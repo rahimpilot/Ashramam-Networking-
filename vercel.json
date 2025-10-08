@@ -1,10 +1,20 @@
 {
   "version": 2,
-  "buildCommand": "cd client && npm run build",
-  "devCommand": "cd client && npm start",
-  "installCommand": "cd client && npm install",
-  "outputDirectory": "client/build",
-  "framework": null,
+  "builds": [
+    {
+      "src": "client/**/*",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "client/build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/client/build/$1"
+    }
+  ],
   "env": {
     "NODE_ENV": "production"
   }
