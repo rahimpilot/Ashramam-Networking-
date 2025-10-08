@@ -6,9 +6,7 @@
       "use": "@vercel/static-build"
     }
   ],
-  "buildCommand": "cd client && npm run build",
-  "devCommand": "cd client && npm run start",
-  "installCommand": "cd client && npm install",
+  "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/build",
   "env": {
     "NODE_ENV": "production"
