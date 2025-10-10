@@ -62,7 +62,7 @@ const Login: React.FC = () => {
         <img 
           src="/AV Logo1.png" 
           alt="Ashramam Vibes Logo" 
-          className="h-auto w-auto object-contain drop-shadow-md max-w-[120px] sm:max-w-none"
+          className="h-8 w-8 sm:h-auto sm:w-auto object-contain drop-shadow-md max-w-[40px] sm:max-w-none"
           onError={(e) => {
             console.error('Logo failed to load');
             e.currentTarget.src = '/AV Logo.png'; // Fallback to original
@@ -71,8 +71,8 @@ const Login: React.FC = () => {
       </div>
       
       {/* Centered login form - mobile responsive */}
-      <div className="flex-1 flex items-start justify-center px-4 sm:px-6 pt-4 sm:pt-12 pb-4 sm:pb-8">
-        <div className="max-w-sm sm:max-w-md w-full bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 border border-white/20">
+      <div className="flex-1 flex items-start justify-center px-4 sm:px-6 pt-2 sm:pt-12 pb-4 sm:pb-8">
+        <div className="max-w-sm sm:max-w-md w-full bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border border-white/20">
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
             {isSignUp ? 'Join Ashramam Vibes' : ''}
