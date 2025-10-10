@@ -62,7 +62,7 @@ const Login: React.FC = () => {
         <img 
           src="/AV Logo.png" 
           alt="Ashramam Vibes Logo" 
-          className="h-8 w-8 object-contain drop-shadow-md"
+          className="h-6 w-6 object-contain drop-shadow-md"
         />
       </div>
       
