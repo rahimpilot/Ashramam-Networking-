@@ -2,7 +2,7 @@
   "name": "ashramam-vibes",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ashramam-networking.vercel.app",
+  "homepage": "https://www.ashramamvibes.com",
   "dependencies": {
     "@firebase/auth": "^1.11.0",
     "@firebase/firestore": "^4.9.2",
