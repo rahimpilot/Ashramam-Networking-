@@ -60,9 +60,13 @@ const Login: React.FC = () => {
       {/* Logo at the top */}
       <div className="flex justify-center pt-8 pb-4">
         <img 
-          src="/AV logo1.png" 
+          src="/AV Logo1.png" 
           alt="Ashramam Vibes Logo" 
           className="h-auto w-auto object-contain drop-shadow-md"
+          onError={(e) => {
+            console.error('Logo failed to load');
+            e.currentTarget.src = '/AV Logo.png'; // Fallback to original
+          }}
         />
       </div>
       
