@@ -66,15 +66,15 @@ const Login: React.FC = () => {
         />
       </div>
       
-      {/* Centered login form */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8">
+      {/* Centered login form - positioned higher */}
+      <div className="flex-1 flex items-start justify-center px-4 pt-12 pb-8">
         <div className="max-w-md w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-white/20">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-2">
             {isSignUp ? 'Join Ashramam Vibes' : ''}
           </h2>
           <p className="text-gray-600 text-sm">
-            {isSignUp ? 'Create your account to connect with friends' : 'സുഖല്ലേ? എന്ന കേറിക്കോ'}
+            {isSignUp ? 'Create your account to connect with friends' : <span className="font-bold">സുഖല്ലേ? എന്ന കേറിക്കോ</span>}
           </p>
         </div>
 
