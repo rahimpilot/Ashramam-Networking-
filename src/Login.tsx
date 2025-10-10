@@ -57,12 +57,12 @@ const Login: React.FC = () => {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <style>{`body { font-family: 'Inter', sans-serif; }`}</style>
       
-      {/* Logo at the top */}
-      <div className="flex justify-center pt-8 pb-4">
+      {/* Logo at the top - mobile responsive */}
+      <div className="flex justify-center pt-4 sm:pt-8 pb-2 sm:pb-4">
         <img 
           src="/AV Logo1.png" 
           alt="Ashramam Vibes Logo" 
-          className="h-auto w-auto object-contain drop-shadow-md"
+          className="h-auto w-auto object-contain drop-shadow-md max-w-[120px] sm:max-w-none"
           onError={(e) => {
             console.error('Logo failed to load');
             e.currentTarget.src = '/AV Logo.png'; // Fallback to original
@@ -70,19 +70,19 @@ const Login: React.FC = () => {
         />
       </div>
       
-      {/* Centered login form - positioned higher */}
-      <div className="flex-1 flex items-start justify-center px-4 pt-12 pb-8">
-        <div className="max-w-md w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-white/20">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+      {/* Centered login form - mobile responsive */}
+      <div className="flex-1 flex items-start justify-center px-4 sm:px-6 pt-4 sm:pt-12 pb-4 sm:pb-8">
+        <div className="max-w-sm sm:max-w-md w-full bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 border border-white/20">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
             {isSignUp ? 'Join Ashramam Vibes' : ''}
           </h2>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 text-sm sm:text-base">
             {isSignUp ? 'Create your account to connect with friends' : <span className="font-bold">സുഖല്ലേ? എന്ന കേറിക്കോ</span>}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">
               Email
@@ -92,7 +92,7 @@ const Login: React.FC = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white/70 backdrop-blur-sm transition-all"
+              className="mt-1 block w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white/70 backdrop-blur-sm transition-all text-base"
               placeholder="Enter your email"
               required
             />
@@ -107,14 +107,14 @@ const Login: React.FC = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white/70 backdrop-blur-sm transition-all"
+              className="mt-1 block w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white/70 backdrop-blur-sm transition-all text-base"
               placeholder="Enter your password"
               required
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm font-medium">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-sm font-medium">
               {error}
             </div>
           )}
@@ -122,13 +122,13 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed text-base"
           >
             {loading ? 'Please wait...' : (isSignUp ? 'Create Account' : 'Sign In')}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
+        <div className="mt-4 sm:mt-6 text-center">
           <button
             onClick={() => setIsSignUp(!isSignUp)}
             className="text-blue-600 hover:text-purple-600 text-sm font-medium transition-colors"
@@ -137,7 +137,7 @@ const Login: React.FC = () => {
           </button>
         </div>
 
-        <div className="mt-4 text-center">
+        <div className="mt-3 sm:mt-4 text-center">
           <button
             onClick={handleSignOut}
             className="text-gray-500 hover:text-gray-700 text-xs font-medium transition-colors"
