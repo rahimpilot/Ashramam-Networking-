@@ -60,9 +60,9 @@ const Login: React.FC = () => {
       {/* Logo at the top */}
       <div className="flex justify-center pt-8 pb-4">
         <img 
-          src="/AV Logo.png" 
+          src="/AV logo1.png" 
           alt="Ashramam Vibes Logo" 
-          className="h-6 w-6 object-contain drop-shadow-md"
+          className="h-auto w-auto object-contain drop-shadow-md"
         />
       </div>
       
