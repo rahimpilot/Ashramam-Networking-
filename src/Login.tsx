@@ -52,27 +52,31 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 font-sans flex flex-col">
       {/* Google Fonts: Inter */}
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <style>{`body { font-family: 'Inter', sans-serif; }`}</style>
       
-      {/* ASHRAMAM Brand Logo at the top */}
-      <div className="pt-8 pb-4 text-center">
-        <div className="flex items-center justify-center">
-          <div className="text-6xl font-extrabold text-gray-800 tracking-wider">
-            <span className="inline-block transform -rotate-12 mr-2">A</span>
-            <span className="text-5xl">SHRAMAM</span>
-          </div>
-        </div>
+      {/* Logo at the top */}
+      <div className="flex justify-center pt-8 pb-4">
+        <img 
+          src="/AV Logo.png" 
+          alt="Ashramam Vibes Logo" 
+          className="h-20 w-auto object-contain drop-shadow-md"
+        />
       </div>
       
       {/* Centered login form */}
-      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <div className="max-w-md w-full bg-white/95 rounded-2xl shadow-2xl p-8 border border-gray-200 mx-4">
-        <h2 className="text-3xl font-extrabold text-center mb-8 text-gray-800 tracking-tight drop-shadow-sm">
-          {isSignUp ? 'Join Ashramam Vibes' : 'സുഖല്ലേ? എന്ന കേറിക്കോ'}
-        </h2>
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="max-w-md w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-white/20">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+            {isSignUp ? 'Join Ashramam Vibes' : 'Welcome Back'}
+          </h2>
+          <p className="text-gray-600 text-sm">
+            {isSignUp ? 'Create your account to connect with friends' : 'സുഖല്ലേ? എന്ന കേറിക്കോ'}
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -84,7 +88,8 @@ const Login: React.FC = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 text-gray-900 bg-gray-50"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white/70 backdrop-blur-sm transition-all"
+              placeholder="Enter your email"
               required
             />
           </div>
@@ -98,13 +103,14 @@ const Login: React.FC = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 text-gray-900 bg-gray-50"
+              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white/70 backdrop-blur-sm transition-all"
+              placeholder="Enter your password"
               required
             />
           </div>
 
           {error && (
-            <div className="text-red-600 text-sm font-medium">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm font-medium">
               {error}
             </div>
           )}
@@ -112,16 +118,16 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white py-2 px-4 rounded-lg font-bold shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Please wait...' : (isSignUp ? 'Sign Up' : 'Sign In')}
+            {loading ? 'Please wait...' : (isSignUp ? 'Create Account' : 'Sign In')}
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <button
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-purple-600 hover:text-pink-600 text-sm font-semibold underline"
+            className="text-blue-600 hover:text-purple-600 text-sm font-medium transition-colors"
           >
             {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
           </button>
@@ -130,7 +136,7 @@ const Login: React.FC = () => {
         <div className="mt-4 text-center">
           <button
             onClick={handleSignOut}
-            className="text-gray-500 hover:text-gray-700 text-sm font-medium"
+            className="text-gray-500 hover:text-gray-700 text-xs font-medium transition-colors"
           >
             Sign Out
           </button>
