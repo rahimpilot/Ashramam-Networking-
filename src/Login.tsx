@@ -63,12 +63,12 @@ const Login: React.FC = () => {
           {/* Logo */}
           <div className="mb-6 sm:mb-8">
             <img 
-              src="/logo.png" 
+              src="/newlogo.svg" 
               alt="Ashramam Vibes Logo" 
               className="h-auto w-auto object-contain drop-shadow-md"
               onError={(e) => {
                 console.error('Logo failed to load');
-                e.currentTarget.src = '/AV Logo.png'; // Fallback to original
+                e.currentTarget.src = '/logo.png'; // Fallback to previous logo
               }}
             />
           </div>
