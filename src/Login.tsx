@@ -57,21 +57,8 @@ const Login: React.FC = () => {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <style>{`body { font-family: 'Inter', sans-serif; }`}</style>
       
-      {/* Centered container with logo and login form */}
+      {/* Centered container with login form and logo */}
       <div className="min-h-screen flex flex-col items-center justify-center px-3 sm:px-6 py-8">
-        {/* Logo */}
-        <div className="mb-6 sm:mb-8">
-          <img 
-            src="/logo.png" 
-            alt="Ashramam Vibes Logo" 
-            className="h-auto w-auto object-contain drop-shadow-md"
-            onError={(e) => {
-              console.error('Logo failed to load');
-              e.currentTarget.src = '/AV Logo.png'; // Fallback to original
-            }}
-          />
-        </div>
-        
         {/* Login form */}
         <div className="max-w-sm sm:max-w-md w-full bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border border-white/20">
         <div className="text-center mb-6 sm:mb-8">
@@ -146,6 +133,19 @@ const Login: React.FC = () => {
             Sign Out
           </button>
         </div>
+        </div>
+        
+        {/* Logo positioned below login form */}
+        <div className="mt-6 sm:mt-8">
+          <img 
+            src="/logo.png" 
+            alt="Ashramam Vibes Logo" 
+            className="h-auto w-auto object-contain drop-shadow-md"
+            onError={(e) => {
+              console.error('Logo failed to load');
+              e.currentTarget.src = '/AV Logo.png'; // Fallback to original
+            }}
+          />
         </div>
       </div>
     </div>
