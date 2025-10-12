@@ -57,12 +57,12 @@ const Login: React.FC = () => {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <style>{`body { font-family: 'Inter', sans-serif; }`}</style>
       
-      {/* Logo at the top - mobile responsive */}
-      <div className="flex justify-center pt-2 sm:pt-8 pb-1 sm:pb-4">
+      {/* Logo at the top - using manually resized logo */}
+      <div className="flex justify-center pt-4 sm:pt-8 pb-2 sm:pb-4">
         <img 
-          src="/AV Logo1.png" 
+          src="/logo.png" 
           alt="Ashramam Vibes Logo" 
-          className="h-6 w-6 sm:h-auto sm:w-auto object-contain drop-shadow-md max-w-[24px] sm:max-w-none"
+          className="h-auto w-auto object-contain drop-shadow-md"
           onError={(e) => {
             console.error('Logo failed to load');
             e.currentTarget.src = '/AV Logo.png'; // Fallback to original
