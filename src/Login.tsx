@@ -58,8 +58,8 @@ const Login: React.FC = () => {
       <style>{`body { font-family: 'Inter', sans-serif; }`}</style>
       
       {/* Centered container with logo and login form */}
-      <div className="min-h-screen flex flex-col items-center justify-center px-3 sm:px-6 py-8">
-        <div className="flex flex-col items-center">
+      <div className="min-h-screen flex items-center justify-center px-3 sm:px-6 py-8">
+        <div className="flex flex-col items-center w-full">
           {/* Logo */}
           <div className="mb-6 sm:mb-8">
             <img 
