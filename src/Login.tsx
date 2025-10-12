@@ -59,21 +59,22 @@ const Login: React.FC = () => {
       
       {/* Centered container with logo and login form */}
       <div className="min-h-screen flex flex-col items-center justify-center px-3 sm:px-6 py-8">
-        {/* Logo */}
-        <div className="mb-6 sm:mb-8">
-          <img 
-            src="/logo.png" 
-            alt="Ashramam Vibes Logo" 
-            className="h-auto w-auto object-contain drop-shadow-md"
-            onError={(e) => {
-              console.error('Logo failed to load');
-              e.currentTarget.src = '/AV Logo.png'; // Fallback to original
-            }}
-          />
-        </div>
-        
-        {/* Login form */}
-        <div className="max-w-sm sm:max-w-md w-full bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border border-white/20">
+        <div className="flex flex-col items-center">
+          {/* Logo */}
+          <div className="mb-6 sm:mb-8">
+            <img 
+              src="/logo.png" 
+              alt="Ashramam Vibes Logo" 
+              className="h-auto w-auto object-contain drop-shadow-md"
+              onError={(e) => {
+                console.error('Logo failed to load');
+                e.currentTarget.src = '/AV Logo.png'; // Fallback to original
+              }}
+            />
+          </div>
+          
+          {/* Login form */}
+          <div className="max-w-sm sm:max-w-md w-full bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border border-white/20">
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
             {isSignUp ? 'Join Ashramam Vibes' : ''}
@@ -146,6 +147,7 @@ const Login: React.FC = () => {
             Sign Out
           </button>
         </div>
+          </div>
         </div>
       </div>
     </div>
