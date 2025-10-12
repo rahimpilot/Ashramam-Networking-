@@ -57,8 +57,8 @@ const Login: React.FC = () => {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       <style>{`body { font-family: 'Inter', sans-serif; }`}</style>
       
-      {/* Logo at the top - using manually resized logo */}
-      <div className="flex justify-center pt-4 sm:pt-8 pb-2 sm:pb-4">
+      {/* Logo positioned close to login area */}
+      <div className="flex justify-center pt-6 sm:pt-12 pb-1 sm:pb-2">
         <img 
           src="/logo.png" 
           alt="Ashramam Vibes Logo" 
@@ -70,8 +70,8 @@ const Login: React.FC = () => {
         />
       </div>
       
-      {/* Centered login form - mobile responsive */}
-      <div className="flex-1 flex items-start justify-center px-3 sm:px-6 pt-1 sm:pt-12 pb-4 sm:pb-8">
+      {/* Centered login form - positioned close to logo */}
+      <div className="flex-1 flex items-start justify-center px-3 sm:px-6 pt-1 sm:pt-2 pb-4 sm:pb-8">
         <div className="max-w-sm sm:max-w-md w-full bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 border border-white/20">
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
