@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
+import DisclaimerModal from './DisclaimerModal';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -10,17 +11,33 @@ const Login: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // For sign-up, show disclaimer first if not already accepted
+    if (isSignUp && !disclaimerAccepted) {
+      setShowDisclaimer(true);
+      return;
+    }
+
     setLoading(true);
 
     try {
       if (isSignUp) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        
+        // Send verification email immediately after account creation
+        try {
+          await sendEmailVerification(user);
+        } catch (verificationError) {
+          console.error('Error sending verification email:', verificationError);
+        }
         
         await setDoc(doc(db, 'pendingUsers', user.uid), {
           email: user.email,
@@ -29,8 +46,9 @@ const Login: React.FC = () => {
           uid: user.uid
         });
         
-        setError('Account created successfully! Please wait for admin approval before signing in.');
+        setError('Account created successfully! A verification email has been sent to your email address. Please verify your email and wait for admin approval before signing in.');
         setIsSignUp(false);
+        setDisclaimerAccepted(false); // Reset for next time
       } else {
         const cred = await signInWithEmailAndPassword(auth, email, password);
         // Enforce admin approval: check user's pendingUsers doc
@@ -58,27 +76,48 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleDisclaimerAgree = () => {
+    setShowDisclaimer(false);
+    setDisclaimerAccepted(true);
+    // Trigger the form submission after accepting disclaimer
+    const form = document.querySelector('form') as HTMLFormElement;
+    if (form) {
+      form.requestSubmit();
+    }
+  };
+
+  const handleDisclaimerCancel = () => {
+    setShowDisclaimer(false);
+    setDisclaimerAccepted(false);
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(to bottom right, #dbeafe, #ffffff, #faf5ff)',
+      background: '#ffffff',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '1rem'
+      padding: window.innerWidth <= 768 ? '0.5rem' : '1rem'
     }}>
-      <div style={{ maxWidth: '28rem', width: '100%' }}>
+      <div style={{ 
+        maxWidth: '28rem', 
+        width: '100%',
+        margin: window.innerWidth <= 768 ? '0' : 'auto'
+      }}>
         {/* Login Form */}
         <div style={{
           background: 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(8px)',
-          borderRadius: '1rem',
+          borderRadius: window.innerWidth <= 768 ? '0.75rem' : '1rem',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          padding: '2rem',
+          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
+          minHeight: window.innerWidth <= 768 ? 'calc(100vh - 1rem)' : 'auto',
+          justifyContent: window.innerWidth <= 768 ? 'center' : 'flex-start'
         }}>
           {/* Logo above login form */}
           <div style={{
@@ -91,7 +130,7 @@ const Login: React.FC = () => {
               src="/newlogo.svg" 
               alt="Ashramam Vibes Logo" 
               style={{
-                height: '64px',
+                height: window.innerWidth <= 768 ? '48px' : '64px',
                 width: 'auto',
                 objectFit: 'contain',
                 filter: 'drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07))'
@@ -99,20 +138,27 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ 
+            textAlign: 'center', 
+            marginBottom: window.innerWidth <= 768 ? '1.5rem' : '2rem' 
+          }}>
             <h2 style={{
-              fontSize: '1.5rem',
+              fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 'bold',
               color: '#1f2937',
-              marginBottom: '0.5rem'
+              marginBottom: '0.5rem',
+              lineHeight: '1.3',
+              textAlign: 'center'
             }}>
-              {isSignUp ? 'Join Ashramam Vibes' : ''}
+              {isSignUp ? 'അവനവൻ കുഴിക്കുന്ന കുരുക്കഴിച്ചെടുക്കുമ്പോൾ ഗുലുമാൽ' : ''}
             </h2>
             <p style={{
               color: '#6b7280',
-              fontSize: '0.875rem'
+              fontSize: window.innerWidth <= 768 ? '0.8rem' : '0.875rem',
+              fontWeight: isSignUp ? 'normal' : 'bold',
+              lineHeight: '1.4'
             }}>
-              {isSignUp ? 'Create your account to connect with friends' : <span style={{ fontWeight: 'bold' }}>സുഖല്ലേ? എന്ന കേറിക്കോ</span>}
+              {isSignUp ? '' : <strong style={{fontWeight:'900', fontSize: window.innerWidth <= 768 ? '0.85rem' : '0.9rem'}}>സുഖല്ലേ? എന്ന കേറിക്കോ</strong>}
             </p>
           </div>
 
@@ -236,6 +282,12 @@ const Login: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      <DisclaimerModal
+        isOpen={showDisclaimer}
+        onAgree={handleDisclaimerAgree}
+        onCancel={handleDisclaimerCancel}
+      />
     </div>
   );
 };
