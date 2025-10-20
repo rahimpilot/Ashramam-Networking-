@@ -12,14 +12,38 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#667eea" />
+    <meta name="theme-color" content="#000000" />
+    
+    <!-- Enhanced Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.googleapis.com https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://vercel.live wss://ws-us3.pusher.com; frame-src 'none'; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
     <meta
       name="description"
-      content="Ashramam Vibes - Connect with friends and build your community. Join our social platform designed for meaningful connections."
+      content="Ashramam - Connect with your Malayalam community, share memories, plan trips and stay updated."
     />
+    
+    <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ashramam">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Ashramam">
+    
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="Ashramam - Community Network">
+    <meta property="og:description" content="Connect with your Malayalam community, share memories, plan trips and stay updated.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="%PUBLIC_URL%/logo512.png">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ashramam - Community Network">
+    <meta name="twitter:description" content="Connect with your Malayalam community, share memories, plan trips and stay updated.">
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -34,11 +58,97 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Ashramam Vibes - Connect & Build Community</title>
+    <title>Ashramam - Community Network</title>
+    <style>
+      /* PWA Loading Screen */
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      }
+      
+      #loading-screen.hidden {
+        display: none;
+      }
+      
+      .loading-logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+      }
+      
+      .loading-text {
+        color: #333;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      
+      .loading-subtext {
+        color: #666;
+        font-size: 14px;
+      }
+      
+      @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.7; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #000;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-top: 20px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    
+    <!-- PWA Loading Screen -->
+    <div id="loading-screen">
+      <img src="%PUBLIC_URL%/newlogo.svg" alt="Ashramam" class="loading-logo" />
+      <div class="loading-text">Ashramam</div>
+      <div class="loading-subtext">Loading your community...</div>
+      <div class="spinner"></div>
+    </div>
+    
     <div id="root"></div>
+    
+    <script>
+      // Hide loading screen when React app loads
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const loadingScreen = document.getElementById('loading-screen');
+          if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+          }
+        }, 1000);
+      });
+      
+      // PWA Debug logging
+      console.log('PWA: HTML loaded, display mode:', window.matchMedia('(display-mode: standalone)').matches ? 'standalone' : 'browser');
+      console.log('PWA: Current URL:', window.location.href);
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

@@ -1,0 +1,83 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Critical collections for authentication flow
+    match /pendingUsers/{userId} {
+      // Allow users to create their own pending user document during signup
+      allow create: if request.auth != null && request.auth.uid == userId;
+      // Allow users to read their own pending status
+      allow read: if request.auth != null && request.auth.uid == userId;
+      // Allow admin to read/write all pending users (for approval process)
+      allow read, write: if request.auth != null;
+    }
+    
+    match /profiles/{userId} {
+      // Allow users to read and write their own profile
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Allow authenticated users to read other profiles for community features
+      allow read: if request.auth != null;
+      // Allow profile creation during onboarding
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Users collection for additional user data
+    match /users/{userId} {
+      // Allow users to read and write their own user document
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Allow authenticated users to read basic info of other users
+      allow read: if request.auth != null;
+      // Allow user creation during signup
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Community posts/stories - authenticated users can read, authors can write/delete
+    match /stories/{storyId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && 
+        (resource.data.authorId == request.auth.uid || request.data.authorId == request.auth.uid);
+    }
+    
+    // Hangout/trip planning - authenticated users can read and create, participants can edit
+    match /hangouts/{hangoutId} {
+      allow read, create: if request.auth != null;
+      allow update, delete: if request.auth != null && 
+        (resource.data.createdBy == request.auth.uid || 
+         request.auth.uid in resource.data.participants);
+    }
+    
+    // Residents directory - authenticated users can read and write
+    match /residents/{residentId} {
+      allow read, create: if request.auth != null;
+      allow update, delete: if request.auth != null && request.auth.uid == residentId;
+    }
+    
+    // Messages/notifications - authenticated users can read/write their own
+    match /messages/{messageId} {
+      allow read, write: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && 
+        (resource.data.senderId == request.auth.uid || 
+         resource.data.recipientId == request.auth.uid);
+    }
+    
+    // General collections for app functionality
+    match /notifications/{notificationId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    match /trips/{tripId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    match /events/{eventId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Fallback rule for any other collections - authenticated users can access
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

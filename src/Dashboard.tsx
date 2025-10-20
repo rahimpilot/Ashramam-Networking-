@@ -1,456 +1,88 @@
-import React, { useEffect, useState } from 'react';import React, { useEffect, useState } from 'react';
-
-import { auth, db } from './firebase';import { auth, db } from './firebase';
-
-import { doc, getDoc } from 'firebase/firestore';import { doc, getDoc, collection, getDocs, setDoc, query, orderBy, Timestamp } from 'firebase/firestore';
-
-import { useNavigate } from 'react-router-dom';import { useNavigate } from 'react-router-dom';
-
-
-
-interface UserProfile {interface UserProfile {
-
-  name?: string;  name?: string;
-
-  bio?: string;  bio?: string;
-
-  location?: string;  location?: string;
-
-  occupation?: string;  occupation?: string;
-
-  profileCompletion?: number;  profileCompletion?: number;
-
-}}
-
-              <p style={{ 
-
-const Dashboard: React.FC = () => {                fontSize: '0.95rem', 
-
-  const user = auth.currentUser;                color: '#64748b', 
-
-  const navigate = useNavigate();                margin: '0 0 2rem 0'
-
-  const [userProfile, setUserProfile] = useState<UserProfile>({});              }}>
-
-  const [loading, setLoading] = useState(true);                Share your thoughts with the community • Just like the good old Orkut days!
-
-  const [activeTab, setActiveTab] = useState<string>('scrapbook');              </p>
-
-              
-
-  useEffect(() => {              {/* Write New Scrap Form */}
-
-    if (!user) {              <div style={{
-
-      navigate('/');                background: '#ffffff',
-
-      return;                border: '1px solid #e5e7eb',
-
-    }                borderRadius: 12,
-
-                padding: '1.5rem',
-
-    const fetchUserProfile = async () => {                marginBottom: '2rem'
-
-      try {              }}>
-
-        const profileRef = doc(db, 'profiles', user.uid);                <h3 style={{ 
-
-        const profileSnap = await getDoc(profileRef);                  fontSize: '1.1rem', 
-
-                          fontWeight: 600, 
-
-        if (profileSnap.exists()) {                  color: '#000000', 
-
-          setUserProfile(profileSnap.data() as UserProfile);                  margin: '0 0 1rem 0' 
-
-        }                }}>
-
-      } catch (error) {                  ✍️ Write a Scrap
-
-        console.error('Error fetching user profile:', error);                </h3>
-
-      } finally {                <form onSubmit={handleSubmitScrapPost}>
-
-        setLoading(false);                  <textarea
-
-      }                    value={newMessage}
-
-    };                    onChange={(e) => setNewMessage(e.target.value)}
-
-                    placeholder="What's on your mind? Share it with everyone..."
-
-    fetchUserProfile();                    rows={4}
-
-  }, [user, navigate]);                    style={{
-
-                      width: '100%',
-
-  const goToAccount = () => {                      padding: '12px',
-
-    navigate('/account');                      borderRadius: 8,
-
-  };                      border: '1px solid #e5e7eb',
-
-                      fontSize: '1rem',
-
-  const goToProfile = () => {                      outline: 'none',
-
-    navigate('/profile');                      transition: 'border-color 0.2s',
-
-  };                      resize: 'vertical',
-
-                      fontFamily: 'inherit'
-
-  const goToStories = () => {                    }}
-
-    navigate('/stories');                    onFocus={e => e.target.style.borderColor = '#000000'}
-
-  };                    onBlur={e => e.target.style.borderColor = '#e5e7eb'}
-
-                    required
-
-  const getFirstName = (fullName: string) => {                  />
-
-    return fullName.split(' ')[0];                  <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-
-  };                    <button
-
-                      type="submit"
-
-  if (loading) {                      disabled={submitting || !newMessage.trim()}
-
-    return (                      style={{
-
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>                        background: submitting || !newMessage.trim() ? '#9ca3af' : '#000000',
-
-        <div style={{ textAlign: 'center' }}>                        border: 'none',
-
-          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>                        borderRadius: 8,
-
-          <p>Loading...</p>                        padding: '10px 20px',
-
-        </div>                        cursor: submitting || !newMessage.trim() ? 'not-allowed' : 'pointer',
-
-      </div>                        fontSize: '0.95rem',
-
-    );                        fontWeight: 600,
-
-  }                        color: '#ffffff',
-
-                        transition: 'all 0.2s ease'
-
-  return (                      }}
-
-    <div style={{ minHeight: '100vh', background: '#ffffff', padding: '1rem 0' }}>                    >
-
-      <div style={{                       {submitting ? 'Posting...' : 'Post Scrap'}
-
-        maxWidth: 1200,                     </button>
-
-        margin: '0 auto',                   </div>
-
-        padding: '2rem',                 </form>
-
-        background: '#fff',               </div>
-
-        borderRadius: 16, 
-
-        boxShadow: '0 2px 16px rgba(0,0,0,0.10)'              {/* Scrap Posts Feed */}
-
-      }}>              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-
-        {/* Header */}                {scrapPosts.length === 0 ? (
-
-        <div style={{                   <div style={{
-
-          display: 'flex',                     background: '#f8fafc',
-
-          justifyContent: 'space-between',                     border: '1px solid #e5e7eb',
-
-          alignItems: 'center',                     borderRadius: 12,
-
-          marginBottom: 24                    padding: '2rem',
-
-        }}>                    textAlign: 'center'
-
-          <img src="/newlogo.svg" alt="Logo" style={{ height: 48 }} />                  }}>
-
-                              <div style={{ fontSize: '2rem', marginBottom: '1rem', opacity: 0.3 }}>📝</div>
-
-          <div style={{ display: 'flex', gap: '1rem' }}>                    <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#000000', margin: '0 0 0.5rem 0' }}>
-
-            <button onClick={goToStories} style={{                       No Scraps Yet
-
-              background: '#ffffff',                     </h3>
-
-              color: '#000000',                     <p style={{ fontSize: '0.95rem', color: '#64748b', margin: 0 }}>
-
-              border: '1px solid #e5e7eb',                       Be the first to write a scrap and start the conversation!
-
-              borderRadius: 10,                     </p>
-
-              padding: '8px 16px',                   </div>
-
-              cursor: 'pointer',                 ) : (
-
-              fontSize: '0.9rem',                   scrapPosts.map((post) => (
-
-              fontWeight: 600                    <div 
-
-            }}>                      key={post.id} 
-
-              📚 Stories                      style={{
-
-            </button>                        background: '#ffffff',
-
-            <button onClick={goToProfile} style={{                         border: '1px solid #e5e7eb',
-
-              background: '#ffffff',                         borderRadius: 12,
-
-              color: '#000000',                         padding: '1.5rem',
-
-              border: '1px solid #e5e7eb',                         transition: 'all 0.2s ease'
-
-              borderRadius: 10,                       }}
-
-              padding: '8px 16px',                       onMouseOver={e => {
-
-              cursor: 'pointer',                         e.currentTarget.style.backgroundColor = '#f9fafb';
-
-              fontSize: '0.9rem',                         e.currentTarget.style.borderColor = '#d1d5db';
-
-              fontWeight: 600                      }}
-
-            }}>                      onMouseOut={e => {
-
-              👤 Profile                        e.currentTarget.style.backgroundColor = '#ffffff';
-
-            </button>                        e.currentTarget.style.borderColor = '#e5e7eb';
-
-            <button onClick={goToAccount} style={{                       }}
-
-              background: '#ffffff',                     >
-
-              color: '#000000',                       {/* Scrap Header */}
-
-              border: '1px solid #e5e7eb',                       <div style={{ 
-
-              borderRadius: 10,                         display: 'flex', 
-
-              padding: '8px 16px',                         justifyContent: 'space-between', 
-
-              cursor: 'pointer',                         alignItems: 'center', 
-
-              fontSize: '0.9rem',                         marginBottom: '1rem' 
-
-              fontWeight: 600                      }}>
-
-            }}>                        <div>
-
-              ⚙️ Account                          <h4 style={{ 
-
-            </button>                            fontSize: '1rem', 
-
-          </div>                            fontWeight: 600, 
-
-        </div>                            color: '#000000', 
-
-                            margin: 0 
-
-        <h1 style={{                           }}>
-
-          fontSize: '2rem',                             {post.author}
-
-          fontWeight: 700,                           </h4>
-
-          marginBottom: '2rem',                           <p style={{ 
-
-          color: '#000000',                            fontSize: '0.85rem', 
-
-          textAlign: 'center'                            color: '#6b7280', 
-
-        }}>                            margin: '0.25rem 0 0 0' 
-
-          Welcome to Your Dashboard, {getFirstName(userProfile.name || user?.displayName || 'User')}!                          }}>
-
-        </h1>                            {post.createdAt.toDate().toLocaleDateString()} at {post.createdAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-
-                          </p>
-
-        {/* Tab Navigation */}                        </div>
-
-        <div style={{                        <span style={{ 
-
-          display: 'flex',                          background: '#f3f4f6', 
-
-          gap: '1rem',                          color: '#6b7280', 
-
-          marginBottom: '2rem',                          padding: '4px 8px', 
-
-          borderBottom: '1px solid #e5e7eb',                          borderRadius: 6, 
-
-          paddingBottom: '1rem'                          fontSize: '0.75rem',
-
-        }}>                          fontWeight: 500
-
-          <button                        }}>
-
-            onClick={() => setActiveTab('scrapbook')}                          Scrap
-
-            style={{                        </span>
-
-              background: activeTab === 'scrapbook' ? '#000000' : 'transparent',                      </div>
-
-              color: activeTab === 'scrapbook' ? '#ffffff' : '#64748b',                      
-
-              border: '1px solid #e5e7eb',                      {/* Scrap Message */}
-
-              borderRadius: 8,                      <div style={{
-
-              padding: '10px 20px',                        fontSize: '1rem',
-
-              cursor: 'pointer',                        color: '#374151',
-
-              fontSize: '0.95rem',                        lineHeight: '1.6',
-
-              fontWeight: 600,                        whiteSpace: 'pre-wrap'
-
-              transition: 'all 0.2s ease'                      }}>
-
-            }}                        {post.message}
-
-          >                      </div>
-
-            📝 Scrap Book                    </div>
-
-          </button>                  ))
-
-          <button                )}
-
-            onClick={() => setActiveTab('residents')}              </div>Post {
-
-            style={{  id: string;
-
-              background: activeTab === 'residents' ? '#000000' : 'transparent',  message: string;
-
-              color: activeTab === 'residents' ? '#ffffff' : '#64748b',  author: string;
-
-              border: '1px solid #e5e7eb',  authorEmail: string;
-
-              borderRadius: 8,  createdAt: Timestamp;
-
-              padding: '10px 20px',}
-
-              cursor: 'pointer',
-
-              fontSize: '0.95rem',const Dashboard: React.FC = () => {
-
-              fontWeight: 600,  const user = auth.currentUser;
-
-              transition: 'all 0.2s ease'  const navigate = useNavigate();
-
-            }}  const [userProfile, setUserProfile] = useState<UserProfile>({});
-
-          >  const [loading, setLoading] = useState(true);
-
-            🔮 ആശ്രമ നിവാസികൾ  const [activeTab, setActiveTab] = useState<string>('scrapbook');
-
-          </button>  const [scrapPosts, setScrapPosts] = useState<ScrapPost[]>([]);
-
-        </div>  const [newMessage, setNewMessage] = useState('');
-
+import React, { useEffect, useState } from 'react';
+import { auth, db } from './firebase';
+import { doc, getDoc, collection, getDocs, setDoc, updateDoc, query, orderBy, Timestamp } from 'firebase/firestore';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+
+interface UserProfile {
+  name?: string;
+  bio?: string;
+  location?: string;
+  occupation?: string;
+  profileCompletion?: number;
+  profilePicture?: string;
+}
+
+interface ScrapPost {
+  id: string;
+  message: string;
+  author: string;
+  authorEmail: string;
+  createdAt: Timestamp;
+  likes: string[];
+  likeCount: number;
+  tags: string[];
+  replies: ScrapReply[];
+  replyCount: number;
+}
+
+interface ScrapReply {
+  id: string;
+  message: string;
+  author: string;
+  authorEmail: string;
+  createdAt: Timestamp;
+}
+
+interface Notification {
+  id: string;
+  type: 'mention' | 'reply';
+  fromUser: string;
+  fromEmail: string;
+  toEmail: string;
+  postId: string;
+  message: string;
+  createdAt: Timestamp;
+  read: boolean;
+}
+
+const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState<UserProfile>({});
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<string>('scrapbook');
+  const [scrapPosts, setScrapPosts] = useState<ScrapPost[]>([]);
+  const [newMessage, setNewMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [hangoutActiveTab, setHangoutActiveTab] = useState<string>('upcoming-trip');
 
-        {/* Tab Content */}
-
-        {activeTab === 'scrapbook' && (  useEffect(() => {
-
-          <div style={{ textAlign: 'center', padding: '2rem' }}>    if (!user) {
-
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</div>      navigate('/');
-
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#000000', margin: '0 0 1rem 0' }}>      return;
-
-              Scrap Book Coming Soon    }
-
-            </h2>
-
-            <p style={{ fontSize: '1rem', color: '#64748b', margin: 0 }}>    const fetchUserProfile = async () => {
-
-              We're working on the scrap book feature      try {
-
-            </p>        const profileRef = doc(db, 'profiles', user.uid);
-
-          </div>        const profileSnap = await getDoc(profileRef);
-
-        )}        
-
-        if (profileSnap.exists()) {
-
-        {activeTab === 'residents' && (          setUserProfile(profileSnap.data() as UserProfile);
-
-          <div style={{ textAlign: 'center', padding: '2rem' }}>        }
-
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏠</div>      } catch (error) {
-
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#000000', margin: '0 0 1rem 0' }}>        console.error('Error fetching user profile:', error);
-
-              ആശ്രമ നിവാസികൾ Coming Soon      } finally {
-
-            </h2>        setLoading(false);
-
-            <p style={{ fontSize: '1rem', color: '#64748b', margin: 0 }}>      }
-
-              Community members directory will be available soon    };
-
-            </p>
-
-          </div>    const fetchScrapPosts = async () => {
-
-        )}      try {
-
-      </div>        const scrapRef = collection(db, 'scrapbook');
-
-    </div>        const q = query(scrapRef, orderBy('createdAt', 'desc'));
-
-  );        const querySnapshot = await getDocs(q);
-
-};        
-
-        const postsData: ScrapPost[] = [];
-
-export default Dashboard;        querySnapshot.forEach((doc) => {
-          postsData.push({ id: doc.id, ...doc.data() } as ScrapPost);
-        });
-        
-        setScrapPosts(postsData);
-      } catch (error) {
-        console.error('Error fetching scrap posts:', error);
+  // Auth state listener
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+      
+      if (!currentUser) {
+        navigate('/');
       }
-    };
+    });
 
-    fetchUserProfile();
-    fetchScrapPosts();
-  }, [user, navigate]);
+    return () => unsubscribe();
+  }, [navigate]);
 
-  const goToAccount = () => {
-    navigate('/account');
-  };
+  // Navigation functions
+  const goToStories = () => navigate('/stories');
+  const goToResidents = () => navigate('/residents'); 
+  const goToProfile = () => navigate('/profile');
+  const goToAccount = () => navigate('/account');
 
-  const goToProfile = () => {
-    navigate('/profile');
-  };
-
-  const goToScrapBook = () => {
-    setActiveTab('scrapbook');
-  };
-
-  const goToStories = () => {
-    navigate('/stories');
-  };
-
-  const handleSubmitScrapPost = async (e: React.FormEvent) => {
+  // Simple post submission
+  const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !newMessage.trim()) return;
 
@@ -458,327 +90,410 @@ export default Dashboard;        querySnapshot.forEach((doc) => {
     try {
       const postData = {
         message: newMessage.trim(),
-        author: user.displayName || 'Anonymous User',
+        author: userProfile.name || user.displayName || 'Anonymous User',
         authorEmail: user.email || '',
-        createdAt: Timestamp.now()
+        createdAt: Timestamp.now(),
+        likes: [],
+        likeCount: 0,
+        tags: [],
+        replies: [],
+        replyCount: 0
       };
 
-      await setDoc(doc(collection(db, 'scrapbook')), postData);
+      const docRef = doc(collection(db, 'scrapbook'));
+      await setDoc(docRef, postData);
+      
       setNewMessage('');
-      
-      // Refresh the posts
-      const scrapRef = collection(db, 'scrapbook');
-      const q = query(scrapRef, orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(q);
-      
-      const postsData: ScrapPost[] = [];
-      querySnapshot.forEach((doc) => {
-        postsData.push({ id: doc.id, ...doc.data() } as ScrapPost);
-      });
-      
-      setScrapPosts(postsData);
+      fetchScrapPosts();
     } catch (error) {
-      console.error('Error adding scrap post:', error);
+      console.error('Error posting message:', error);
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (loading) {
+  // Fetch functions
+  const fetchUserProfile = async () => {
+    if (!user?.uid) return;
+    
+    try {
+      const profileRef = doc(db, 'profiles', user.uid);
+      const profileSnap = await getDoc(profileRef);
+      
+      if (profileSnap.exists()) {
+        setUserProfile(profileSnap.data());
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
+
+  const fetchScrapPosts = async () => {
+    try {
+      const scrapRef = collection(db, 'scrapbook');
+      const q = query(scrapRef, orderBy('createdAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+      
+      const posts: ScrapPost[] = [];
+      querySnapshot.forEach((doc) => {
+        posts.push({ id: doc.id, ...doc.data() } as ScrapPost);
+      });
+      
+      setScrapPosts(posts);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      navigate('/');
+      return;
+    }
+    
+    fetchUserProfile();
+    fetchScrapPosts();
+    setLoading(false);
+  }, [user, navigate, authLoading]);
+
+  if (authLoading || loading) {
     return (
       <div style={{ 
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'center', 
         height: '100vh',
-        background: '#ffffff'
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
       }}>
-        <div style={{ color: '#374151', fontSize: '1.2rem' }}>Loading your dashboard...</div>
+        <div style={{ 
+          textAlign: 'center',
+          color: '#ffffff',
+          background: 'rgba(255,255,255,0.1)',
+          padding: '2rem',
+          borderRadius: 20,
+          backdropFilter: 'blur(10px)'
+        }}>
+          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
+          <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 500 }}>
+            {authLoading ? 'Checking authentication...' : 'Loading your feed...'}
+          </p>
+        </div>
       </div>
     );
   }
 
-  if (!user) {
-    return null;
-  }
-
-  const displayName = userProfile.name || user.displayName || 'User';
-  const profileCompletion = userProfile.profileCompletion || 0;
-
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      background: '#ffffff',
-      padding: window.innerWidth <= 768 ? '1rem 0.5rem' : '2rem 1rem'
+    <div style={{
+      minHeight: '100vh',
+      background: '#f8fafc',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
-      <div style={{ 
-        maxWidth: 1200, 
-        margin: '0 auto',
-        padding: window.innerWidth <= 768 ? '0 0.5rem' : '0'
+      {/* Modern Mobile Header */}
+      <div style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: '1rem',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        boxShadow: '0 2px 20px rgba(0,0,0,0.1)'
       }}>
-        {/* Header */}
-        <div style={{ 
-          background: 'rgba(255, 255, 255, 0.95)', 
-          borderRadius: window.innerWidth <= 768 ? 16 : 20, 
-          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem', 
-          marginBottom: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-          backdropFilter: 'blur(10px)'
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          maxWidth: 480,
+          margin: '0 auto'
         }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: window.innerWidth <= 768 ? 'flex-start' : 'center', 
-            marginBottom: '1rem',
-            flexDirection: window.innerWidth <= 768 ? 'column' : 'row',
-            gap: window.innerWidth <= 768 ? '1rem' : '0'
-          }}>
-            <div style={{ width: window.innerWidth <= 768 ? '100%' : 'auto' }}>
-              <h1 style={{ 
-                fontSize: window.innerWidth <= 480 ? '1.8rem' : window.innerWidth <= 768 ? '2rem' : '2.5rem', 
-                fontWeight: 700, 
-                margin: 0, 
-                color: '#000000',
-                lineHeight: '1.2'
-              }}>
-                Welcome back, {displayName}! 👋
-              </h1>
-              <p style={{ 
-                fontSize: window.innerWidth <= 768 ? '1rem' : '1.1rem', 
-                color: '#64748b', 
-                margin: '0.5rem 0 0 0',
-                lineHeight: '1.4'
-              }}>
-                {userProfile.occupation ? `${userProfile.occupation}` : 'Ready to explore?'}
-                {userProfile.location && ` • ${userProfile.location}`}
-              </p>
-            </div>
-            <div style={{ 
-              display: 'flex', 
-              gap: window.innerWidth <= 768 ? '0.75rem' : '1rem',
-              width: window.innerWidth <= 768 ? '100%' : 'auto',
-              justifyContent: window.innerWidth <= 768 ? 'stretch' : 'flex-end'
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backdropFilter: 'blur(10px)'
             }}>
-              <button
-                onClick={goToAccount}
-                style={{
-                  background: '#fff',
-                  border: '2px solid #e5e7eb',
-                  borderRadius: window.innerWidth <= 768 ? 10 : 12,
-                  padding: window.innerWidth <= 768 ? '8px 16px' : '10px 20px',
-                  cursor: 'pointer',
-                  fontSize: window.innerWidth <= 768 ? '0.85rem' : '0.95rem',
-                  fontWeight: 600,
-                  color: '#374151',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  transition: 'all 0.2s ease',
-                  flex: window.innerWidth <= 768 ? '1' : 'none',
-                  justifyContent: 'center'
-                }}
-                onMouseOver={e => {
-                  e.currentTarget.style.borderColor = '#000000';
-                  e.currentTarget.style.color = '#000000';
-                }}
-                onMouseOut={e => {
-                  e.currentTarget.style.borderColor = '#e5e7eb';
-                  e.currentTarget.style.color = '#374151';
-                }}
-              >
-                ⚙️ Account
-              </button>
-              <button
-                onClick={goToProfile}
-                style={{
-                  background: '#000000',
-                  border: 'none',
-                  borderRadius: window.innerWidth <= 768 ? 10 : 12,
-                  padding: window.innerWidth <= 768 ? '8px 16px' : '10px 20px',
-                  cursor: 'pointer',
-                  fontSize: window.innerWidth <= 768 ? '0.85rem' : '0.95rem',
-                  fontWeight: 600,
-                  color: '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  transition: 'all 0.2s ease',
-                  flex: window.innerWidth <= 768 ? '1' : 'none',
-                  justifyContent: 'center'
-                }}
-                onMouseOver={e => e.currentTarget.style.transform = 'translateY(-1px)'}
-                onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
-              >
-                👤 Profile
-              </button>
-              <button
-                onClick={goToStories}
-                style={{
-                  background: '#000000',
-                  border: 'none',
-                  borderRadius: window.innerWidth <= 768 ? 10 : 12,
-                  padding: window.innerWidth <= 768 ? '8px 16px' : '10px 20px',
-                  cursor: 'pointer',
-                  fontSize: window.innerWidth <= 768 ? '0.85rem' : '0.95rem',
-                  fontWeight: 600,
-                  color: '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  transition: 'all 0.2s ease',
-                  flex: window.innerWidth <= 768 ? '1' : 'none',
-                  justifyContent: 'center'
-                }}
-                onMouseOver={e => {
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseOut={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                📖 Our Stories
-              </button>
+              <span style={{ fontSize: '1.5rem' }}>🏠</span>
             </div>
+            <h1 style={{
+              color: '#ffffff',
+              fontSize: '1.4rem',
+              fontWeight: 700,
+              margin: 0,
+              textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}>
+              Ashramam
+            </h1>
           </div>
+          
+          <div style={{
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.2)',
+            backdropFilter: 'blur(10px)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '2px solid rgba(255,255,255,0.3)',
+            transition: 'all 0.2s ease'
+          }}
+          onClick={goToProfile}>
+            <span style={{ fontSize: '1.2rem', color: '#ffffff' }}>👤</span>
+          </div>
+        </div>
+      </div>
 
-          {/* Profile Completion Bar */}
-          {profileCompletion < 100 && (
-            <div style={{ 
-              background: '#f8fafc', 
-              borderRadius: 12, 
-              padding: '1rem', 
-              border: '1px solid #e2e8f0' 
+      {/* Main Content */}
+      <div style={{
+        maxWidth: 480,
+        margin: '0 auto',
+        background: '#ffffff',
+        minHeight: 'calc(100vh - 80px)'
+      }}>
+        {/* Story/Post Composer */}
+        <div style={{
+          padding: '1rem',
+          borderBottom: '1px solid #e2e8f0',
+          background: '#ffffff'
+        }}>
+          <form onSubmit={handleSubmitPost}>
+            <textarea
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="What's on your mind?"
+              style={{
+                width: '100%',
+                minHeight: '80px',
+                border: 'none',
+                outline: 'none',
+                fontSize: '1rem',
+                resize: 'none',
+                fontFamily: 'inherit',
+                color: '#1e293b',
+                background: 'transparent'
+              }}
+            />
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: '1rem'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#374151' }}>
-                  Profile Completion
-                </span>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#000000' }}>
-                  {profileCompletion}%
-                </span>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <span style={{ fontSize: '1.2rem', cursor: 'pointer' }}>📷</span>
+                <span style={{ fontSize: '1.2rem', cursor: 'pointer' }}>😊</span>
+                <span style={{ fontSize: '1.2rem', cursor: 'pointer' }}>📍</span>
               </div>
-              <div style={{ background: '#e5e7eb', height: 8, borderRadius: 4, overflow: 'hidden' }}>
-                              <div style={{ 
-                background: profileCompletion >= 80 ? '#000000' : profileCompletion >= 50 ? '#666666' : '#999999',
-                height: '100%', 
-                width: `${profileCompletion}%`, 
-                transition: 'width 0.3s ease',
-                borderRadius: 4
-              }}></div>
-              </div>
-              <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.5rem 0 0 0' }}>
-                Complete your profile to unlock all features and connect with others!
-              </p>
+              <button
+                type="submit"
+                disabled={!newMessage.trim() || submitting}
+                style={{
+                  background: newMessage.trim() ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : '#e2e8f0',
+                  color: newMessage.trim() ? '#ffffff' : '#94a3b8',
+                  border: 'none',
+                  borderRadius: 20,
+                  padding: '0.5rem 1.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 600,
+                  cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {submitting ? '⏳' : 'Share'}
+              </button>
             </div>
-          )}
+          </form>
         </div>
 
-        {/* Feature Tabs */}
-        <div style={{ 
-          background: 'rgba(255, 255, 255, 0.95)', 
-          borderRadius: 20, 
-          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem', 
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-          backdropFilter: 'blur(10px)',
-          marginBottom: '2rem'
-        }}>
-          <div style={{
-            display: 'flex',
-            gap: '1rem',
-            marginBottom: '2rem',
-            borderBottom: '1px solid #e5e7eb',
-            paddingBottom: '1rem',
-            overflowX: 'auto'
-          }}>
-            <button
-              onClick={() => setActiveTab('scrapbook')}
+        {/* Posts Feed */}
+        <div style={{ padding: '0' }}>
+          {scrapPosts.map((post) => (
+            <div
+              key={post.id}
               style={{
-                background: activeTab === 'scrapbook' ? '#000000' : 'transparent',
-                color: activeTab === 'scrapbook' ? '#ffffff' : '#64748b',
-                border: '1px solid #e5e7eb',
-                borderRadius: 8,
-                padding: '10px 20px',
-                cursor: 'pointer',
-                fontSize: '0.95rem',
-                fontWeight: 600,
-                transition: 'all 0.2s ease',
-                whiteSpace: 'nowrap'
+                padding: '1rem',
+                borderBottom: '1px solid #f1f5f9',
+                background: '#ffffff'
               }}
             >
-              📝 Scrap Book
-            </button>
-            {/* Future feature tabs can be added here */}
-            <button
-              onClick={() => setActiveTab('coming-soon')}
-              style={{
-                background: activeTab === 'coming-soon' ? '#000000' : 'transparent',
-                color: activeTab === 'coming-soon' ? '#ffffff' : '#64748b',
-                border: '1px solid #e5e7eb',
-                borderRadius: 8,
-                padding: '10px 20px',
-                cursor: 'pointer',
-                fontSize: '0.95rem',
-                fontWeight: 600,
-                transition: 'all 0.2s ease',
-                whiteSpace: 'nowrap',
-                opacity: 0.5
-              }}
-            >
-              🔮 More Features
-            </button>
-          </div>
-
-          {/* Tab Content */}
-          {activeTab === 'scrapbook' && (
-            <div>
-              <h2 style={{ 
-                fontSize: window.innerWidth <= 768 ? '1.5rem' : '1.8rem', 
-                fontWeight: 600, 
-                color: '#000000', 
-                margin: '0 0 2rem 0' 
-              }}>
-                Scrap Book
-              </h2>
-              
-              {/* Placeholder for Scrap Book content */}
-              <div style={{
-                background: '#f8fafc',
-                border: '2px dashed #cbd5e1',
-                borderRadius: 12,
-                padding: '3rem 2rem',
-                textAlign: 'center'
-              }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem', opacity: 0.3 }}>�</div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: '#374151', margin: '0 0 0.5rem 0' }}>
-                  Scrap Book Content Area
-                </h3>
-                <p style={{ fontSize: '1rem', color: '#64748b', margin: 0 }}>
-                  This is where we'll design the scrap book features later
-                </p>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                <div style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#ffffff',
+                  fontSize: '1.2rem',
+                  fontWeight: 600,
+                  flexShrink: 0
+                }}>
+                  {post.author.charAt(0).toUpperCase()}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                    <h4 style={{ 
+                      margin: 0, 
+                      fontSize: '0.9rem', 
+                      fontWeight: 600,
+                      color: '#1e293b'
+                    }}>
+                      {post.author}
+                    </h4>
+                    <span style={{ 
+                      fontSize: '0.8rem', 
+                      color: '#64748b'
+                    }}>
+                      {post.createdAt.toDate().toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p style={{
+                    margin: '0 0 1rem 0',
+                    fontSize: '0.95rem',
+                    lineHeight: '1.5',
+                    color: '#334155',
+                    whiteSpace: 'pre-wrap'
+                  }}>
+                    {post.message}
+                  </p>
+                  <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                    <button style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#64748b',
+                      fontSize: '0.9rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem'
+                    }}>
+                      ❤️ {post.likeCount || 0}
+                    </button>
+                    <button style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#64748b',
+                      fontSize: '0.9rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem'
+                    }}>
+                      💬 {post.replyCount || 0}
+                    </button>
+                    <button style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#64748b',
+                      fontSize: '0.9rem',
+                      cursor: 'pointer'
+                    }}>
+                      📤
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
 
-          {activeTab === 'coming-soon' && (
-            <div style={{ textAlign: 'center', padding: '2rem' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem', opacity: 0.3 }}>�</div>
-              <h2 style={{ 
-                fontSize: '1.5rem', 
-                fontWeight: 600, 
-                color: '#000000', 
-                margin: '0 0 1rem 0' 
-              }}>
-                More Features Coming Soon
-              </h2>
-              <p style={{ 
-                fontSize: '1rem', 
-                color: '#64748b', 
-                margin: 0
-              }}>
-                We're working on exciting new features for your dashboard
-              </p>
-            </div>
-          )}
+      {/* Bottom Navigation */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: '#ffffff',
+        borderTop: '1px solid #e2e8f0',
+        padding: '0.75rem 0',
+        zIndex: 100
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          maxWidth: 480,
+          margin: '0 auto'
+        }}>
+          <button
+            onClick={() => setActiveTab('scrapbook')}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.5rem',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.25rem',
+              color: activeTab === 'scrapbook' ? '#667eea' : '#64748b'
+            }}
+          >
+            <span style={{ fontSize: '1.5rem' }}>🏠</span>
+            <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>Home</span>
+          </button>
+          
+          <button
+            onClick={goToStories}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.5rem',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.25rem',
+              color: '#64748b'
+            }}
+          >
+            <span style={{ fontSize: '1.5rem' }}>📚</span>
+            <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>Stories</span>
+          </button>
+          
+          <button
+            onClick={goToResidents}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.5rem',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.25rem',
+              color: '#64748b'
+            }}
+          >
+            <span style={{ fontSize: '1.5rem' }}>👥</span>
+            <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>People</span>
+          </button>
+          
+          <button
+            onClick={goToAccount}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.5rem',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.25rem',
+              color: '#64748b'
+            }}
+          >
+            <span style={{ fontSize: '1.5rem' }}>⚙️</span>
+            <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>Settings</span>
+          </button>
         </div>
       </div>
     </div>

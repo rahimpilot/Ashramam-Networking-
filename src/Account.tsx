@@ -1,15 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
-import { sendEmailVerification, reload } from 'firebase/auth';
+import { sendEmailVerification, reload, onAuthStateChanged, User } from 'firebase/auth';
 
 const Account: React.FC = () => {
-  const user = auth.currentUser;
   const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [verificationSent, setVerificationSent] = useState(false);
   const [verificationLoading, setVerificationLoading] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState('');
   const [isCheckingVerification, setIsCheckingVerification] = useState(false);
+
+  // Auth state listener
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+      
+      if (!currentUser) {
+        navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
 
   const formatDate = (timestamp: string | null | undefined) => {
     if (!timestamp) return 'N/A';
@@ -91,6 +106,21 @@ const Account: React.FC = () => {
     return () => clearInterval(interval);
   }, [user]);
 
+  if (authLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
+          <p>Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Will be redirected by useEffect
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: '#ffffff', padding: '1rem 0' }}>
       <div style={{ 
@@ -118,9 +148,9 @@ const Account: React.FC = () => {
         <button 
           onClick={goToHome}
           style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-            color: '#fff', 
-            border: 'none', 
+            background: '#000000', 
+            color: '#ffffff', 
+            border: '2px solid #000000', 
             borderRadius: 10, 
             padding: window.innerWidth <= 768 ? '6px 12px' : '8px 16px', 
             cursor: 'pointer', 
@@ -129,12 +159,17 @@ const Account: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
             transition: 'all 0.2s ease',
             minWidth: 'fit-content'
           }}
-          onMouseOver={e => e.currentTarget.style.transform = 'translateY(-1px)'}
-          onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
+          onMouseOver={e => {
+            e.currentTarget.style.background = '#ffffff';
+            e.currentTarget.style.color = '#000000';
+          }}
+          onMouseOut={e => {
+            e.currentTarget.style.background = '#000000';
+            e.currentTarget.style.color = '#ffffff';
+          }}
         >
           🏠 Home
         </button>
@@ -153,23 +188,23 @@ const Account: React.FC = () => {
         fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.5rem', 
         fontWeight: 700, 
         marginBottom: '0.5rem', 
-        color: '#2563eb',
+        color: '#000000',
         textAlign: 'center'
       }}>Welcome!</h2>
       {user ? (
         <>
           <div style={{ marginBottom: window.innerWidth <= 768 ? 16 : 24, width: '100%' }}>
             <div style={{ 
-              background: '#f8fafc', 
+              background: '#ffffff', 
               borderRadius: window.innerWidth <= 768 ? 8 : 12, 
               padding: window.innerWidth <= 768 ? 16 : 20, 
-              border: '1px solid #e2e8f0' 
+              border: '1px solid #000000' 
             }}>
               <h3 style={{ 
                 fontSize: window.innerWidth <= 768 ? '1rem' : '1.1rem', 
                 fontWeight: 600, 
                 marginBottom: window.innerWidth <= 768 ? 12 : 16, 
-                color: '#1e293b', 
+                color: '#000000', 
                 textAlign: 'center' 
               }}>Account Information</h3>
               
@@ -179,31 +214,31 @@ const Account: React.FC = () => {
                   justifyContent: 'space-between', 
                   alignItems: window.innerWidth <= 768 ? 'flex-start' : 'center', 
                   padding: window.innerWidth <= 768 ? '6px 0' : '8px 0', 
-                  borderBottom: '1px solid #e2e8f0',
+                  borderBottom: '1px solid #000000',
                   flexDirection: window.innerWidth <= 480 ? 'column' : 'row',
                   gap: window.innerWidth <= 480 ? '4px' : '0'
                 }}>
                   <span style={{ 
                     fontWeight: 600, 
-                    color: '#475569',
+                    color: '#000000',
                     fontSize: window.innerWidth <= 768 ? '0.9rem' : '1rem'
                   }}>Display Name:</span>
                   <span style={{ 
-                    color: '#64748b',
+                    color: '#000000',
                     fontSize: window.innerWidth <= 768 ? '0.85rem' : '1rem',
                     textAlign: window.innerWidth <= 480 ? 'left' : 'right'
                   }}>{user.displayName || 'Not set'}</span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-                  <span style={{ fontWeight: 600, color: '#475569' }}>Email:</span>
-                  <span style={{ color: '#64748b', fontSize: '0.9rem' }}>{user.email}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #000000' }}>
+                  <span style={{ fontWeight: 600, color: '#000000' }}>Email:</span>
+                  <span style={{ color: '#000000', fontSize: '0.9rem' }}>{user.email}</span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-                  <span style={{ fontWeight: 600, color: '#475569' }}>Email Verified:</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #000000' }}>
+                  <span style={{ fontWeight: 600, color: '#000000' }}>Email Verified:</span>
                   <span style={{ 
-                    color: user.emailVerified ? '#059669' : '#dc2626', 
+                    color: '#000000', 
                     fontWeight: 600,
                     fontSize: '0.9rem'
                   }}>
@@ -211,31 +246,31 @@ const Account: React.FC = () => {
                   </span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-                  <span style={{ fontWeight: 600, color: '#475569' }}>Phone Number:</span>
-                  <span style={{ color: '#64748b' }}>{user.phoneNumber || 'Not provided'}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #000000' }}>
+                  <span style={{ fontWeight: 600, color: '#000000' }}>Phone Number:</span>
+                  <span style={{ color: '#000000' }}>{user.phoneNumber || 'Not provided'}</span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-                  <span style={{ fontWeight: 600, color: '#475569' }}>Account Created:</span>
-                  <span style={{ color: '#64748b', fontSize: '0.85rem' }}>{formatDate(user.metadata.creationTime)}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #000000' }}>
+                  <span style={{ fontWeight: 600, color: '#000000' }}>Account Created:</span>
+                  <span style={{ color: '#000000', fontSize: '0.85rem' }}>{formatDate(user.metadata.creationTime)}</span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-                  <span style={{ fontWeight: 600, color: '#475569' }}>Last Sign In:</span>
-                  <span style={{ color: '#64748b', fontSize: '0.85rem' }}>{formatDate(user.metadata.lastSignInTime)}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #000000' }}>
+                  <span style={{ fontWeight: 600, color: '#000000' }}>Last Sign In:</span>
+                  <span style={{ color: '#000000', fontSize: '0.85rem' }}>{formatDate(user.metadata.lastSignInTime)}</span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-                  <span style={{ fontWeight: 600, color: '#475569' }}>Provider:</span>
-                  <span style={{ color: '#64748b' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid #000000' }}>
+                  <span style={{ fontWeight: 600, color: '#000000' }}>Provider:</span>
+                  <span style={{ color: '#000000' }}>
                     {user.providerData.length > 0 ? user.providerData[0].providerId : 'Unknown'}
                   </span>
                 </div>
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' }}>
-                  <span style={{ fontWeight: 600, color: '#475569' }}>User ID:</span>
-                  <span style={{ color: '#64748b', fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                  <span style={{ fontWeight: 600, color: '#000000' }}>User ID:</span>
+                  <span style={{ color: '#000000', fontSize: '0.8rem', fontFamily: 'monospace' }}>
                     {user.uid.substring(0, 8)}...
                   </span>
                 </div>
@@ -245,8 +280,8 @@ const Account: React.FC = () => {
           
           {!user.emailVerified && (
             <div style={{ marginBottom: 16, width: '100%' }}>
-              <div style={{ background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: 8, padding: 16, textAlign: 'center' }}>
-                <p style={{ margin: '0 0 12px 0', fontSize: '0.9rem', color: '#92400e' }}>
+              <div style={{ background: '#ffffff', border: '2px solid #000000', borderRadius: 8, padding: 16, textAlign: 'center' }}>
+                <p style={{ margin: '0 0 12px 0', fontSize: '0.9rem', color: '#000000' }}>
                   <strong>⚠️ Email not verified</strong><br />
                   Please verify your email address for full account access.
                 </p>
@@ -257,9 +292,9 @@ const Account: React.FC = () => {
                       onClick={handleSendVerification}
                       disabled={verificationLoading}
                       style={{
-                        background: '#f59e0b',
-                        color: '#fff',
-                        border: 'none',
+                        background: '#000000',
+                        color: '#ffffff',
+                        border: '2px solid #000000',
                         borderRadius: 6,
                         padding: '8px 16px',
                         fontSize: '0.85rem',
@@ -268,7 +303,8 @@ const Account: React.FC = () => {
                         opacity: verificationLoading ? 0.6 : 1,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px'
+                        gap: '6px',
+                        transition: 'all 0.2s ease'
                       }}
                     >
                       {verificationLoading ? '⏳ Sending...' : '📧 Send Verification Email'}
@@ -278,9 +314,9 @@ const Account: React.FC = () => {
                       onClick={handleCheckVerification}
                       disabled={isCheckingVerification}
                       style={{
-                        background: '#059669',
-                        color: '#fff',
-                        border: 'none',
+                        background: '#000000',
+                        color: '#ffffff',
+                        border: '2px solid #000000',
                         borderRadius: 6,
                         padding: '8px 16px',
                         fontSize: '0.85rem',
@@ -289,7 +325,8 @@ const Account: React.FC = () => {
                         opacity: isCheckingVerification ? 0.6 : 1,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px'
+                        gap: '6px',
+                        transition: 'all 0.2s ease'
                       }}
                     >
                       {isCheckingVerification ? '⏳ Checking...' : '🔄 I\'ve Verified - Check Status'}
@@ -299,7 +336,7 @@ const Account: React.FC = () => {
                   {verificationMessage && (
                     <div style={{
                       fontSize: '0.8rem',
-                      color: verificationMessage.includes('Error') ? '#dc2626' : verificationMessage.includes('🎉') ? '#059669' : '#92400e',
+                      color: '#000000',
                       fontWeight: 500,
                       marginTop: '4px',
                       lineHeight: '1.3'
@@ -308,7 +345,7 @@ const Account: React.FC = () => {
                     </div>
                   )}
                   
-                  <div style={{ fontSize: '0.75rem', color: '#92400e', marginTop: '4px' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#000000', marginTop: '4px' }}>
                     💡 Check your spam folder if you don't see the email
                   </div>
                 </div>
@@ -318,8 +355,8 @@ const Account: React.FC = () => {
 
           {user.emailVerified && (
             <div style={{ marginBottom: 16, width: '100%' }}>
-              <div style={{ background: '#dcfce7', border: '1px solid #16a34a', borderRadius: 8, padding: 12, textAlign: 'center' }}>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: '#166534', fontWeight: 600 }}>
+              <div style={{ background: '#ffffff', border: '2px solid #000000', borderRadius: 8, padding: 12, textAlign: 'center' }}>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: '#000000', fontWeight: 600 }}>
                   ✅ Email verified successfully!
                 </p>
               </div>
@@ -329,27 +366,45 @@ const Account: React.FC = () => {
             marginBottom: 12, 
             padding: window.innerWidth <= 768 ? '8px 24px' : '10px 32px', 
             borderRadius: 8, 
-            background: '#9333ea', 
-            color: '#fff', 
+            background: '#000000', 
+            color: '#ffffff', 
             fontWeight: 600, 
-            border: 'none', 
+            border: '2px solid #000000', 
             cursor: 'pointer', 
             fontSize: window.innerWidth <= 768 ? '0.9rem' : '1rem', 
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            width: window.innerWidth <= 480 ? '100%' : 'auto'
-          }}>Profile</button>
+            width: window.innerWidth <= 480 ? '100%' : 'auto',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseOver={e => {
+            e.currentTarget.style.background = '#ffffff';
+            e.currentTarget.style.color = '#000000';
+          }}
+          onMouseOut={e => {
+            e.currentTarget.style.background = '#000000';
+            e.currentTarget.style.color = '#ffffff';
+          }}
+          >Profile</button>
           <button onClick={handleLogout} style={{ 
             padding: window.innerWidth <= 768 ? '8px 24px' : '10px 32px', 
             borderRadius: 8, 
-            background: 'linear-gradient(to right, #2563eb, #9333ea)', 
-            color: '#fff', 
+            background: '#000000', 
+            color: '#ffffff', 
             fontWeight: 600, 
-            border: 'none', 
+            border: '2px solid #000000', 
             cursor: 'pointer', 
             fontSize: window.innerWidth <= 768 ? '0.9rem' : '1rem', 
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            width: window.innerWidth <= 480 ? '100%' : 'auto'
-          }}>Logout</button>
+            width: window.innerWidth <= 480 ? '100%' : 'auto',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseOver={e => {
+            e.currentTarget.style.background = '#ffffff';
+            e.currentTarget.style.color = '#000000';
+          }}
+          onMouseOut={e => {
+            e.currentTarget.style.background = '#000000';
+            e.currentTarget.style.color = '#ffffff';
+          }}
+          >Logout</button>
         </>
       ) : (
         <p>Not logged in.</p>

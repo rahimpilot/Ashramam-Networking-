@@ -1,12 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db } from './firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { sendPasswordResetEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { sendPasswordResetEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential, onAuthStateChanged, User } from 'firebase/auth';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+// Admin-controlled profile picture mapping
+const getProfilePicture = (email: string, name: string) => {
+  const profilePictureMap: { [key: string]: string } = {
+    // Add user email mappings here - controlled by admin
+    'raimu456@gmail.com': '/raimu.jpg',
+    'hyder.mohamed@gmail.com': '/hyder.JPG',
+    'mzmhmd@gmail.com': '/bruno.png',
+    'nias.ahamad@gmail.com': '/nias.jpg',
+    'mshanir@gmail.com': '/shanir.jpeg',
+    'niaznasu@gmail.com': '/niaz.jpeg',
+    'riaz986@gmail.com': '/riaz',
+    'anaskallur@gmail.com': '/anas.jpg',
+    'mailmohasinali@gmail.com': '/appan.JPG',
+    // Add more mappings as needed
+  };
+
+  // Check if user has a custom profile picture
+  if (profilePictureMap[email.toLowerCase()]) {
+    return profilePictureMap[email.toLowerCase()];
+  }
+
+  // Return null for default avatar
+  return null;
+};
 
 const Profile: React.FC = () => {
-  const user = auth.currentUser;
   const navigate = useNavigate();
+  const location = useLocation();
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  
+  // Check if this is a first-time user
+  const isFirstTime = new URLSearchParams(location.search).get('firstTime') === 'true';
+
+  // Auth state listener
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+      
+      if (!currentUser) {
+        navigate('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
   
   // Personal Info
   const [name, setName] = useState('');
@@ -95,6 +139,13 @@ const Profile: React.FC = () => {
         
         setMessage('Profile updated successfully! 🎉');
         setMessageType('success');
+        
+        // If this is a first-time user and profile is now complete, redirect to dashboard
+        if (isFirstTime && calculateProfileCompletion() === 100) {
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 2000); // Give user time to see success message
+        }
       } catch (error) {
         setMessage('Error saving profile. Please try again.');
         setMessageType('error');
@@ -104,7 +155,9 @@ const Profile: React.FC = () => {
     setLoading(false);
     
     // Clear message after 3 seconds
-    setTimeout(() => setMessage(''), 3000);
+    if (!isFirstTime || calculateProfileCompletion() !== 100) {
+      setTimeout(() => setMessage(''), 3000);
+    }
   };
 
   const handlePasswordReset = async () => {
@@ -184,7 +237,19 @@ const Profile: React.FC = () => {
   };
 
   const goBack = () => {
-    navigate('/account');
+    if (isFirstTime) {
+      // For first-time users, check if profile is complete before allowing navigation
+      if (calculateProfileCompletion() === 100) {
+        navigate('/dashboard');
+      } else {
+        // Show a warning that profile must be completed
+        setMessage('Please complete all profile fields before proceeding.');
+        setMessageType('error');
+        setTimeout(() => setMessage(''), 3000);
+      }
+    } else {
+      navigate('/account');
+    }
   };
 
   const renderTabButton = (tabId: string, label: string, icon: string) => (
@@ -269,6 +334,21 @@ const Profile: React.FC = () => {
     );
   }
 
+  if (authLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
+          <p>Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // Will be redirected by useEffect
+  }
+
   return (
     <div style={{ 
       minHeight: '100vh', 
@@ -289,23 +369,41 @@ const Profile: React.FC = () => {
           boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
           backdropFilter: 'blur(10px)'
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            marginBottom: '1rem',
+            flexWrap: window.innerWidth <= 480 ? 'wrap' : 'nowrap',
+            gap: window.innerWidth <= 480 ? '0.5rem' : '0'
+          }}>
             <button onClick={goBack} style={{ 
               background: 'rgba(255,255,255,0.8)', 
               border: '2px solid #e5e7eb',
               borderRadius: 12, 
-              width: 40, 
+              width: isFirstTime ? 'auto' : 40, 
               height: 40, 
               color: '#374151', 
               cursor: 'pointer', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center',
-              fontSize: '1.2rem',
+              fontSize: isFirstTime ? '0.9rem' : '1.2rem',
+              fontWeight: isFirstTime ? 600 : 'normal',
+              padding: isFirstTime ? '0 12px' : '0',
               transition: 'all 0.2s ease'
             }}>
-              ←
+              {isFirstTime ? '📝 Continue to Dashboard' : '←'}
             </button>
+            
+            <img src="/newlogo.svg" alt="Logo" style={{ 
+              height: window.innerWidth <= 768 ? 36 : 48,
+              order: window.innerWidth <= 480 ? -1 : 0,
+              width: window.innerWidth <= 480 ? '100%' : 'auto',
+              maxWidth: window.innerWidth <= 480 ? '120px' : 'none',
+              margin: window.innerWidth <= 480 ? '0 auto 0.5rem auto' : '0',
+              flex: window.innerWidth <= 480 ? 'none' : '0 0 auto'
+            }} />
             
             <h1 style={{ 
               fontSize: window.innerWidth <= 768 ? '1.8rem' : '2.2rem', 
@@ -313,13 +411,37 @@ const Profile: React.FC = () => {
               margin: 0, 
               color: '#000000',
               textAlign: 'center',
-              flex: 1
+              flex: 1,
+              order: window.innerWidth <= 480 ? 1 : 0
             }}>
-              Profile Settings
+              {isFirstTime ? 'Welcome! Complete Your Profile' : 'Profile Settings'}
             </h1>
 
-            <div style={{ width: 40 }}></div>
+            <div style={{ 
+              width: 40,
+              order: window.innerWidth <= 480 ? 2 : 0
+            }}></div>
           </div>
+
+          {isFirstTime && (
+            <div style={{ 
+              background: '#ffffff', 
+              border: '2px solid #000000', 
+              borderRadius: 12, 
+              padding: 16, 
+              marginBottom: 16,
+              textAlign: 'center'
+            }}>
+              <p style={{ 
+                fontSize: '1rem', 
+                color: '#000000', 
+                margin: 0,
+                fontWeight: 600
+              }}>
+                🎉 Welcome to Ashramam! Please complete your profile information below to get started.
+              </p>
+            </div>
+          )}
 
           <p style={{ 
             fontSize: '1rem', 
@@ -327,7 +449,7 @@ const Profile: React.FC = () => {
             margin: 0,
             textAlign: 'center'
           }}>
-            Manage your personal information and account settings
+            {isFirstTime ? 'Fill out all the required fields to join the community' : 'Manage your personal information and account settings'}
           </p>
         </div>
 
@@ -348,19 +470,59 @@ const Profile: React.FC = () => {
             textAlign: window.innerWidth <= 480 ? 'center' : 'left'
           }}>
             <div style={{ 
-              width: window.innerWidth <= 768 ? 80 : 100, 
-              height: window.innerWidth <= 768 ? 80 : 100, 
+              width: window.innerWidth <= 768 ? 120 : 150, 
+              height: window.innerWidth <= 768 ? 120 : 150, 
               borderRadius: '50%', 
-              background: '#f3f4f6',
               border: '3px solid #e5e7eb',
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              fontSize: window.innerWidth <= 768 ? '2rem' : '2.5rem', 
-              color: '#9ca3af',
-              flexShrink: 0
+              flexShrink: 0,
+              overflow: 'hidden',
+              position: 'relative'
             }}>
-              {name ? name.charAt(0).toUpperCase() : '👤'}
+              {user?.email && name && getProfilePicture(user.email, name) ? (
+                <img 
+                  src={getProfilePicture(user.email, name)!} 
+                  alt={name}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const parent = target.parentElement;
+                    if (parent) {
+                      parent.innerHTML = `
+                        <div style="
+                          width: 100%;
+                          height: 100%;
+                          background: #f3f4f6;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-size: ${window.innerWidth <= 768 ? '3rem' : '4rem'};
+                          color: #9ca3af;
+                        ">
+                          ${name ? name.charAt(0).toUpperCase() : '👤'}
+                        </div>
+                      `;
+                    }
+                  }}
+                />
+              ) : (
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  background: '#f3f4f6',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: window.innerWidth <= 768 ? '3rem' : '4rem',
+                  color: '#9ca3af'
+                }}>
+                  {name ? name.charAt(0).toUpperCase() : '👤'}
+                </div>
+              )}
             </div>
             
             <div style={{ minWidth: 0, flex: 1 }}>
@@ -639,7 +801,7 @@ const Profile: React.FC = () => {
 
                   <div style={{ gridColumn: '1 / -1' }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#000000' }}>
-                      Bio or നിങ്ങളുടെ ചരിത്രം. വളരെ കുറച്ചു വാക്കുകളിൽ ലളിതമായി തള്ളാതെ എഴുതുക. (Hyder and Marzook can contact me if you need more space to write)
+                      Bio or നിങ്ങളുടെ ചരിത്രം. വളരെ കുറച്ചു വാക്കുകളിൽ ലളിതമായി തള്ളാതെ എഴുതുക. (Hyder and Marzook can contact the admin if you need more space)
                     </label>
                     <textarea 
                       value={bio} 

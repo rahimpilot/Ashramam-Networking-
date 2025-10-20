@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from './firebase';
+import { auth, db, setAuthPersistence } from './firebase';
 import DisclaimerModal from './DisclaimerModal';
 
 const Login: React.FC = () => {
@@ -13,6 +13,7 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
+  const [keepLoggedIn, setKeepLoggedIn] = useState(true); // Default to true for better UX
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,6 +51,9 @@ const Login: React.FC = () => {
         setIsSignUp(false);
         setDisclaimerAccepted(false); // Reset for next time
       } else {
+        // Set auth persistence based on user preference before signing in
+        await setAuthPersistence(keepLoggedIn);
+        
         const cred = await signInWithEmailAndPassword(auth, email, password);
         // Enforce admin approval: check user's pendingUsers doc
         const pendingRef = doc(db, 'pendingUsers', cred.user.uid);
@@ -66,8 +70,30 @@ const Login: React.FC = () => {
           setError('No pendingUsers document found for your account.');
           return;
         }
-        // Approved: redirect to account page
-        navigate('/account');
+        // Approved: check if profile is complete, then redirect appropriately
+        const profileRef = doc(db, 'profiles', cred.user.uid);
+        const profileSnap = await getDoc(profileRef);
+        
+        if (profileSnap.exists()) {
+          const profileData = profileSnap.data();
+          // Check if essential profile fields are filled
+          const isProfileComplete = profileData.name && 
+                                   profileData.city && 
+                                   profileData.country && 
+                                   profileData.bio && 
+                                   profileData.intellectual && 
+                                   profileData.umrah && 
+                                   profileData.funLover;
+          
+          if (isProfileComplete) {
+            navigate('/dashboard');
+          } else {
+            navigate('/profile?firstTime=true');
+          }
+        } else {
+          // No profile exists, definitely need to complete it
+          navigate('/profile?firstTime=true');
+        }
       }
     } catch (err: any) {
       setError(err.message);
@@ -228,6 +254,39 @@ const Login: React.FC = () => {
                 required
               />
             </div>
+
+            {/* Keep me logged in checkbox - only show for sign in */}
+            {!isSignUp && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                marginTop: '0.5rem'
+              }}>
+                <input
+                  type="checkbox"
+                  id="keepLoggedIn"
+                  checked={keepLoggedIn}
+                  onChange={(e) => setKeepLoggedIn(e.target.checked)}
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                    cursor: 'pointer'
+                  }}
+                />
+                <label
+                  htmlFor="keepLoggedIn"
+                  style={{
+                    fontSize: '0.875rem',
+                    color: '#374151',
+                    cursor: 'pointer',
+                    userSelect: 'none'
+                  }}
+                >
+                  Keep me logged in
+                </label>
+              </div>
+            )}
 
             {error && (
               <div style={{
