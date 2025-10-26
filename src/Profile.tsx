@@ -37,6 +37,11 @@ const Profile: React.FC = () => {
   
   // Check if this is a first-time user
   const isFirstTime = new URLSearchParams(location.search).get('firstTime') === 'true';
+  
+  // Check if viewing another user's profile
+  const viewedUserEmail = new URLSearchParams(location.search).get('user');
+  const viewedUserName = new URLSearchParams(location.search).get('name');
+  const isViewingOtherUser = viewedUserEmail && viewedUserEmail !== user?.email;
 
   // Auth state listener
   useEffect(() => {
@@ -478,51 +483,56 @@ const Profile: React.FC = () => {
               overflow: 'hidden',
               position: 'relative'
             }}>
-              {user?.email && name && getProfilePicture(user.email, name) ? (
-                <img 
-                  src={getProfilePicture(user.email, name)!} 
-                  alt={name}
-                  style={{
+              {(() => {
+                const displayEmail = isViewingOtherUser ? viewedUserEmail : user?.email;
+                const displayName = isViewingOtherUser ? viewedUserName : name;
+                
+                return displayEmail && displayName && getProfilePicture(displayEmail, displayName) ? (
+                  <img 
+                    src={getProfilePicture(displayEmail, displayName)!} 
+                    alt={displayName}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = `
+                          <div style="
+                            width: 100%;
+                            height: 100%;
+                            background: #f3f4f6;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: ${window.innerWidth <= 768 ? '3rem' : '4rem'};
+                            color: #9ca3af;
+                          ">
+                            ${displayName ? displayName.charAt(0).toUpperCase() : '👤'}
+                          </div>
+                        `;
+                      }
+                    }}
+                  />
+                ) : (
+                  <div style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover'
-                  }}
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                    const parent = target.parentElement;
-                    if (parent) {
-                      parent.innerHTML = `
-                        <div style="
-                          width: 100%;
-                          height: 100%;
-                          background: #f3f4f6;
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          font-size: ${window.innerWidth <= 768 ? '3rem' : '4rem'};
-                          color: #9ca3af;
-                        ">
-                          ${name ? name.charAt(0).toUpperCase() : '👤'}
-                        </div>
-                      `;
-                    }
-                  }}
-                />
-              ) : (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  background: '#f3f4f6',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: window.innerWidth <= 768 ? '3rem' : '4rem',
-                  color: '#9ca3af'
-                }}>
-                  {name ? name.charAt(0).toUpperCase() : '👤'}
-                </div>
-              )}
+                    background: '#f3f4f6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: window.innerWidth <= 768 ? '3rem' : '4rem',
+                    color: '#9ca3af'
+                  }}>
+                    {displayName ? displayName.charAt(0).toUpperCase() : '👤'}
+                  </div>
+                );
+              })()}
             </div>
             
             <div style={{ minWidth: 0, flex: 1 }}>
@@ -532,14 +542,14 @@ const Profile: React.FC = () => {
                 margin: '0 0 0.5rem 0',
                 color: '#000000'
               }}>
-                {name || 'Complete Your Profile'}
+                {isViewingOtherUser ? viewedUserName : (name || 'Complete Your Profile')}
               </h2>
               <p style={{ 
                 fontSize: '0.95rem', 
                 color: '#64748b', 
                 margin: '0 0 0.75rem 0'
               }}>
-                {user.email}
+                {isViewingOtherUser ? viewedUserEmail : user.email}
               </p>
               <div style={{ 
                 display: 'flex', 
@@ -628,8 +638,9 @@ const Profile: React.FC = () => {
           </div>
         </div>
 
-        {/* Content Area */}
-        <form onSubmit={handleSave}>
+        {/* Content Area - Only show for own profile */}
+        {!isViewingOtherUser && (
+          <form onSubmit={handleSave}>
           <div style={{ 
             background: 'rgba(255, 255, 255, 0.95)', 
             borderRadius: window.innerWidth <= 768 ? 16 : 20, 
@@ -1095,6 +1106,7 @@ const Profile: React.FC = () => {
             </button>
           </div>
       </form>
+        )}
     </div>
     </div>
   );

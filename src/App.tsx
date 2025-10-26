@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Login from './Login';
 import AdminPanel from './AdminPanel';
 import Account from './Account';
@@ -8,6 +8,33 @@ import Profile from './Profile';
 import Dashboard from './Dashboard';
 import Stories from './Stories';
 import Residents from './Residents';
+import Hangout from './Hangout';
+import BottomNavigation from './BottomNavigation';
+
+// App Content component that can use location hook
+const AppContent: React.FC = () => {
+  const location = useLocation();
+
+  return (
+    <div style={{ minHeight: '100vh', paddingBottom: '80px' }}>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/stories" element={<Stories />} />
+          <Route path="/hangout" element={<Hangout />} />
+          <Route path="/residents" element={<Residents />} />
+          <Route path="/account" element={<Account />} />
+        </Routes>      {/* Bottom Navigation - only show on main app pages */}
+      {location.pathname !== '/' &&
+       location.pathname !== '/admin' &&
+       location.pathname !== '/profile' && (
+        <BottomNavigation />
+      )}
+    </div>
+  );
+};
 
 function App() {
   // PWA Error Boundary
@@ -40,9 +67,9 @@ function App() {
 
   if (hasError) {
     return (
-      <div style={{ 
-        padding: '2rem', 
-        textAlign: 'center', 
+      <div style={{
+        padding: '2rem',
+        textAlign: 'center',
         fontFamily: 'system-ui, sans-serif',
         minHeight: '100vh',
         display: 'flex',
@@ -75,15 +102,7 @@ function App() {
 
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL || ''}>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/stories" element={<Stories />} />
-        <Route path="/residents" element={<Residents />} />
-      </Routes>
+      <AppContent />
     </BrowserRouter>
   );
 }
