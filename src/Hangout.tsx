@@ -46,14 +46,6 @@ const Hangout: React.FC = () => {
             }}>
               Hangout
             </h1>
-            <p style={{
-              fontSize: '1.1rem',
-              color: '#64748b',
-              margin: 0,
-              maxWidth: '400px'
-            }}>
-              Coming Soon - Redesigned Hangout Experience
-            </p>
           </div>
         </div>
 
