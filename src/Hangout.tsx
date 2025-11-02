@@ -32,11 +32,23 @@ const Hangout: React.FC = () => {
             flexDirection: 'column',
             textAlign: 'center'
           }}>
+            {/* Logo */}
             <div style={{
-              fontSize: window.innerWidth <= 768 ? '3rem' : '4rem',
-              marginBottom: '1rem'
+              display: 'flex',
+              justifyContent: 'center',
+              marginBottom: '1rem',
+              width: '100%'
             }}>
-              🍸
+              <img
+                src="/newlogo.svg"
+                alt="Ashramam Vibes Logo"
+                style={{
+                  height: window.innerWidth <= 768 ? '48px' : '64px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07))'
+                }}
+              />
             </div>
             <h1 style={{
               fontSize: window.innerWidth <= 768 ? '2rem' : '2.5rem',
@@ -52,7 +64,7 @@ const Hangout: React.FC = () => {
         {/* Feature Icons */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(3, 1fr)',
+          gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(2, 1fr)',
           gap: window.innerWidth <= 768 ? '1rem' : '1.5rem',
           marginBottom: window.innerWidth <= 768 ? '1.5rem' : '2rem'
         }}>
@@ -67,6 +79,7 @@ const Hangout: React.FC = () => {
             border: '2px solid #fbbf24',
             boxShadow: '0 4px 12px rgba(251, 191, 36, 0.2)'
           }}
+          onClick={() => navigate('/power-group')}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-4px)';
             e.currentTarget.style.boxShadow = '0 8px 25px rgba(251, 191, 36, 0.3)';
@@ -90,7 +103,7 @@ const Hangout: React.FC = () => {
               color: '#78350f',
               margin: 0
             }}>
-              Coming Soon
+              Rich and Naughty
             </p>
           </div>
 
@@ -105,6 +118,7 @@ const Hangout: React.FC = () => {
             border: '2px solid #3b82f6',
             boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
           }}
+          onClick={() => navigate('/meeting-minutes')}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-4px)';
             e.currentTarget.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.3)';
@@ -123,13 +137,6 @@ const Hangout: React.FC = () => {
             }}>
               Minutes of Meeting
             </h3>
-            <p style={{
-              fontSize: '0.9rem',
-              color: '#1d4ed8',
-              margin: 0
-            }}>
-              Coming Soon
-            </p>
           </div>
 
           {/* Royal Bank of Chandiyar */}
@@ -143,6 +150,7 @@ const Hangout: React.FC = () => {
             border: '2px solid #16a34a',
             boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)'
           }}
+          onClick={() => navigate('/royal-bank')}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-4px)';
             e.currentTarget.style.boxShadow = '0 8px 25px rgba(22, 163, 74, 0.3)';
@@ -166,7 +174,46 @@ const Hangout: React.FC = () => {
               color: '#15803d',
               margin: 0
             }}>
-              Coming Soon
+              Apply for financial assistance to enjoy life
+            </p>
+          </div>
+
+          {/* Happening Now */}
+          <div style={{
+            background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
+            borderRadius: window.innerWidth <= 768 ? 12 : 16,
+            padding: window.innerWidth <= 768 ? '2rem 1rem' : '2.5rem 1.5rem',
+            textAlign: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            border: '2px solid #dc2626',
+            boxShadow: '0 4px 12px rgba(220, 38, 38, 0.2)'
+          }}
+          onClick={() => navigate('/voice-room')}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(220, 38, 38, 0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 38, 38, 0.2)';
+          }}
+          >
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔥</div>
+            <h3 style={{
+              fontSize: window.innerWidth <= 768 ? '1.2rem' : '1.4rem',
+              fontWeight: 700,
+              margin: '0 0 0.5rem 0',
+              color: '#991b1b'
+            }}>
+              Happening Now
+            </h3>
+            <p style={{
+              fontSize: '0.9rem',
+              color: '#b91c1c',
+              margin: 0
+            }}>
+              Join Voice Chat
             </p>
           </div>
         </div>

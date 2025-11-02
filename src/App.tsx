@@ -9,6 +9,12 @@ import Dashboard from './Dashboard';
 import Stories from './Stories';
 import Residents from './Residents';
 import Hangout from './Hangout';
+import MeetingMinutes from './MeetingMinutes';
+import October5th2025Meeting from './October5th2025Meeting';
+import September7th2025Meeting from './September7th2025Meeting';
+import PowerGroup from './PowerGroup';
+import VoiceRoom from './VoiceRoom';
+import RoyalBank from './RoyalBank';
 import BottomNavigation from './BottomNavigation';
 
 // App Content component that can use location hook
@@ -24,12 +30,19 @@ const AppContent: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/stories" element={<Stories />} />
           <Route path="/hangout" element={<Hangout />} />
+          <Route path="/royal-bank" element={<RoyalBank />} />
+          <Route path="/voice-room" element={<VoiceRoom />} />
+          <Route path="/meeting-minutes" element={<MeetingMinutes />} />
+          <Route path="/meeting-minutes/october-5th-2025" element={<October5th2025Meeting />} />
+          <Route path="/meeting-minutes/september-7th-2025" element={<September7th2025Meeting />} />
+          <Route path="/power-group" element={<PowerGroup />} />
           <Route path="/residents" element={<Residents />} />
           <Route path="/account" element={<Account />} />
         </Routes>      {/* Bottom Navigation - only show on main app pages */}
       {location.pathname !== '/' &&
        location.pathname !== '/admin' &&
-       location.pathname !== '/profile' && (
+       location.pathname !== '/profile' &&
+       location.pathname !== '/voice-room' && (
         <BottomNavigation />
       )}
     </div>
