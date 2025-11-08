@@ -48,16 +48,19 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
       <button
         onClick={goToScrapbook}
         style={{
-          background: 'none',
+          background: activeTab === 'scrapbook' ? 'rgba(59, 130, 246, 0.1)' : 'none',
           border: 'none',
           padding: '0.5rem',
+          borderRadius: '12px',
           cursor: 'pointer',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '0.25rem',
           color: activeTab === 'scrapbook' ? '#1f2937' : '#64748b',
-          transition: 'color 0.2s ease'
+          transition: 'all 0.2s ease',
+          transform: activeTab === 'scrapbook' ? 'scale(1.05)' : 'scale(1)',
+          minWidth: '60px'
         }}
       >
         <span style={{ fontSize: '1.5rem' }}>🏠</span>
@@ -67,16 +70,19 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
       <button
         onClick={goToStories}
         style={{
-          background: 'none',
+          background: activeTab === 'stories' ? 'rgba(59, 130, 246, 0.1)' : 'none',
           border: 'none',
           padding: '0.5rem',
+          borderRadius: '12px',
           cursor: 'pointer',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '0.25rem',
           color: activeTab === 'stories' ? '#1f2937' : '#64748b',
-          transition: 'color 0.2s ease'
+          transition: 'all 0.2s ease',
+          transform: activeTab === 'stories' ? 'scale(1.05)' : 'scale(1)',
+          minWidth: '60px'
         }}
       >
         <span style={{ fontSize: '1.5rem' }}>📚</span>
@@ -86,16 +92,19 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
       <button
         onClick={goToHangout}
         style={{
-          background: 'none',
+          background: activeTab === 'hangout' ? 'rgba(59, 130, 246, 0.1)' : 'none',
           border: 'none',
           padding: '0.5rem',
+          borderRadius: '12px',
           cursor: 'pointer',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '0.25rem',
           color: activeTab === 'hangout' ? '#1f2937' : '#64748b',
-          transition: 'color 0.2s ease'
+          transition: 'all 0.2s ease',
+          transform: activeTab === 'hangout' ? 'scale(1.05)' : 'scale(1)',
+          minWidth: '60px'
         }}
       >
         <span style={{ fontSize: '1.5rem' }}>🍸</span>
@@ -105,16 +114,19 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
       <button
         onClick={goToPeople}
         style={{
-          background: 'none',
+          background: activeTab === 'people' ? 'rgba(59, 130, 246, 0.1)' : 'none',
           border: 'none',
           padding: '0.5rem',
+          borderRadius: '12px',
           cursor: 'pointer',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '0.25rem',
           color: activeTab === 'people' ? '#1f2937' : '#64748b',
-          transition: 'color 0.2s ease'
+          transition: 'all 0.2s ease',
+          transform: activeTab === 'people' ? 'scale(1.05)' : 'scale(1)',
+          minWidth: '60px'
         }}
       >
         <span style={{ fontSize: '1.5rem' }}>👥</span>
@@ -124,16 +136,19 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
       <button
         onClick={goToSettings}
         style={{
-          background: 'none',
+          background: activeTab === 'settings' ? 'rgba(59, 130, 246, 0.1)' : 'none',
           border: 'none',
           padding: '0.5rem',
+          borderRadius: '12px',
           cursor: 'pointer',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '0.25rem',
           color: activeTab === 'settings' ? '#1f2937' : '#64748b',
-          transition: 'color 0.2s ease'
+          transition: 'all 0.2s ease',
+          transform: activeTab === 'settings' ? 'scale(1.05)' : 'scale(1)',
+          minWidth: '60px'
         }}
       >
         <span style={{ fontSize: '1.5rem' }}>⚙️</span>

@@ -16,6 +16,7 @@ import PowerGroup from './PowerGroup';
 import VoiceRoom from './VoiceRoom';
 import RoyalBank from './RoyalBank';
 import BottomNavigation from './BottomNavigation';
+import InstallPrompt from './InstallPrompt';
 
 // App Content component that can use location hook
 const AppContent: React.FC = () => {
@@ -116,6 +117,7 @@ function App() {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL || ''}>
       <AppContent />
+      <InstallPrompt />
     </BrowserRouter>
   );
 }

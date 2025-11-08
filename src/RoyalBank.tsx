@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LoanApplicationForm from './LoanApplicationForm';
 
 const RoyalBank: React.FC = () => {
   const navigate = useNavigate();
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   return (
     <div style={{
@@ -99,7 +101,7 @@ const RoyalBank: React.FC = () => {
             marginRight: 'auto',
             fontWeight: 500
           }}>
-            Where money meets your leisure and pressure
+            Where money meets leisure and pleasure
           </p>
 
           {/* Subtitle */}
@@ -169,21 +171,21 @@ const RoyalBank: React.FC = () => {
             borderRadius: '12px',
             border: '2px solid #16a34a'
           }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>💳</div>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>✈️</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
               color: '#166534',
               margin: '0 0 0.5rem 0'
             }}>
-              Premium Savings
+              യാത്ര വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
               color: '#15803d',
               margin: 0
             }}>
-              High-yield savings accounts with competitive interest rates
+              ഭാര്യയിൽ നിന്നും ഒരു ഒളിച്ചോട്ടം
             </p>
           </div>
 
@@ -194,21 +196,21 @@ const RoyalBank: React.FC = () => {
             borderRadius: '12px',
             border: '2px solid #059669'
           }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🏡</div>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🕌</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
               color: '#065f46',
               margin: '0 0 0.5rem 0'
             }}>
-              Home Loans
+              ഉംറ വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
               color: '#047857',
               margin: 0
             }}>
-              Flexible mortgage solutions for your dream home
+              നല്ലവനായ ഉണ്ണിയാവാൻ ആഗ്രഹിക്കുന്നവർക്ക്
             </p>
           </div>
 
@@ -219,21 +221,21 @@ const RoyalBank: React.FC = () => {
             borderRadius: '12px',
             border: '2px solid #059669'
           }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>✈️</div>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🎉</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
               color: '#065f46',
               margin: '0 0 0.5rem 0'
             }}>
-              Travel Rewards
+              ഉല്ലാസ വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
               color: '#047857',
               margin: 0
             }}>
-              Earn points on every transaction for your leisure activities
+              നാരങ്ങാ വെള്ളവും പിന്നെ അങ്ങോട്ട് സുഖമാവലും
             </p>
           </div>
 
@@ -244,21 +246,21 @@ const RoyalBank: React.FC = () => {
             borderRadius: '12px',
             border: '2px solid #059669'
           }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📈</div>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>⚠️</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
               color: '#065f46',
               margin: '0 0 0.5rem 0'
             }}>
-              Investment Plans
+              വായ്പ തിരികെ അടക്കാത്തവർ
             </h3>
             <p style={{
               fontSize: '0.9rem',
               color: '#047857',
               margin: 0
             }}>
-              Diversified portfolio options with expert guidance
+              തിരിച്ചു താടാ
             </p>
           </div>
         </div>
@@ -362,9 +364,11 @@ const RoyalBank: React.FC = () => {
             color: '#bbf7d0',
             margin: '0 0 1.5rem 0'
           }}>
-            Apply for financial assistance and start your journey with us today!
+            വായ്പ എടുക്കുവിൻ .... ഉല്ലസിക്കുവിൻ...
           </p>
-          <button style={{
+          <button 
+            onClick={() => setIsFormOpen(true)}
+            style={{
             background: '#fbbf24',
             color: '#78350f',
             border: 'none',
@@ -463,6 +467,9 @@ const RoyalBank: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Loan Application Form Modal */}
+      <LoanApplicationForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </div>
   );
 };

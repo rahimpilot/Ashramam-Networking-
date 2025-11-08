@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { auth, db } from './firebase';
-import { doc, getDoc, collection, getDocs, setDoc, updateDoc, query, orderBy, Timestamp, where, limit, writeBatch } from 'firebase/firestore';
+import { auth, db, storage } from './firebase';
+import { doc, getDoc, collection, getDocs, setDoc, updateDoc, query, orderBy, Timestamp } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { ref, deleteObject } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 
 // Admin-controlled profile picture mapping
@@ -17,6 +18,7 @@ const getProfilePicture = (email: string, name: string) => {
     'riaz986@gmail.com': '/riaz',
     'anaskallur@gmail.com': '/anas.jpg',
     'mailmohasinali@gmail.com': '/appan.JPG',
+    'asifmadheena@gmail.com': '/asif.png',
     // Add more mappings as needed
   };
 
@@ -66,18 +68,6 @@ interface ScrapReply {
   author: string;
   authorEmail: string;
   createdAt: Timestamp;
-}
-
-interface Notification {
-  id: string;
-  type: 'new_post' | 'mention' | 'like' | 'reply';
-  message: string;
-  recipientEmail: string;
-  senderEmail: string;
-  senderName: string;
-  postId?: string;
-  createdAt: Timestamp;
-  read: boolean;
 }
 
 interface ImageModalProps {
@@ -140,7 +130,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, onClose }) =>
         </button>
         <img
           src={imageSrc}
-          alt="Full size post image"
+          alt="Full size post"
           style={{
             maxWidth: '100%',
             maxHeight: '100%',
@@ -166,6 +156,7 @@ const Dashboard: React.FC = () => {
   const [scrapPosts, setScrapPosts] = useState<ScrapPost[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userProfiles, setUserProfiles] = useState<{[email: string]: UserProfile}>({});
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -174,14 +165,10 @@ const Dashboard: React.FC = () => {
   const [showLikes, setShowLikes] = useState<{[postId: string]: boolean}>({});
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState<string | null>(null);
-
-  // Notification states
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
-  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
   
   // Mention/Tagging states
   const [showMentionDropdown, setShowMentionDropdown] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [mentionQuery, setMentionQuery] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const [mentionUsers, setMentionUsers] = useState<MentionableUser[]>([]);
@@ -189,6 +176,7 @@ const Dashboard: React.FC = () => {
 
   // Comment mention states
   const [showCommentMentionDropdown, setShowCommentMentionDropdown] = useState<{[postId: string]: boolean}>({});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [commentMentionQuery, setCommentMentionQuery] = useState<{[postId: string]: string}>({});
   const [commentCursorPosition, setCommentCursorPosition] = useState<{[postId: string]: number}>({});
   const [commentMentionUsers, setCommentMentionUsers] = useState<{[postId: string]: MentionableUser[]}>({});
@@ -196,6 +184,7 @@ const Dashboard: React.FC = () => {
   // Edit post states
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [editingMessage, setEditingMessage] = useState<string>('');
+  const [editingImageRemoved, setEditingImageRemoved] = useState<boolean>(false);
 
   // Enhanced avatar fetching with fallback options
   const getUserAvatar = (post: any): string | null => {
@@ -516,18 +505,6 @@ const Dashboard: React.FC = () => {
           likes: updatedLikes,
           likeCount: updatedLikes.length
         });
-
-        // Create notification for post author if someone liked their post
-        if (!likes.includes(userEmail) && postData.authorEmail !== userEmail) {
-          await createNotification({
-            type: 'like',
-            message: `${userProfile.name || user.displayName || 'Someone'} liked your post`,
-            recipientEmail: postData.authorEmail,
-            senderEmail: user.email,
-            senderName: userProfile.name || user.displayName || 'Anonymous User',
-            postId: postId
-          });
-        }
         
         fetchScrapPosts();
       }
@@ -586,34 +563,6 @@ const Dashboard: React.FC = () => {
         setShowCommentMentionDropdown(prev => ({ ...prev, [postId]: false }));
         fetchScrapPosts();
 
-        // Create notifications for comment mentions
-        if (commentMentions.length > 0) {
-          for (const mentionedUser of commentMentions) {
-            const mentionedUserData = allUsers.find(u => u.name.toLowerCase() === mentionedUser.toLowerCase());
-            if (mentionedUserData && mentionedUserData.email !== user.email) {
-              await createNotification({
-                type: 'mention',
-                message: `${userProfile.name || user.displayName || 'Someone'} mentioned you in a comment`,
-                recipientEmail: mentionedUserData.email,
-                senderEmail: user.email || '',
-                senderName: userProfile.name || user.displayName || 'Anonymous User',
-                postId: postId
-              });
-            }
-          }
-        }
-
-        // Create notification for post author if someone commented on their post
-        if (postData.authorEmail !== user.email) {
-          await createNotification({
-            type: 'reply',
-            message: `${userProfile.name || user.displayName || 'Someone'} replied to your post`,
-            recipientEmail: postData.authorEmail,
-            senderEmail: user.email || '',
-            senderName: userProfile.name || user.displayName || 'Anonymous User',
-            postId: postId
-          });
-        }
       }
     } catch (error) {
       console.error('Error adding comment:', error);
@@ -629,6 +578,7 @@ const Dashboard: React.FC = () => {
   const cancelEditingPost = () => {
     setEditingPostId(null);
     setEditingMessage('');
+    setEditingImageRemoved(false);
   };
 
   const saveEditedPost = async (postId: string) => {
@@ -647,12 +597,26 @@ const Dashboard: React.FC = () => {
           return;
         }
 
-        await updateDoc(postRef, {
+        const updateData: any = {
           message: editingMessage.trim()
-        });
+        };
+
+        // Handle image removal
+        if (editingImageRemoved && postData.image) {
+          try {
+            const imageRef = ref(storage, postData.image);
+            await deleteObject(imageRef);
+          } catch (error) {
+            console.error('Error deleting image from storage:', error);
+          }
+          updateData.image = null;
+        }
+
+        await updateDoc(postRef, updateData);
 
         setEditingPostId(null);
         setEditingMessage('');
+        setEditingImageRemoved(false);
         fetchScrapPosts();
       }
     } catch (error) {
@@ -709,82 +673,6 @@ const Dashboard: React.FC = () => {
   const closeImageModal = () => {
     setImageModalOpen(false);
     setModalImageSrc(null);
-  };
-
-  // Notification functions
-  const createNotification = async (notification: Omit<Notification, 'id' | 'createdAt' | 'read'>) => {
-    try {
-      const notificationData = {
-        ...notification,
-        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-        createdAt: Timestamp.now(),
-        read: false
-      };
-
-      await setDoc(doc(collection(db, 'notifications')), notificationData);
-      console.log('Notification created:', notificationData);
-    } catch (error) {
-      console.error('Error creating notification:', error);
-    }
-  };
-
-  const fetchNotifications = async () => {
-    if (!user?.email) return;
-
-    try {
-      const notificationsRef = collection(db, 'notifications');
-      const q = query(
-        notificationsRef,
-        where('recipientEmail', '==', user.email),
-        orderBy('createdAt', 'desc'),
-        limit(50)
-      );
-      const querySnapshot = await getDocs(q);
-
-      const notificationsData: Notification[] = [];
-      querySnapshot.forEach((doc) => {
-        notificationsData.push({ id: doc.id, ...doc.data() } as Notification);
-      });
-
-      setNotifications(notificationsData);
-      const unreadCount = notificationsData.filter(n => !n.read).length;
-      setUnreadNotificationCount(unreadCount);
-    } catch (error) {
-      console.error('Error fetching notifications:', error);
-    }
-  };
-
-  const markNotificationAsRead = async (notificationId: string) => {
-    try {
-      await updateDoc(doc(db, 'notifications', notificationId), { read: true });
-      setNotifications(prev =>
-        prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
-      );
-      setUnreadNotificationCount(prev => Math.max(0, prev - 1));
-    } catch (error) {
-      console.error('Error marking notification as read:', error);
-    }
-  };
-
-  const markAllNotificationsAsRead = async () => {
-    if (!user?.email) return;
-
-    try {
-      const batch = writeBatch(db);
-      const unreadNotifications = notifications.filter(n => !n.read);
-
-      unreadNotifications.forEach(notification => {
-        const notificationRef = doc(db, 'notifications', notification.id);
-        batch.update(notificationRef, { read: true });
-      });
-
-      await batch.commit();
-
-      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-      setUnreadNotificationCount(0);
-    } catch (error) {
-      console.error('Error marking all notifications as read:', error);
-    }
   };
 
   // Simple post submission
@@ -858,36 +746,6 @@ const Dashboard: React.FC = () => {
       fetchScrapPosts();
       console.log('Post submission completed successfully');
 
-      // Create notifications for mentions
-      if (mentions.length > 0) {
-        for (const mentionedUser of mentions) {
-          const mentionedUserData = allUsers.find(u => u.name.toLowerCase() === mentionedUser.toLowerCase());
-          if (mentionedUserData && mentionedUserData.email !== user.email) {
-            await createNotification({
-              type: 'mention',
-              message: `${userProfile.name || user.displayName || 'Someone'} mentioned you in a post`,
-              recipientEmail: mentionedUserData.email,
-              senderEmail: user.email || '',
-              senderName: userProfile.name || user.displayName || 'Anonymous User',
-              postId: docRef.id
-            });
-          }
-        }
-      }
-
-      // Create notifications for all users about new post (excluding the poster)
-      for (const userData of allUsers) {
-        if (userData.email !== user.email) {
-          await createNotification({
-            type: 'new_post',
-            message: `${userProfile.name || user.displayName || 'Someone'} created a new post`,
-            recipientEmail: userData.email,
-            senderEmail: user.email || '',
-            senderName: userProfile.name || user.displayName || 'Anonymous User',
-            postId: docRef.id
-          });
-        }
-      }
     } catch (error) {
       console.error('Error posting message:', error);
       alert('Failed to post. Please try again.');
@@ -953,21 +811,6 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // Close notification dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (showNotificationDropdown && !target.closest('.notification-bell')) {
-        setShowNotificationDropdown(false);
-      }
-    };
-
-    if (showNotificationDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [showNotificationDropdown]);
-
   useEffect(() => {
     if (authLoading) return;
     if (!user) {
@@ -978,8 +821,8 @@ const Dashboard: React.FC = () => {
     fetchUserProfile();
     fetchScrapPosts();
     fetchAllUsers(); // Fetch users for mentioning
-    fetchNotifications(); // Fetch user notifications
     setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, navigate, authLoading]);
 
   if (authLoading || loading) {
@@ -1044,66 +887,6 @@ const Dashboard: React.FC = () => {
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            {/* Notification Bell */}
-            <div style={{ position: 'relative' }}>
-              <div
-                className="notification-bell"
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: '50%',
-                  background: 'rgba(0,0,0,0.1)',
-                  backdropFilter: 'blur(10px)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '2px solid rgba(0,0,0,0.1)',
-                  transition: 'all 0.2s ease'
-                }}
-                onClick={() => {
-                  setShowNotificationDropdown(!showNotificationDropdown);
-                  if (!showNotificationDropdown) {
-                    // Mark all as read when opening dropdown
-                    markAllNotificationsAsRead();
-                  }
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(0,0,0,0.15)';
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(0,0,0,0.1)';
-                  e.currentTarget.style.transform = 'scale(1)';
-                }}
-              >
-                <span style={{ fontSize: '1.2rem' }}>🔔</span>
-              </div>
-
-              {/* Notification Badge */}
-              {unreadNotificationCount > 0 && (
-                <div style={{
-                  position: 'absolute',
-                  top: '-8px',
-                  right: '-8px',
-                  background: '#ef4444',
-                  color: '#ffffff',
-                  borderRadius: '50%',
-                  width: '20px',
-                  height: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.7rem',
-                  fontWeight: 'bold',
-                  border: '2px solid #ffffff',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                }}>
-                  {unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}
-                </div>
-              )}
-            </div>
-
             {/* Profile Picture */}
             <div style={{
               width: 36,
@@ -1144,161 +927,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Notification Dropdown */}
-      {showNotificationDropdown && (
-        <div style={{
-          position: 'absolute',
-          top: '100%',
-          right: '1rem',
-          width: '320px',
-          maxHeight: '400px',
-          background: '#ffffff',
-          border: '1px solid #e2e8f0',
-          borderRadius: '12px',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-          zIndex: 1000,
-          overflow: 'hidden'
-        }}>
-          <div style={{
-            padding: '1rem',
-            borderBottom: '1px solid #e2e8f0',
-            background: '#f8fafc'
-          }}>
-            <h3 style={{
-              margin: 0,
-              fontSize: '1.1rem',
-              fontWeight: 600,
-              color: '#1e293b'
-            }}>
-              Notifications
-            </h3>
-          </div>
-
-          <div style={{
-            maxHeight: '320px',
-            overflowY: 'auto'
-          }}>
-            {notifications.length === 0 ? (
-              <div style={{
-                padding: '2rem 1rem',
-                textAlign: 'center',
-                color: '#64748b'
-              }}>
-                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔔</div>
-                <p style={{ margin: 0 }}>No notifications yet</p>
-              </div>
-            ) : (
-              notifications.map((notification) => (
-                <div
-                  key={notification.id}
-                  style={{
-                    padding: '1rem',
-                    borderBottom: '1px solid #f1f5f9',
-                    background: notification.read ? '#ffffff' : '#f0f9ff',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s ease'
-                  }}
-                  onClick={() => {
-                    if (!notification.read) {
-                      markNotificationAsRead(notification.id);
-                    }
-                    // Navigate to post if it has a postId
-                    if (notification.postId) {
-                      // Could scroll to post or highlight it
-                      console.log('Navigate to post:', notification.postId);
-                    }
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = notification.read ? '#f8fafc' : '#e0f2fe';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = notification.read ? '#ffffff' : '#f0f9ff';
-                  }}
-                >
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '0.75rem'
-                  }}>
-                    <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      background: '#e2e8f0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
-                    }}>
-                      {notification.type === 'new_post' && '📝'}
-                      {notification.type === 'mention' && '🏷️'}
-                      {notification.type === 'like' && '❤️'}
-                      {notification.type === 'reply' && '💬'}
-                    </div>
-
-                    <div style={{ flex: 1 }}>
-                      <p style={{
-                        margin: 0,
-                        fontSize: '0.9rem',
-                        color: '#374151',
-                        lineHeight: '1.4'
-                      }}>
-                        {notification.message}
-                      </p>
-                      <p style={{
-                        margin: '0.25rem 0 0 0',
-                        fontSize: '0.75rem',
-                        color: '#64748b'
-                      }}>
-                        {notification.createdAt.toDate().toLocaleDateString()} at{' '}
-                        {notification.createdAt.toDate().toLocaleTimeString([], {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </p>
-                    </div>
-
-                    {!notification.read && (
-                      <div style={{
-                        width: '8px',
-                        height: '8px',
-                        borderRadius: '50%',
-                        background: '#3b82f6',
-                        flexShrink: 0,
-                        marginTop: '0.25rem'
-                      }} />
-                    )}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-
-          {notifications.length > 0 && (
-            <div style={{
-              padding: '0.75rem 1rem',
-              borderTop: '1px solid #e2e8f0',
-              background: '#f8fafc',
-              textAlign: 'center'
-            }}>
-              <button
-                onClick={() => setShowNotificationDropdown(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#3b82f6',
-                  fontSize: '0.9rem',
-                  fontWeight: 500,
-                  cursor: 'pointer'
-                }}
-              >
-                Close
-              </button>
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Tab Navigation */}
       <div style={{
@@ -1612,6 +1240,51 @@ const Dashboard: React.FC = () => {
                         }}
                         placeholder="Edit your post..."
                       />
+                      {post.image && !editingImageRemoved && (
+                        <div style={{ marginTop: '0.75rem', padding: '0.75rem', backgroundColor: '#fef3c7', borderRadius: '8px', border: '1px solid #fcd34d' }}>
+                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                            <img
+                              src={post.image}
+                              alt="Post content"
+                              style={{
+                                width: '60px',
+                                height: '60px',
+                                objectFit: 'cover',
+                                borderRadius: '6px'
+                              }}
+                            />
+                            <div style={{ flex: 1 }}>
+                              <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.85rem', color: '#92400e', fontWeight: 500 }}>
+                                Image attached
+                              </p>
+                              <button
+                                onClick={() => {
+                                  setEditingImageRemoved(true);
+                                }}
+                                style={{
+                                  background: '#dc2626',
+                                  color: '#ffffff',
+                                  border: 'none',
+                                  borderRadius: '4px',
+                                  padding: '0.35rem 0.75rem',
+                                  fontSize: '0.8rem',
+                                  fontWeight: 600,
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                Remove Image
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {editingImageRemoved && (
+                        <div style={{ marginTop: '0.75rem', padding: '0.75rem', backgroundColor: '#fee2e2', borderRadius: '8px', border: '1px solid #fca5a5' }}>
+                          <p style={{ margin: 0, fontSize: '0.85rem', color: '#991b1b', fontWeight: 500 }}>
+                            ✓ Image will be removed when you save
+                          </p>
+                        </div>
+                      )}
                       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
                         <button
                           onClick={() => saveEditedPost(post.id)}

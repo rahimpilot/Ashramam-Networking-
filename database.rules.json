@@ -1,0 +1,43 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "voiceRooms": {
+      ".indexOn": ["participants"],
+      "$roomId": {
+        "participants": {
+          "$userId": {
+            ".validate": "newData.hasChildren(['id', 'name', 'email', 'isMuted', 'isActive', 'joinedAt'])"
+          }
+        },
+        "offers": {
+          "$userId": {
+            "$targetId": {
+              ".validate": "newData.hasChildren(['sdp', 'type', 'timestamp'])"
+            }
+          }
+        },
+        "answers": {
+          "$userId": {
+            "$targetId": {
+              ".validate": "newData.hasChildren(['sdp', 'type', 'timestamp'])"
+            }
+          }
+        },
+        "iceCandidates": {
+          "$userId": {
+            "$targetId": {
+              "$candidateId": {
+                ".validate": "newData.hasChildren(['candidate', 'sdpMLineIndex', 'sdpMid', 'timestamp'])"
+              }
+            }
+          }
+        }
+      }
+    },
+    "test": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}

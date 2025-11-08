@@ -4,6 +4,7 @@
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "build",
   "env": {
+    "CI": "false",
     "REACT_APP_FIREBASE_API_KEY": "AIzaSyAto1Q5Bq2nHNNecCdsXLkLmpdNR2X_RdI",
     "REACT_APP_FIREBASE_AUTH_DOMAIN": "ashramam-network.firebaseapp.com",
     "REACT_APP_FIREBASE_PROJECT_ID": "ashramam-network",

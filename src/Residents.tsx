@@ -123,6 +123,7 @@ const getProfilePicture = (email: string, name: string) => {
     'riaz986@gmail.com': '/riaz',
     'anaskallur@gmail.com': '/anas.jpg',
     'mailmohasinali@gmail.com': '/appan.JPG',
+    'asifmadheena@gmail.com': '/asif.png',
     // Add more mappings as needed
   };
 

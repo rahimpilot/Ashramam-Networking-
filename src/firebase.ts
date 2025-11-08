@@ -1,11 +1,13 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence, connectAuthEmulator } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAto1Q5Bq2nHNNecCdsXLkLmpdNR2X_RdI",
   authDomain: "ashramam-network.firebaseapp.com",
+  databaseURL: "https://ashramam-network-default-rtdb.firebasedatabase.app",
   projectId: "ashramam-network",
   storageBucket: "ashramam-network.firebasestorage.app",
   messagingSenderId: "135445089005",
@@ -16,6 +18,9 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+// Initialize Realtime Database with explicit URL
+export const rtdb = getDatabase(app, "https://ashramam-network-default-rtdb.firebasedatabase.app");
 
 // Enhanced security: Connect to emulators in development for testing security rules
 if (process.env.NODE_ENV === 'development' && !auth.app.options.projectId?.includes('demo')) {

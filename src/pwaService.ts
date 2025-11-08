@@ -21,7 +21,7 @@ export class PWAService {
   private async registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register('/sw.js');
+        const registration = await navigator.serviceWorker.register('/service-worker.js');
         console.log('PWA: Service Worker registered successfully:', registration);
         
         // Listen for updates

@@ -466,24 +466,29 @@ const VoiceRoom: React.FC = () => {
 
     initializeAudio();
 
+    // Store ref values for cleanup
+    const currentPeerConnections = peerConnectionsRef.current;
+    const currentRoomId = roomIdRef.current;
+
     return () => {
       console.log('🧹 Cleaning up audio resources');
       // Cleanup when component unmounts
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(track => track.stop());
       }
-      Object.values(peerConnectionsRef.current).forEach(pc => {
+      Object.values(currentPeerConnections).forEach(pc => {
         pc.close();
       });
       
       // Remove participant from database when leaving
       if (user) {
-        const participantRef = ref(rtdb, `voiceRooms/${roomIdRef.current}/participants/${user.uid}`);
+        const participantRef = ref(rtdb, `voiceRooms/${currentRoomId}/participants/${user.uid}`);
         remove(participantRef).catch(err => {
           console.error('Error removing participant on cleanup:', err);
         });
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, makeOffer, handleRemoteOffer, handleRemoteAnswer, handleRemoteICECandidate]);
 
   // Toggle mute

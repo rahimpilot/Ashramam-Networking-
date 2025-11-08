@@ -17,15 +17,19 @@ const getProfilePicture = (email: string, name: string) => {
     'riaz986@gmail.com': '/riaz',
     'anaskallur@gmail.com': '/anas.jpg',
     'mailmohasinali@gmail.com': '/appan.JPG',
+    'asifmadheena@gmail.com': '/asif.png',
     // Add more mappings as needed
   };
 
   // Check if user has a custom profile picture
-  if (profilePictureMap[email.toLowerCase()]) {
-    return profilePictureMap[email.toLowerCase()];
+  const normalizedEmail = email ? email.toLowerCase().trim() : '';
+  if (normalizedEmail && profilePictureMap[normalizedEmail]) {
+    console.log('Profile picture found for:', normalizedEmail, profilePictureMap[normalizedEmail]);
+    return profilePictureMap[normalizedEmail];
   }
 
   // Return null for default avatar
+  console.log('No profile picture for:', normalizedEmail);
   return null;
 };
 
@@ -117,6 +121,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     setProfileComplete(calculateProfileCompletion());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, city, country, bio, intellectual, umrah, funLover]);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -257,6 +262,7 @@ const Profile: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const renderTabButton = (tabId: string, label: string, icon: string) => (
     <button
       onClick={() => setActiveTab(tabId)}
@@ -486,6 +492,13 @@ const Profile: React.FC = () => {
               {(() => {
                 const displayEmail = isViewingOtherUser ? viewedUserEmail : user?.email;
                 const displayName = isViewingOtherUser ? viewedUserName : name;
+                
+                console.log('Rendering profile picture:', {
+                  displayEmail,
+                  displayName,
+                  isViewingOtherUser,
+                  hasPicture: displayEmail && displayName ? getProfilePicture(displayEmail, displayName) : null
+                });
                 
                 return displayEmail && displayName && getProfilePicture(displayEmail, displayName) ? (
                   <img 

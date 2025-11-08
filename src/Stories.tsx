@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from './firebase';
-import { collection, getDocs, doc, setDoc, deleteDoc, query, orderBy, Timestamp, getDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, query, orderBy, Timestamp, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
@@ -82,6 +82,7 @@ const Stories: React.FC = () => {
     }
     fetchUserProfile();
     fetchStories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, navigate, authLoading]);
 
   const fetchUserProfile = async () => {
