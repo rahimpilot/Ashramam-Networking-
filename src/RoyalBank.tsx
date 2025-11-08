@@ -295,7 +295,7 @@ const RoyalBank: React.FC = () => {
               gap: '0.75rem'
             }}>
               <span style={{ fontSize: '1.2rem' }}>✓</span>
-              24/7 Customer Support and Digital Banking
+              Immediate approval with fastest verification
             </li>
             <li style={{
               fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
@@ -306,7 +306,7 @@ const RoyalBank: React.FC = () => {
               gap: '0.75rem'
             }}>
               <span style={{ fontSize: '1.2rem' }}>✓</span>
-              Zero Hidden Charges - Complete Transparency
+              No questions asked for Leisure loans with pleasure
             </li>
             <li style={{
               fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
@@ -317,18 +317,7 @@ const RoyalBank: React.FC = () => {
               gap: '0.75rem'
             }}>
               <span style={{ fontSize: '1.2rem' }}>✓</span>
-              Exclusive Member Benefits and Rewards
-            </li>
-            <li style={{
-              fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-              color: '#374151',
-              marginBottom: '0.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem'
-            }}>
-              <span style={{ fontSize: '1.2rem' }}>✓</span>
-              Competitive Interest Rates on Savings and Investments
+              Anonymous application process and personal chat with the Owner
             </li>
             <li style={{
               fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
@@ -338,7 +327,7 @@ const RoyalBank: React.FC = () => {
               gap: '0.75rem'
             }}>
               <span style={{ fontSize: '1.2rem' }}>✓</span>
-              Financial Wellness Programs and Expert Guidance
+              Complimentary leisure services with the bank owner for the lenders
             </li>
           </ul>
         </div>
