@@ -71,10 +71,40 @@ const November2nd2025Meeting: React.FC = () => {
               marginTop: 0,
               marginBottom: '0.75rem'
             }}>
-              1. Meeting Topic - To be updated
+              1. The Late Meeting Host - Marzooq Mohammed
             </h3>
             <p style={{ margin: '0.5rem 0', fontSize: '0.95rem' }}>
-              Content to be provided later.
+              The meeting host was late as usual — none other than Marzooq Mohammed — and started blabbering as usual as soon as he joined. He gave some instructions about the upcoming trip and also blabbered about stories from his past adventurous trips. During that time, I noticed that the other participants had placed their microphones on mute, which was obvious.
+            </p>
+          </div>
+
+          <div style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{
+              fontSize: '1.1rem',
+              fontWeight: 600,
+              color: '#1f2937',
+              marginTop: 0,
+              marginBottom: '0.75rem'
+            }}>
+              2. Rare Guest Appearance - Asif Madheena
+            </h3>
+            <p style={{ margin: '0.5rem 0', fontSize: '0.95rem' }}>
+              This time, we had a guest who hardly ever joins this Sunday meeting: his name is Asif Madheena. He tries to skip the meeting most of the time, providing random and ridiculous excuses such as visiting relatives, attending a grama event, going to theevandi rehearsals, visiting Black friends in Deira, etc. (We have learned enough not to fall for these stupid trap excuses anymore.) Another excuse he gives is about his "family man" life, which is utterly bullshit. Let's keep that topic aside.
+            </p>
+          </div>
+
+          <div style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{
+              fontSize: '1.1rem',
+              fontWeight: 600,
+              color: '#1f2937',
+              marginTop: 0,
+              marginBottom: '0.75rem'
+            }}>
+              3. Punctual Participant - Anas Ismail
+            </h3>
+            <p style={{ margin: '0.5rem 0', fontSize: '0.95rem' }}>
+              Anas Ismail was another punctual participant in this meeting. He was obviously managing his staff at the chicken shop and cutting several chicken thighs while wearing his white coat (just like a scientist in a lab) and attending the meeting. I was so proud to see his dedication toward this meeting while other motherfuckers fled without attending. He was also speaking to his staff, customers, and chicken distributors in English, Malayalam, Hindi, Arabic, Tulu, Konkani, and Kannada — all in Kallur accent.
             </p>
           </div>
 
@@ -89,7 +119,7 @@ const November2nd2025Meeting: React.FC = () => {
               color: '#6b7280',
               margin: 0
             }}>
-              Meeting minutes will be updated once the context is provided.
+              That's all for the minutes. If anything is missing, feel free to approach the admin, who can update the content accordingly.
             </p>
           </div>
         </div>
