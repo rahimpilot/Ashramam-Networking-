@@ -12,6 +12,7 @@ import Hangout from './Hangout';
 import MeetingMinutes from './MeetingMinutes';
 import October5th2025Meeting from './October5th2025Meeting';
 import September7th2025Meeting from './September7th2025Meeting';
+import November2nd2025Meeting from './November2nd2025Meeting';
 import PowerGroup from './PowerGroup';
 import VoiceRoom from './VoiceRoom';
 import RoyalBank from './RoyalBank';
@@ -36,6 +37,7 @@ const AppContent: React.FC = () => {
           <Route path="/meeting-minutes" element={<MeetingMinutes />} />
           <Route path="/meeting-minutes/october-5th-2025" element={<October5th2025Meeting />} />
           <Route path="/meeting-minutes/september-7th-2025" element={<September7th2025Meeting />} />
+          <Route path="/meeting-minutes/november-2nd-2025" element={<November2nd2025Meeting />} />
           <Route path="/power-group" element={<PowerGroup />} />
           <Route path="/residents" element={<Residents />} />
           <Route path="/account" element={<Account />} />

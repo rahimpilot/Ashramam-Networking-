@@ -148,6 +148,46 @@ const MeetingMinutes: React.FC = () => {
               Meeting minutes and discussions
             </p>
           </div>
+
+          {/* November 2nd 2025 Meeting Tile */}
+          <div style={{
+            background: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)',
+            borderRadius: window.innerWidth <= 768 ? 12 : 16,
+            padding: window.innerWidth <= 768 ? '2rem 1rem' : '2.5rem 1.5rem',
+            textAlign: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            border: '2px solid #16a34a',
+            boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)',
+            marginBottom: '1rem'
+          }}
+          onClick={() => navigate('/meeting-minutes/november-2nd-2025')}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(22, 163, 74, 0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(22, 163, 74, 0.2)';
+          }}
+          >
+            <h3 style={{
+              fontSize: window.innerWidth <= 768 ? '1.4rem' : '1.6rem',
+              fontWeight: 700,
+              margin: '0 0 0.5rem 0',
+              color: '#166534'
+            }}>
+              November 2nd 2025
+            </h3>
+            <p style={{
+              fontSize: '0.95rem',
+              color: '#15803d',
+              margin: 0,
+              fontWeight: 500
+            }}>
+              Meeting minutes and discussions
+            </p>
+          </div>
         </div>
 
         {/* Back Button */}
