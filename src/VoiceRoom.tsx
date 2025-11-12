@@ -982,20 +982,31 @@ const VoiceRoom: React.FC = () => {
                 <p>Participants Found: {debugInfo.participantsCount}</p>
                 <p>Peer Connections: {Object.keys(peerConnectionsRef.current).length}</p>
                 <p>Remote Streams: {Object.keys(remoteStreamsRef.current).length}</p>
-                <p>Database Connected: {debugInfo.databaseConnected ? '✅' : '❌'}</p>
+                <p>Database: {debugInfo.databaseConnected ? '✅ Connected' : '⚠️ Limited Mode'}</p>
                 {debugInfo.participantsCount === 0 && debugInfo.databaseConnected && (
-                  <p style={{ color: '#f59e0b', fontWeight: 600 }}>
-                    ⚠️ No other users found in room
+                  <p style={{ color: '#f59e0b', fontWeight: 600, marginTop: '0.5rem' }}>
+                    💡 No other participants yet - invite friends!
                   </p>
                 )}
                 {!debugInfo.databaseConnected && (
-                  <p style={{ color: '#dc2626', fontWeight: 600 }}>
-                    ❌ Database connection failed - try refreshing
-                  </p>
+                  <div style={{ 
+                    marginTop: '0.5rem',
+                    padding: '0.75rem',
+                    background: '#fef3c7',
+                    borderRadius: '6px',
+                    border: '1px solid #fcd34d'
+                  }}>
+                    <p style={{ color: '#92400e', fontWeight: 600, margin: '0 0 0.5rem 0' }}>
+                      ℹ️ Database Not Connected
+                    </p>
+                    <p style={{ color: '#78350f', fontSize: '0.75rem', margin: 0 }}>
+                      Voice room is in limited mode. To enable multi-user features, update Firebase Realtime Database rules. Check FIREBASE_SETUP.md for instructions.
+                    </p>
+                  </div>
                 )}
                 {debugInfo.participantsCount > 0 && Object.keys(peerConnectionsRef.current).length === 0 && (
-                  <p style={{ color: '#f59e0b', fontWeight: 600 }}>
-                    ⚠️ Participants found but no connections established
+                  <p style={{ color: '#f59e0b', fontWeight: 600, marginTop: '0.5rem' }}>
+                    🔄 Establishing connections...
                   </p>
                 )}
               </div>
