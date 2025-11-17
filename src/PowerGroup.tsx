@@ -42,6 +42,13 @@ const PowerGroup: React.FC = () => {
     'hyder.mohamed@gmail.com': '🧔'
   };
 
+  // Name mapping for Power Group members
+  const nameMap: { [key: string]: string } = {
+    'niaznasu@gmail.com': 'Niaz Kamaru',
+    'mshanir@gmail.com': 'Shanir Musliyamveetil',
+    'hyder.mohamed@gmail.com': 'Hyder Mohamed'
+  };
+
   const emailsToFetch = ['niaznasu@gmail.com', 'mshanir@gmail.com', 'hyder.mohamed@gmail.com'];
 
   useEffect(() => {
@@ -61,7 +68,7 @@ const PowerGroup: React.FC = () => {
             membersList.push({
               id: doc.id,
               email: doc.data().email,
-              displayName: doc.data().displayName || email.split('@')[0],
+              displayName: nameMap[email] || doc.data().displayName || email.split('@')[0],
               bio: doc.data().bio || '',
               profilePicture: profilePictureMap[email] || '👤',
               location: doc.data().location || '',
@@ -72,7 +79,7 @@ const PowerGroup: React.FC = () => {
             membersList.push({
               id: email,
               email: email,
-              displayName: email.split('@')[0],
+              displayName: nameMap[email] || email.split('@')[0],
               bio: '',
               profilePicture: profilePictureMap[email] || '👤',
               location: '',
