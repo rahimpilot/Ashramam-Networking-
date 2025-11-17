@@ -259,19 +259,48 @@ const Stories: React.FC = () => {
         justifyContent: 'center', 
         alignItems: 'center', 
         height: '100vh',
-        background: '#ffffff'
+        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
       }}>
-        <div style={{ color: '#374151', fontSize: '1.2rem' }}>Loading stories...</div>
+        <div style={{ 
+          textAlign: 'center',
+          color: '#FFFFFF',
+          background: 'rgba(255,255,255,0.15)',
+          padding: '32px',
+          borderRadius: '16px',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
+          <p style={{ margin: 0, fontSize: '18px', fontWeight: 500, lineHeight: '1.3' }}>
+            Loading stories...
+          </p>
+        </div>
       </div>
     );
   }
 
   if (authLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
-          <p>Checking authentication...</p>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
+      }}>
+        <div style={{ 
+          textAlign: 'center',
+          color: '#FFFFFF',
+          background: 'rgba(255,255,255,0.15)',
+          padding: '32px',
+          borderRadius: '16px',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
+          <p style={{ margin: 0, fontSize: '18px', fontWeight: 500, lineHeight: '1.3' }}>
+            Checking authentication...
+          </p>
         </div>
       </div>
     );
@@ -284,124 +313,124 @@ const Stories: React.FC = () => {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      background: '#ffffff',
-      padding: window.innerWidth <= 768 ? '1rem 0.5rem' : '2rem 1rem'
+      background: '#F8F9FA',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
-      <div style={{ 
-        maxWidth: 800, 
-        margin: '0 auto',
-        padding: window.innerWidth <= 768 ? '0 0.5rem' : '0'
+      {/* Modern Mobile Header - 60px height */}
+      <div style={{
+        background: '#FFFFFF',
+        height: '60px',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        borderBottom: '1px solid #E4E6EA'
       }}>
-        {/* Header */}
-        <div style={{ 
-          background: 'rgba(255, 255, 255, 0.95)', 
-          borderRadius: window.innerWidth <= 768 ? 16 : 20, 
-          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem', 
-          marginBottom: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-          backdropFilter: 'blur(10px)'
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          maxWidth: 480,
+          margin: '0 auto',
+          height: '100%',
+          padding: '0 16px'
         }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            marginBottom: '1rem',
-            flexWrap: window.innerWidth <= 480 ? 'wrap' : 'nowrap',
-            gap: window.innerWidth <= 480 ? '0.5rem' : '0'
-          }}>
-            <button onClick={goBack} style={{ 
-              background: 'rgba(255,255,255,0.8)', 
-              border: '2px solid #e5e7eb',
-              borderRadius: 12, 
-              width: 40, 
-              height: 40, 
-              color: '#374151', 
-              cursor: 'pointer', 
-              display: 'flex', 
-              alignItems: 'center', 
+          <button
+            onClick={goBack}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#1877F2',
+              fontSize: '20px',
+              cursor: 'pointer',
+              padding: '8px',
+              display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '1.2rem',
-              transition: 'all 0.2s ease'
-            }}>
-              ←
-            </button>
-            
-            <img src="/newlogo.svg" alt="Logo" style={{ 
-              height: window.innerWidth <= 768 ? 36 : 48,
-              order: window.innerWidth <= 480 ? -1 : 0,
-              width: window.innerWidth <= 480 ? '100%' : 'auto',
-              maxWidth: window.innerWidth <= 480 ? '120px' : 'none',
-              margin: window.innerWidth <= 480 ? '0 auto 0.5rem auto' : '0',
-              flex: window.innerWidth <= 480 ? 'none' : '0 0 auto'
-            }} />
-            
-            <h1 style={{ 
-              fontSize: window.innerWidth <= 768 ? '1.8rem' : '2.2rem', 
-              fontWeight: 700, 
-              margin: 0, 
-              color: '#000000',
-              textAlign: 'center',
-              flex: 1,
-              order: window.innerWidth <= 480 ? 1 : 0
-            }}>
-              {currentView === 'topics' ? 'Our Stories' : getCurrentTopic()?.name}
-            </h1>
-
-            {currentView === 'stories' && (
-              <button
-                onClick={() => setShowAddForm(!showAddForm)}
-                style={{
-                  background: '#000000',
-                  border: 'none',
-                  borderRadius: 8,
-                  padding: '8px 16px',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  color: '#ffffff',
-                  transition: 'all 0.2s ease',
-                  order: window.innerWidth <= 480 ? 2 : 0
-                }}
-              >
-                {showAddForm ? 'Cancel' : 'Add Story'}
-              </button>
-            )}
-            
-            {currentView === 'topics' && (
-              <div style={{ width: 40 }}></div>
-            )}
-          </div>
-
-          <p style={{ 
-            fontSize: '1rem', 
-            color: '#64748b', 
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              transition: 'background-color 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+          >
+            ←
+          </button>
+          
+          <h1 style={{
+            fontSize: '18px',
+            fontWeight: 600,
+            color: '#050505',
+            lineHeight: '1.3',
             margin: 0,
-            textAlign: 'center'
+            flex: 1,
+            textAlign: 'center',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            padding: '0 8px'
           }}>
-            {currentView === 'topics' 
-              ? 'Choose a topic to explore stories or share your own'
-              : getCurrentTopic()?.description || 'Share your stories in this topic'
-            }
-          </p>
+            {currentView === 'topics' ? 'Our Stories' : getCurrentTopic()?.name}
+          </h1>
+
+          {currentView === 'stories' ? (
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              style={{
+                background: showAddForm ? '#E4E6EA' : 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
+                border: 'none',
+                borderRadius: '12px',
+                padding: '8px 12px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500,
+                color: showAddForm ? '#050505' : '#FFFFFF',
+                transition: 'all 0.2s ease',
+                minHeight: '36px',
+                whiteSpace: 'nowrap'
+              }}
+              onMouseEnter={(e) => {
+                if (!showAddForm) {
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              {showAddForm ? 'Cancel' : '+ Add'}
+            </button>
+          ) : (
+            <div style={{ width: '44px' }}></div>
+          )}
         </div>
+      </div>
+
+      <div style={{ 
+        maxWidth: 480, 
+        margin: '0 auto',
+        padding: '16px'
+      }}>
 
         {/* Add Story Form */}
         {showAddForm && (
           <div style={{ 
-            background: 'rgba(255, 255, 255, 0.95)', 
-            borderRadius: window.innerWidth <= 768 ? 16 : 20, 
-            padding: window.innerWidth <= 768 ? '1.5rem' : '2rem', 
-            marginBottom: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-            backdropFilter: 'blur(10px)'
+            background: '#FFFFFF', 
+            borderRadius: '12px', 
+            padding: '16px', 
+            marginBottom: '8px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: '1rem', color: '#000000' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 600, lineHeight: '1.3', marginBottom: '16px', color: '#050505' }}>
               Share Your Story
             </h3>
             
-            <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#374151' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
                   Topic Category
                 </label>
                 <select
@@ -410,15 +439,17 @@ const Stories: React.FC = () => {
                   style={{
                     width: '100%',
                     padding: '12px',
-                    borderRadius: 8,
-                    border: '2px solid #e5e7eb',
-                    fontSize: '1rem',
+                    borderRadius: '12px',
+                    border: '1px solid #E4E6EA',
+                    fontSize: '16px',
+                    fontWeight: 400,
+                    lineHeight: '1.4',
                     outline: 'none',
                     transition: 'border-color 0.2s',
-                    background: '#fff'
+                    background: '#FFF'
                   }}
-                  onFocus={e => e.target.style.borderColor = '#ff6b6b'}
-                  onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                  onFocus={e => e.target.style.borderColor = '#1877F2'}
+                  onBlur={e => e.target.style.borderColor = '#E4E6EA'}
                   required
                 >
                   <option value="">Select a topic...</option>
@@ -431,7 +462,7 @@ const Stories: React.FC = () => {
               </div>
               
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#374151' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
                   Story Title
                 </label>
                 <input
@@ -442,39 +473,43 @@ const Stories: React.FC = () => {
                   style={{
                     width: '100%',
                     padding: '12px',
-                    borderRadius: 8,
-                    border: '2px solid #e5e7eb',
-                    fontSize: '1rem',
+                    borderRadius: '12px',
+                    border: '1px solid #E4E6EA',
+                    fontSize: '16px',
+                    fontWeight: 400,
+                    lineHeight: '1.4',
                     outline: 'none',
                     transition: 'border-color 0.2s'
                   }}
-                  onFocus={e => e.target.style.borderColor = '#ff6b6b'}
-                  onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                  onFocus={e => e.target.style.borderColor = '#1877F2'}
+                  onBlur={e => e.target.style.borderColor = '#E4E6EA'}
                   required
                 />
               </div>
               
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#374151' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
                   Your Story
                 </label>
                 <textarea
                   value={newStory.content}
                   onChange={(e) => setNewStory({ ...newStory, content: e.target.value })}
-                  placeholder="Tell us your story... Share your experiences, memories, or thoughts with the community."
+                  placeholder="Tell us your story..."
                   rows={6}
                   style={{
                     width: '100%',
                     padding: '12px',
-                    borderRadius: 8,
-                    border: '2px solid #e5e7eb',
-                    fontSize: '1rem',
+                    borderRadius: '12px',
+                    border: '1px solid #E4E6EA',
+                    fontSize: '16px',
+                    fontWeight: 400,
+                    lineHeight: '1.4',
                     outline: 'none',
                     transition: 'border-color 0.2s',
                     resize: 'vertical'
                   }}
-                  onFocus={e => e.target.style.borderColor = '#ff6b6b'}
-                  onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                  onFocus={e => e.target.style.borderColor = '#1877F2'}
+                  onBlur={e => e.target.style.borderColor = '#E4E6EA'}
                   required
                 />
               </div>
@@ -483,16 +518,29 @@ const Stories: React.FC = () => {
                 type="submit"
                 disabled={submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic}
                 style={{
-                  background: submitting ? '#9ca3af' : '#000000',
+                  background: submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic
+                    ? '#E4E6EA'
+                    : 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
                   border: 'none',
-                  borderRadius: 8,
+                  borderRadius: '12px',
                   padding: '12px 24px',
                   cursor: (submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic) ? 'not-allowed' : 'pointer',
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  color: '#ffffff',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  minHeight: '44px',
+                  color: submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic ? '#9A9DA1' : '#FFFFFF',
                   transition: 'all 0.2s ease',
-                  opacity: (submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic) ? 0.6 : 1
+                  boxShadow: (submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic) ? 'none' : '0 2px 4px rgba(24, 119, 242, 0.2)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!submitting && newStory.title.trim() && newStory.content.trim() && newStory.topic) {
+                    e.currentTarget.style.transform = 'scale(1.02)';
+                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = (submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic) ? 'none' : '0 2px 4px rgba(24, 119, 242, 0.2)';
                 }}
               >
                 {submitting ? 'Publishing...' : 'Publish Story'}
@@ -505,51 +553,52 @@ const Stories: React.FC = () => {
         {currentView === 'topics' ? (
           <div style={{ 
             display: 'grid',
-            gridTemplateColumns: window.innerWidth <= 768 
-              ? 'repeat(2, 1fr)' 
-              : 'repeat(5, 1fr)',
-            gap: '1rem'
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '8px'
           }}>
             {topics.slice(0, 10).map((topic) => (
               <div 
                 key={topic.id}
                 onClick={() => handleTopicSelect(topic.id)}
                 style={{ 
-                  background: '#ffffff', 
-                  border: '1px solid #e5e7eb',
-                  borderRadius: 8, 
-                  padding: window.innerWidth <= 768 ? '1rem' : '1.5rem', 
+                  background: '#FFFFFF', 
+                  border: '1px solid #E4E6EA',
+                  borderRadius: '12px', 
+                  padding: '16px', 
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   textAlign: 'center',
-                  minHeight: window.innerWidth <= 768 ? '100px' : '120px',
+                  minHeight: '100px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                 }}
                 onMouseOver={e => {
-                  e.currentTarget.style.backgroundColor = '#f9fafb';
-                  e.currentTarget.style.borderColor = '#d1d5db';
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
+                  e.currentTarget.style.borderColor = '#1877F2';
                 }}
                 onMouseOut={e => {
-                  e.currentTarget.style.backgroundColor = '#ffffff';
-                  e.currentTarget.style.borderColor = '#e5e7eb';
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                  e.currentTarget.style.borderColor = '#E4E6EA';
                 }}
               >
                 <h3 style={{ 
-                  fontSize: window.innerWidth <= 768 ? '0.9rem' : '1rem', 
+                  fontSize: '14px', 
                   fontWeight: 600, 
-                  margin: '0 0 0.5rem 0', 
-                  color: '#000000',
-                  lineHeight: '1.3'
+                  lineHeight: '1.3',
+                  margin: '0 0 8px 0', 
+                  color: '#050505'
                 }}>
                   {topic.name}
                 </h3>
                 <span style={{ 
-                  fontSize: window.innerWidth <= 768 ? '0.8rem' : '0.85rem', 
-                  color: '#6b7280',
-                  fontWeight: 500
+                  fontSize: '12px', 
+                  fontWeight: 400,
+                  color: '#65676B'
                 }}>
                   {stories.filter(s => s.topic === topic.id).length} stories
                 </span>
@@ -560,89 +609,67 @@ const Stories: React.FC = () => {
           // Stories List for selected topic
           getFilteredStories().length === 0 ? (
             <div style={{ 
-              background: '#ffffff', 
-              border: '1px solid #e5e7eb',
-              borderRadius: 8, 
-              padding: '2rem', 
-              textAlign: 'center'
+              background: '#FFFFFF', 
+              border: '1px solid #E4E6EA',
+              borderRadius: '12px', 
+              padding: '32px 16px', 
+              textAlign: 'center',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
             }}>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: '#000000', marginBottom: '0.5rem' }}>
-                {getCurrentTopic()?.name}
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📖</div>
+              <h3 style={{ fontSize: '18px', fontWeight: 600, lineHeight: '1.3', color: '#050505', marginBottom: '8px' }}>
+                No stories yet
               </h3>
-              <p style={{ fontSize: '1rem', color: '#6b7280', marginBottom: '1.5rem' }}>
-                Story will be published shortly.
+              <p style={{ fontSize: '14px', fontWeight: 400, lineHeight: '1.4', color: '#65676B', marginBottom: '16px' }}>
+                Be the first to share a story!
               </p>
               <button
                 onClick={() => setShowAddForm(true)}
                 style={{
-                  background: '#000000',
+                  background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
                   border: 'none',
-                  borderRadius: 8,
+                  borderRadius: '12px',
                   padding: '10px 20px',
                   cursor: 'pointer',
-                  fontSize: '0.95rem',
-                  fontWeight: 600,
-                  color: '#ffffff'
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  minHeight: '44px',
+                  color: '#FFFFFF',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 4px rgba(24, 119, 242, 0.2)'
                 }}
-              >
-                Add Story
-              </button>
-            </div>
-          ) : getFilteredStories().length === 0 ? (
-            <div style={{
-              textAlign: 'center',
-              padding: '3rem 1rem',
-              color: '#6b7280'
-            }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📖</div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.5rem', color: '#374151' }}>
-                No stories yet in {getCurrentTopic()?.name}
-              </h3>
-              <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                Be the first to share a story in this topic!
-              </p>
-              <button
-                onClick={() => setShowAddForm(true)}
-                style={{
-                  background: '#000000',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: 8,
-                  padding: '12px 24px',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  transition: 'all 0.2s ease'
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
                 }}
-                onMouseOver={(e) => e.currentTarget.style.background = '#374151'}
-                onMouseOut={(e) => e.currentTarget.style.background = '#000000'}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(24, 119, 242, 0.2)';
+                }}
               >
                 📝 Write First Story
               </button>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {getFilteredStories().map((story) => (
                 <div key={story.id} style={{ 
-                  background: '#ffffff', 
-                  border: '1px solid #e5e7eb',
-                  borderRadius: 8, 
-                  padding: '1rem',
+                  background: '#FFFFFF', 
+                  border: '1px solid #E4E6EA',
+                  borderRadius: '12px', 
+                  padding: '16px',
                   transition: 'all 0.2s ease',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                 }}
                 onClick={() => setExpandedStory(expandedStory === story.id ? null : story.id)}
                 onMouseOver={e => {
-                  e.currentTarget.style.backgroundColor = '#f9fafb';
-                  e.currentTarget.style.borderColor = '#d1d5db';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                  e.currentTarget.style.transform = 'scale(1.01)';
+                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
                 }}
                 onMouseOut={e => {
-                  e.currentTarget.style.backgroundColor = '#ffffff';
-                  e.currentTarget.style.borderColor = '#e5e7eb';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
                 }}>
                   {editingStory === story.id ? (
                     // Edit Mode
@@ -654,13 +681,17 @@ const Stories: React.FC = () => {
                         placeholder="Story title"
                         style={{
                           width: '100%',
-                          padding: '0.75rem',
-                          marginBottom: '1rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: 8,
-                          fontSize: '1.1rem',
-                          fontWeight: 600
+                          padding: '12px',
+                          marginBottom: '12px',
+                          border: '1px solid #E4E6EA',
+                          borderRadius: '12px',
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          lineHeight: '1.3',
+                          outline: 'none'
                         }}
+                        onFocus={e => e.target.style.borderColor = '#1877F2'}
+                        onBlur={e => e.target.style.borderColor = '#E4E6EA'}
                       />
                       <textarea
                         value={editStoryData.content}
@@ -669,30 +700,38 @@ const Stories: React.FC = () => {
                         rows={10}
                         style={{
                           width: '100%',
-                          padding: '0.75rem',
-                          marginBottom: '1rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: 8,
-                          fontSize: '0.95rem',
-                          lineHeight: '1.5',
+                          padding: '12px',
+                          marginBottom: '12px',
+                          border: '1px solid #E4E6EA',
+                          borderRadius: '12px',
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          lineHeight: '1.4',
                           resize: 'vertical',
-                          fontFamily: 'inherit'
+                          fontFamily: 'inherit',
+                          outline: 'none'
                         }}
+                        onFocus={e => e.target.style.borderColor = '#1877F2'}
+                        onBlur={e => e.target.style.borderColor = '#E4E6EA'}
                       />
-                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                         <button
                           onClick={handleCancelEdit}
                           disabled={submitting}
                           style={{
                             background: 'transparent',
-                            border: '1px solid #6b7280',
-                            color: '#6b7280',
-                            borderRadius: 6,
-                            padding: '8px 16px',
+                            border: '1px solid #E4E6EA',
+                            color: '#65676B',
+                            borderRadius: '12px',
+                            padding: '10px 16px',
                             cursor: 'pointer',
-                            fontSize: '0.85rem',
-                            fontWeight: 500
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            minHeight: '44px',
+                            transition: 'all 0.2s ease'
                           }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
                           Cancel
                         </button>
@@ -700,15 +739,28 @@ const Stories: React.FC = () => {
                           onClick={() => handleSaveEdit(story.id)}
                           disabled={submitting}
                           style={{
-                            background: '#000000',
+                            background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
                             border: 'none',
-                            color: '#ffffff',
-                            borderRadius: 6,
-                            padding: '8px 16px',
+                            color: '#FFFFFF',
+                            borderRadius: '12px',
+                            padding: '10px 16px',
                             cursor: submitting ? 'not-allowed' : 'pointer',
-                            fontSize: '0.85rem',
+                            fontSize: '14px',
                             fontWeight: 500,
-                            opacity: submitting ? 0.7 : 1
+                            minHeight: '44px',
+                            opacity: submitting ? 0.7 : 1,
+                            transition: 'all 0.2s ease',
+                            boxShadow: '0 2px 4px rgba(24, 119, 242, 0.2)'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!submitting) {
+                              e.currentTarget.style.transform = 'scale(1.02)';
+                              e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.boxShadow = '0 2px 4px rgba(24, 119, 242, 0.2)';
                           }}
                         >
                           {submitting ? 'Saving...' : 'Save Changes'}
@@ -717,22 +769,23 @@ const Stories: React.FC = () => {
                     </div>
                   ) : (
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <div style={{ flex: 1, marginRight: '1rem' }}>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 0.5rem 0', color: '#000000' }}>
+                      <div style={{ flex: 1, marginRight: '12px' }}>
+                        <h3 style={{ fontSize: '18px', fontWeight: 600, lineHeight: '1.3', margin: '0 0 8px 0', color: '#050505' }}>
                           {story.title}
                         </h3>
-                        <div style={{ fontSize: '0.85rem', color: '#6b7280', marginBottom: '0.75rem' }}>
-                          By <span style={{ fontWeight: 600, color: '#374151' }}>
+                        <div style={{ fontSize: '12px', fontWeight: 400, color: '#65676B', marginBottom: '12px' }}>
+                          By <span style={{ fontWeight: 600, color: '#050505' }}>
                             {authorNames[story.authorEmail] || story.author || 'Anonymous'}
                           </span> • {story.createdAt.toDate().toLocaleDateString()}
                         </div>
                         
                         {/* Story Content Preview */}
                         <div style={{ 
-                          fontSize: '0.9rem', 
-                          color: '#374151', 
-                          lineHeight: '1.5',
-                          marginBottom: '0.75rem'
+                          fontSize: '14px', 
+                          fontWeight: 400,
+                          lineHeight: '1.4',
+                          color: '#050505', 
+                          marginBottom: '12px'
                         }}>
                           {expandedStory === story.id ? (
                             // Full content
@@ -752,12 +805,12 @@ const Stories: React.FC = () => {
                         
                         {/* Read More/Less indicator */}
                         <div style={{ 
-                          fontSize: '0.8rem', 
-                          color: '#1d4ed8', 
+                          fontSize: '12px', 
+                          color: '#1877F2', 
                           fontWeight: 500,
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '0.25rem'
+                          gap: '4px'
                         }}>
                           {expandedStory === story.id ? (
                             <>📖 Click to collapse</>
@@ -767,7 +820,7 @@ const Stories: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
                         {/* Edit button - only show to story author */}
                         {story.authorEmail === user?.email && (
                           <button
@@ -777,22 +830,24 @@ const Stories: React.FC = () => {
                             }}
                             style={{
                               background: 'transparent',
-                              border: '1px solid #6b7280',
-                              color: '#6b7280',
-                              borderRadius: 4,
-                              padding: '4px 8px',
+                              border: '1px solid #E4E6EA',
+                              color: '#65676B',
+                              borderRadius: '8px',
+                              padding: '6px 12px',
                               cursor: 'pointer',
-                              fontSize: '0.75rem',
+                              fontSize: '12px',
                               fontWeight: 500,
                               transition: 'all 0.2s ease'
                             }}
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.borderColor = '#374151';
-                              e.currentTarget.style.color = '#374151';
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#F8F9FA';
+                              e.currentTarget.style.borderColor = '#1877F2';
+                              e.currentTarget.style.color = '#1877F2';
                             }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.borderColor = '#6b7280';
-                              e.currentTarget.style.color = '#6b7280';
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                              e.currentTarget.style.borderColor = '#E4E6EA';
+                              e.currentTarget.style.color = '#65676B';
                             }}
                           >
                             ✏️ Edit
@@ -801,20 +856,30 @@ const Stories: React.FC = () => {
                         
                         <button
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent triggering the expand/collapse
+                            e.stopPropagation();
                             handleLikeStory(story.id);
                           }}
                           style={{
-                            background: story.likedBy.includes(user?.uid || '') ? '#000000' : 'transparent',
-                            border: '1px solid #000000',
-                            borderRadius: 4,
+                            background: story.likedBy.includes(user?.uid || '') ? 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)' : 'transparent',
+                            border: '1px solid #1877F2',
+                            borderRadius: '8px',
                             padding: '6px 12px',
                             cursor: 'pointer',
-                            fontSize: '0.8rem',
-                            fontWeight: 600,
-                            color: story.likedBy.includes(user?.uid || '') ? '#ffffff' : '#000000',
+                            fontSize: '12px',
+                            fontWeight: 500,
+                            color: story.likedBy.includes(user?.uid || '') ? '#FFFFFF' : '#1877F2',
                             transition: 'all 0.2s ease',
                             flexShrink: 0
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!story.likedBy.includes(user?.uid || '')) {
+                              e.currentTarget.style.backgroundColor = '#F8F9FA';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!story.likedBy.includes(user?.uid || '')) {
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                            }
                           }}
                         >
                           ♥ {story.likes}

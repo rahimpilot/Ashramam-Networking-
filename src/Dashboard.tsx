@@ -419,11 +419,11 @@ const Dashboard: React.FC = () => {
         <span
           key={match.index}
           style={{
-            color: '#1f2937',
+            color: '#1877F2',
             fontWeight: 600,
-            background: 'rgba(31, 41, 55, 0.1)',
-            borderRadius: '4px',
-            padding: '2px 4px'
+            background: 'rgba(24, 119, 242, 0.1)',
+            borderRadius: '6px',
+            padding: '2px 6px'
           }}
         >
           @{match[1]}
@@ -832,18 +832,19 @@ const Dashboard: React.FC = () => {
         justifyContent: 'center', 
         alignItems: 'center', 
         height: '100vh',
-        background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)'
+        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
       }}>
         <div style={{ 
           textAlign: 'center',
-          color: '#ffffff',
-          background: 'rgba(255,255,255,0.1)',
-          padding: '2rem',
-          borderRadius: 20,
-          backdropFilter: 'blur(10px)'
+          color: '#FFFFFF',
+          background: 'rgba(255,255,255,0.15)',
+          padding: '32px',
+          borderRadius: '16px',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
         }}>
-          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
-          <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 500 }}>
+          <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
+          <p style={{ margin: 0, fontSize: '18px', fontWeight: 500, lineHeight: '1.3' }}>
             {authLoading ? 'Checking authentication...' : 'Loading your feed...'}
           </p>
         </div>
@@ -854,55 +855,52 @@ const Dashboard: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#f8fafc',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      background: '#F8F9FA',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
-      {/* Modern Mobile Header */}
+      {/* Modern Mobile Header - 60px height */}
       <div style={{
-        background: '#ffffff',
-        padding: '1rem',
+        background: '#FFFFFF',
+        height: '60px',
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        boxShadow: '0 2px 20px rgba(0,0,0,0.1)',
-        borderBottom: '1px solid #e2e8f0'
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        borderBottom: '1px solid #E4E6EA'
       }}>
         <div style={{
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
+          justifyContent: 'space-between',
           maxWidth: 480,
-          margin: '0 auto'
+          margin: '0 auto',
+          height: '100%',
+          padding: '0 16px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img 
-              src="/newlogo.svg" 
-              alt="Logo" 
-              style={{ 
-                height: 40,
-                width: 'auto',
-                maxWidth: '140px'
-              }} 
-            />
-          </div>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            {/* Profile Picture */}
+          {/* Left: Profile Picture + Name */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
             <div style={{
-              width: 36,
-              height: 36,
+              width: 48,
+              height: 48,
               borderRadius: '50%',
-              background: 'rgba(0,0,0,0.1)',
-              backdropFilter: 'blur(10px)',
+              border: '2px solid #E4E6EA',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '2px solid rgba(0,0,0,0.1)',
-              transition: 'all 0.2s ease',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              flexShrink: 0,
+              transition: 'transform 0.2s ease, border-color 0.2s ease'
             }}
-            onClick={() => navigate('/profile')}>
+            onClick={() => navigate('/profile')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.borderColor = '#1877F2';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.borderColor = '#E4E6EA';
+            }}>
               {user?.email && getProfilePicture(user.email, userProfile.name || user.displayName || '') ? (
                 <img
                   src={getProfilePicture(user.email, userProfile.name || user.displayName || '')!}
@@ -916,24 +914,65 @@ const Dashboard: React.FC = () => {
                     console.log('Header profile image failed to load:', getProfilePicture(user.email!, userProfile.name || user.displayName || ''));
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.parentElement!.innerHTML = `
-                      <span style="font-size: 1.2rem; color: #374151;">👤</span>
+                      <span style="font-size: 1.2rem; color: #65676B;">👤</span>
                     `;
                   }}
                 />
               ) : (
-                <span style={{ fontSize: '1.2rem', color: '#374151' }}>👤</span>
+                <span style={{ fontSize: '1.2rem', color: '#65676B' }}>👤</span>
               )}
             </div>
+            
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{
+                fontSize: '18px',
+                fontWeight: 600,
+                color: '#050505',
+                lineHeight: '1.3',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}>
+                {userProfile.name || user?.displayName || 'User'}
+              </div>
+              {userProfile.bio && (
+                <div style={{
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  color: '#65676B',
+                  lineHeight: '1.4',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {userProfile.bio}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Right: Action Icons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img 
+              src="/newlogo.svg" 
+              alt="Logo" 
+              style={{ 
+                height: 32,
+                width: 'auto',
+                maxWidth: '100px',
+                opacity: 0.8
+              }} 
+            />
           </div>
         </div>
       </div>
 
-      {/* Tab Navigation */}
+      {/* Tab Navigation - Cleaner Design */}
       <div style={{
-        background: '#ffffff',
-        borderBottom: '1px solid #e2e8f0',
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E4E6EA',
         position: 'sticky',
-        top: '70px', // Below the header
+        top: '60px',
         zIndex: 50
       }}>
         <div style={{
@@ -945,14 +984,15 @@ const Dashboard: React.FC = () => {
           <button
             style={{
               flex: 1,
-              padding: '1rem 0.5rem',
+              padding: '12px 16px',
               border: 'none',
-              background: '#f8fafc',
-              color: '#1f2937',
-              fontSize: '0.9rem',
-              fontWeight: 600,
+              background: 'transparent',
+              color: '#050505',
+              fontSize: '16px',
+              fontWeight: 500,
               cursor: 'pointer',
-              borderBottom: '2px solid #3b82f6'
+              borderBottom: '3px solid #1877F2',
+              transition: 'all 0.2s ease'
             }}
           >
             📝 Scrapbook
@@ -964,14 +1004,16 @@ const Dashboard: React.FC = () => {
       <div style={{
         maxWidth: 480,
         margin: '0 auto',
-        background: '#ffffff',
+        background: '#F8F9FA',
         minHeight: '100vh'
       }}>
-        {/* Story/Post Composer */}
+        {/* Story/Post Composer - Card Style */}
         <div style={{
-          padding: '1rem',
-          borderBottom: '1px solid #e2e8f0',
-          background: '#ffffff',
+          margin: '16px 16px 8px 16px',
+          padding: '16px',
+          background: '#FFFFFF',
+          borderRadius: '12px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           position: 'relative'
         }}>
           <form onSubmit={handleSubmitPost}>
@@ -984,10 +1026,12 @@ const Dashboard: React.FC = () => {
                 minHeight: '80px',
                 border: 'none',
                 outline: 'none',
-                fontSize: '1rem',
+                fontSize: '16px',
+                fontWeight: 400,
+                lineHeight: '1.4',
                 resize: 'none',
                 fontFamily: 'inherit',
-                color: '#1e293b',
+                color: '#050505',
                 background: 'transparent'
               }}
             />
@@ -997,11 +1041,11 @@ const Dashboard: React.FC = () => {
               <div style={{
                 position: 'absolute',
                 top: '100px',
-                left: '1rem',
-                right: '1rem',
-                background: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '8px',
+                left: '16px',
+                right: '16px',
+                background: '#FFFFFF',
+                border: '1px solid #E4E6EA',
+                borderRadius: '12px',
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                 zIndex: 1000,
                 maxHeight: '200px',
@@ -1012,29 +1056,36 @@ const Dashboard: React.FC = () => {
                     key={user.id}
                     onClick={() => insertMention(user)}
                     style={{
-                      padding: '0.75rem',
+                      padding: '12px',
                       cursor: 'pointer',
-                      borderBottom: index < mentionUsers.length - 1 ? '1px solid #f1f5f9' : 'none',
+                      borderBottom: index < mentionUsers.length - 1 ? '1px solid #F8F9FA' : 'none',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5rem',
+                      gap: '12px',
                       backgroundColor: 'transparent',
-                      transition: 'background-color 0.2s'
+                      transition: 'background-color 0.2s, transform 0.1s'
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#F8F9FA';
+                      e.currentTarget.style.transform = 'scale(1.01)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.transform = 'scale(1)';
+                    }}
                   >
                     <div style={{
-                      width: 32,
-                      height: 32,
+                      width: 40,
+                      height: 40,
                       borderRadius: '50%',
                       overflow: 'hidden',
-                      background: user.profilePicture ? 'transparent' : 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
+                      border: '2px solid #E4E6EA',
+                      background: user.profilePicture ? 'transparent' : 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#ffffff',
-                      fontSize: '0.9rem',
+                      color: '#FFFFFF',
+                      fontSize: '16px',
                       fontWeight: 600
                     }}>
                       {user.profilePicture ? (
@@ -1043,7 +1094,7 @@ const Dashboard: React.FC = () => {
                         user.name.charAt(0).toUpperCase()
                       )}
                     </div>
-                    <span style={{ fontSize: '0.9rem', color: '#1e293b' }}>{user.name}</span>
+                    <span style={{ fontSize: '16px', fontWeight: 500, color: '#050505' }}>{user.name}</span>
                   </div>
                 ))}
               </div>
@@ -1051,14 +1102,14 @@ const Dashboard: React.FC = () => {
             
             {/* Image Preview */}
             {imagePreview && (
-              <div style={{ marginTop: '1rem', position: 'relative' }}>
+              <div style={{ marginTop: '16px', position: 'relative' }}>
                 <img
                   src={imagePreview}
                   alt="Preview"
                   style={{
                     maxWidth: '100%',
                     maxHeight: '200px',
-                    borderRadius: '8px',
+                    borderRadius: '12px',
                     objectFit: 'cover'
                   }}
                 />
@@ -1067,17 +1118,24 @@ const Dashboard: React.FC = () => {
                   onClick={removeImage}
                   style={{
                     position: 'absolute',
-                    top: '0.5rem',
-                    right: '0.5rem',
+                    top: '8px',
+                    right: '8px',
                     background: 'rgba(0,0,0,0.7)',
-                    color: '#ffffff',
+                    color: '#FFFFFF',
                     border: 'none',
                     borderRadius: '50%',
-                    width: '24px',
-                    height: '24px',
+                    width: '32px',
+                    height: '32px',
                     cursor: 'pointer',
-                    fontSize: '0.8rem'
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'transform 0.2s ease'
                   }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                 >
                   ✕
                 </button>
@@ -1088,11 +1146,24 @@ const Dashboard: React.FC = () => {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginTop: '1rem'
+              marginTop: '16px'
             }}>
-              <div style={{ display: 'flex', gap: '1rem' }}>
+              <div style={{ display: 'flex', gap: '16px' }}>
                 {/* Camera Button */}
-                <label style={{ fontSize: '1.2rem', cursor: 'pointer' }}>
+                <label style={{ 
+                  fontSize: '24px', 
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  transition: 'background-color 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
                   📷
                   <input
                     type="file"
@@ -1106,15 +1177,29 @@ const Dashboard: React.FC = () => {
                 type="submit"
                 disabled={(!newMessage.trim() && !selectedImage) || submitting}
                 style={{
-                  background: (newMessage.trim() || selectedImage) ? 'linear-gradient(135deg, #1f2937 0%, #374151 100%)' : '#e2e8f0',
-                  color: (newMessage.trim() || selectedImage) ? '#ffffff' : '#94a3b8',
+                  background: (newMessage.trim() || selectedImage) 
+                    ? 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)' 
+                    : '#E4E6EA',
+                  color: (newMessage.trim() || selectedImage) ? '#FFFFFF' : '#9A9DA1',
                   border: 'none',
-                  borderRadius: 20,
-                  padding: '0.5rem 1.5rem',
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
-                  transition: 'all 0.2s ease'
+                  borderRadius: '12px',
+                  padding: '12px 24px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  minHeight: '44px',
+                  cursor: (newMessage.trim() || selectedImage) ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.2s ease',
+                  boxShadow: (newMessage.trim() || selectedImage) ? '0 2px 4px rgba(24, 119, 242, 0.2)' : 'none'
+                }}
+                onMouseEnter={(e) => {
+                  if (newMessage.trim() || selectedImage) {
+                    e.currentTarget.style.transform = 'scale(1.02)';
+                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = (newMessage.trim() || selectedImage) ? '0 2px 4px rgba(24, 119, 242, 0.2)' : 'none';
                 }}
               >
                 {submitting ? '⏳' : 'Share'}
@@ -1124,30 +1209,41 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Posts Feed */}
-        <div style={{ padding: '0' }}>
+        <div style={{ padding: '0 16px 16px 16px' }}>
           {scrapPosts.map((post) => (
             <div
               key={post.id}
               style={{
-                padding: '1rem',
-                borderBottom: '1px solid #f1f5f9',
-                background: '#ffffff'
+                marginBottom: '8px',
+                padding: '16px',
+                background: '#FFFFFF',
+                borderRadius: '12px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                transition: 'box-shadow 0.2s ease'
               }}
+              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'}
             >
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <div style={{
-                  width: 40,
-                  height: 40,
+                  width: 48,
+                  height: 48,
                   borderRadius: '50%',
                   overflow: 'hidden',
-                  border: '2px solid #e5e7eb',
+                  border: '2px solid #E4E6EA',
                   flexShrink: 0,
                   cursor: 'pointer',
-                  transition: 'border-color 0.2s ease'
+                  transition: 'transform 0.2s ease, border-color 0.2s ease'
                 }}
                 onClick={() => viewUserProfile(post.authorEmail || post.author, post.author)}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = '#3b82f6'}
-                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.borderColor = '#1877F2';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.borderColor = '#E4E6EA';
+                }}
                 >
                   {(() => {
                     const avatarUrl = getUserAvatar(post);
@@ -1191,12 +1287,12 @@ const Dashboard: React.FC = () => {
                         <div style={{
                           width: '100%',
                           height: '100%',
-                          background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
+                          background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: '#ffffff',
-                          fontSize: '1.2rem',
+                          color: '#FFFFFF',
+                          fontSize: '18px',
                           fontWeight: 600
                         }}>
                           {(post.authorEmail || post.author || '?').charAt(0).toUpperCase()}
@@ -1206,34 +1302,39 @@ const Dashboard: React.FC = () => {
                   })()}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                     <h4 style={{ 
                       margin: 0, 
-                      fontSize: '0.9rem', 
+                      fontSize: '18px', 
                       fontWeight: 600,
-                      color: '#1e293b'
+                      lineHeight: '1.3',
+                      color: '#050505'
                     }}>
                       {post.author}
                     </h4>
                     <span style={{ 
-                      fontSize: '0.8rem', 
-                      color: '#64748b'
+                      fontSize: '12px',
+                      fontWeight: 400,
+                      lineHeight: '1.4',
+                      color: '#65676B'
                     }}>
                       {post.createdAt.toDate().toLocaleDateString()}
                     </span>
                   </div>
                   {editingPostId === post.id ? (
-                    <div style={{ marginBottom: '1rem' }}>
+                    <div style={{ marginBottom: '16px' }}>
                       <textarea
                         value={editingMessage}
                         onChange={(e) => setEditingMessage(e.target.value)}
                         style={{
                           width: '100%',
                           minHeight: '80px',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '8px',
-                          padding: '0.75rem',
-                          fontSize: '0.95rem',
+                          border: '1px solid #E4E6EA',
+                          borderRadius: '12px',
+                          padding: '12px',
+                          fontSize: '16px',
+                          fontWeight: 400,
+                          lineHeight: '1.4',
                           fontFamily: 'inherit',
                           resize: 'vertical',
                           outline: 'none'
@@ -1241,8 +1342,8 @@ const Dashboard: React.FC = () => {
                         placeholder="Edit your post..."
                       />
                       {post.image && !editingImageRemoved && (
-                        <div style={{ marginTop: '0.75rem', padding: '0.75rem', backgroundColor: '#fef3c7', borderRadius: '8px', border: '1px solid #fcd34d' }}>
-                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                        <div style={{ marginTop: '12px', padding: '12px', backgroundColor: '#FEF3C7', borderRadius: '12px', border: '1px solid #FCD34D' }}>
+                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                             <img
                               src={post.image}
                               alt="Post content"
@@ -1250,11 +1351,11 @@ const Dashboard: React.FC = () => {
                                 width: '60px',
                                 height: '60px',
                                 objectFit: 'cover',
-                                borderRadius: '6px'
+                                borderRadius: '8px'
                               }}
                             />
                             <div style={{ flex: 1 }}>
-                              <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.85rem', color: '#92400e', fontWeight: 500 }}>
+                              <p style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#92400E', fontWeight: 500 }}>
                                 Image attached
                               </p>
                               <button
@@ -1262,15 +1363,19 @@ const Dashboard: React.FC = () => {
                                   setEditingImageRemoved(true);
                                 }}
                                 style={{
-                                  background: '#dc2626',
-                                  color: '#ffffff',
+                                  background: '#DC2626',
+                                  color: '#FFFFFF',
                                   border: 'none',
-                                  borderRadius: '4px',
-                                  padding: '0.35rem 0.75rem',
-                                  fontSize: '0.8rem',
-                                  fontWeight: 600,
-                                  cursor: 'pointer'
+                                  borderRadius: '8px',
+                                  padding: '6px 12px',
+                                  fontSize: '12px',
+                                  fontWeight: 500,
+                                  minHeight: '32px',
+                                  cursor: 'pointer',
+                                  transition: 'transform 0.2s ease'
                                 }}
+                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                               >
                                 Remove Image
                               </button>
@@ -1279,40 +1384,48 @@ const Dashboard: React.FC = () => {
                         </div>
                       )}
                       {editingImageRemoved && (
-                        <div style={{ marginTop: '0.75rem', padding: '0.75rem', backgroundColor: '#fee2e2', borderRadius: '8px', border: '1px solid #fca5a5' }}>
-                          <p style={{ margin: 0, fontSize: '0.85rem', color: '#991b1b', fontWeight: 500 }}>
+                        <div style={{ marginTop: '12px', padding: '12px', backgroundColor: '#FEE2E2', borderRadius: '12px', border: '1px solid #FCA5A5' }}>
+                          <p style={{ margin: 0, fontSize: '14px', color: '#991B1B', fontWeight: 500 }}>
                             ✓ Image will be removed when you save
                           </p>
                         </div>
                       )}
-                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                         <button
                           onClick={() => saveEditedPost(post.id)}
                           style={{
-                            background: '#10b981',
-                            color: '#ffffff',
+                            background: '#10B981',
+                            color: '#FFFFFF',
                             border: 'none',
-                            borderRadius: '6px',
-                            padding: '0.5rem 1rem',
-                            fontSize: '0.85rem',
-                            fontWeight: 600,
-                            cursor: 'pointer'
+                            borderRadius: '12px',
+                            padding: '10px 16px',
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            minHeight: '44px',
+                            cursor: 'pointer',
+                            transition: 'transform 0.2s ease'
                           }}
+                          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         >
                           Save
                         </button>
                         <button
                           onClick={cancelEditingPost}
                           style={{
-                            background: '#6b7280',
-                            color: '#ffffff',
+                            background: '#6B7280',
+                            color: '#FFFFFF',
                             border: 'none',
-                            borderRadius: '6px',
-                            padding: '0.5rem 1rem',
-                            fontSize: '0.85rem',
-                            fontWeight: 600,
-                            cursor: 'pointer'
+                            borderRadius: '12px',
+                            padding: '10px 16px',
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            minHeight: '44px',
+                            cursor: 'pointer',
+                            transition: 'transform 0.2s ease'
                           }}
+                          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         >
                           Cancel
                         </button>
@@ -1320,10 +1433,11 @@ const Dashboard: React.FC = () => {
                     </div>
                   ) : (
                     <p style={{
-                      margin: '0 0 1rem 0',
-                      fontSize: '0.95rem',
-                      lineHeight: '1.5',
-                      color: '#334155',
+                      margin: '0 0 16px 0',
+                      fontSize: '16px',
+                      fontWeight: 400,
+                      lineHeight: '1.4',
+                      color: '#050505',
                       whiteSpace: 'pre-wrap'
                     }}>
                       {renderMessageWithMentions(post.message)}
@@ -1332,23 +1446,24 @@ const Dashboard: React.FC = () => {
                   
                   {/* Post Image */}
                   {post.image && (
-                    <div style={{ marginBottom: '1rem' }}>
+                    <div style={{ marginBottom: '16px' }}>
                       <img
                         src={post.image}
                         alt="Post content"
                         onClick={() => handleImageClick(post.image!)}
                         style={{
                           width: '100%',
-                          maxWidth: '300px',
-                          height: '200px',
+                          maxWidth: '100%',
+                          height: 'auto',
+                          maxHeight: '300px',
                           objectFit: 'cover',
-                          borderRadius: '8px',
+                          borderRadius: '12px',
                           cursor: 'pointer',
                           transition: 'transform 0.2s ease, box-shadow 0.2s ease'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'scale(1.02)';
-                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                          e.currentTarget.style.transform = 'scale(1.01)';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.transform = 'scale(1)';
@@ -1358,17 +1473,32 @@ const Dashboard: React.FC = () => {
                     </div>
                   )}
                   
-                  <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <button 
                         onClick={() => handleLike(post.id)}
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: post.likes?.includes(user?.email || '') ? '#ef4444' : '#64748b',
-                          fontSize: '0.9rem',
+                          color: post.likes?.includes(user?.email || '') ? '#EF4444' : '#65676B',
+                          fontSize: '20px',
                           cursor: 'pointer',
-                          transition: 'color 0.2s ease'
+                          padding: '8px',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '44px',
+                          height: '44px',
+                          transition: 'background-color 0.2s ease, transform 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#F8F9FA';
+                          e.currentTarget.style.transform = 'scale(1.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'scale(1)';
                         }}
                       >
                         ❤️
@@ -1376,13 +1506,14 @@ const Dashboard: React.FC = () => {
                       <span 
                         onClick={() => setShowLikes(prev => ({ ...prev, [post.id]: !prev[post.id] }))}
                         style={{
-                          color: '#64748b',
-                          fontSize: '0.9rem',
+                          color: '#65676B',
+                          fontSize: '14px',
+                          fontWeight: 400,
                           cursor: 'pointer',
                           userSelect: 'none'
                         }}
                       >
-                        {post.likeCount || 0} {post.likeCount === 1 ? 'like' : 'likes'}
+                        {post.likeCount || 0}
                       </span>
                     </div>
                     <button 
@@ -1390,14 +1521,19 @@ const Dashboard: React.FC = () => {
                       style={{
                         background: 'none',
                         border: 'none',
-                        color: '#64748b',
-                        fontSize: '0.9rem',
+                        color: '#65676B',
+                        fontSize: '14px',
+                        fontWeight: 400,
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.25rem',
-                        transition: 'color 0.2s ease'
+                        gap: '6px',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        transition: 'background-color 0.2s ease'
                       }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
                       💬 {post.replyCount || 0}
                     </button>
@@ -1407,14 +1543,19 @@ const Dashboard: React.FC = () => {
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: '#64748b',
-                          fontSize: '0.9rem',
+                          color: '#65676B',
+                          fontSize: '14px',
+                          fontWeight: 400,
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '0.25rem',
-                          transition: 'color 0.2s ease'
+                          gap: '6px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          transition: 'background-color 0.2s ease'
                         }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
                         ✏️ Edit
                       </button>
@@ -1423,26 +1564,35 @@ const Dashboard: React.FC = () => {
                   
                   {/* Likes Section */}
                   {showLikes[post.id] && post.likes && post.likes.length > 0 && (
-                    <div style={{ marginTop: '0.5rem', padding: '0.5rem', backgroundColor: '#f8fafc', borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
-                      <div style={{ fontSize: '0.8rem', color: '#475569', fontWeight: '500', marginBottom: '0.5rem' }}>
+                    <div style={{ marginTop: '8px', padding: '12px', backgroundColor: '#F8F9FA', borderRadius: '12px', border: '1px solid #E4E6EA' }}>
+                      <div style={{ fontSize: '12px', color: '#65676B', fontWeight: 500, marginBottom: '8px' }}>
                         Liked by:
                       </div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {post.likes.map((email: string) => (
                           <span
                             key={email}
                             onClick={() => viewUserProfile(email, getUserName(email))}
                             style={{
-                              backgroundColor: '#e2e8f0',
-                              color: '#334155',
-                              padding: '0.25rem 0.5rem',
-                              borderRadius: '0.25rem',
-                              fontSize: '0.8rem',
+                              backgroundColor: '#E4E6EA',
+                              color: '#050505',
+                              padding: '6px 12px',
+                              borderRadius: '12px',
+                              fontSize: '12px',
+                              fontWeight: 400,
                               cursor: 'pointer',
-                              transition: 'background-color 0.2s ease'
+                              transition: 'background-color 0.2s ease, transform 0.1s ease'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#cbd5e1'}
-                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#e2e8f0'}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#1877F2';
+                              e.currentTarget.style.color = '#FFFFFF';
+                              e.currentTarget.style.transform = 'scale(1.05)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = '#E4E6EA';
+                              e.currentTarget.style.color = '#050505';
+                              e.currentTarget.style.transform = 'scale(1)';
+                            }}
                           >
                             {getUserName(email)}
                           </span>
@@ -1453,23 +1603,30 @@ const Dashboard: React.FC = () => {
                   
                   {/* Comments Section */}
                   {showComments[post.id] && (
-                    <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
+                    <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #E4E6EA' }}>
                       {/* Existing Comments */}
                       {post.replies && post.replies.map((reply) => (
-                        <div key={reply.id} style={{ marginBottom: '0.75rem', fontSize: '0.9rem', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                        <div key={reply.id} style={{ marginBottom: '12px', fontSize: '14px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                           {/* Reply Avatar */}
                           <div style={{
-                            width: 24,
-                            height: 24,
+                            width: 32,
+                            height: 32,
                             borderRadius: '50%',
                             overflow: 'hidden',
+                            border: '2px solid #E4E6EA',
                             flexShrink: 0,
                             cursor: 'pointer',
-                            transition: 'border 0.2s ease'
+                            transition: 'transform 0.2s ease, border-color 0.2s ease'
                           }}
                           onClick={() => viewUserProfile(reply.authorEmail || reply.author, reply.author)}
-                          onMouseEnter={(e) => e.currentTarget.style.border = '2px solid #3b82f6'}
-                          onMouseLeave={(e) => e.currentTarget.style.border = 'none'}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                            e.currentTarget.style.borderColor = '#1877F2';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.borderColor = '#E4E6EA';
+                          }}
                           >
                             {(() => {
                               const replyAvatar = getProfilePicture(reply.authorEmail || reply.author, reply.author);
@@ -1510,12 +1667,12 @@ const Dashboard: React.FC = () => {
                                   <div style={{
                                     width: '100%',
                                     height: '100%',
-                                    background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
+                                    background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    color: '#ffffff',
-                                    fontSize: '0.7rem',
+                                    color: '#FFFFFF',
+                                    fontSize: '12px',
                                     fontWeight: 600
                                   }}>
                                     {(reply.authorEmail || reply.author || '?').charAt(0).toUpperCase()}
@@ -1527,9 +1684,11 @@ const Dashboard: React.FC = () => {
                           
                           {/* Reply Content */}
                           <div style={{ flex: 1 }}>
-                            <strong style={{ color: '#1e293b' }}>{reply.author}:</strong>{' '}
-                            <span style={{ color: '#374151' }}>{renderMessageWithMentions(reply.message)}</span>
-                            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>
+                            <strong style={{ color: '#050505', fontSize: '14px', fontWeight: 600 }}>{reply.author}:</strong>{' '}
+                            <span style={{ color: '#65676B', fontSize: '14px', fontWeight: 400, lineHeight: '1.4' }}>
+                              {renderMessageWithMentions(reply.message)}
+                            </span>
+                            <div style={{ fontSize: '11px', color: '#9A9DA1', marginTop: '4px' }}>
                               {reply.createdAt.toDate().toLocaleDateString()}
                             </div>
                           </div>
@@ -1537,7 +1696,7 @@ const Dashboard: React.FC = () => {
                       ))}
                       
                       {/* Add Comment */}
-                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', position: 'relative' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '12px', position: 'relative' }}>
                         <input
                           type="text"
                           value={newComment[post.id] || ''}
@@ -1545,12 +1704,18 @@ const Dashboard: React.FC = () => {
                           placeholder="Add a comment..."
                           style={{
                             flex: 1,
-                            padding: '0.5rem',
-                            border: '1px solid #e2e8f0',
+                            padding: '10px 12px',
+                            border: '1px solid #E4E6EA',
                             borderRadius: '20px',
-                            fontSize: '0.9rem',
-                            outline: 'none'
+                            fontSize: '14px',
+                            fontWeight: 400,
+                            lineHeight: '1.4',
+                            outline: 'none',
+                            transition: 'border-color 0.2s ease',
+                            minHeight: '44px'
                           }}
+                          onFocus={(e) => e.currentTarget.style.borderColor = '#1877F2'}
+                          onBlur={(e) => e.currentTarget.style.borderColor = '#E4E6EA'}
                           onKeyPress={(e) => {
                             if (e.key === 'Enter') {
                               handleAddComment(post.id);
@@ -1565,42 +1730,44 @@ const Dashboard: React.FC = () => {
                             bottom: '100%',
                             left: '0',
                             right: '80px',
-                            background: '#ffffff',
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '8px',
+                            background: '#FFFFFF',
+                            border: '1px solid #E4E6EA',
+                            borderRadius: '12px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                             zIndex: 1000,
                             maxHeight: '200px',
-                            overflowY: 'auto'
+                            overflowY: 'auto',
+                            marginBottom: '8px'
                           }}>
                             {commentMentionUsers[post.id].map((user, index) => (
                               <div
                                 key={index}
                                 onClick={() => insertCommentMention(post.id, user)}
                                 style={{
-                                  padding: '0.5rem',
+                                  padding: '8px',
                                   cursor: 'pointer',
-                                  borderBottom: index < commentMentionUsers[post.id].length - 1 ? '1px solid #f1f5f9' : 'none',
+                                  borderBottom: index < commentMentionUsers[post.id].length - 1 ? '1px solid #F8F9FA' : 'none',
                                   display: 'flex',
                                   alignItems: 'center',
-                                  gap: '0.5rem'
+                                  gap: '8px'
                                 }}
-                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
-                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
                               >
                                 <div style={{
-                                  width: '24px',
-                                  height: '24px',
+                                  width: '32px',
+                                  height: '32px',
                                   borderRadius: '50%',
-                                  background: '#e2e8f0',
+                                  border: '2px solid #E4E6EA',
+                                  background: '#E4E6EA',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
-                                  fontSize: '0.8rem'
+                                  fontSize: '14px'
                                 }}>
                                   {user.name.charAt(0).toUpperCase()}
                                 </div>
-                                <span style={{ fontSize: '0.9rem', color: '#374151' }}>{user.name}</span>
+                                <span style={{ fontSize: '14px', color: '#050505' }}>{user.name}</span>
                               </div>
                             ))}
                           </div>
@@ -1609,13 +1776,24 @@ const Dashboard: React.FC = () => {
                         <button
                           onClick={() => handleAddComment(post.id)}
                           style={{
-                            background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
-                            color: '#ffffff',
+                            background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
+                            color: '#FFFFFF',
                             border: 'none',
                             borderRadius: '20px',
-                            padding: '0.5rem 1rem',
-                            fontSize: '0.85rem',
-                            cursor: 'pointer'
+                            padding: '10px 20px',
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            minHeight: '44px',
+                            cursor: 'pointer',
+                            transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.02)';
+                            e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.boxShadow = 'none';
                           }}
                         >
                           Send

@@ -41,45 +41,48 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, userName, onC
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 2000,
-        padding: '2rem',
+        padding: 16,
         cursor: 'pointer'
       }}
       onClick={onClose}
     >
       <div style={{
         position: 'relative',
-        maxWidth: '90vw',
+        maxWidth: 'min(90vw, 480px)',
         maxHeight: '90vh',
-        backgroundColor: '#ffffff',
-        borderRadius: '1rem',
-        padding: '1rem',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
+        padding: 16,
+        boxShadow: '0 12px 48px rgba(0, 0, 0, 0.5)'
       }}>
         <button
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: '0.5rem',
-            right: '0.5rem',
-            background: 'rgba(0, 0, 0, 0.5)',
-            color: '#ffffff',
+            top: 8,
+            right: 8,
+            background: 'rgba(0, 0, 0, 0.7)',
+            color: '#FFFFFF',
             border: 'none',
             borderRadius: '50%',
-            width: '2rem',
-            height: '2rem',
+            width: 32,
+            height: 32,
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            zIndex: 1
+            fontSize: 16,
+            fontWeight: 600,
+            zIndex: 1,
+            transition: 'background-color 0.2s'
           }}
+          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.9)'}
+          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0, 0, 0, 0.7)'}
         >
           ✕
         </button>
@@ -87,21 +90,22 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, userName, onC
           src={imageSrc}
           alt={userName}
           style={{
-            maxWidth: '400px',
-            maxHeight: '400px',
+            maxWidth: 'min(400px, calc(90vw - 32px))',
+            maxHeight: 'min(400px, calc(90vh - 64px))',
             width: 'auto',
             height: 'auto',
-            borderRadius: '0.5rem',
+            borderRadius: 8,
             objectFit: 'cover'
           }}
           onClick={(e) => e.stopPropagation()}
         />
         <p style={{
           textAlign: 'center',
-          marginTop: '0.5rem',
-          fontSize: '1rem',
+          marginTop: 12,
+          fontSize: 16,
           fontWeight: 600,
-          color: '#000000'
+          color: '#050505',
+          margin: '12px 0 0 0'
         }}>
           {userName}
         </p>
@@ -154,29 +158,29 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 1000,
-      padding: '1rem'
+      padding: 16
     }}>
       <div style={{
-        backgroundColor: '#ffffff',
-        borderRadius: '1rem',
-        padding: '2rem',
-        maxWidth: '500px',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
+        padding: 20,
+        maxWidth: 480,
         width: '100%',
         maxHeight: '80vh',
         overflowY: 'auto',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-        border: '1px solid #e5e7eb'
+        boxShadow: '0 12px 48px rgba(0, 0, 0, 0.25)',
+        border: '1px solid #E4E6EA'
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: '1.5rem'
+          marginBottom: 20
         }}>
           <h2 style={{
-            fontSize: '1.5rem',
-            fontWeight: '700',
-            color: '#111827',
+            fontSize: 18,
+            fontWeight: 600,
+            color: '#050505',
             margin: 0
           }}>Profile Information</h2>
           <button
@@ -184,10 +188,19 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
             style={{
               background: 'transparent',
               border: 'none',
-              fontSize: '1.5rem',
+              fontSize: 24,
               cursor: 'pointer',
-              color: '#64748b'
+              color: '#65676B',
+              width: 32,
+              height: 32,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '50%',
+              transition: 'background-color 0.2s'
             }}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#F8F9FA'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
             ✕
           </button>
@@ -196,17 +209,18 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          marginBottom: '1.5rem'
+          marginBottom: 20
         }}>
           <div 
             style={{
               width: 80,
               height: 80,
               borderRadius: '50%',
-              marginRight: '1rem',
+              marginRight: 16,
               overflow: 'hidden',
               position: 'relative',
-              cursor: getProfilePicture(user.email, user.name) ? 'pointer' : 'default'
+              cursor: getProfilePicture(user.email, user.name) ? 'pointer' : 'default',
+              border: '2px solid #E4E6EA'
             }}
             onMouseOver={(e) => {
               if (getProfilePicture(user.email, user.name)) {
@@ -248,12 +262,12 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
                       <div style="
                         width: 100%;
                         height: 100%;
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        background: linear-gradient(135deg, #1877F2 0%, #166FE5 100%);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         color: white;
-                        font-size: 2rem;
+                        font-size: 32px;
                         font-weight: 600;
                       ">
                         ${user.name.charAt(0).toUpperCase()}
@@ -266,12 +280,12 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               <div style={{
                 width: '100%',
                 height: '100%',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#ffffff',
-                fontSize: '2rem',
+                color: '#FFFFFF',
+                fontSize: 32,
                 fontWeight: 600
               }}>
                 {user.name.charAt(0).toUpperCase()}
@@ -300,8 +314,8 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               >
                 <div style={{
                   color: '#ffffff',
-                  fontSize: '1.5rem',
-                  fontWeight: 'bold'
+                  fontSize: 24,
+                  fontWeight: 600
                 }}>
                   🔍
                 </div>
@@ -310,17 +324,17 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           </div>
           <div>
             <h3 style={{
-              fontSize: '1.3rem',
+              fontSize: 18,
               fontWeight: 600,
-              color: '#000000',
+              color: '#050505',
               margin: 0,
-              marginBottom: '0.25rem'
+              marginBottom: 4
             }}>
               {user.name}
             </h3>
             <p style={{
-              fontSize: '0.9rem',
-              color: '#64748b',
+              fontSize: 14,
+              color: '#65676B',
               margin: 0
             }}>
               {user.city && user.country ? `${user.city}, ${user.country}` : user.email}
@@ -328,40 +342,76 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           </div>
         </div>
 
-        <div style={{ color: '#374151', lineHeight: '1.6' }}>
+        <div style={{ color: '#050505', lineHeight: 1.4 }}>
           {user.bio && (
-            <div style={{ marginBottom: '1rem' }}>
-              <h4 style={{ color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
+            <div style={{ marginBottom: 16 }}>
+              <h4 style={{ 
+                color: '#050505', 
+                marginBottom: 8, 
+                fontSize: 14,
+                fontWeight: 600
+              }}>
                 Bio:
               </h4>
-              <p style={{ margin: 0, fontSize: '0.95rem' }}>{user.bio}</p>
+              <p style={{ 
+                margin: 0, 
+                fontSize: 14,
+                color: '#65676B'
+              }}>{user.bio}</p>
             </div>
           )}
 
           {user.intellectual && (
-            <div style={{ marginBottom: '1rem' }}>
-              <h4 style={{ color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
+            <div style={{ marginBottom: 16 }}>
+              <h4 style={{ 
+                color: '#050505', 
+                marginBottom: 8, 
+                fontSize: 14,
+                fontWeight: 600
+              }}>
                 ബുദ്ധിജീവി ആണോ?
               </h4>
-              <p style={{ margin: 0, fontSize: '0.95rem' }}>{user.intellectual}</p>
+              <p style={{ 
+                margin: 0, 
+                fontSize: 14,
+                color: '#65676B'
+              }}>{user.intellectual}</p>
             </div>
           )}
 
           {user.umrah && (
-            <div style={{ marginBottom: '1rem' }}>
-              <h4 style={{ color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
+            <div style={{ marginBottom: 16 }}>
+              <h4 style={{ 
+                color: '#050505', 
+                marginBottom: 8, 
+                fontSize: 14,
+                fontWeight: 600
+              }}>
                 ഉംറ ചെയ്തിട്ടുണ്ടോ:
               </h4>
-              <p style={{ margin: 0, fontSize: '0.95rem' }}>{user.umrah}</p>
+              <p style={{ 
+                margin: 0, 
+                fontSize: 14,
+                color: '#65676B'
+              }}>{user.umrah}</p>
             </div>
           )}
 
           {user.funLover && (
-            <div style={{ marginBottom: '1rem' }}>
-              <h4 style={{ color: '#111827', marginBottom: '0.5rem', fontSize: '1rem' }}>
+            <div style={{ marginBottom: 16 }}>
+              <h4 style={{ 
+                color: '#050505', 
+                marginBottom: 8, 
+                fontSize: 14,
+                fontWeight: 600
+              }}>
                 ഉല്ലാസം ഇഷ്ടമാണോ?
               </h4>
-              <p style={{ margin: 0, fontSize: '0.95rem' }}>{user.funLover}</p>
+              <p style={{ 
+                margin: 0, 
+                fontSize: 14,
+                color: '#65676B'
+              }}>{user.funLover}</p>
             </div>
           )}
 
@@ -498,10 +548,29 @@ const Residents: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
+      }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
-          <p>Loading residents...</p>
+          <div style={{ 
+            width: 48,
+            height: 48,
+            border: '4px solid rgba(255,255,255,0.3)',
+            borderTop: '4px solid #FFFFFF',
+            borderRadius: '50%',
+            margin: '0 auto 16px',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <p style={{ 
+            color: '#FFFFFF', 
+            fontSize: 16,
+            fontWeight: 500,
+            margin: 0
+          }}>Loading residents...</p>
         </div>
       </div>
     );
@@ -509,10 +578,29 @@ const Residents: React.FC = () => {
 
   if (authLoading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
+      }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
-          <p>Checking authentication...</p>
+          <div style={{ 
+            width: 48,
+            height: 48,
+            border: '4px solid rgba(255,255,255,0.3)',
+            borderTop: '4px solid #FFFFFF',
+            borderRadius: '50%',
+            margin: '0 auto 16px',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <p style={{ 
+            color: '#FFFFFF', 
+            fontSize: 16,
+            fontWeight: 500,
+            margin: 0
+          }}>Checking authentication...</p>
         </div>
       </div>
     );
@@ -523,191 +611,186 @@ const Residents: React.FC = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#ffffff', padding: '1rem 0' }}>
+    <div style={{ minHeight: '100vh', background: '#F8F9FA' }}>
+      {/* Modern Header */}
       <div style={{ 
-        maxWidth: 1200, 
-        margin: '0 auto', 
-        padding: window.innerWidth <= 768 ? '1rem' : '2rem', 
-        background: '#fff', 
-        borderRadius: window.innerWidth <= 768 ? 12 : 16, 
-        boxShadow: '0 2px 16px rgba(0,0,0,0.10)', 
-        minHeight: window.innerWidth <= 768 ? 'calc(100vh - 2rem)' : 'auto'
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E4E6EA',
+        height: 60
       }}>
-        {/* Header */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          marginBottom: window.innerWidth <= 768 ? 16 : 24,
-          flexWrap: window.innerWidth <= 480 ? 'wrap' : 'nowrap',
-          gap: window.innerWidth <= 480 ? '0.5rem' : '0'
+        <div style={{
+          maxWidth: 480,
+          margin: '0 auto',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 16px'
         }}>
-          <img src="/newlogo.svg" alt="Logo" style={{ 
-            height: window.innerWidth <= 768 ? 36 : 48,
-            order: window.innerWidth <= 480 ? -1 : 0,
-            width: window.innerWidth <= 480 ? '100%' : 'auto',
-            maxWidth: window.innerWidth <= 480 ? '120px' : 'none',
-            margin: window.innerWidth <= 480 ? '0 auto 0.5rem auto' : '0'
-          }} />
+          <button
+            onClick={goToDashboard}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '50%',
+              transition: 'background-color 0.2s',
+              width: 36,
+              height: 36
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#F8F9FA'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <span style={{ fontSize: 20 }}>←</span>
+          </button>
           
-          <div style={{ 
-            display: 'flex', 
-            gap: window.innerWidth <= 768 ? '0.5rem' : '1rem',
-            flexWrap: window.innerWidth <= 480 ? 'wrap' : 'nowrap',
-            justifyContent: window.innerWidth <= 480 ? 'center' : 'flex-end',
-            width: window.innerWidth <= 480 ? '100%' : 'auto'
+          <h1 style={{
+            margin: 0,
+            fontSize: 18,
+            fontWeight: 600,
+            color: '#050505'
           }}>
-            <button 
-              onClick={goToDashboard}
-              style={{ 
-                background: '#ffffff', 
-                color: '#000000', 
-                border: '1px solid #e5e7eb', 
-                borderRadius: 10, 
-                padding: window.innerWidth <= 768 ? '6px 12px' : '8px 16px', 
-                cursor: 'pointer', 
-                fontSize: window.innerWidth <= 768 ? '0.8rem' : '0.9rem', 
-                fontWeight: 600,
-                transition: 'all 0.2s ease',
-                minWidth: 'fit-content'
+            People
+          </h1>
+
+          <button
+            onClick={goToProfile}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '50%',
+              transition: 'background-color 0.2s',
+              width: 36,
+              height: 36
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#F8F9FA'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <span style={{ fontSize: 20 }}>👤</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div style={{ 
+        maxWidth: 480, 
+        margin: '0 auto', 
+        paddingTop: 16
+      }}>
+
+        {/* Muthalali Section */}
+        <div style={{ 
+          background: '#FFFFFF',
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 16,
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        }}>
+          <h2 style={{ 
+            fontSize: 18, 
+            fontWeight: 600, 
+            marginBottom: 12, 
+            color: '#050505',
+            textAlign: 'center'
+          }}>
+            🏠 ആശ്രമ നിവാസികൾ
+          </h2>
+
+          <div style={{ 
+            display: 'flex',
+            justifyContent: 'center'
+          }}>
+            <img 
+              src={`${process.env.PUBLIC_URL}/muthalali.jpeg`}
+              alt="Muthalali"
+              style={{
+                width: '100%',
+                maxWidth: 350,
+                height: 'auto',
+                borderRadius: 12,
+                objectFit: 'contain',
+                border: '2px solid #E4E6EA',
+                transition: 'transform 0.2s ease'
               }}
-            >
-              🏠 Dashboard
-            </button>
-            <button 
-              onClick={goToStories}
-              style={{ 
-                background: '#ffffff', 
-                color: '#000000', 
-                border: '1px solid #e5e7eb', 
-                borderRadius: 10, 
-                padding: window.innerWidth <= 768 ? '6px 12px' : '8px 16px', 
-                cursor: 'pointer', 
-                fontSize: window.innerWidth <= 768 ? '0.8rem' : '0.9rem', 
-                fontWeight: 600,
-                transition: 'all 0.2s ease',
-                minWidth: 'fit-content'
-              }}
-            >
-              📚 Stories
-            </button>
-            <button 
-              onClick={goToProfile}
-              style={{ 
-                background: '#ffffff', 
-                color: '#000000', 
-                border: '1px solid #e5e7eb', 
-                borderRadius: 10, 
-                padding: window.innerWidth <= 768 ? '6px 12px' : '8px 16px', 
-                cursor: 'pointer', 
-                fontSize: window.innerWidth <= 768 ? '0.8rem' : '0.9rem', 
-                fontWeight: 600,
-                transition: 'all 0.2s ease',
-                minWidth: 'fit-content'
-              }}
-            >
-              👤 Profile
-            </button>
-            <button 
-              onClick={goToAccount}
-              style={{ 
-                background: '#ffffff', 
-                color: '#000000', 
-                border: '1px solid #e5e7eb', 
-                borderRadius: 10, 
-                padding: window.innerWidth <= 768 ? '6px 12px' : '8px 16px', 
-                cursor: 'pointer', 
-                fontSize: window.innerWidth <= 768 ? '0.8rem' : '0.9rem', 
-                fontWeight: 600,
-                transition: 'all 0.2s ease',
-                minWidth: 'fit-content'
-              }}
-            >
-              ⚙️ Account
-            </button>
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            />
           </div>
         </div>
 
-        <h1 style={{ 
-          fontSize: window.innerWidth <= 768 ? '1.6rem' : '2rem', 
-          fontWeight: 700, 
-          marginBottom: '1rem', 
-          color: '#000000',
-          textAlign: 'center'
-        }}>
-          🏠 ആശ്രമ നിവാസികൾ
-        </h1>
-
-        <div style={{ 
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: '2rem'
-        }}>
-          <img 
-            src={`${process.env.PUBLIC_URL}/muthalali.jpeg`}
-            alt="Muthalali"
-            style={{
-              width: window.innerWidth <= 768 ? '100%' : '100%',
-              maxWidth: window.innerWidth <= 768 ? '350px' : '500px',
-              height: 'auto',
-              borderRadius: '12px',
-              objectFit: 'contain',
-              border: '3px solid #e5e7eb',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-              transition: 'transform 0.2s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-          />
-        </div>
-
         {residents.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '2rem' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem', opacity: 0.3 }}>👥</div>
-            <h3 style={{ color: '#64748b', fontSize: '1.1rem' }}>No residents found</h3>
-            <p style={{ color: '#64748b', fontSize: '0.9rem' }}>
+          <div style={{ 
+            background: '#FFFFFF',
+            borderRadius: 12,
+            padding: 32,
+            textAlign: 'center',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+          }}>
+            <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.3 }}>👥</div>
+            <h3 style={{ 
+              color: '#65676B', 
+              fontSize: 16,
+              fontWeight: 600,
+              margin: '0 0 8px 0'
+            }}>No residents found</h3>
+            <p style={{ 
+              color: '#65676B', 
+              fontSize: 14,
+              margin: 0
+            }}>
               Approved users will appear here
             </p>
           </div>
         ) : (
           <div style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth <= 768 ? 'repeat(auto-fit, minmax(150px, 1fr))' : 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1.5rem',
-            justifyItems: 'center'
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 12,
+            paddingBottom: 80
           }}>
             {residents.map((resident) => (
               <div
                 key={resident.uid}
                 onClick={() => setSelectedUser(resident)}
                 style={{
-                  background: '#ffffff',
-                  border: '1px solid #e5e7eb',
+                  background: '#FFFFFF',
+                  border: '1px solid #E4E6EA',
                   borderRadius: 12,
-                  padding: '1.5rem',
+                  padding: 16,
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  textAlign: 'center',
-                  width: '100%',
-                  maxWidth: '200px'
+                  textAlign: 'center'
                 }}
                 onMouseOver={e => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.15)';
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
                 }}
                 onMouseOut={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.transform = 'scale(1)';
                   e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
                 }}
               >
                 <div style={{
-                  width: 60,
-                  height: 60,
+                  width: 64,
+                  height: 64,
                   borderRadius: '50%',
-                  margin: '0 auto 1rem auto',
+                  margin: '0 auto 12px auto',
                   overflow: 'hidden',
-                  position: 'relative'
+                  position: 'relative',
+                  border: '2px solid #E4E6EA'
                 }}>
                   {getProfilePicture(resident.email, resident.name) ? (
                     <img 
@@ -727,12 +810,12 @@ const Residents: React.FC = () => {
                             <div style="
                               width: 100%;
                               height: 100%;
-                              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                              background: linear-gradient(135deg, #1877F2 0%, #166FE5 100%);
                               display: flex;
                               align-items: center;
                               justify-content: center;
                               color: white;
-                              font-size: 1.5rem;
+                              font-size: 24px;
                               font-weight: 600;
                             ">
                               ${resident.name.charAt(0).toUpperCase()}
@@ -745,12 +828,12 @@ const Residents: React.FC = () => {
                     <div style={{
                       width: '100%',
                       height: '100%',
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#ffffff',
-                      fontSize: '1.5rem',
+                      color: '#FFFFFF',
+                      fontSize: 24,
                       fontWeight: 600
                     }}>
                       {resident.name.charAt(0).toUpperCase()}
@@ -759,20 +842,20 @@ const Residents: React.FC = () => {
                 </div>
                 
                 <h3 style={{
-                  fontSize: '1rem',
+                  fontSize: 14,
                   fontWeight: 600,
-                  color: '#000000',
+                  color: '#050505',
                   margin: 0,
-                  marginBottom: '0.5rem'
+                  marginBottom: 4
                 }}>
                   {resident.name}
                 </h3>
                 
                 <p style={{
-                  fontSize: '0.8rem',
-                  color: '#64748b',
+                  fontSize: 12,
+                  color: '#65676B',
                   margin: 0,
-                  marginBottom: '0.75rem'
+                  marginBottom: 8
                 }}>
                   {resident.city && resident.country ? 
                     `${resident.city}, ${resident.country}` : 
@@ -781,11 +864,11 @@ const Residents: React.FC = () => {
                 </p>
                 
                 <div style={{
-                  fontSize: '0.75rem',
-                  color: '#64748b',
-                  padding: '0.25rem 0.5rem',
-                  backgroundColor: '#f8fafc',
-                  borderRadius: '12px',
+                  fontSize: 11,
+                  color: '#65676B',
+                  padding: '4px 8px',
+                  backgroundColor: '#F8F9FA',
+                  borderRadius: 12,
                   display: 'inline-block'
                 }}>
                   {resident.profileCompletion}% complete
