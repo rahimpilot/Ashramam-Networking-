@@ -49,6 +49,13 @@ const PowerGroup: React.FC = () => {
     'hyder.mohamed@gmail.com': 'Hyder Mohamed'
   };
 
+  // Member ID mapping for routing
+  const memberIdMap: { [key: string]: string } = {
+    'niaznasu@gmail.com': 'niaz-kamaru',
+    'mshanir@gmail.com': 'shanir-musliyamveetil',
+    'hyder.mohamed@gmail.com': 'hyder-mohamed'
+  };
+
   const emailsToFetch = ['niaznasu@gmail.com', 'mshanir@gmail.com', 'hyder.mohamed@gmail.com'];
 
   useEffect(() => {
@@ -199,6 +206,7 @@ const PowerGroup: React.FC = () => {
               {members.map((member) => (
                 <div
                   key={member.id}
+                  onClick={() => navigate(`/power-group/${memberIdMap[member.email]}`)}
                   style={{
                     background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
                     borderRadius: window.innerWidth <= 768 ? 12 : 16,
