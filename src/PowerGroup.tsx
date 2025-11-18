@@ -39,24 +39,27 @@ const PowerGroup: React.FC = () => {
   const profilePictureMap: { [key: string]: string } = {
     'niaznasu@gmail.com': '👤',
     'mshanir@gmail.com': '👨',
-    'hyder.mohamed@gmail.com': '🧔'
+    'hyder.mohamed@gmail.com': '🧔',
+    'mohasinali@gmail.com': '👨‍💼'
   };
 
   // Name mapping for Power Group members
   const nameMap: { [key: string]: string } = {
     'niaznasu@gmail.com': 'Niaz Kamaru',
     'mshanir@gmail.com': 'Shanir Musliyamveetil',
-    'hyder.mohamed@gmail.com': 'Hyder Mohamed'
+    'hyder.mohamed@gmail.com': 'Hyder Mohamed',
+    'mohasinali@gmail.com': 'Mohasin Ali'
   };
 
   // Member ID mapping for routing
   const memberIdMap: { [key: string]: string } = {
     'niaznasu@gmail.com': 'niaz-kamaru',
     'mshanir@gmail.com': 'shanir-musliyamveetil',
-    'hyder.mohamed@gmail.com': 'hyder-mohamed'
+    'hyder.mohamed@gmail.com': 'hyder-mohamed',
+    'mohasinali@gmail.com': 'mohasin-ali'
   };
 
-  const emailsToFetch = ['niaznasu@gmail.com', 'mshanir@gmail.com', 'hyder.mohamed@gmail.com'];
+  const emailsToFetch = ['niaznasu@gmail.com', 'mshanir@gmail.com', 'hyder.mohamed@gmail.com', 'mohasinali@gmail.com'];
 
   useEffect(() => {
     const fetchMembers = async () => {
