@@ -17,6 +17,8 @@ import PowerGroup from './PowerGroup';
 import PowerGroupMemberProfile from './PowerGroupMemberProfile';
 import VoiceRoom from './VoiceRoom';
 import RoyalBank from './RoyalBank';
+import OurTrips from './OurTrips';
+import Krabi from './Krabi';
 import BottomNavigation from './BottomNavigation';
 import InstallPrompt from './InstallPrompt';
 
@@ -41,6 +43,8 @@ const AppContent: React.FC = () => {
           <Route path="/meeting-minutes/november-2nd-2025" element={<November2nd2025Meeting />} />
           <Route path="/power-group" element={<PowerGroup />} />
           <Route path="/power-group/:memberId" element={<PowerGroupMemberProfile />} />
+          <Route path="/our-trips" element={<OurTrips />} />
+          <Route path="/our-trips/krabi" element={<Krabi />} />
           <Route path="/residents" element={<Residents />} />
           <Route path="/account" element={<Account />} />
         </Routes>      {/* Bottom Navigation - only show on main app pages */}
