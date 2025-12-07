@@ -16,6 +16,26 @@ styleSheet.textContent = `
       transform: scale(1.1);
     }
   }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 document.head.appendChild(styleSheet);
 
@@ -29,11 +49,22 @@ interface UserProfile {
   joinedDate?: string;
 }
 
+interface Group {
+  id: number;
+  title: string;
+  members: number;
+  icon: string;
+  color: string;
+  mutual: number;
+}
+
 const PowerGroup: React.FC = () => {
   const navigate = useNavigate();
   const [members, setMembers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<UserProfile | null>(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   // Profile pictures mapping
   const profilePictureMap: { [key: string]: string } = {
@@ -59,6 +90,15 @@ const PowerGroup: React.FC = () => {
     'mohasinali@gmail.com': 'mohasin-ali'
   };
 
+  // Mock groups data based on design spec
+  const suggestedGroups: Group[] = [
+    { id: 1, title: 'Lightning Fast Team', members: 256, icon: '⚡', color: '#FF9800', mutual: 72 },
+    { id: 2, title: 'Would You Rather', members: 256, icon: '❓', color: '#FF9800', mutual: 63 },
+    { id: 3, title: 'Drop a pic of your pet', members: 256, icon: '🐶', color: '#4CAF50', mutual: 72 },
+    { id: 4, title: 'Climate Change', members: 256, icon: '🌍', color: '#4CAF50', mutual: 0 },
+    { id: 5, title: 'Gym & Fitness', members: 256, icon: '🏋️', color: '#FFEB3B', mutual: 0 },
+  ];
+
   const emailsToFetch = ['niaznasu@gmail.com', 'mshanir@gmail.com', 'hyder.mohamed@gmail.com', 'mohasinali@gmail.com'];
 
   useEffect(() => {
@@ -79,10 +119,10 @@ const PowerGroup: React.FC = () => {
               id: doc.id,
               email: doc.data().email,
               displayName: nameMap[email] || doc.data().displayName || email.split('@')[0],
-              bio: doc.data().bio || '',
+              bio: doc.data().bio || 'Bookworm with a passion for community',
               profilePicture: profilePictureMap[email] || '👤',
-              location: doc.data().location || '',
-              joinedDate: doc.data().joinedDate || ''
+              location: doc.data().location || 'Seattle, WA',
+              joinedDate: doc.data().joinedDate || 'May 5'
             });
           } else {
             // Create a default profile if user doesn't exist
@@ -90,10 +130,10 @@ const PowerGroup: React.FC = () => {
               id: email,
               email: email,
               displayName: nameMap[email] || email.split('@')[0],
-              bio: '',
+              bio: 'Bookworm with a passion for community',
               profilePicture: profilePictureMap[email] || '👤',
-              location: '',
-              joinedDate: ''
+              location: 'Seattle, WA',
+              joinedDate: 'May 5'
             });
           }
         }
@@ -112,78 +152,211 @@ const PowerGroup: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleAddFriend = (member: UserProfile) => {
+    // Placeholder for add friend action
+    console.log('Add friend:', member.displayName);
+  };
+
+  const handleMessage = (member: UserProfile) => {
+    // Placeholder for message action
+    console.log('Message:', member.displayName);
+  };
+
+  const handleJoinGroup = (group: Group) => {
+    // Placeholder for join group action
+    console.log('Join group:', group.title);
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#ffffff',
-      padding: window.innerWidth <= 768 ? '1rem 0.5rem' : '2rem 1rem',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      background: '#F0F8FF',
+      padding: '1rem',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      overflow: 'hidden'
     }}>
+      {/* Status Bar Mock */}
       <div style={{
-        maxWidth: 800,
-        margin: '0 auto',
-        padding: window.innerWidth <= 768 ? '0 0.5rem' : '0'
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingBottom: '1rem',
+        color: '#666',
+        fontSize: '0.875rem'
       }}>
-        {/* Header */}
+        <span>9:41</span>
+        <span>⚡📶</span>
+      </div>
+
+      <div style={{
+        maxWidth: '100%',
+        margin: '0 auto',
+        animation: 'fadeIn 0.3s ease'
+      }}>
+        {/* Groups Section */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: window.innerWidth <= 768 ? 16 : 20,
-          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-          marginBottom: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-          backdropFilter: 'blur(10px)'
+          marginBottom: '2rem'
         }}>
           <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            textAlign: 'center'
+            padding: '1rem',
+            marginBottom: '1rem'
           }}>
-            {/* Logo */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginBottom: '1rem',
-              width: '100%'
-            }}>
-              <img
-                src="/newlogo.svg"
-                alt="Ashramam Vibes Logo"
-                style={{
-                  height: window.innerWidth <= 768 ? '48px' : '64px',
-                  width: 'auto',
-                  objectFit: 'contain',
-                  filter: 'drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07))'
-                }}
-              />
-            </div>
-            <h1 style={{
-              fontSize: window.innerWidth <= 768 ? '2rem' : '2.5rem',
-              fontWeight: 700,
-              margin: '0 0 1rem 0',
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              margin: '0 0 0.25rem 0',
               color: '#1f2937'
             }}>
-              Power Group
-            </h1>
+              Groups
+            </h2>
             <p style={{
-              fontSize: window.innerWidth <= 768 ? '0.9rem' : '1rem',
-              color: '#6b7280',
-              margin: 0
+              fontSize: '0.875rem',
+              color: '#999',
+              margin: '0 0 0.5rem 0'
             }}>
-              Elite members of the community
+              Public groups {suggestedGroups.length}
             </p>
+            <button
+              onClick={() => console.log('See all groups')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#2196F3',
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                padding: 0
+              }}
+            >
+              See all
+            </button>
+          </div>
+
+          {/* Groups Cards */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            paddingBottom: '1rem'
+          }}>
+            {suggestedGroups.map((group, index) => (
+              <div
+                key={group.id}
+                style={{
+                  background: '#FFFFFF',
+                  borderRadius: '12px',
+                  padding: '1rem',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  animation: `slideUp 0.3s ease ${index * 0.05}s forwards`,
+                  opacity: 0
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                {/* Icon */}
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    backgroundColor: group.color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.5rem',
+                    flexShrink: 0
+                  }}
+                >
+                  {group.icon}
+                </div>
+
+                {/* Group Info */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <h3 style={{
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    margin: '0 0 0.25rem 0',
+                    color: '#1f2937'
+                  }}>
+                    {group.title}
+                  </h3>
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: '#666',
+                    margin: '0 0 0.25rem 0'
+                  }}>
+                    {group.members} members
+                  </p>
+                  {group.mutual > 0 && (
+                    <p style={{
+                      fontSize: '0.8rem',
+                      color: '#4CAF50',
+                      margin: 0
+                    }}>
+                      {group.mutual} friends are members
+                    </p>
+                  )}
+                </div>
+
+                {/* Join Button */}
+                <button
+                  onClick={() => handleJoinGroup(group)}
+                  style={{
+                    background: '#2196F3',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '20px',
+                    padding: '0.5rem 1.25rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    flexShrink: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1976D2';
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#2196F3';
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  Join
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Members Grid */}
+        {/* Suggested Friends Section */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: window.innerWidth <= 768 ? 16 : 20,
-          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-          backdropFilter: 'blur(10px)'
+          marginBottom: '2rem'
         }}>
+          <div style={{
+            padding: '1rem',
+            marginBottom: '1rem'
+          }}>
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              margin: '0',
+              color: '#1f2937'
+            }}>
+              Suggested Friends
+            </h2>
+          </div>
+
+          {/* Friends Cards */}
           {loading ? (
             <div style={{
               textAlign: 'center',
@@ -202,122 +375,319 @@ const PowerGroup: React.FC = () => {
             </div>
           ) : (
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: window.innerWidth <= 768 ? '1rem' : '1.5rem'
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              paddingBottom: '1rem'
             }}>
-              {members.map((member) => (
+              {members.map((member, index) => (
                 <div
                   key={member.id}
-                  onClick={() => navigate(`/power-group/${memberIdMap[member.email]}`)}
                   style={{
-                    background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-                    borderRadius: window.innerWidth <= 768 ? 12 : 16,
-                    padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-                    textAlign: 'center',
-                    border: '2px solid #fbbf24',
-                    boxShadow: '0 4px 12px rgba(251, 191, 36, 0.2)',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer'
+                    background: '#FFFFFF',
+                    borderRadius: '12px',
+                    padding: '1rem',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    animation: `slideUp 0.3s ease ${(suggestedGroups.length + index) * 0.05}s forwards`,
+                    opacity: 0
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(251, 191, 36, 0.3)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
                   }}
                   onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(251, 191, 36, 0.2)';
                   }}
                 >
-                  {/* Profile Picture with Wealth Indicators */}
-                  <div style={{
-                    position: 'relative',
-                    display: 'inline-block',
-                    marginBottom: '1rem'
-                  }}>
-                    {/* Main Avatar */}
-                    <div style={{
-                      fontSize: '3.5rem'
-                    }}>
-                      {member.profilePicture}
-                    </div>
-                    
-                    {/* Gold Badge */}
-                    <div style={{
-                      position: 'absolute',
-                      top: '-5px',
-                      right: '-5px',
-                      fontSize: '1.8rem',
-                      filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
-                      animation: 'pulse 2s infinite'
-                    }}>
-                      💰
-                    </div>
-
-                    {/* Money Bag Badge */}
-                    <div style={{
-                      position: 'absolute',
-                      bottom: '-5px',
-                      left: '-5px',
-                      fontSize: '1.8rem',
-                      filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
-                      animation: 'pulse 2s infinite 0.3s'
-                    }}>
-                      💵
-                    </div>
+                  {/* Profile Photo */}
+                  <div
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      borderRadius: '50%',
+                      backgroundColor: '#E0E7FF',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.75rem',
+                      flexShrink: 0,
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                      setSelectedProfile(member);
+                      setShowProfileModal(true);
+                    }}
+                  >
+                    {member.profilePicture}
                   </div>
 
-                  {/* Name */}
-                  <h3 style={{
-                    fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
-                    fontWeight: 700,
-                    margin: '0 0 0.5rem 0',
-                    color: '#92400e'
-                  }}>
-                    {member.displayName}
-                  </h3>
-
-                  {/* Email */}
-                  <p style={{
-                    fontSize: '0.85rem',
-                    color: '#b45309',
-                    margin: '0 0 0.75rem 0',
-                    wordBreak: 'break-all'
-                  }}>
-                    {member.email}
-                  </p>
-
-                  {/* Bio */}
-                  {member.bio && (
+                  {/* User Info */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h3 style={{
+                      fontSize: '0.95rem',
+                      fontWeight: 'bold',
+                      margin: '0 0 0.25rem 0',
+                      color: '#1f2937'
+                    }}>
+                      {member.displayName}
+                    </h3>
                     <p style={{
-                      fontSize: '0.9rem',
-                      color: '#78350f',
-                      margin: 0
+                      fontSize: '0.8rem',
+                      color: '#666',
+                      margin: '0 0 0.25rem 0',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
                     }}>
                       {member.bio}
                     </p>
-                  )}
+                    <p style={{
+                      fontSize: '0.75rem',
+                      color: '#999',
+                      margin: 0
+                    }}>
+                      📍 {member.location}
+                    </p>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '0.5rem',
+                    flexShrink: 0
+                  }}>
+                    <button
+                      onClick={() => handleAddFriend(member)}
+                      style={{
+                        background: '#2196F3',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '20px',
+                        padding: '0.5rem 1rem',
+                        fontSize: '0.8rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#1976D2';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#2196F3';
+                      }}
+                    >
+                      Add
+                    </button>
+                    <button
+                      onClick={() => handleMessage(member)}
+                      style={{
+                        background: '#E8E8E8',
+                        color: '#333',
+                        border: 'none',
+                        borderRadius: '20px',
+                        padding: '0.5rem 1rem',
+                        fontSize: '0.8rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#D0D0D0';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#E8E8E8';
+                      }}
+                    >
+                      Message
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
 
+        {/* Profile Modal */}
+        {showProfileModal && selectedProfile && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              display: 'flex',
+              alignItems: 'flex-end',
+              zIndex: 1000,
+              animation: 'fadeIn 0.2s ease'
+            }}
+            onClick={() => setShowProfileModal(false)}
+          >
+            <div
+              style={{
+                background: '#FFFFFF',
+                borderRadius: '16px 16px 0 0',
+                width: '100%',
+                maxHeight: '80vh',
+                padding: '1.5rem',
+                overflow: 'auto',
+                animation: 'slideUp 0.3s ease'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowProfileModal(false)}
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  left: '1rem',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: '#666'
+                }}
+              >
+                ←
+              </button>
+
+              {/* Profile Photo */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginBottom: '1.5rem'
+              }}>
+                <div
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '50%',
+                    backgroundColor: '#E0E7FF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '3rem'
+                  }}
+                >
+                  {selectedProfile.profilePicture}
+                </div>
+              </div>
+
+              {/* Name */}
+              <h2 style={{
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                margin: '0 0 0.5rem 0',
+                color: '#1f2937'
+              }}>
+                {selectedProfile.displayName}
+              </h2>
+
+              {/* Bio */}
+              <p style={{
+                fontSize: '0.95rem',
+                textAlign: 'center',
+                color: '#666',
+                margin: '0 0 1rem 0',
+                lineHeight: '1.5'
+              }}>
+                {selectedProfile.bio}
+              </p>
+
+              {/* Location */}
+              <p style={{
+                fontSize: '0.875rem',
+                textAlign: 'center',
+                color: '#999',
+                margin: '0 0 1.5rem 0'
+              }}>
+                📍 {selectedProfile.location}
+              </p>
+
+              {/* Action Buttons */}
+              <div style={{
+                display: 'flex',
+                gap: '1rem'
+              }}>
+                <button
+                  onClick={() => {
+                    handleAddFriend(selectedProfile);
+                    setShowProfileModal(false);
+                  }}
+                  style={{
+                    flex: 1,
+                    background: '#2196F3',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '20px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '0.95rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1976D2';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#2196F3';
+                  }}
+                >
+                  Add friend
+                </button>
+                <button
+                  onClick={() => {
+                    handleMessage(selectedProfile);
+                    setShowProfileModal(false);
+                  }}
+                  style={{
+                    flex: 1,
+                    background: 'none',
+                    color: '#2196F3',
+                    border: '2px solid #2196F3',
+                    borderRadius: '20px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '0.95rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#E3F2FD';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  Message
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Back Button */}
         <div style={{
           textAlign: 'center',
-          marginTop: window.innerWidth <= 768 ? '1.5rem' : '2rem'
+          padding: '2rem 1rem 1rem 1rem'
         }}>
           <button
             onClick={() => navigate('/hangout')}
             style={{
-              background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
+              background: '#1f2937',
               color: '#ffffff',
               border: 'none',
-              borderRadius: 25,
+              borderRadius: '25px',
               padding: '0.75rem 2rem',
-              fontSize: '1rem',
-              fontWeight: 600,
+              fontSize: '0.95rem',
+              fontWeight: '600',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
               boxShadow: '0 4px 12px rgba(0,0,0,0.2)'

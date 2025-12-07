@@ -275,6 +275,56 @@ const Hangout: React.FC = () => {
               </p>
             </div>
           </div>
+
+          {/* Our Trips */}
+          <div style={{
+            background: 'linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%)',
+            borderRadius: '12px',
+            padding: '20px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            border: '2px solid #A855F7',
+            boxShadow: '0 1px 3px rgba(168, 85, 247, 0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px'
+          }}
+          onClick={() => navigate('/our-trips')}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.02)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(168, 85, 247, 0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 1px 3px rgba(168, 85, 247, 0.2)';
+          }}
+          >
+            <div style={{ 
+              fontSize: '48px', 
+              lineHeight: 1,
+              flexShrink: 0 
+            }}>✈️</div>
+            <div>
+              <h3 style={{
+                fontSize: '18px',
+                fontWeight: 600,
+                lineHeight: '1.3',
+                margin: '0 0 4px 0',
+                color: '#6B21A8'
+              }}>
+                Our Trips
+              </h3>
+              <p style={{
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '1.4',
+                color: '#7E22CE',
+                margin: 0
+              }}>
+                Share travel experiences
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

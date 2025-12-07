@@ -31,6 +31,19 @@ const OurTrips: React.FC = () => {
         textDark: '#92400E',
         textLight: '#B45309'
       }
+    },
+    {
+      id: 'baku',
+      name: 'Baku',
+      emoji: '🌃',
+      description: 'Memories from our Baku adventure',
+      color: {
+        gradient: 'linear-gradient(135deg, #DDD6FE 0%, #C7D2FE 100%)',
+        border: '#A78BFA',
+        shadow: 'rgba(167, 139, 250, 0.2)',
+        textDark: '#4C1D95',
+        textLight: '#6D28D9'
+      }
     }
   ];
 
