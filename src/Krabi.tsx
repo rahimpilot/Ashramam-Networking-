@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-interface TripStory {
+interface PhotoComment {
   id: string;
   author: string;
-  content: string;
+  text: string;
   timestamp: string;
 }
 
@@ -13,44 +13,34 @@ interface TripPhoto {
   url: string;
   caption: string;
   uploadedBy: string;
+  uploadDate: string;
+  comments: PhotoComment[];
 }
 
 const Krabi: React.FC = () => {
   const navigate = useNavigate();
-  const [stories, setStories] = useState<TripStory[]>([
-    {
-      id: '1',
-      author: 'Member 1',
-      content: 'Amazing sunset at Railay Beach! The view was absolutely breathtaking. 🌅',
-      timestamp: '2 days ago'
-    }
-  ]);
-
+  
   const [photos, setPhotos] = useState<TripPhoto[]>([
     {
       id: '1',
       url: '/krabi-sample.jpg',
       caption: 'Railay Beach Sunset',
-      uploadedBy: 'Member 1'
+      uploadedBy: 'Member 1',
+      uploadDate: '2 days ago',
+      comments: [
+        {
+          id: '1',
+          author: 'Member 2',
+          text: 'Amazing view! 🌅',
+          timestamp: '1 day ago'
+        }
+      ]
     }
   ]);
 
-  const [newStory, setNewStory] = useState('');
-  const [showStoryInput, setShowStoryInput] = useState(false);
-
-  const handleAddStory = () => {
-    if (newStory.trim()) {
-      const story: TripStory = {
-        id: Date.now().toString(),
-        author: 'You',
-        content: newStory,
-        timestamp: 'Just now'
-      };
-      setStories([story, ...stories]);
-      setNewStory('');
-      setShowStoryInput(false);
-    }
-  };
+  const [selectedPhotoId, setSelectedPhotoId] = useState<string | null>(null);
+  const [commentText, setCommentText] = useState('');
+  const [commentingPhotoId, setCommentingPhotoId] = useState<string | null>(null);
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -61,11 +51,50 @@ const Krabi: React.FC = () => {
           id: Date.now().toString(),
           url: e.target?.result as string,
           caption: 'New Photo',
-          uploadedBy: 'You'
+          uploadedBy: 'You',
+          uploadDate: 'Just now',
+          comments: []
         };
         setPhotos([photo, ...photos]);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddComment = () => {
+    if (commentText.trim() && commentingPhotoId) {
+      setPhotos(photos.map(photo => {
+        if (photo.id === commentingPhotoId) {
+          const newComment: PhotoComment = {
+            id: Date.now().toString(),
+            author: 'You',
+            text: commentText,
+            timestamp: 'Just now'
+          };
+          return {
+            ...photo,
+            comments: [newComment, ...photo.comments]
+          };
+        }
+        return photo;
+      }));
+      setCommentText('');
+      setCommentingPhotoId(null);
+    }
+  };
+
+  const selectedPhoto = photos.find(p => p.id === selectedPhotoId);
+  const currentPhotoIndex = photos.findIndex(p => p.id === selectedPhotoId);
+
+  const goToPreviousPhoto = () => {
+    if (currentPhotoIndex > 0) {
+      setSelectedPhotoId(photos[currentPhotoIndex - 1].id);
+    }
+  };
+
+  const goToNextPhoto = () => {
+    if (currentPhotoIndex < photos.length - 1) {
+      setSelectedPhotoId(photos[currentPhotoIndex + 1].id);
     }
   };
 
@@ -75,7 +104,7 @@ const Krabi: React.FC = () => {
       background: '#F8F9FA',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
-      {/* Modern Mobile Header - 60px height */}
+      {/* Modern Mobile Header */}
       <div style={{
         background: '#FFFFFF',
         height: '60px',
@@ -123,7 +152,7 @@ const Krabi: React.FC = () => {
             lineHeight: '1.3',
             margin: 0
           }}>
-            Krabi Trip
+            Krabi Gallery
           </h1>
           <img 
             src="/newlogo.svg" 
@@ -144,174 +173,59 @@ const Krabi: React.FC = () => {
         padding: '16px'
       }}>
         
-        {/* Trip Hero Section */}
+        {/* Gallery Header */}
         <div style={{
-          background: 'linear-gradient(135deg, #FEF3E2 0%, #FED7AA 100%)',
-          borderRadius: '12px',
-          padding: '24px',
-          marginBottom: '24px',
-          textAlign: 'center',
-          border: '2px solid #FB923C'
+          marginBottom: '24px'
         }}>
-          <div style={{
-            fontSize: '64px',
-            lineHeight: 1,
-            marginBottom: '12px'
-          }}>
-            🏖️
-          </div>
           <h2 style={{
-            fontSize: '28px',
+            fontSize: '24px',
             fontWeight: 700,
-            color: '#92400E',
+            color: '#050505',
             margin: '0 0 8px 0'
           }}>
-            Krabi Adventure
+            Photo Gallery 📸
           </h2>
           <p style={{
             fontSize: '14px',
-            color: '#B45309',
+            color: '#6B7280',
             margin: 0
           }}>
-            Share your memories from our trip
+            {photos.length} {photos.length === 1 ? 'photo' : 'photos'} in the gallery
           </p>
         </div>
 
-        {/* Add Story Section */}
+        {/* Upload Section */}
         <div style={{
           background: '#FFFFFF',
           borderRadius: '12px',
           padding: '16px',
-          marginBottom: '20px',
-          border: '1px solid #E4E6EA'
-        }}>
-          {!showStoryInput ? (
-            <button
-              onClick={() => setShowStoryInput(true)}
-              style={{
-                width: '100%',
-                padding: '12px',
-                background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
-                border: 'none',
-                borderRadius: '8px',
-                color: '#FFFFFF',
-                fontSize: '14px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.02)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              📝 Add a Story
-            </button>
-          ) : (
-            <div>
-              <textarea
-                value={newStory}
-                onChange={(e) => setNewStory(e.target.value)}
-                placeholder="Share your Krabi memories..."
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: '1px solid #D1D5DB',
-                  fontSize: '14px',
-                  fontFamily: 'inherit',
-                  minHeight: '100px',
-                  resize: 'none',
-                  boxSizing: 'border-box',
-                  marginBottom: '12px'
-                }}
-              />
-              <div style={{
-                display: 'flex',
-                gap: '12px'
-              }}>
-                <button
-                  onClick={handleAddStory}
-                  style={{
-                    flex: 1,
-                    padding: '10px',
-                    background: 'linear-gradient(135deg, #16A34A 0%, #15803D 100%)',
-                    border: 'none',
-                    borderRadius: '8px',
-                    color: '#FFFFFF',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                >
-                  Post Story
-                </button>
-                <button
-                  onClick={() => {
-                    setShowStoryInput(false);
-                    setNewStory('');
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '10px',
-                    background: '#F3F4F6',
-                    border: '1px solid #D1D5DB',
-                    borderRadius: '8px',
-                    color: '#374151',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#E5E7EB'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = '#F3F4F6'}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Photo Upload Section */}
-        <div style={{
-          background: '#FFFFFF',
-          borderRadius: '12px',
-          padding: '16px',
-          marginBottom: '20px',
-          border: '1px solid #E4E6EA'
+          marginBottom: '24px',
+          border: '1px solid #E4E6EA',
+          textAlign: 'center'
         }}>
           <label style={{
             display: 'block',
             width: '100%',
-            padding: '12px',
-            background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+            padding: '16px',
+            background: 'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)',
             border: 'none',
             borderRadius: '8px',
             color: '#FFFFFF',
             fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            textAlign: 'center'
+            transition: 'all 0.2s ease'
           }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(236, 72, 153, 0.3)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'scale(1)';
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            📸 Upload Photo
+            � Upload Photo
             <input
               type="file"
               accept="image/*"
@@ -321,137 +235,465 @@ const Krabi: React.FC = () => {
           </label>
         </div>
 
-        {/* Stories Section */}
-        <div style={{
-          marginBottom: '20px'
-        }}>
-          <h3 style={{
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#050505',
-            marginBottom: '12px',
-            margin: '0 0 12px 0'
-          }}>
-            Stories ({stories.length})
-          </h3>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px'
-          }}>
-            {stories.map((story) => (
-              <div
-                key={story.id}
-                style={{
-                  background: '#FFFFFF',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  border: '1px solid #E4E6EA',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-                }}
-              >
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'start',
-                  marginBottom: '12px'
-                }}>
-                  <div>
-                    <p style={{
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      color: '#050505',
-                      margin: '0 0 4px 0'
-                    }}>
-                      {story.author}
-                    </p>
-                    <p style={{
-                      fontSize: '12px',
-                      color: '#9CA3AF',
-                      margin: 0
-                    }}>
-                      {story.timestamp}
-                    </p>
-                  </div>
-                </div>
-                <p style={{
-                  fontSize: '14px',
-                  color: '#374151',
-                  lineHeight: '1.5',
-                  margin: 0
-                }}>
-                  {story.content}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Photos Section */}
+        {/* Photos Gallery Grid */}
         <div style={{
           marginBottom: '40px'
         }}>
-          <h3 style={{
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#050505',
-            margin: '0 0 12px 0'
-          }}>
-            Photos ({photos.length})
-          </h3>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '12px'
-          }}>
-            {photos.map((photo) => (
-              <div
-                key={photo.id}
-                style={{
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  background: '#FFFFFF',
-                  border: '1px solid #E4E6EA'
-                }}
-              >
-                <img
-                  src={photo.url}
-                  alt={photo.caption}
+          {photos.length === 0 ? (
+            <div style={{
+              background: '#FFFFFF',
+              borderRadius: '12px',
+              padding: '40px 16px',
+              textAlign: 'center',
+              border: '1px solid #E4E6EA',
+              color: '#9CA3AF'
+            }}>
+              <div style={{
+                fontSize: '48px',
+                marginBottom: '16px'
+              }}>📷</div>
+              <p style={{
+                fontSize: '14px',
+                margin: 0
+              }}>
+                No photos yet. Start by uploading one!
+              </p>
+            </div>
+          ) : (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '12px'
+            }}>
+              {photos.map((photo) => (
+                <div
+                  key={photo.id}
+                  onClick={() => setSelectedPhotoId(photo.id)}
                   style={{
-                    width: '100%',
-                    height: '180px',
-                    objectFit: 'cover',
-                    display: 'block'
-                  }}
-                />
-                <div style={{
-                  padding: '12px'
-                }}>
-                  <p style={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: '#050505',
-                    margin: '0 0 4px 0',
+                    borderRadius: '12px',
                     overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                    background: '#FFFFFF',
+                    border: '1px solid #E4E6EA',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.02)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                  }}
+                >
+                  <div style={{
+                    position: 'relative',
+                    overflow: 'hidden',
+                    height: '200px',
+                    background: '#F3F4F6'
                   }}>
-                    {photo.caption}
-                  </p>
-                  <p style={{
-                    fontSize: '11px',
-                    color: '#9CA3AF',
-                    margin: 0
+                    <img
+                      src={photo.url}
+                      alt={photo.caption}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block'
+                      }}
+                    />
+                    {/* Comments badge */}
+                    {photo.comments.length > 0 && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        background: '#EC4899',
+                        color: '#FFFFFF',
+                        borderRadius: '20px',
+                        padding: '4px 8px',
+                        fontSize: '12px',
+                        fontWeight: 600
+                      }}>
+                        💬 {photo.comments.length}
+                      </div>
+                    )}
+                  </div>
+                  <div style={{
+                    padding: '12px'
                   }}>
-                    by {photo.uploadedBy}
-                  </p>
+                    <p style={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#050505',
+                      margin: '0 0 4px 0',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {photo.caption}
+                    </p>
+                    <p style={{
+                      fontSize: '11px',
+                      color: '#9CA3AF',
+                      margin: 0
+                    }}>
+                      by {photo.uploadedBy}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Photo Modal */}
+      {selectedPhoto && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.9)',
+          display: 'flex',
+          flexDirection: 'column',
+          zIndex: 1000,
+          animation: 'fadeIn 0.2s ease'
+        }}>
+          {/* Modal Header */}
+          <div style={{
+            background: 'rgba(0, 0, 0, 0.95)',
+            padding: '12px 16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{
+              color: '#FFFFFF',
+              fontSize: '14px',
+              fontWeight: 500
+            }}>
+              {currentPhotoIndex + 1} / {photos.length}
+            </div>
+            <button
+              onClick={() => setSelectedPhotoId(null)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#FFFFFF',
+                fontSize: '24px',
+                cursor: 'pointer',
+                padding: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Modal Content */}
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            overflow: 'hidden'
+          }}>
+            {/* Image Section */}
+            <div style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '20px',
+              position: 'relative'
+            }}>
+              <img
+                src={selectedPhoto.url}
+                alt={selectedPhoto.caption}
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '60vh',
+                  objectFit: 'contain',
+                  borderRadius: '8px'
+                }}
+              />
+              
+              {/* Navigation Buttons */}
+              {currentPhotoIndex > 0 && (
+                <button
+                  onClick={goToPreviousPhoto}
+                  style={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    border: 'none',
+                    color: '#FFFFFF',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    transition: 'background-color 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+                >
+                  ❮
+                </button>
+              )}
+              
+              {currentPhotoIndex < photos.length - 1 && (
+                <button
+                  onClick={goToNextPhoto}
+                  style={{
+                    position: 'absolute',
+                    right: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    border: 'none',
+                    color: '#FFFFFF',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    transition: 'background-color 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+                >
+                  ❯
+                </button>
+              )}
+            </div>
+
+            {/* Comments Section */}
+            <div style={{
+              width: '320px',
+              background: '#1F2937',
+              display: 'flex',
+              flexDirection: 'column',
+              borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
+              maxHeight: '100%',
+              overflowY: 'auto'
+            }}>
+              {/* Photo Info */}
+              <div style={{
+                padding: '16px',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+              }}>
+                <p style={{
+                  color: '#FFFFFF',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  margin: '0 0 4px 0'
+                }}>
+                  {selectedPhoto.caption}
+                </p>
+                <p style={{
+                  color: '#9CA3AF',
+                  fontSize: '12px',
+                  margin: 0
+                }}>
+                  by {selectedPhoto.uploadedBy}
+                </p>
+                <p style={{
+                  color: '#6B7280',
+                  fontSize: '11px',
+                  margin: '4px 0 0 0'
+                }}>
+                  {selectedPhoto.uploadDate}
+                </p>
+              </div>
+
+              {/* Comments List */}
+              <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '12px'
+              }}>
+                {selectedPhoto.comments.length === 0 ? (
+                  <p style={{
+                    color: '#9CA3AF',
+                    fontSize: '12px',
+                    textAlign: 'center',
+                    padding: '20px 0',
+                    margin: 0
+                  }}>
+                    No comments yet. Be the first!
+                  </p>
+                ) : (
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px'
+                  }}>
+                    {selectedPhoto.comments.map((comment) => (
+                      <div
+                        key={comment.id}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          borderRadius: '8px',
+                          padding: '10px',
+                          borderLeft: '3px solid #EC4899'
+                        }}
+                      >
+                        <p style={{
+                          color: '#FFFFFF',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          margin: '0 0 4px 0'
+                        }}>
+                          {comment.author}
+                        </p>
+                        <p style={{
+                          color: '#D1D5DB',
+                          fontSize: '12px',
+                          margin: '0 0 4px 0',
+                          lineHeight: '1.4'
+                        }}>
+                          {comment.text}
+                        </p>
+                        <p style={{
+                          color: '#9CA3AF',
+                          fontSize: '10px',
+                          margin: 0
+                        }}>
+                          {comment.timestamp}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Comment Input */}
+              <div style={{
+                padding: '12px',
+                borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                background: 'rgba(0, 0, 0, 0.3)'
+              }}>
+                {commentingPhotoId === selectedPhoto.id ? (
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}>
+                    <input
+                      type="text"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      placeholder="Add a comment..."
+                      style={{
+                        width: '100%',
+                        padding: '8px',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        color: '#FFFFFF',
+                        fontSize: '12px',
+                        boxSizing: 'border-box',
+                        fontFamily: 'inherit'
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          handleAddComment();
+                        }
+                      }}
+                    />
+                    <div style={{
+                      display: 'flex',
+                      gap: '8px'
+                    }}>
+                      <button
+                        onClick={handleAddComment}
+                        style={{
+                          flex: 1,
+                          padding: '6px',
+                          background: '#EC4899',
+                          border: 'none',
+                          borderRadius: '4px',
+                          color: '#FFFFFF',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'background-color 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = '#DB2777'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = '#EC4899'}
+                      >
+                        Post
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCommentingPhotoId(null);
+                          setCommentText('');
+                        }}
+                        style={{
+                          flex: 1,
+                          padding: '6px',
+                          background: 'rgba(255, 255, 255, 0.1)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          borderRadius: '4px',
+                          color: '#FFFFFF',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          transition: 'background-color 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setCommentingPhotoId(selectedPhoto.id)}
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      background: 'rgba(236, 72, 153, 0.2)',
+                      border: '1px solid rgba(236, 72, 153, 0.4)',
+                      borderRadius: '6px',
+                      color: '#EC4899',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(236, 72, 153, 0.3)';
+                      e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.6)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(236, 72, 153, 0.2)';
+                      e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.4)';
+                    }}
+                  >
+                    💬 Add Comment
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 };
