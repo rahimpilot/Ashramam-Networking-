@@ -656,26 +656,38 @@ const Residents: React.FC = () => {
             People
           </h1>
 
-          <button
-            onClick={goToProfile}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 8,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              transition: 'background-color 0.2s',
-              width: 36,
-              height: 36
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = '#F8F9FA'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-          >
-            <span style={{ fontSize: 20 }}>👤</span>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              onClick={goToProfile}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 8,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '50%',
+                transition: 'background-color 0.2s',
+                width: 36,
+                height: 36
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = '#F8F9FA'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            >
+              <span style={{ fontSize: 20 }}>👤</span>
+            </button>
+            <img
+              src="/newlogo.svg"
+              alt="Logo"
+              style={{
+                height: 32,
+                width: 'auto',
+                maxWidth: '100px',
+                opacity: 0.8
+              }}
+            />
+          </div>
         </div>
       </div>
 

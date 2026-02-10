@@ -375,38 +375,48 @@ const Stories: React.FC = () => {
             {currentView === 'topics' ? 'Our Stories (v1.1)' : getCurrentTopic()?.name}
           </h1>
 
-          {currentView === 'stories' ? (
-            <button
-              onClick={() => setShowAddForm(!showAddForm)}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {currentView === 'stories' && (
+              <button
+                onClick={() => setShowAddForm(!showAddForm)}
+                style={{
+                  background: showAddForm ? '#E4E6EA' : 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '8px 12px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  color: showAddForm ? '#050505' : '#FFFFFF',
+                  transition: 'all 0.2s ease',
+                  minHeight: '36px',
+                  whiteSpace: 'nowrap'
+                }}
+                onMouseEnter={(e) => {
+                  if (!showAddForm) {
+                    e.currentTarget.style.transform = 'scale(1.02)';
+                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                {showAddForm ? 'Cancel' : '+ Add'}
+              </button>
+            )}
+            <img
+              src="/newlogo.svg"
+              alt="Logo"
               style={{
-                background: showAddForm ? '#E4E6EA' : 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
-                border: 'none',
-                borderRadius: '12px',
-                padding: '8px 12px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: 500,
-                color: showAddForm ? '#050505' : '#FFFFFF',
-                transition: 'all 0.2s ease',
-                minHeight: '36px',
-                whiteSpace: 'nowrap'
+                height: 32,
+                width: 'auto',
+                maxWidth: '100px',
+                opacity: 0.8
               }}
-              onMouseEnter={(e) => {
-                if (!showAddForm) {
-                  e.currentTarget.style.transform = 'scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              {showAddForm ? 'Cancel' : '+ Add'}
-            </button>
-          ) : (
-            <div style={{ width: '44px' }}></div>
-          )}
+            />
+          </div>
         </div>
       </div>
 
