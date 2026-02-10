@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db, setAuthPersistence } from './firebase';
-import DisclaimerModal from './DisclaimerModal';
+import { auth, db } from './firebase';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -11,49 +10,28 @@ const Login: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
-  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
-  const [keepLoggedIn, setKeepLoggedIn] = useState(true); // Default to true for better UX
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
-    // For sign-up, show disclaimer first if not already accepted
-    if (isSignUp && !disclaimerAccepted) {
-      setShowDisclaimer(true);
-      return;
-    }
-
     setLoading(true);
 
     try {
       if (isSignUp) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        
-        // Send verification email immediately after account creation
-        try {
-          await sendEmailVerification(user);
-        } catch (verificationError) {
-          console.error('Error sending verification email:', verificationError);
-        }
-        
+
         await setDoc(doc(db, 'pendingUsers', user.uid), {
           email: user.email,
           approved: false,
           joinedAt: new Date(),
           uid: user.uid
         });
-        
-        setError('Account created successfully! A verification email has been sent to your email address. Please verify your email and wait for admin approval before signing in.');
+
+        setError('Account created successfully! Please wait for admin approval before signing in.');
         setIsSignUp(false);
-        setDisclaimerAccepted(false); // Reset for next time
       } else {
-        // Set auth persistence based on user preference before signing in
-        await setAuthPersistence(keepLoggedIn);
-        
         const cred = await signInWithEmailAndPassword(auth, email, password);
         // Enforce admin approval: check user's pendingUsers doc
         const pendingRef = doc(db, 'pendingUsers', cred.user.uid);
@@ -70,30 +48,8 @@ const Login: React.FC = () => {
           setError('No pendingUsers document found for your account.');
           return;
         }
-        // Approved: check if profile is complete, then redirect appropriately
-        const profileRef = doc(db, 'profiles', cred.user.uid);
-        const profileSnap = await getDoc(profileRef);
-        
-        if (profileSnap.exists()) {
-          const profileData = profileSnap.data();
-          // Check if essential profile fields are filled
-          const isProfileComplete = profileData.name && 
-                                   profileData.city && 
-                                   profileData.country && 
-                                   profileData.bio && 
-                                   profileData.intellectual && 
-                                   profileData.umrah && 
-                                   profileData.funLover;
-          
-          if (isProfileComplete) {
-            navigate('/dashboard');
-          } else {
-            navigate('/profile?firstTime=true');
-          }
-        } else {
-          // No profile exists, definitely need to complete it
-          navigate('/profile?firstTime=true');
-        }
+        // Approved: redirect to dashboard
+        navigate('/dashboard');
       }
     } catch (err: any) {
       setError(err.message);
@@ -102,48 +58,27 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleDisclaimerAgree = () => {
-    setShowDisclaimer(false);
-    setDisclaimerAccepted(true);
-    // Trigger the form submission after accepting disclaimer
-    const form = document.querySelector('form') as HTMLFormElement;
-    if (form) {
-      form.requestSubmit();
-    }
-  };
-
-  const handleDisclaimerCancel = () => {
-    setShowDisclaimer(false);
-    setDisclaimerAccepted(false);
-  };
-
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#ffffff',
+      background: 'linear-gradient(to bottom right, #dbeafe, #ffffff, #faf5ff)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: window.innerWidth <= 768 ? '0.5rem' : '1rem'
+      padding: '1rem'
     }}>
-      <div style={{ 
-        maxWidth: '28rem', 
-        width: '100%',
-        margin: window.innerWidth <= 768 ? '0' : 'auto'
-      }}>
+      <div style={{ maxWidth: '28rem', width: '100%' }}>
         {/* Login Form */}
         <div style={{
           background: 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(8px)',
-          borderRadius: window.innerWidth <= 768 ? '0.75rem' : '1rem',
+          borderRadius: '1rem',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
+          padding: '2rem',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          minHeight: window.innerWidth <= 768 ? 'calc(100vh - 1rem)' : 'auto',
-          justifyContent: window.innerWidth <= 768 ? 'center' : 'flex-start'
+          alignItems: 'center'
         }}>
           {/* Logo above login form */}
           <div style={{
@@ -152,11 +87,11 @@ const Login: React.FC = () => {
             marginBottom: '2rem',
             width: '100%'
           }}>
-            <img 
-              src="/newlogo.svg" 
-              alt="Ashramam Vibes Logo" 
+            <img
+              src="/newlogo.svg"
+              alt="Ashramam Vibes Logo"
               style={{
-                height: window.innerWidth <= 768 ? '48px' : '64px',
+                height: '64px',
                 width: 'auto',
                 objectFit: 'contain',
                 filter: 'drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07))'
@@ -164,27 +99,21 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <div style={{ 
-            textAlign: 'center', 
-            marginBottom: window.innerWidth <= 768 ? '1.5rem' : '2rem' 
-          }}>
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <h2 style={{
-              fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
+              fontSize: '1.5rem',
               fontWeight: 'bold',
               color: '#1f2937',
-              marginBottom: '0.5rem',
-              lineHeight: '1.3',
-              textAlign: 'center'
+              marginBottom: '0.5rem'
             }}>
-              {isSignUp ? 'അവനവൻ കുഴിക്കുന്ന കുരുക്കഴിച്ചെടുക്കുമ്പോൾ ഗുലുമാൽ' : ''}
+              {isSignUp ? 'Join Ashramam Vibes' : ''}
             </h2>
             <p style={{
               color: '#6b7280',
-              fontSize: window.innerWidth <= 768 ? '0.8rem' : '0.875rem',
-              fontWeight: isSignUp ? 'normal' : 'bold',
-              lineHeight: '1.4'
+              fontSize: '0.875rem',
+              fontWeight: isSignUp ? 'normal' : 'bold'
             }}>
-              {isSignUp ? '' : <strong style={{fontWeight:'900', fontSize: window.innerWidth <= 768 ? '0.85rem' : '0.9rem'}}>സുഖല്ലേ? എന്ന കേറിക്കോ</strong>}
+              {isSignUp ? 'Create your account to connect with friends' : <strong style={{ fontWeight: 'bold' }}>സുഖല്ലേ? എന്ന കേറിക്കോ</strong>}
             </p>
           </div>
 
@@ -255,39 +184,6 @@ const Login: React.FC = () => {
               />
             </div>
 
-            {/* Keep me logged in checkbox - only show for sign in */}
-            {!isSignUp && (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                marginTop: '0.5rem'
-              }}>
-                <input
-                  type="checkbox"
-                  id="keepLoggedIn"
-                  checked={keepLoggedIn}
-                  onChange={(e) => setKeepLoggedIn(e.target.checked)}
-                  style={{
-                    width: '16px',
-                    height: '16px',
-                    cursor: 'pointer'
-                  }}
-                />
-                <label
-                  htmlFor="keepLoggedIn"
-                  style={{
-                    fontSize: '0.875rem',
-                    color: '#374151',
-                    cursor: 'pointer',
-                    userSelect: 'none'
-                  }}
-                >
-                  Keep me logged in
-                </label>
-              </div>
-            )}
-
             {error && (
               <div style={{
                 background: '#fef2f2',
@@ -341,12 +237,6 @@ const Login: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      <DisclaimerModal
-        isOpen={showDisclaimer}
-        onAgree={handleDisclaimerAgree}
-        onCancel={handleDisclaimerCancel}
-      />
     </div>
   );
 };
