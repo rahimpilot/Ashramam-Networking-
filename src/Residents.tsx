@@ -3,6 +3,7 @@ import { auth, db } from './firebase';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import BottomNavigation from './BottomNavigation';
 
 interface ResidentUser {
   uid: string;
@@ -899,6 +900,9 @@ const Residents: React.FC = () => {
         userName={enlargedImageUser}
         onClose={closeImageModal}
       />
+
+      {/* Bottom Navigation */}
+      <BottomNavigation />
     </div>
   );
 };

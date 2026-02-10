@@ -3,6 +3,7 @@ import { auth, db } from './firebase';
 import { collection, getDocs, doc, setDoc, query, orderBy, Timestamp, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import BottomNavigation from './BottomNavigation';
 
 interface Story {
   id: string;
@@ -904,6 +905,9 @@ const Stories: React.FC = () => {
           )
         )}
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNavigation />
     </div>
   );
 };
