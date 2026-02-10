@@ -34,7 +34,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, userName, onC
   if (!isOpen || !imageSrc) return null;
 
   return (
-    <div 
+    <div
       style={{
         position: 'fixed',
         top: 0,
@@ -86,7 +86,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, userName, onC
         >
           ✕
         </button>
-        <img 
+        <img
           src={imageSrc}
           alt={userName}
           style={{
@@ -211,7 +211,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           alignItems: 'center',
           marginBottom: 20
         }}>
-          <div 
+          <div
             style={{
               width: 80,
               height: 80,
@@ -234,8 +234,8 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
             }}
           >
             {getProfilePicture(user.email, user.name) ? (
-              <img 
-                src={getProfilePicture(user.email, user.name)!} 
+              <img
+                src={getProfilePicture(user.email, user.name)!}
                 alt={user.name}
                 style={{
                   width: '100%',
@@ -291,10 +291,10 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
                 {user.name.charAt(0).toUpperCase()}
               </div>
             )}
-            
+
             {/* Zoom overlay for clickable profile pictures */}
             {getProfilePicture(user.email, user.name) && (
-              <div 
+              <div
                 className="zoom-overlay"
                 style={{
                   position: 'absolute',
@@ -345,16 +345,16 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
         <div style={{ color: '#050505', lineHeight: 1.4 }}>
           {user.bio && (
             <div style={{ marginBottom: 16 }}>
-              <h4 style={{ 
-                color: '#050505', 
-                marginBottom: 8, 
+              <h4 style={{
+                color: '#050505',
+                marginBottom: 8,
                 fontSize: 14,
                 fontWeight: 600
               }}>
                 Bio:
               </h4>
-              <p style={{ 
-                margin: 0, 
+              <p style={{
+                margin: 0,
                 fontSize: 14,
                 color: '#65676B'
               }}>{user.bio}</p>
@@ -363,16 +363,16 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
 
           {user.intellectual && (
             <div style={{ marginBottom: 16 }}>
-              <h4 style={{ 
-                color: '#050505', 
-                marginBottom: 8, 
+              <h4 style={{
+                color: '#050505',
+                marginBottom: 8,
                 fontSize: 14,
                 fontWeight: 600
               }}>
                 ബുദ്ധിജീവി ആണോ?
               </h4>
-              <p style={{ 
-                margin: 0, 
+              <p style={{
+                margin: 0,
                 fontSize: 14,
                 color: '#65676B'
               }}>{user.intellectual}</p>
@@ -381,16 +381,16 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
 
           {user.umrah && (
             <div style={{ marginBottom: 16 }}>
-              <h4 style={{ 
-                color: '#050505', 
-                marginBottom: 8, 
+              <h4 style={{
+                color: '#050505',
+                marginBottom: 8,
                 fontSize: 14,
                 fontWeight: 600
               }}>
                 ഉംറ ചെയ്തിട്ടുണ്ടോ:
               </h4>
-              <p style={{ 
-                margin: 0, 
+              <p style={{
+                margin: 0,
                 fontSize: 14,
                 color: '#65676B'
               }}>{user.umrah}</p>
@@ -399,16 +399,16 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
 
           {user.funLover && (
             <div style={{ marginBottom: 16 }}>
-              <h4 style={{ 
-                color: '#050505', 
-                marginBottom: 8, 
+              <h4 style={{
+                color: '#050505',
+                marginBottom: 8,
                 fontSize: 14,
                 fontWeight: 600
               }}>
                 ഉല്ലാസം ഇഷ്ടമാണോ?
               </h4>
-              <p style={{ 
-                margin: 0, 
+              <p style={{
+                margin: 0,
                 fontSize: 14,
                 color: '#65676B'
               }}>{user.funLover}</p>
@@ -447,7 +447,7 @@ const Residents: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setAuthLoading(false);
-      
+
       if (!currentUser) {
         navigate('/');
       }
@@ -462,7 +462,7 @@ const Residents: React.FC = () => {
       // Wait for auth state to be determined
       return;
     }
-    
+
     if (!user) {
       navigate('/');
       return;
@@ -474,21 +474,21 @@ const Residents: React.FC = () => {
         // Get approved users from pendingUsers collection
         const pendingUsersRef = collection(db, 'pendingUsers');
         const pendingSnapshot = await getDocs(pendingUsersRef);
-        
+
         const approvedUsers: ResidentUser[] = [];
-        
+
         for (const docSnapshot of pendingSnapshot.docs) {
           const userData = docSnapshot.data();
           if (userData.approved) {
             // Get profile data for each approved user
             const profileRef = doc(db, 'profiles', userData.uid);
             const profileSnap = await getDoc(profileRef);
-            
+
             let profileData: any = {};
             if (profileSnap.exists()) {
               profileData = profileSnap.data();
             }
-            
+
             approvedUsers.push({
               uid: userData.uid,
               email: userData.email,
@@ -503,7 +503,7 @@ const Residents: React.FC = () => {
             });
           }
         }
-        
+
         // Sort by name
         approvedUsers.sort((a, b) => a.name.localeCompare(b.name));
         setResidents(approvedUsers);
@@ -517,17 +517,13 @@ const Residents: React.FC = () => {
     fetchResidents();
   }, [user, navigate, authLoading]);
 
-  const goToAccount = () => {
-    navigate('/account');
-  };
+
 
   const goToProfile = () => {
     navigate('/profile');
   };
 
-  const goToStories = () => {
-    navigate('/stories');
-  };
+
 
   const handleImageClick = (imageSrc: string, userName: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the profile modal
@@ -548,15 +544,15 @@ const Residents: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100vh',
         background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ 
+          <div style={{
             width: 48,
             height: 48,
             border: '4px solid rgba(255,255,255,0.3)',
@@ -565,8 +561,8 @@ const Residents: React.FC = () => {
             margin: '0 auto 16px',
             animation: 'spin 1s linear infinite'
           }} />
-          <p style={{ 
-            color: '#FFFFFF', 
+          <p style={{
+            color: '#FFFFFF',
             fontSize: 16,
             fontWeight: 500,
             margin: 0
@@ -578,15 +574,15 @@ const Residents: React.FC = () => {
 
   if (authLoading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100vh',
         background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ 
+          <div style={{
             width: 48,
             height: 48,
             border: '4px solid rgba(255,255,255,0.3)',
@@ -595,8 +591,8 @@ const Residents: React.FC = () => {
             margin: '0 auto 16px',
             animation: 'spin 1s linear infinite'
           }} />
-          <p style={{ 
-            color: '#FFFFFF', 
+          <p style={{
+            color: '#FFFFFF',
             fontSize: 16,
             fontWeight: 500,
             margin: 0
@@ -613,7 +609,7 @@ const Residents: React.FC = () => {
   return (
     <div style={{ minHeight: '100vh', background: '#F8F9FA' }}>
       {/* Modern Header */}
-      <div style={{ 
+      <div style={{
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -650,7 +646,7 @@ const Residents: React.FC = () => {
           >
             <span style={{ fontSize: 20 }}>←</span>
           </button>
-          
+
           <h1 style={{
             margin: 0,
             fontSize: 18,
@@ -684,35 +680,35 @@ const Residents: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div style={{ 
-        maxWidth: 480, 
-        margin: '0 auto', 
+      <div style={{
+        maxWidth: 480,
+        margin: '0 auto',
         paddingTop: 16
       }}>
 
         {/* Muthalali Section */}
-        <div style={{ 
+        <div style={{
           background: '#FFFFFF',
           borderRadius: 12,
           padding: 16,
           marginBottom: 16,
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
         }}>
-          <h2 style={{ 
-            fontSize: 18, 
-            fontWeight: 600, 
-            marginBottom: 12, 
+          <h2 style={{
+            fontSize: 18,
+            fontWeight: 600,
+            marginBottom: 12,
             color: '#050505',
             textAlign: 'center'
           }}>
             🏠 ആശ്രമ നിവാസികൾ
           </h2>
 
-          <div style={{ 
+          <div style={{
             display: 'flex',
             justifyContent: 'center'
           }}>
-            <img 
+            <img
               src={`${process.env.PUBLIC_URL}/muthalali.jpeg`}
               alt="Muthalali"
               style={{
@@ -731,7 +727,7 @@ const Residents: React.FC = () => {
         </div>
 
         {residents.length === 0 ? (
-          <div style={{ 
+          <div style={{
             background: '#FFFFFF',
             borderRadius: 12,
             padding: 32,
@@ -739,14 +735,14 @@ const Residents: React.FC = () => {
             boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}>
             <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.3 }}>👥</div>
-            <h3 style={{ 
-              color: '#65676B', 
+            <h3 style={{
+              color: '#65676B',
               fontSize: 16,
               fontWeight: 600,
               margin: '0 0 8px 0'
             }}>No residents found</h3>
-            <p style={{ 
-              color: '#65676B', 
+            <p style={{
+              color: '#65676B',
               fontSize: 14,
               margin: 0
             }}>
@@ -793,8 +789,8 @@ const Residents: React.FC = () => {
                   border: '2px solid #E4E6EA'
                 }}>
                   {getProfilePicture(resident.email, resident.name) ? (
-                    <img 
-                      src={getProfilePicture(resident.email, resident.name)!} 
+                    <img
+                      src={getProfilePicture(resident.email, resident.name)!}
                       alt={resident.name}
                       style={{
                         width: '100%',
@@ -840,7 +836,7 @@ const Residents: React.FC = () => {
                     </div>
                   )}
                 </div>
-                
+
                 <h3 style={{
                   fontSize: 14,
                   fontWeight: 600,
@@ -850,19 +846,19 @@ const Residents: React.FC = () => {
                 }}>
                   {resident.name}
                 </h3>
-                
+
                 <p style={{
                   fontSize: 12,
                   color: '#65676B',
                   margin: 0,
                   marginBottom: 8
                 }}>
-                  {resident.city && resident.country ? 
-                    `${resident.city}, ${resident.country}` : 
+                  {resident.city && resident.country ?
+                    `${resident.city}, ${resident.country}` :
                     resident.email.split('@')[0]
                   }
                 </p>
-                
+
                 <div style={{
                   fontSize: 11,
                   color: '#65676B',

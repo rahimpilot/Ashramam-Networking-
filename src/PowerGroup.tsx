@@ -82,13 +82,7 @@ const PowerGroup: React.FC = () => {
     'mohasinali@gmail.com': 'Mohasin Ali'
   };
 
-  // Member ID mapping for routing
-  const memberIdMap: { [key: string]: string } = {
-    'niaznasu@gmail.com': 'niaz-kamaru',
-    'mshanir@gmail.com': 'shanir-musliyamveetil',
-    'hyder.mohamed@gmail.com': 'hyder-mohamed',
-    'mohasinali@gmail.com': 'mohasin-ali'
-  };
+
 
   // Mock groups data based on design spec
   const suggestedGroups: Group[] = [
@@ -106,13 +100,13 @@ const PowerGroup: React.FC = () => {
       try {
         setLoading(true);
         const usersRef = collection(db, 'users');
-        
+
         const membersList: UserProfile[] = [];
 
         for (const email of emailsToFetch) {
           const q = query(usersRef, where('email', '==', email));
           const querySnapshot = await getDocs(q);
-          
+
           if (!querySnapshot.empty) {
             const doc = querySnapshot.docs[0];
             membersList.push({
