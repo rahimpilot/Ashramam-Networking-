@@ -557,7 +557,7 @@ const Stories: React.FC = () => {
             gridTemplateColumns: 'repeat(2, 1fr)',
             gap: '8px'
           }}>
-            {topics.slice(0, 10).map((topic) => (
+            {topics.map((topic) => (
               <div
                 key={topic.id}
                 onClick={() => handleTopicSelect(topic.id)}
