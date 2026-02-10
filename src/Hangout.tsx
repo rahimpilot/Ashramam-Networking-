@@ -178,13 +178,13 @@ const Hangout: React.FC = () => {
 
           {/* Royal Bank of Chandiyar */}
           <div style={{
-            background: 'linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%)',
+            background: 'linear-gradient(135deg, #E8E8E8 0%, #D0D0D0 100%)',
             borderRadius: '12px',
             padding: '20px',
             cursor: 'pointer',
             transition: 'all 0.2s ease',
-            border: '2px solid #16A34A',
-            boxShadow: '0 1px 3px rgba(22, 163, 74, 0.2)',
+            border: '2px solid #4A4A4A',
+            boxShadow: '0 1px 3px rgba(74, 74, 74, 0.2)',
             display: 'flex',
             alignItems: 'center',
             gap: '16px'
@@ -192,11 +192,11 @@ const Hangout: React.FC = () => {
           onClick={() => navigate('/royal-bank')}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'scale(1.02)';
-            e.currentTarget.style.boxShadow = '0 4px 12px rgba(22, 163, 74, 0.3)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(74, 74, 74, 0.3)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = '0 1px 3px rgba(22, 163, 74, 0.2)';
+            e.currentTarget.style.boxShadow = '0 1px 3px rgba(74, 74, 74, 0.2)';
           }}
           >
             <div style={{ 
@@ -210,7 +210,7 @@ const Hangout: React.FC = () => {
                 fontWeight: 600,
                 lineHeight: '1.3',
                 margin: '0 0 4px 0',
-                color: '#166534'
+                color: '#2a2a2a'
               }}>
                 Royal Bank of Chandiyar
               </h3>
@@ -218,7 +218,7 @@ const Hangout: React.FC = () => {
                 fontSize: '14px',
                 fontWeight: 400,
                 lineHeight: '1.4',
-                color: '#15803D',
+                color: '#4a4a4a',
                 margin: 0
               }}>
                 Apply for financial assistance to enjoy life

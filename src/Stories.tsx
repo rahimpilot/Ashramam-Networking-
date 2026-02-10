@@ -46,7 +46,7 @@ const Stories: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setAuthLoading(false);
-      
+
       if (!currentUser) {
         navigate('/');
       }
@@ -67,7 +67,8 @@ const Stories: React.FC = () => {
     { id: 'munthiriclub', name: 'മുന്തിരി ക്ലബ്', description: 'Munthiri Club stories and experiences', icon: '', color: '#000000' },
     { id: 'shajipappan', name: 'ഷാജി പാപ്പൻ', description: 'Stories about Shaji Pappan', icon: '', color: '#000000' },
     { id: 'teamsensorium', name: 'ടീം സെൻസോറിയം', description: 'Team Sensorium stories and projects', icon: '', color: '#000000' },
-    { id: 'editingsimham', name: 'എഡിറ്റിംഗ് സിംഹം', description: 'Editing Simham stories and experiences', icon: '', color: '#000000' }
+    { id: 'editingsimham', name: 'എഡിറ്റിംഗ് സിംഹം', description: 'Editing Simham stories and experiences', icon: '', color: '#000000' },
+    { id: 'krabi', name: 'ക്രാബി', description: 'Stories from Krabi', icon: '', color: '#000000' }
   ];
 
   useEffect(() => {
@@ -75,7 +76,7 @@ const Stories: React.FC = () => {
       // Wait for auth state to be determined
       return;
     }
-    
+
     if (!user) {
       navigate('/');
       return;
@@ -87,11 +88,11 @@ const Stories: React.FC = () => {
 
   const fetchUserProfile = async () => {
     if (!user?.uid) return;
-    
+
     try {
       const profileRef = doc(db, 'profiles', user.uid);
       const profileSnap = await getDoc(profileRef);
-      
+
       if (profileSnap.exists()) {
         setUserProfile(profileSnap.data());
       }
@@ -105,10 +106,10 @@ const Stories: React.FC = () => {
       const storiesRef = collection(db, 'stories');
       const q = query(storiesRef, orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
-      
+
       const storiesData: Story[] = [];
       const emailSet = new Set<string>();
-      
+
       querySnapshot.forEach((doc) => {
         const story = { id: doc.id, ...doc.data() } as Story;
         storiesData.push(story);
@@ -116,19 +117,19 @@ const Stories: React.FC = () => {
           emailSet.add(story.authorEmail);
         }
       });
-      
+
       // Fetch author names from profiles
       const profilesRef = collection(db, 'profiles');
       const profilesSnapshot = await getDocs(profilesRef);
       const names: Record<string, string> = {};
-      
+
       profilesSnapshot.forEach((doc) => {
         const profileData = doc.data();
         if (profileData.email && profileData.name) {
           names[profileData.email] = profileData.name;
         }
       });
-      
+
       setAuthorNames(names);
       setStories(storiesData);
     } catch (error) {
@@ -174,7 +175,7 @@ const Stories: React.FC = () => {
       if (!story) return;
 
       const isLiked = story.likedBy.includes(user.uid);
-      const updatedLikedBy = isLiked 
+      const updatedLikedBy = isLiked
         ? story.likedBy.filter(uid => uid !== user.uid)
         : [...story.likedBy, user.uid];
 
@@ -254,14 +255,14 @@ const Stories: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100vh',
         background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
       }}>
-        <div style={{ 
+        <div style={{
           textAlign: 'center',
           color: '#FFFFFF',
           background: 'rgba(255,255,255,0.15)',
@@ -281,14 +282,14 @@ const Stories: React.FC = () => {
 
   if (authLoading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100vh',
         background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
       }}>
-        <div style={{ 
+        <div style={{
           textAlign: 'center',
           color: '#FFFFFF',
           background: 'rgba(255,255,255,0.15)',
@@ -311,8 +312,8 @@ const Stories: React.FC = () => {
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
+    <div style={{
+      minHeight: '100vh',
       background: '#F8F9FA',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
@@ -357,7 +358,7 @@ const Stories: React.FC = () => {
           >
             ←
           </button>
-          
+
           <h1 style={{
             fontSize: '18px',
             fontWeight: 600,
@@ -409,25 +410,25 @@ const Stories: React.FC = () => {
         </div>
       </div>
 
-      <div style={{ 
-        maxWidth: 480, 
+      <div style={{
+        maxWidth: 480,
         margin: '0 auto',
         padding: '16px'
       }}>
 
         {/* Add Story Form */}
         {showAddForm && (
-          <div style={{ 
-            background: '#FFFFFF', 
-            borderRadius: '12px', 
-            padding: '16px', 
+          <div style={{
+            background: '#FFFFFF',
+            borderRadius: '12px',
+            padding: '16px',
             marginBottom: '8px',
             boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}>
             <h3 style={{ fontSize: '18px', fontWeight: 600, lineHeight: '1.3', marginBottom: '16px', color: '#050505' }}>
               Share Your Story
             </h3>
-            
+
             <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
@@ -460,7 +461,7 @@ const Stories: React.FC = () => {
                   ))}
                 </select>
               </div>
-              
+
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
                   Story Title
@@ -486,7 +487,7 @@ const Stories: React.FC = () => {
                   required
                 />
               </div>
-              
+
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
                   Your Story
@@ -513,7 +514,7 @@ const Stories: React.FC = () => {
                   required
                 />
               </div>
-              
+
               <button
                 type="submit"
                 disabled={submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic}
@@ -551,20 +552,20 @@ const Stories: React.FC = () => {
 
         {/* Topics Grid or Stories List */}
         {currentView === 'topics' ? (
-          <div style={{ 
+          <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
             gap: '8px'
           }}>
             {topics.slice(0, 10).map((topic) => (
-              <div 
+              <div
                 key={topic.id}
                 onClick={() => handleTopicSelect(topic.id)}
-                style={{ 
-                  background: '#FFFFFF', 
+                style={{
+                  background: '#FFFFFF',
                   border: '1px solid #E4E6EA',
-                  borderRadius: '12px', 
-                  padding: '16px', 
+                  borderRadius: '12px',
+                  padding: '16px',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   textAlign: 'center',
@@ -586,17 +587,17 @@ const Stories: React.FC = () => {
                   e.currentTarget.style.borderColor = '#E4E6EA';
                 }}
               >
-                <h3 style={{ 
-                  fontSize: '14px', 
-                  fontWeight: 600, 
+                <h3 style={{
+                  fontSize: '14px',
+                  fontWeight: 600,
                   lineHeight: '1.3',
-                  margin: '0 0 8px 0', 
+                  margin: '0 0 8px 0',
                   color: '#050505'
                 }}>
                   {topic.name}
                 </h3>
-                <span style={{ 
-                  fontSize: '12px', 
+                <span style={{
+                  fontSize: '12px',
                   fontWeight: 400,
                   color: '#65676B'
                 }}>
@@ -608,11 +609,11 @@ const Stories: React.FC = () => {
         ) : (
           // Stories List for selected topic
           getFilteredStories().length === 0 ? (
-            <div style={{ 
-              background: '#FFFFFF', 
+            <div style={{
+              background: '#FFFFFF',
               border: '1px solid #E4E6EA',
-              borderRadius: '12px', 
-              padding: '32px 16px', 
+              borderRadius: '12px',
+              padding: '32px 16px',
               textAlign: 'center',
               boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
             }}>
@@ -653,24 +654,24 @@ const Stories: React.FC = () => {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {getFilteredStories().map((story) => (
-                <div key={story.id} style={{ 
-                  background: '#FFFFFF', 
+                <div key={story.id} style={{
+                  background: '#FFFFFF',
                   border: '1px solid #E4E6EA',
-                  borderRadius: '12px', 
+                  borderRadius: '12px',
                   padding: '16px',
                   transition: 'all 0.2s ease',
                   cursor: 'pointer',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                 }}
-                onClick={() => setExpandedStory(expandedStory === story.id ? null : story.id)}
-                onMouseOver={e => {
-                  e.currentTarget.style.transform = 'scale(1.01)';
-                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
-                }}
-                onMouseOut={e => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-                }}>
+                  onClick={() => setExpandedStory(expandedStory === story.id ? null : story.id)}
+                  onMouseOver={e => {
+                    e.currentTarget.style.transform = 'scale(1.01)';
+                    e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseOut={e => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                  }}>
                   {editingStory === story.id ? (
                     // Edit Mode
                     <div style={{ width: '100%' }}>
@@ -778,13 +779,13 @@ const Stories: React.FC = () => {
                             {authorNames[story.authorEmail] || story.author || 'Anonymous'}
                           </span> • {story.createdAt.toDate().toLocaleDateString()}
                         </div>
-                        
+
                         {/* Story Content Preview */}
-                        <div style={{ 
-                          fontSize: '14px', 
+                        <div style={{
+                          fontSize: '14px',
                           fontWeight: 400,
                           lineHeight: '1.4',
-                          color: '#050505', 
+                          color: '#050505',
                           marginBottom: '12px'
                         }}>
                           {expandedStory === story.id ? (
@@ -795,18 +796,18 @@ const Stories: React.FC = () => {
                           ) : (
                             // Preview with truncation
                             <div>
-                              {story.content.length > 150 
-                                ? story.content.substring(0, 150) + '...' 
+                              {story.content.length > 150
+                                ? story.content.substring(0, 150) + '...'
                                 : story.content
                               }
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Read More/Less indicator */}
-                        <div style={{ 
-                          fontSize: '12px', 
-                          color: '#1877F2', 
+                        <div style={{
+                          fontSize: '12px',
+                          color: '#1877F2',
                           fontWeight: 500,
                           display: 'flex',
                           alignItems: 'center',
@@ -819,7 +820,7 @@ const Stories: React.FC = () => {
                           )}
                         </div>
                       </div>
-                      
+
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
                         {/* Edit button - only show to story author */}
                         {story.authorEmail === user?.email && (
@@ -853,7 +854,7 @@ const Stories: React.FC = () => {
                             ✏️ Edit
                           </button>
                         )}
-                        
+
                         <button
                           onClick={(e) => {
                             e.stopPropagation();

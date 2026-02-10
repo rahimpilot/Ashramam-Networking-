@@ -32,7 +32,7 @@ const RoyalBank: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            color: '#166534'
+            color: '#4a4a4a'
           }}
         >
           ← Back
@@ -41,7 +41,7 @@ const RoyalBank: React.FC = () => {
 
       {/* Banner Section */}
       <div style={{
-        background: 'linear-gradient(135deg, #1a5f2f 0%, #2d8659 50%, #16a34a 100%)',
+        background: 'linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 50%, #4a4a4a 100%)',
         padding: window.innerWidth <= 768 ? '3rem 1rem' : '4rem 2rem',
         textAlign: 'center',
         position: 'relative',
@@ -94,7 +94,7 @@ const RoyalBank: React.FC = () => {
           <p style={{
             fontSize: window.innerWidth <= 768 ? '1rem' : '1.3rem',
             fontStyle: 'italic',
-            color: '#dcfce7',
+            color: '#e8e8e8',
             margin: 0,
             maxWidth: '600px',
             marginLeft: 'auto',
@@ -107,7 +107,7 @@ const RoyalBank: React.FC = () => {
           {/* Subtitle */}
           <p style={{
             fontSize: window.innerWidth <= 768 ? '0.9rem' : '1rem',
-            color: '#bbf7d0',
+            color: '#d0d0d0',
             margin: '1rem 0 0 0',
             letterSpacing: '0.5px'
           }}>
@@ -124,8 +124,8 @@ const RoyalBank: React.FC = () => {
       }}>
         {/* About Bank */}
         <div style={{
-          background: '#f0fdf4',
-          borderLeft: '5px solid #16a34a',
+          background: '#eeeeee',
+          borderLeft: '5px solid #4a4a4a',
           padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
           borderRadius: '8px',
           marginBottom: '2rem'
@@ -133,7 +133,7 @@ const RoyalBank: React.FC = () => {
           <h2 style={{
             fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
             fontWeight: 700,
-            color: '#166534',
+            color: '#2a2a2a',
             margin: '0 0 1rem 0'
           }}>
             About Us
@@ -152,7 +152,7 @@ const RoyalBank: React.FC = () => {
         <h2 style={{
           fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
           fontWeight: 700,
-          color: '#166534',
+          color: '#2a2a2a',
           margin: '0 0 1.5rem 0'
         }}>
           Our Services
@@ -166,23 +166,23 @@ const RoyalBank: React.FC = () => {
         }}>
           {/* Service Card 1 */}
           <div style={{
-            background: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)',
+            background: 'linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
-            border: '2px solid #16a34a'
+            border: '2px solid #4a4a4a'
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>✈️</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
-              color: '#166534',
+              color: '#2a2a2a',
               margin: '0 0 0.5rem 0'
             }}>
               യാത്ര വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
-              color: '#15803d',
+              color: '#4a4a4a',
               margin: 0
             }}>
               ഭാര്യയിൽ നിന്നും ഒരു ഒളിച്ചോട്ടം
@@ -191,23 +191,23 @@ const RoyalBank: React.FC = () => {
 
           {/* Service Card 2 */}
           <div style={{
-            background: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
+            background: 'linear-gradient(135deg, #e0e0e0 0%, #c8c8c8 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
-            border: '2px solid #059669'
+            border: '2px solid #4a4a4a'
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🕌</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
-              color: '#065f46',
+              color: '#2a2a2a',
               margin: '0 0 0.5rem 0'
             }}>
               ഉംറ വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
-              color: '#047857',
+              color: '#4a4a4a',
               margin: 0
             }}>
               നല്ലവനായ ഉണ്ണിയാവാൻ ആഗ്രഹിക്കുന്നവർക്ക്
@@ -216,23 +216,23 @@ const RoyalBank: React.FC = () => {
 
           {/* Service Card 3 */}
           <div style={{
-            background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)',
+            background: 'linear-gradient(135deg, #d8d8d8 0%, #c0c0c0 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
-            border: '2px solid #059669'
+            border: '2px solid #4a4a4a'
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🎉</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
-              color: '#065f46',
+              color: '#2a2a2a',
               margin: '0 0 0.5rem 0'
             }}>
               ഉല്ലാസ വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
-              color: '#047857',
+              color: '#4a4a4a',
               margin: 0
             }}>
               നാരങ്ങാ വെള്ളവും പിന്നെ അങ്ങോട്ട് സുഖമാവലും
@@ -241,23 +241,23 @@ const RoyalBank: React.FC = () => {
 
           {/* Service Card 4 */}
           <div style={{
-            background: 'linear-gradient(135deg, #c7f0d8 0%, #a7f3d0 100%)',
+            background: 'linear-gradient(135deg, #d0d0d0 0%, #b8b8b8 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
-            border: '2px solid #059669'
+            border: '2px solid #4a4a4a'
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>⚠️</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
-              color: '#065f46',
+              color: '#2a2a2a',
               margin: '0 0 0.5rem 0'
             }}>
               വായ്പ തിരികെ അടക്കാത്തവർ
             </h3>
             <p style={{
               fontSize: '0.9rem',
-              color: '#047857',
+              color: '#4a4a4a',
               margin: 0
             }}>
               തിരിച്ചു താടാ
