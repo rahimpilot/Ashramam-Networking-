@@ -1,6 +1,7 @@
 import React from 'react';
 import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
+import BottomNavigation from './BottomNavigation';
 
 const Account: React.FC = () => {
   const user = auth.currentUser;
@@ -16,7 +17,7 @@ const Account: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '2rem auto', padding: '2rem', background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ maxWidth: 400, margin: '2rem auto 100px auto', padding: '2rem', background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <img src="/newlogo.svg" alt="Logo" style={{ height: 48, marginBottom: 24 }} />
       <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem', color: '#2563eb' }}>Welcome!</h2>
       {user ? (
@@ -37,6 +38,9 @@ const Account: React.FC = () => {
       ) : (
         <p>Not logged in.</p>
       )}
+
+      {/* Bottom Navigation */}
+      <BottomNavigation />
     </div>
   );
 };

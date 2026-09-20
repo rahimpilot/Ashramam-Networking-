@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import BottomNavigation from './BottomNavigation';
 
 const Hangout: React.FC = () => {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ const Hangout: React.FC = () => {
       <div style={{
         maxWidth: 480,
         margin: '0 auto',
-        padding: '16px'
+        padding: '16px 16px 96px 16px'
       }}>
 
         {/* Feature Cards */}
@@ -327,6 +328,9 @@ const Hangout: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNavigation />
     </div>
   );
 };

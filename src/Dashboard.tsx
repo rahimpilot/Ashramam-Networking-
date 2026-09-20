@@ -4,6 +4,7 @@ import { doc, getDoc, collection, getDocs, setDoc, updateDoc, query, orderBy, Ti
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { ref, deleteObject } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
+import BottomNavigation from './BottomNavigation';
 
 // Admin-controlled profile picture mapping
 const getProfilePicture = (email: string, name: string) => {
@@ -1209,7 +1210,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Posts Feed */}
-        <div style={{ padding: '0 16px 16px 16px' }}>
+        <div style={{ padding: '0 16px 96px 16px' }}>
           {scrapPosts.map((post) => (
             <div
               key={post.id}
@@ -1814,6 +1815,9 @@ const Dashboard: React.FC = () => {
         imageSrc={modalImageSrc}
         onClose={closeImageModal}
       />
+
+      {/* Bottom Navigation */}
+      <BottomNavigation />
     </div>
   );
 };
