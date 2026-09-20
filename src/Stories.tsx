@@ -373,7 +373,7 @@ const Stories: React.FC = () => {
             whiteSpace: 'nowrap',
             padding: '0 8px'
           }}>
-            {currentView === 'topics' ? 'Our Stories (v1.1)' : getCurrentTopic()?.name}
+            {currentView === 'topics' ? 'Our Stories' : getCurrentTopic()?.name}
           </h1>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
