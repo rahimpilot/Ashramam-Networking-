@@ -41,6 +41,7 @@ const Stories: React.FC = () => {
   const [editStoryData, setEditStoryData] = useState({ title: '', content: '' });
   const [userProfile, setUserProfile] = useState<any>({});
   const [authorNames, setAuthorNames] = useState<Record<string, string>>({});
+  const [copiedStoryId, setCopiedStoryId] = useState<string | null>(null);
 
   // Auth state listener
   useEffect(() => {
@@ -69,7 +70,8 @@ const Stories: React.FC = () => {
     { id: 'shajipappan', name: 'ഷാജി പാപ്പൻ', description: 'Stories about Shaji Pappan', icon: '', color: '#000000' },
     { id: 'teamsensorium', name: 'ടീം സെൻസോറിയം', description: 'Team Sensorium stories and projects', icon: '', color: '#000000' },
     { id: 'editingsimham', name: 'എഡിറ്റിംഗ് സിംഹം', description: 'Editing Simham stories and experiences', icon: '', color: '#000000' },
-    { id: 'krabi', name: 'ക്രാബി', description: 'Stories from Krabi', icon: '', color: '#000000' }
+    { id: 'krabi', name: 'ക്രാബി', description: 'Stories from Krabi', icon: '', color: '#000000' },
+    { id: 'hydergoa', name: 'Hyder in Goa', description: 'Tales of Hyder\'s Goan escapades', icon: '', color: '#000000' }
   ];
 
   useEffect(() => {
@@ -251,6 +253,47 @@ const Stories: React.FC = () => {
     setEditingStory(null);
     setEditStoryData({ title: '', content: '' });
   };
+
+  // Copy a permalink for a story (deep link: /stories?topic=<id>&story=<id>)
+  const handleCopyPermalink = async (story: Story) => {
+    const url = `${window.location.origin}/stories?topic=${story.topic}&story=${story.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // Fallback for browsers without clipboard API access
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    setCopiedStoryId(story.id);
+    setTimeout(() => setCopiedStoryId(null), 2000);
+  };
+
+  // Honor permalink query params: /stories?topic=<id>&story=<id>
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const topicParam = params.get('topic');
+    const storyParam = params.get('story');
+    if (topicParam && topics.some(t => t.id === topicParam)) {
+      setSelectedTopic(topicParam);
+      setCurrentView('stories');
+      if (storyParam) {
+        setExpandedStory(storyParam);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Scroll the deep-linked (or expanded) story into view once loaded
+  useEffect(() => {
+    if (expandedStory && stories.some(s => s.id === expandedStory)) {
+      const el = document.getElementById('story-' + expandedStory);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [expandedStory, stories]);
 
 
 
@@ -665,7 +708,7 @@ const Stories: React.FC = () => {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {getFilteredStories().map((story) => (
-                <div key={story.id} style={{
+                <div key={story.id} id={'story-' + story.id} style={{
                   background: '#FFFFFF',
                   border: '1px solid #E4E6EA',
                   borderRadius: '12px',
@@ -829,6 +872,32 @@ const Stories: React.FC = () => {
                           ) : (
                             <>👆 Click to read full story</>
                           )}
+                        </div>
+
+                        {/* Copy permalink - bottom right, underneath the content */}
+                        <div style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          marginTop: '8px'
+                        }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCopyPermalink(story);
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#1877F2',
+                              fontSize: '12px',
+                              fontWeight: 500,
+                              cursor: 'pointer',
+                              padding: '4px 2px',
+                              textDecoration: 'underline'
+                            }}
+                          >
+                            {copiedStoryId === story.id ? '✓ Copied!' : '🔗 copy permalink'}
+                          </button>
                         </div>
                       </div>
 
