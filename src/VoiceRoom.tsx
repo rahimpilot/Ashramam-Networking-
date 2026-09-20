@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { auth, rtdb } from './firebase';
-import { ref, set, onValue, remove, update } from 'firebase/database';
+import { ref, set, push, onValue, onChildAdded, remove, update, onDisconnect } from 'firebase/database';
+import type { Unsubscribe } from 'firebase/database';
 import { onAuthStateChanged } from 'firebase/auth';
+import type { User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 
@@ -11,1061 +13,713 @@ interface Participant {
   email: string;
   isMuted: boolean;
   isActive: boolean;
+  joinedAt: number;
 }
+
+const ROOM_ID = 'happening-now-room';
+
+// STUN for most connections + a free TURN fallback so phones on mobile
+// data (symmetric NATs) can still connect, Clubhouse-style.
+const ICE_SERVERS: RTCIceServer[] = [
+  {
+    urls: [
+      'stun:stun.l.google.com:19302',
+      'stun:stun1.l.google.com:19302',
+      'stun:stun2.l.google.com:19302',
+    ],
+  },
+  {
+    urls: 'turn:openrelay.metered.ca:80',
+    username: 'openrelay',
+    credential: 'openrelay',
+  },
+  {
+    urls: 'turn:openrelay.metered.ca:443',
+    username: 'openrelay',
+    credential: 'openrelay',
+  },
+  {
+    urls: 'turns:openrelay.metered.ca:443?transport=tcp',
+    username: 'openrelay',
+    credential: 'openrelay',
+  },
+];
+
+const roomRef = (path: string) => ref(rtdb, `voiceRooms/${ROOM_ID}/${path}`);
 
 const VoiceRoom: React.FC = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [authReady, setAuthReady] = useState(false);
+  const [joined, setJoined] = useState(false);
+  const [joining, setJoining] = useState(false);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [isMuted, setIsMuted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [audioStats, setAudioStats] = useState<string>('');
-  const [currentStep, setCurrentStep] = useState<string>('Checking authentication...');
-  const [debugInfo, setDebugInfo] = useState({
-    roomId: 'happening-now-room',
-    userId: '',
-    participantsCount: 0,
-    peerConnectionsCount: 0,
-    remoteStreamsCount: 0,
-    databaseConnected: false
-  });
-  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'error'>('connecting');
-  
-  const localAudioRef = useRef<HTMLAudioElement>(null);
+  const [connectedPeers, setConnectedPeers] = useState<string[]>([]);
+  // speakingTick re-renders the UI when the speaking set changes
+  const [, setSpeakingTick] = useState(0);
+
+  const userRef = useRef<User | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
-  const remoteStreamsRef = useRef<{ [key: string]: MediaStream }>({});
-  const roomIdRef = useRef('happening-now-room');
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const peerConnectionsRef = useRef<Map<string, RTCPeerConnection>>(new Map());
+  const remoteAudiosRef = useRef<Map<string, HTMLAudioElement>>(new Map());
+  const remoteAnalysersRef = useRef<Map<string, { analyser: AnalyserNode; data: Uint8Array }>>(new Map());
+  const localAnalyserRef = useRef<{ analyser: AnalyserNode; data: Uint8Array } | null>(null);
+  const pendingCandidatesRef = useRef<Map<string, RTCIceCandidateInit[]>>(new Map());
+  const listenersRef = useRef<Unsubscribe[]>([]);
+  const speakingRef = useRef<Set<string>>(new Set());
+  const joinedRef = useRef(false);
 
-  // Initialize Firebase Auth
+  const setSpeaking = useCallback((id: string, speaking: boolean) => {
+    const s = speakingRef.current;
+    if (speaking && !s.has(id)) {
+      s.add(id);
+      setSpeakingTick(t => t + 1);
+    } else if (!speaking && s.has(id)) {
+      s.delete(id);
+      setSpeakingTick(t => t + 1);
+    }
+  }, []);
+
+  const isSpeaking = useCallback((id: string) => speakingRef.current.has(id), []);
+
+  // ---------- auth ----------
   useEffect(() => {
-    console.log('🔐 Auth effect started');
-    setCurrentStep('Checking authentication...');
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        console.log('✅ User authenticated:', currentUser.email);
-        setCurrentStep('User authenticated, initializing audio...');
-        setUser(currentUser);
-      } else {
-        console.log('❌ User not authenticated, redirecting to login');
-        setCurrentStep('Redirecting to login...');
-        navigate('/');
-      }
+      userRef.current = currentUser;
+      setUser(currentUser);
+      setAuthReady(true);
+      if (!currentUser) navigate('/');
     });
-
-    return unsubscribe;
+    return () => unsubscribe();
   }, [navigate]);
 
-  // Create peer connection
-  const createPeerConnection = useCallback((peerId: string) => {
-    try {
-      const peerConnection = new RTCPeerConnection({
-        iceServers: [
-          { urls: ['stun:stun.l.google.com:19302'] },
-          { urls: ['stun:stun1.l.google.com:19302'] },
-          { urls: ['stun:stun2.l.google.com:19302'] },
-          { urls: ['stun:stun3.l.google.com:19302'] },
-          { urls: ['stun:stun4.l.google.com:19302'] }
-        ]
-      });
+  // Live headcount on the join screen (read-only, works before joining)
+  useEffect(() => {
+    if (!authReady || !user) return;
+    const unsub = onValue(roomRef('participants'), (snap) => {
+      const data = snap.val() || {};
+      const list = (Object.values(data) as Participant[]).filter(p => p && p.isActive !== false);
+      setParticipants(list);
+    });
+    return () => unsub();
+  }, [authReady, user]);
 
-      // Add local stream tracks
+  // ---------- peer connection management ----------
+  const cleanupPeer = useCallback((peerId: string) => {
+    const pc = peerConnectionsRef.current.get(peerId);
+    if (pc) {
+      try { pc.close(); } catch { /* noop */ }
+      peerConnectionsRef.current.delete(peerId);
+    }
+    const audio = remoteAudiosRef.current.get(peerId);
+    if (audio) {
+      try { audio.pause(); } catch { /* noop */ }
+      audio.srcObject = null;
+      remoteAudiosRef.current.delete(peerId);
+    }
+    remoteAnalysersRef.current.delete(peerId);
+    pendingCandidatesRef.current.delete(peerId);
+    setSpeaking(peerId, false);
+    setConnectedPeers(prev => prev.filter(id => id !== peerId));
+  }, [setSpeaking]);
+
+  const createPeerConnection = useCallback((peerId: string): RTCPeerConnection | null => {
+    const me = userRef.current;
+    if (!me) return null;
+    try {
+      const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+
       if (localStreamRef.current) {
         localStreamRef.current.getAudioTracks().forEach(track => {
-          peerConnection.addTrack(track, localStreamRef.current!);
+          pc.addTrack(track, localStreamRef.current!);
         });
       }
 
-      // Handle remote stream
-      peerConnection.ontrack = (event) => {
-        console.log('🎵 Received remote track from', peerId);
+      pc.ontrack = (event) => {
         const remoteStream = event.streams[0];
-        remoteStreamsRef.current[peerId] = remoteStream;
-        setDebugInfo(prev => ({
-          ...prev,
-          remoteStreamsCount: Object.keys(remoteStreamsRef.current).length
-        }));
-        
-        // Play remote audio
-        const remoteAudio = new Audio();
-        remoteAudio.srcObject = remoteStream;
-        remoteAudio.play().catch(err => {
-          console.error('Error playing remote audio:', err);
+        if (!remoteStream) return;
+        let audio = remoteAudiosRef.current.get(peerId);
+        if (!audio) {
+          audio = new Audio();
+          audio.autoplay = true;
+          remoteAudiosRef.current.set(peerId, audio);
+        }
+        audio.srcObject = remoteStream;
+        audio.play().catch(() => {
+          // Autoplay blocked (shouldn't happen after the join tap, but retry on next gesture)
         });
-      };
 
-      // Handle ICE candidates
-      peerConnection.onicecandidate = async (event) => {
-        if (event.candidate && user) {
-          try {
-            const candidateRef = ref(rtdb, 
-              `voiceRooms/${roomIdRef.current}/iceCandidates/${user.uid}/${peerId}`
-            );
-            await set(candidateRef, {
-              candidate: event.candidate.candidate,
-              sdpMLineIndex: event.candidate.sdpMLineIndex,
-              sdpMid: event.candidate.sdpMid,
-              timestamp: Date.now()
-            });
-          } catch (err) {
-            console.error('Error adding ICE candidate:', err);
+        // Speaking indicator for this remote stream
+        try {
+          if (!remoteAnalysersRef.current.has(peerId) && audioCtxRef.current) {
+            const src = audioCtxRef.current.createMediaStreamSource(remoteStream);
+            const analyser = audioCtxRef.current.createAnalyser();
+            analyser.fftSize = 512;
+            src.connect(analyser);
+            remoteAnalysersRef.current.set(peerId, { analyser, data: new Uint8Array(analyser.fftSize) });
           }
+        } catch { /* analyser is best-effort */ }
+      };
+
+      pc.onicecandidate = (event) => {
+        if (event.candidate && userRef.current) {
+          // push() => every candidate is kept; set() would overwrite the previous one
+          push(roomRef(`iceCandidates/${userRef.current.uid}/${peerId}`), {
+            candidate: event.candidate.candidate,
+            sdpMLineIndex: event.candidate.sdpMLineIndex,
+            sdpMid: event.candidate.sdpMid,
+            timestamp: Date.now(),
+          }).catch(err => console.error('ICE push failed:', err));
         }
       };
 
-      // Handle connection state changes
-      peerConnection.onconnectionstatechange = () => {
-        console.log(`Connection state with ${peerId}: ${peerConnection.connectionState}`);
-        if (peerConnection.connectionState === 'failed' || peerConnection.connectionState === 'disconnected') {
-          peerConnection.close();
-          delete peerConnectionsRef.current[peerId];
-          delete remoteStreamsRef.current[peerId];
-          setDebugInfo(prev => ({
-            ...prev,
-            peerConnectionsCount: Object.keys(peerConnectionsRef.current).length,
-            remoteStreamsCount: Object.keys(remoteStreamsRef.current).length
-          }));
+      pc.onconnectionstatechange = () => {
+        if (pc.connectionState === 'connected') {
+          setConnectedPeers(prev => (prev.includes(peerId) ? prev : [...prev, peerId]));
+        } else if (
+          pc.connectionState === 'failed' ||
+          pc.connectionState === 'disconnected' ||
+          pc.connectionState === 'closed'
+        ) {
+          cleanupPeer(peerId);
         }
       };
 
-      peerConnectionsRef.current[peerId] = peerConnection;
-      setDebugInfo(prev => ({
-        ...prev,
-        peerConnectionsCount: Object.keys(peerConnectionsRef.current).length
-      }));
-      return peerConnection;
+      peerConnectionsRef.current.set(peerId, pc);
+      return pc;
     } catch (err) {
-      console.error('Error creating peer connection:', err);
+      console.error('createPeerConnection failed:', err);
       return null;
     }
-  }, [user]);
+  }, [cleanupPeer]);
 
-  // Make offer to peer
+  const flushPendingCandidates = useCallback(async (peerId: string) => {
+    const pc = peerConnectionsRef.current.get(peerId);
+    const queued = pendingCandidatesRef.current.get(peerId);
+    if (!pc || !queued || queued.length === 0) return;
+    pendingCandidatesRef.current.set(peerId, []);
+    for (const c of queued) {
+      try {
+        await pc.addIceCandidate(new RTCIceCandidate(c));
+      } catch { /* stale candidate, ignore */ }
+    }
+  }, []);
+
+  const handleRemoteICECandidate = useCallback(async (peerId: string, candidate: RTCIceCandidateInit) => {
+    const pc = peerConnectionsRef.current.get(peerId);
+    if (!pc || pc.signalingState === 'closed') return;
+    try {
+      if (pc.remoteDescription) {
+        await pc.addIceCandidate(new RTCIceCandidate(candidate));
+      } else {
+        // Offer/answer hasn't landed yet — queue it
+        const q = pendingCandidatesRef.current.get(peerId) || [];
+        q.push(candidate);
+        pendingCandidatesRef.current.set(peerId, q);
+      }
+    } catch { /* stale candidate, ignore */ }
+  }, []);
+
   const makeOffer = useCallback(async (peerId: string) => {
+    const me = userRef.current;
+    if (!me || peerConnectionsRef.current.has(peerId)) return;
+    const pc = createPeerConnection(peerId);
+    if (!pc) return;
     try {
-      console.log('📤 Making offer to peer:', peerId);
-      let peerConnection: RTCPeerConnection | undefined | null = peerConnectionsRef.current[peerId];
-      if (!peerConnection) {
-        console.log('🔌 Creating new peer connection for:', peerId);
-        peerConnection = createPeerConnection(peerId);
-        if (!peerConnection) {
-          console.error('❌ Failed to create peer connection');
-          return;
-        }
-      }
-
-      const offer = await peerConnection.createOffer({
-        offerToReceiveAudio: true
+      const offer = await pc.createOffer({ offerToReceiveAudio: true });
+      await pc.setLocalDescription(offer);
+      await set(roomRef(`offers/${me.uid}/${peerId}`), {
+        sdp: offer.sdp,
+        type: offer.type,
+        timestamp: Date.now(),
       });
-      console.log('✅ Offer created, setting local description');
-      await peerConnection.setLocalDescription(offer);
-
-      if (user) {
-        const offerRef = ref(rtdb, 
-          `voiceRooms/${roomIdRef.current}/offers/${user.uid}/${peerId}`
-        );
-        console.log('💾 Saving offer to Firebase');
-        await set(offerRef, {
-          sdp: offer.sdp,
-          type: offer.type,
-          timestamp: Date.now()
-        });
-        console.log('✅ Offer saved to Firebase');
-      }
     } catch (err) {
-      console.error('❌ Error making offer:', err);
+      console.error('makeOffer failed:', err);
+      cleanupPeer(peerId);
     }
-  }, [user, createPeerConnection]);
+  }, [createPeerConnection, cleanupPeer]);
 
-  // Handle offer from peer
-  const handleRemoteOffer = useCallback(async (peerId: string, offer: any) => {
-    try {
-      let peerConnection: RTCPeerConnection | undefined | null = peerConnectionsRef.current[peerId];
-      if (!peerConnection) {
-        peerConnection = createPeerConnection(peerId);
-        if (!peerConnection) return;
-      }
-
-      await peerConnection.setRemoteDescription(
-        new RTCSessionDescription({
-          type: 'offer',
-          sdp: offer.sdp
-        })
-      );
-
-      const answer = await peerConnection.createAnswer({
-        offerToReceiveAudio: true
-      });
-      await peerConnection.setLocalDescription(answer);
-
-      if (user) {
-        const answerRef = ref(rtdb, 
-          `voiceRooms/${roomIdRef.current}/answers/${user.uid}/${peerId}`
-        );
-        await set(answerRef, {
-          sdp: answer.sdp,
-          type: answer.type,
-          timestamp: Date.now()
-        });
-      }
-    } catch (err) {
-      console.error('Error handling offer:', err);
-    }
-  }, [user, createPeerConnection]);
-
-  // Handle answer from peer
-  const handleRemoteAnswer = useCallback(async (peerId: string, answer: any) => {
-    try {
-      const peerConnection = peerConnectionsRef.current[peerId];
-      if (peerConnection && peerConnection.signalingState === 'have-local-offer') {
-        await peerConnection.setRemoteDescription(
-          new RTCSessionDescription({
-            type: 'answer',
-            sdp: answer.sdp
-          })
-        );
-      }
-    } catch (err) {
-      console.error('Error handling answer:', err);
-    }
-  }, []);
-
-  // Handle ICE candidates
-  const handleRemoteICECandidate = useCallback(async (peerId: string, candidate: any) => {
-    try {
-      const peerConnection = peerConnectionsRef.current[peerId];
-      if (peerConnection) {
-        await peerConnection.addIceCandidate(
-          new RTCIceCandidate({
-            candidate: candidate.candidate,
-            sdpMLineIndex: candidate.sdpMLineIndex,
-            sdpMid: candidate.sdpMid
-          })
-        );
-      }
-    } catch (err) {
-      console.error('Error adding ICE candidate:', err);
-    }
-  }, []);
-
-  // Get user's audio stream and join room
-  useEffect(() => {
-    console.log('🎤 Audio initialization effect started, user:', user?.email);
-    if (!user) {
-      console.log('⏳ Waiting for user...');
+  const handleRemoteOffer = useCallback(async (peerId: string, offer: { sdp: string; type: string }) => {
+    const me = userRef.current;
+    if (!me) return;
+    // If we already have a connection, ignore duplicate offers
+    if (peerConnectionsRef.current.has(peerId)) {
+      remove(roomRef(`offers/${peerId}/${me.uid}`)).catch(() => {});
       return;
     }
+    const pc = createPeerConnection(peerId);
+    if (!pc) return;
+    try {
+      await pc.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp: offer.sdp }));
+      await flushPendingCandidates(peerId);
+      const answer = await pc.createAnswer({ offerToReceiveAudio: true });
+      await pc.setLocalDescription(answer);
+      await set(roomRef(`answers/${me.uid}/${peerId}`), {
+        sdp: answer.sdp,
+        type: answer.type,
+        timestamp: Date.now(),
+      });
+    } catch (err) {
+      console.error('handleRemoteOffer failed:', err);
+      cleanupPeer(peerId);
+    } finally {
+      // Consumed — remove so it can never be reprocessed
+      remove(roomRef(`offers/${peerId}/${me.uid}`)).catch(() => {});
+    }
+  }, [createPeerConnection, flushPendingCandidates, cleanupPeer]);
 
-    const initializeAudio = async () => {
-      try {
-        console.log('📡 Requesting microphone access...');
-        setCurrentStep('Requesting microphone access...');
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true
-          },
-          video: false
-        });
+  const handleRemoteAnswer = useCallback(async (peerId: string, answer: { sdp: string; type: string }) => {
+    const me = userRef.current;
+    if (!me) return;
+    try {
+      const pc = peerConnectionsRef.current.get(peerId);
+      if (pc && pc.signalingState === 'have-local-offer') {
+        await pc.setRemoteDescription(new RTCSessionDescription({ type: 'answer', sdp: answer.sdp }));
+        await flushPendingCandidates(peerId);
+      }
+    } catch (err) {
+      console.error('handleRemoteAnswer failed:', err);
+    } finally {
+      remove(roomRef(`answers/${me.uid}/${peerId}`)).catch(() => {});
+    }
+  }, [flushPendingCandidates]);
 
-        console.log('✅ Microphone access granted, stream:', stream);
-        setCurrentStep('Initializing audio context...');
-        localStreamRef.current = stream;
-        if (localAudioRef.current) {
-          localAudioRef.current.srcObject = stream;
-          localAudioRef.current.muted = true; // Mute local audio to prevent echo
+  // ---------- join / leave ----------
+  const joinRoom = useCallback(async () => {
+    const me = userRef.current;
+    if (!me || joinedRef.current) return;
+    setJoining(true);
+    setError(null);
+
+    try {
+      // 1. Microphone (inside the tap gesture, so mobile browsers allow it)
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+        video: false,
+      });
+      localStreamRef.current = stream;
+
+      // 2. AudioContext for the speaking indicator (must resume in a gesture)
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const audioCtx = new Ctx();
+      if (audioCtx.state === 'suspended') await audioCtx.resume();
+      audioCtxRef.current = audioCtx;
+      const localSrc = audioCtx.createMediaStreamSource(stream);
+      const localAnalyser = audioCtx.createAnalyser();
+      localAnalyser.fftSize = 512;
+      localSrc.connect(localAnalyser);
+      localAnalyserRef.current = { analyser: localAnalyser, data: new Uint8Array(localAnalyser.fftSize) };
+
+      // 3. Presence — onDisconnect removes us even if the tab crashes
+      const participantRef = roomRef(`participants/${me.uid}`);
+      await set(participantRef, {
+        id: me.uid,
+        name: me.displayName || me.email || 'Anonymous',
+        email: me.email || '',
+        isMuted: false,
+        isActive: true,
+        joinedAt: Date.now(),
+      });
+      await onDisconnect(participantRef).remove();
+
+      // 4. Clear any stale signaling from a previous session
+      await Promise.all([
+        remove(roomRef(`offers/${me.uid}`)),
+        remove(roomRef(`answers/${me.uid}`)),
+        remove(roomRef(`iceCandidates/${me.uid}`)),
+      ]).catch(() => {});
+
+      joinedRef.current = true;
+      setJoined(true);
+
+      // 5. Signaling listeners (child_added => each message processed exactly once)
+      const unsubs: Unsubscribe[] = [];
+
+      // Participants: offer to newcomers (only the greater UID offers — no glare)
+      unsubs.push(onValue(roomRef('participants'), (snap) => {
+        const data = snap.val() || {};
+        const others = (Object.values(data) as Participant[])
+          .filter(p => p && p.id !== me.uid && p.isActive !== false);
+        setParticipants([ // include self at the top for the UI
+          ...(Object.values(data) as Participant[]).filter(p => p && p.id === me.uid),
+          ...others,
+        ]);
+        for (const p of others) {
+          if (!peerConnectionsRef.current.has(p.id) && me.uid > p.id) {
+            setTimeout(() => makeOffer(p.id), 150);
+          }
         }
-
-        // Initialize audio context
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-        console.log('🎵 Audio context initialized');
-
-        // Add participant to room with better error handling
-        console.log('📝 Adding participant to room:', user.uid);
-        console.log('🔗 RTDB instance:', rtdb);
-        console.log('🔗 RTDB URL:', rtdb.app.options.databaseURL);
-        setCurrentStep('Joining voice room...');
-        
-        const participantRef = ref(rtdb, `voiceRooms/${roomIdRef.current}/participants/${user.uid}`);
-        console.log('📍 Ref path:', participantRef.toString());
-        
-        // Add timeout for database operation
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('Database operation timed out after 10 seconds')), 10000);
-        });
-        
-        let databaseConnected = false;
-        try {
-          await Promise.race([
-            set(participantRef, {
-              id: user.uid,
-              name: user.displayName || user.email || 'Anonymous',
-              email: user.email,
-              isMuted: false,
-              isActive: true,
-              joinedAt: Date.now()
-            }),
-            timeoutPromise
-          ]);
-          
-          console.log('✅ Participant added to database successfully');
-          databaseConnected = true;
-          setDebugInfo(prev => ({
-            ...prev,
-            userId: user.uid,
-            databaseConnected: true
-          }));
-          setConnectionStatus('connected');
-        } catch (participantError) {
-          console.error('❌ Participant write failed:', participantError);
-          const errorMessage = participantError instanceof Error ? participantError.message : 'Unknown error';
-          console.log('⚠️ Database error details:', {
-            error: participantError,
-            message: errorMessage,
-            userId: user.uid,
-            path: participantRef.toString()
-          });
-          
-          // Continue anyway - the voice room can work locally
-          console.log('🔄 Continuing without database connection...');
-          databaseConnected = false;
-          setDebugInfo(prev => ({
-            ...prev,
-            userId: user.uid,
-            databaseConnected: false
-          }));
-          setConnectionStatus('connected');
+        // Drop peer connections for people who left
+        const aliveIds = new Set(others.map(p => p.id));
+        for (const peerId of Array.from(peerConnectionsRef.current.keys())) {
+          if (!aliveIds.has(peerId)) cleanupPeer(peerId);
         }
+      }));
 
-        // Always complete loading and show the UI
-        setCurrentStep(databaseConnected ? 'Connected successfully!' : 'Connected (local mode)');
-        setIsLoading(false);
-        setAudioStats('✅ Microphone connected');
-        
-        console.log('✅ Voice room initialization complete. Database:', databaseConnected ? 'Connected' : 'Disconnected');
-
-        // Listen to other participants
-        console.log('👥 Setting up participant listener...');
-        const participantsRef = ref(rtdb, `voiceRooms/${roomIdRef.current}/participants`);
-        onValue(participantsRef, async (snapshot) => {
-          const data = snapshot.val();
-          console.log('👥 Participants raw data:', data);
-          console.log('👥 Current user ID:', user.uid);
-          
-          if (data) {
-            const allParticipants = Object.values(data) as any[];
-            console.log('👥 All participants before filtering:', allParticipants);
-            
-            const participantList: Participant[] = allParticipants.filter(
-              (p: any) => p.id !== user.uid && p.isActive
-            ) as Participant[];
-            
-            console.log('👥 Filtered participants (excluding self):', participantList);
-            console.log('👥 Setting participants count:', participantList.length);
-            setParticipants(participantList);
-            setDebugInfo(prev => ({
-              ...prev,
-              participantsCount: participantList.length
-            }));
-
-            // Create connections with all other participants
-            for (const participant of participantList) {
-              if (!peerConnectionsRef.current[participant.id]) {
-                // Make offer to new participant (only if our UID is greater to avoid duplicates)
-                if (user.uid > participant.id) {
-                  console.log('🤝 Making offer to peer:', participant.id);
-                  setTimeout(() => makeOffer(participant.id), 100);
-                }
-              }
-            }
-          } else {
-            console.log('👥 No participant data found');
-            setParticipants([]);
-            setDebugInfo(prev => ({
-              ...prev,
-              participantsCount: 0
-            }));
+      // Offers addressed to me
+      unsubs.push(onChildAdded(roomRef('offers'), (fromSnap) => {
+        const fromUid = fromSnap.key!;
+        const targetRef = roomRef(`offers/${fromUid}`);
+        const unsubTargets = onChildAdded(targetRef, (targetSnap) => {
+          if (targetSnap.key === me.uid) {
+            const offer = targetSnap.val();
+            if (offer && offer.sdp) void handleRemoteOffer(fromUid, offer);
           }
-        }, (error) => {
-          console.error('❌ Error listening to participants:', error);
-          setError(`Failed to sync with other participants: ${error.message}`);
         });
+        unsubs.push(unsubTargets);
+      }));
 
-        // Listen to offers from peers
-        const offersRef = ref(rtdb, `voiceRooms/${roomIdRef.current}/offers`);
-        onValue(offersRef, (snapshot) => {
-          const data = snapshot.val();
-          console.log('📥 Offers data received:', data);
-          if (data) {
-            Object.entries(data).forEach(([peerId, offers]: any) => {
-              if (peerId !== user.uid) {
-                Object.entries(offers).forEach(([targetId, offer]: any) => {
-                  if (targetId === user.uid && offer.sdp) {
-                    console.log('📥 Processing offer from', peerId, 'to', targetId);
-                    handleRemoteOffer(peerId, offer);
-                  }
-                });
-              }
+      // Answers addressed to me
+      unsubs.push(onChildAdded(roomRef(`answers/${me.uid}`), (snap) => {
+        const fromUid = snap.key!;
+        const answer = snap.val();
+        if (answer && answer.sdp) void handleRemoteAnswer(fromUid, answer);
+      }));
+
+      // ICE candidates addressed to me
+      unsubs.push(onChildAdded(roomRef(`iceCandidates/${me.uid}`), (fromSnap) => {
+        const fromUid = fromSnap.key!;
+        const candRef = roomRef(`iceCandidates/${me.uid}/${fromUid}`);
+        const unsubCands = onChildAdded(candRef, (candSnap) => {
+          const c = candSnap.val();
+          if (c && c.candidate) {
+            void handleRemoteICECandidate(fromUid, {
+              candidate: c.candidate,
+              sdpMLineIndex: c.sdpMLineIndex,
+              sdpMid: c.sdpMid,
             });
           }
-        }, (error) => {
-          console.error('❌ Error listening to offers:', error);
+          // Consumed — remove so it can never be reprocessed
+          remove(roomRef(`iceCandidates/${me.uid}/${fromUid}/${candSnap.key}`)).catch(() => {});
         });
+        unsubs.push(unsubCands);
+      }));
 
-        // Listen to answers from peers
-        const answersRef = ref(rtdb, `voiceRooms/${roomIdRef.current}/answers`);
-        onValue(answersRef, (snapshot) => {
-          const data = snapshot.val();
-          console.log('📥 Answers data received:', data);
-          if (data) {
-            Object.entries(data).forEach(([peerId, answers]: any) => {
-              if (peerId !== user.uid) {
-                Object.entries(answers).forEach(([targetId, answer]: any) => {
-                  if (targetId === user.uid && answer.sdp) {
-                    console.log('📥 Processing answer from', peerId, 'to', targetId);
-                    handleRemoteAnswer(peerId, answer);
-                  }
-                });
-              }
-            });
-          }
-        }, (error) => {
-          console.error('❌ Error listening to answers:', error);
-        });
+      listenersRef.current = unsubs;
 
-        // Listen to ICE candidates
-        const iceCandidatesRef = ref(rtdb, `voiceRooms/${roomIdRef.current}/iceCandidates`);
-        onValue(iceCandidatesRef, (snapshot) => {
-          const data = snapshot.val();
-          console.log('📥 ICE candidates data received:', data);
-          if (data) {
-            Object.entries(data).forEach(([peerId, candidates]: any) => {
-              if (peerId !== user.uid) {
-                Object.entries(candidates).forEach(([targetId, candidatesObj]: any) => {
-                  if (targetId === user.uid) {
-                    Object.entries(candidatesObj).forEach(([, candidate]: any) => {
-                      if (candidate.candidate) {
-                        console.log('📥 Processing ICE candidate from', peerId, 'to', targetId);
-                        handleRemoteICECandidate(peerId, candidate);
-                      }
-                    });
-                  }
-                });
-              }
-            });
-          }
-        }, (error) => {
-          console.error('❌ Error listening to ICE candidates:', error);
-        });
-
-      } catch (err) {
-        console.error('❌ Error initializing voice room:', err);
-        setCurrentStep('Initialization failed');
-        if (err instanceof Error) {
-          if (err.name === 'NotAllowedError') {
-            setError('Microphone access denied. Please allow microphone access and refresh the page.');
-          } else if (err.name === 'NotFoundError') {
-            setError('No microphone found. Please check your audio devices.');
-          } else if (err.message.includes('Firebase')) {
-            setError('Database connection failed. Please check your internet connection.');
-          } else {
-            setError(`Initialization failed: ${err.message}`);
-          }
+      // 6. Speaking-indicator loop
+      const levelOf = (entry: { analyser: AnalyserNode; data: Uint8Array }) => {
+        entry.analyser.getByteTimeDomainData(entry.data as Uint8Array);
+        let sum = 0;
+        for (let i = 0; i < entry.data.length; i++) {
+          const v = (entry.data[i] - 128) / 128;
+          sum += v * v;
+        }
+        return Math.sqrt(sum / entry.data.length);
+      };
+      const speakTimer = window.setInterval(() => {
+        if (!joinedRef.current) return;
+        if (localAnalyserRef.current && localStreamRef.current?.getAudioTracks()[0]?.enabled) {
+          setSpeaking('me', levelOf(localAnalyserRef.current) > 0.03);
         } else {
-          setError('An unknown error occurred during initialization.');
+          setSpeaking('me', false);
         }
-        setAudioStats('❌ Initialization failed');
-        setIsLoading(false);
-      }
-    };
-
-    initializeAudio();
-
-    // Store ref values for cleanup
-    const currentPeerConnections = peerConnectionsRef.current;
-    const currentRoomId = roomIdRef.current;
-
-    return () => {
-      console.log('🧹 Cleaning up audio resources');
-      // Cleanup when component unmounts
-      if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach(track => track.stop());
-      }
-      Object.values(currentPeerConnections).forEach(pc => {
-        pc.close();
-      });
-      
-      // Remove participant from database when leaving
-      if (user) {
-        const participantRef = ref(rtdb, `voiceRooms/${currentRoomId}/participants/${user.uid}`);
-        remove(participantRef).catch(err => {
-          console.error('Error removing participant on cleanup:', err);
+        remoteAnalysersRef.current.forEach((entry, peerId) => {
+          setSpeaking(peerId, levelOf(entry) > 0.03);
         });
+      }, 350);
+      (listenersRef.current as unknown as { _speakTimer?: number })._speakTimer = speakTimer;
+    } catch (err) {
+      console.error('joinRoom failed:', err);
+      if (err instanceof Error && err.name === 'NotAllowedError') {
+        setError('Microphone access was denied. Please allow the microphone and try again.');
+      } else if (err instanceof Error && /permission_denied/i.test(err.message)) {
+        setError('Could not reach the voice server (permission denied). The database rules need to be published — see database.rules.json in the project, then Firebase console → Realtime Database → Rules → Publish.');
+      } else {
+        setError(`Could not join the voice room: ${err instanceof Error ? err.message : 'unknown error'}`);
       }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, makeOffer, handleRemoteOffer, handleRemoteAnswer, handleRemoteICECandidate]);
-
-  // Toggle mute
-  const toggleMute = async () => {
-    if (localStreamRef.current) {
-      const audioTracks = localStreamRef.current.getAudioTracks();
-      audioTracks.forEach(track => {
-        track.enabled = !track.enabled;
-      });
-
-      const newMutedState = !isMuted;
-      setIsMuted(newMutedState);
-
-      // Update mute status in database
-      if (user) {
-        const participantRef = ref(rtdb, `voiceRooms/${roomIdRef.current}/participants/${user.uid}`);
-        await update(participantRef, {
-          isMuted: newMutedState
-        });
-      }
-
-      setAudioStats(newMutedState ? '🔇 Microphone muted' : '🎤 Microphone active');
+    } finally {
+      setJoining(false);
     }
-  };
+  }, [makeOffer, handleRemoteOffer, handleRemoteAnswer, handleRemoteICECandidate, cleanupPeer, setSpeaking]);
 
-  // Leave room
-  const leaveRoom = async () => {
-    // Stop all audio tracks
-    if (localStreamRef.current) {
-      localStreamRef.current.getTracks().forEach(track => track.stop());
-    }
+  const leaveRoom = useCallback(async () => {
+    const me = userRef.current;
+    joinedRef.current = false;
 
-    // Close peer connections
-    Object.values(peerConnectionsRef.current).forEach(pc => {
-      pc.close();
+    // Stop listeners
+    listenersRef.current.forEach(unsub => {
+      try { (unsub as Unsubscribe)(); } catch { /* noop */ }
     });
+    const timer = (listenersRef.current as unknown as { _speakTimer?: number })._speakTimer;
+    if (timer) window.clearInterval(timer);
+    listenersRef.current = [];
 
-    // Remove from database
-    if (user) {
-      const participantRef = ref(rtdb, `voiceRooms/${roomIdRef.current}/participants/${user.uid}`);
-      await remove(participantRef);
+    // Close all peer connections
+    for (const peerId of Array.from(peerConnectionsRef.current.keys())) cleanupPeer(peerId);
+
+    // Stop mic
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach(t => t.stop());
+      localStreamRef.current = null;
+    }
+    if (audioCtxRef.current) {
+      audioCtxRef.current.close().catch(() => {});
+      audioCtxRef.current = null;
+    }
+    localAnalyserRef.current = null;
+    speakingRef.current.clear();
+
+    // Remove presence + stale signaling
+    if (me) {
+      await Promise.all([
+        remove(roomRef(`participants/${me.uid}`)),
+        remove(roomRef(`offers/${me.uid}`)),
+        remove(roomRef(`answers/${me.uid}`)),
+        remove(roomRef(`iceCandidates/${me.uid}`)),
+      ]).catch(() => {});
     }
 
+    setJoined(false);
+    setConnectedPeers([]);
     navigate('/hangout');
-  };
+  }, [cleanupPeer, navigate]);
 
-  if (isLoading) {
+  // Safety net: clean up if the component unmounts while joined
+  useEffect(() => {
+    const pcs = peerConnectionsRef.current;
+    const audios = remoteAudiosRef.current;
+    const localStream = localStreamRef.current;
+    return () => {
+      if (joinedRef.current) {
+        joinedRef.current = false;
+        listenersRef.current.forEach(unsub => {
+          try { (unsub as Unsubscribe)(); } catch { /* noop */ }
+        });
+        const timer = (listenersRef.current as unknown as { _speakTimer?: number })._speakTimer;
+        if (timer) window.clearInterval(timer);
+        pcs.forEach(pc => { try { pc.close(); } catch { /* noop */ } });
+        pcs.clear();
+        audios.forEach(a => { try { a.pause(); } catch { /* noop */ } });
+        audios.clear();
+        if (localStream) localStream.getTracks().forEach(t => t.stop());
+        const me = userRef.current;
+        if (me) remove(roomRef(`participants/${me.uid}`)).catch(() => {});
+      }
+    };
+  }, []);
+
+  const toggleMute = useCallback(async () => {
+    const me = userRef.current;
+    if (!localStreamRef.current || !me) return;
+    const newMuted = !isMuted;
+    localStreamRef.current.getAudioTracks().forEach(t => { t.enabled = !newMuted; });
+    setIsMuted(newMuted);
+    setSpeaking('me', false);
+    await update(roomRef(`participants/${me.uid}`), { isMuted: newMuted }).catch(() => {});
+  }, [isMuted, setSpeaking]);
+
+  // ---------- UI ----------
+  if (!authReady) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#f3f4f6'
-      }}>
-        <div style={{
-          textAlign: 'center'
-        }}>
-          <div style={{
-            fontSize: '3rem',
-            marginBottom: '1rem',
-            animation: 'pulse 2s infinite'
-          }}>🎙️</div>
-          <p style={{
-            fontSize: '1.1rem',
-            color: '#6b7280'
-          }}>{currentStep}</p>
-        </div>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f3f4f6' }}>
+        <p style={{ fontSize: '1.1rem', color: '#6b7280' }}>Loading…</p>
       </div>
     );
   }
 
-  if (error) {
+  // ---- Join screen (the tap is what unlocks audio on mobile browsers) ----
+  if (!joined) {
+    const othersCount = participants.filter(p => p.id !== user?.uid).length;
     return (
       <div style={{
         minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#f3f4f6'
+        background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        padding: '2rem',
       }}>
         <div style={{
-          background: '#fee2e2',
-          border: '1px solid #fca5a5',
-          borderRadius: '8px',
-          padding: '2rem',
-          maxWidth: '500px',
-          textAlign: 'center'
+          background: '#ffffff', borderRadius: '20px', padding: '2.5rem 2rem',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.1)', maxWidth: '420px', width: '100%', textAlign: 'center',
         }}>
-          <p style={{
-            color: '#991b1b',
-            fontSize: '1rem',
-            marginBottom: '1rem'
-          }}>❌ {error}</p>
+          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔥</div>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#991b1b', margin: '0 0 0.5rem 0' }}>
+            Happening Now
+          </h1>
+          <p style={{ fontSize: '1rem', color: '#6b7280', margin: '0 0 1.5rem 0' }}>
+            {othersCount > 0
+              ? `🟢 ${othersCount} friend${othersCount === 1 ? '' : 's'} ${othersCount === 1 ? 'is' : 'are'} in the room right now`
+              : 'The room is quiet — be the first one in! 🎉'}
+          </p>
+          {error && (
+            <div style={{
+              background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px',
+              padding: '0.75rem', marginBottom: '1rem', fontSize: '0.85rem', color: '#991b1b', textAlign: 'left',
+            }}>
+              {error}
+            </div>
+          )}
+          <button
+            onClick={joinRoom}
+            disabled={joining}
+            style={{
+              background: joining ? '#9ca3af' : 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+              color: '#ffffff', border: 'none', borderRadius: '12px',
+              padding: '1.1rem 2rem', fontSize: '1.15rem', fontWeight: 700,
+              cursor: joining ? 'default' : 'pointer', width: '100%',
+              boxShadow: '0 4px 12px rgba(220,38,38,0.3)',
+            }}
+          >
+            {joining ? 'Joining…' : '🎙️ Join Voice Chat'}
+          </button>
+          <p style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '1rem' }}>
+            You'll be asked for microphone access.
+          </p>
           <button
             onClick={() => navigate('/hangout')}
-            style={{
-              background: '#dc2626',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '0.75rem 1.5rem',
-              fontSize: '1rem',
-              cursor: 'pointer',
-              marginRight: '0.5rem'
-            }}
+            style={{ background: 'none', border: 'none', color: '#6b7280', fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.5rem' }}
           >
-            Back to Hangout
-          </button>
-          <button
-            onClick={() => {
-              setError(null);
-              setIsLoading(true);
-              window.location.reload();
-            }}
-            style={{
-              background: '#3b82f6',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '0.75rem 1.5rem',
-              fontSize: '1rem',
-              cursor: 'pointer'
-            }}
-          >
-            Try Again
+            ← Back to Hangout
           </button>
         </div>
+        <div style={{ height: '80px' }} />
+        <BottomNavigation />
       </div>
     );
   }
+
+  // ---- In-room UI ----
+  const others = participants.filter(p => p.id !== user?.uid);
+
+  const statusFor = (p: Participant, id: string) =>
+    p.isMuted ? '🔇 Muted' : isSpeaking(id) ? '🎤 Speaking' : '🎧 Listening';
+
+  const cardStyle = (speaking: boolean, highlight: string): React.CSSProperties => ({
+    display: 'flex', alignItems: 'center', padding: '1rem',
+    background: '#f9fafb', borderRadius: '12px', marginBottom: '0.75rem',
+    border: '1px solid #e5e7eb',
+    boxShadow: speaking ? `0 0 0 3px ${highlight}, 0 4px 12px rgba(0,0,0,0.1)` : 'none',
+    transition: 'box-shadow 0.2s ease',
+  });
 
   return (
     <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
-      padding: '2rem',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      padding: '1.25rem',
+      paddingBottom: '96px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     }}>
-      <div style={{
-        maxWidth: 1000,
-        margin: '0 auto'
-      }}>
+      <div style={{ maxWidth: 560, margin: '0 auto' }}>
         {/* Header */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '2rem'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <h1 style={{
-              fontSize: '2rem',
-              fontWeight: 700,
-              margin: 0,
-              color: '#991b1b'
-            }}>
-              🔥 Happening Now - Voice Room
-            </h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+          <h1 style={{ fontSize: '1.4rem', fontWeight: 700, margin: 0, color: '#991b1b' }}>
+            🔥 Happening Now
+          </h1>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.4rem 0.9rem', borderRadius: '20px',
+            background: connectedPeers.length > 0 || others.length === 0 ? '#dcfce7' : '#fef3c7',
+            border: '1px solid #16a34a',
+          }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#16a34a' }} />
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#15803d' }}>
+              {others.length === 0 ? 'Live' : `${connectedPeers.length}/${others.length} connected`}
+            </span>
+          </div>
+        </div>
+
+        {error && (
+          <div style={{
+            background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px',
+            padding: '0.75rem', marginBottom: '1rem', fontSize: '0.85rem', color: '#991b1b',
+          }}>
+            {error}
+          </div>
+        )}
+
+        {/* Participants */}
+        <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', marginBottom: '1.25rem' }}>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0', color: '#1f2937' }}>
+            👥 In the room ({participants.length})
+          </h2>
+
+          {/* You */}
+          <div style={cardStyle(isSpeaking('me'), '#3b82f6')}>
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.5rem 1rem',
-              borderRadius: '20px',
-              background: connectionStatus === 'connected' ? '#dcfce7' : 
-                         connectionStatus === 'error' ? '#fee2e2' : '#fef3c7',
-              border: `1px solid ${
-                connectionStatus === 'connected' ? '#16a34a' : 
-                connectionStatus === 'error' ? '#dc2626' : '#f59e0b'
-              }`
+              width: '48px', height: '48px', borderRadius: '50%',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
             }}>
-              <div style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: connectionStatus === 'connected' ? '#16a34a' : 
-                           connectionStatus === 'error' ? '#dc2626' : '#f59e0b',
-                animation: connectionStatus === 'connecting' ? 'pulse 2s infinite' : 'none'
-              }}></div>
-              <span style={{
-                fontSize: '0.85rem',
-                fontWeight: 600,
-                color: connectionStatus === 'connected' ? '#15803d' : 
-                       connectionStatus === 'error' ? '#991b1b' : '#92400e'
-              }}>
-                {connectionStatus === 'connected' ? 'Connected' : 
-                 connectionStatus === 'error' ? 'Connection Error' : 'Connecting...'}
-              </span>
+              {user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || '?'}
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ margin: '0 0 0.25rem 0', fontWeight: 600, color: '#1f2937' }}>
+                {user?.displayName || user?.email} (You)
+              </p>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>
+                {isMuted ? '🔇 Muted' : isSpeaking('me') ? '🎤 Speaking' : '🎧 Listening'}
+              </p>
             </div>
           </div>
+
+          {others.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '1.5rem', color: '#6b7280' }}>
+              <p style={{ margin: 0 }}>No one else here yet — share the Hangout and get them in! 🎉</p>
+            </div>
+          ) : others.map(p => (
+            <div key={p.id} style={cardStyle(isSpeaking(p.id), '#22c55e')}>
+              <div style={{
+                width: '48px', height: '48px', borderRadius: '50%',
+                background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#fff', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
+              }}>
+                {p.name?.[0]?.toUpperCase() || '?'}
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: '0 0 0.25rem 0', fontWeight: 600, color: '#1f2937' }}>{p.name}</p>
+                <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>{statusFor(p, p.id)}</p>
+              </div>
+              {connectedPeers.includes(p.id) && (
+                <span style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 600 }}>● live</span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Controls */}
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <button
+            onClick={toggleMute}
+            style={{
+              flex: 1,
+              background: isMuted ? '#10b981' : '#374151',
+              color: '#fff', border: 'none', borderRadius: '14px',
+              padding: '1.1rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+            }}
+          >
+            {isMuted ? '🔓 Unmute' : '🔇 Mute'}
+          </button>
           <button
             onClick={leaveRoom}
             style={{
-              background: '#dc2626',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '0.75rem 1.5rem',
-              fontSize: '1rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#b91c1c';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#dc2626';
+              flex: 1,
+              background: '#dc2626', color: '#fff', border: 'none', borderRadius: '14px',
+              padding: '1.1rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
             }}
           >
-            Leave Room
+            👋 Leave
           </button>
         </div>
 
-        {/* Main Container */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : '1fr 1fr',
-          gap: '2rem',
-          marginBottom: '2rem'
+          background: '#dbeafe', border: '1px solid #93c5fd', borderRadius: '12px',
+          padding: '1rem', marginTop: '1.25rem',
         }}>
-          {/* Participants List */}
-          <div style={{
-            background: '#ffffff',
-            borderRadius: '12px',
-            padding: '1.5rem',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-          }}>
-            <h2 style={{
-              fontSize: '1.3rem',
-              fontWeight: 700,
-              margin: '0 0 1.5rem 0',
-              color: '#1f2937'
-            }}>
-              👥 Participants ({participants.length + 1})
-            </h2>
-
-            {/* You */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '1rem',
-              background: '#eff6ff',
-              borderRadius: '8px',
-              marginBottom: '1rem',
-              border: '2px solid #3b82f6'
-            }}>
-              <div style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #1f2937 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ffffff',
-                fontWeight: 600,
-                fontSize: '1.2rem',
-                marginRight: '1rem',
-                flexShrink: 0
-              }}>
-                {user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || '?'}
-              </div>
-              <div style={{ flex: 1 }}>
-                <p style={{
-                  margin: '0 0 0.25rem 0',
-                  fontWeight: 600,
-                  color: '#1f2937'
-                }}>
-                  {user?.displayName || user?.email} (You)
-                </p>
-                <p style={{
-                  margin: 0,
-                  fontSize: '0.85rem',
-                  color: '#6b7280'
-                }}>
-                  {isMuted ? '🔇 Muted' : '🎤 Speaking'}
-                </p>
-              </div>
-            </div>
-
-            {/* Other Participants */}
-            {participants.length === 0 ? (
-              <div style={{
-                textAlign: 'center',
-                padding: '2rem',
-                color: '#6b7280'
-              }}>
-                <p style={{ fontSize: '1rem', margin: 0 }}>No other participants yet</p>
-                <p style={{ fontSize: '0.85rem', margin: '0.5rem 0 0 0' }}>Be the first one here! 🎉</p>
-              </div>
-            ) : (
-              participants.map(participant => (
-                <div
-                  key={participant.id}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '1rem',
-                    background: '#f9fafb',
-                    borderRadius: '8px',
-                    marginBottom: '1rem',
-                    border: '1px solid #e5e7eb'
-                  }}
-                >
-                  <div style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#ffffff',
-                    fontWeight: 600,
-                    fontSize: '1.2rem',
-                    marginRight: '1rem',
-                    flexShrink: 0
-                  }}>
-                    {participant.name?.[0]?.toUpperCase() || '?'}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <p style={{
-                      margin: '0 0 0.25rem 0',
-                      fontWeight: 600,
-                      color: '#1f2937'
-                    }}>
-                      {participant.name}
-                    </p>
-                    <p style={{
-                      margin: 0,
-                      fontSize: '0.85rem',
-                      color: '#6b7280'
-                    }}>
-                      {participant.isMuted ? '🔇 Muted' : '🎤 Speaking'}
-                    </p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-
-          {/* Controls */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.5rem'
-          }}>
-            {/* Audio Status */}
-            <div style={{
-              background: '#ffffff',
-              borderRadius: '12px',
-              padding: '2rem',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-              textAlign: 'center'
-            }}>
-              <div style={{
-                fontSize: '4rem',
-                marginBottom: '1rem',
-                animation: isMuted ? 'none' : 'pulse 1s infinite'
-              }}>
-                {isMuted ? '🔇' : '🎤'}
-              </div>
-              <p style={{
-                fontSize: '1.2rem',
-                fontWeight: 600,
-                color: '#1f2937',
-                margin: '0 0 0.5rem 0'
-              }}>
-                {isMuted ? 'Microphone Off' : 'Microphone On'}
-              </p>
-              <p style={{
-                fontSize: '0.9rem',
-                color: '#6b7280',
-                margin: 0
-              }}>
-                {isMuted ? 'Your voice is muted' : 'You are speaking'}
-              </p>
-            </div>
-
-            {/* Audio Stats */}
-            <div style={{
-              background: '#fef3c7',
-              border: '1px solid #fcd34d',
-              borderRadius: '12px',
-              padding: '1rem',
-              textAlign: 'center'
-            }}>
-              <p style={{
-                margin: 0,
-                fontSize: '0.95rem',
-                color: '#78350f',
-                fontWeight: 600
-              }}>
-                {audioStats}
-              </p>
-            </div>
-
-            {/* Mute/Unmute Button */}
-            <button
-              onClick={toggleMute}
-              style={{
-                background: isMuted ? '#10b981' : '#ef4444',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '12px',
-                padding: '1.5rem',
-                fontSize: '1.1rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.75rem'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              <span style={{ fontSize: '1.5rem' }}>
-                {isMuted ? '🔓' : '🔒'}
-              </span>
-              {isMuted ? 'Unmute' : 'Mute'}
-            </button>
-
-            {/* Debug Info */}
-            <div style={{
-              background: '#f3f4f6',
-              border: '1px solid #d1d5db',
-              borderRadius: '12px',
-              padding: '1.5rem'
-            }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '0.75rem'
-              }}>
-                <p style={{
-                  fontSize: '0.95rem',
-                  color: '#374151',
-                  margin: 0,
-                  fontWeight: 600
-                }}>
-                  🔧 Connection Status
-                </p>
-                <button
-                  onClick={() => window.location.reload()}
-                  style={{
-                    background: '#6b7280',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '4px',
-                    padding: '0.25rem 0.5rem',
-                    fontSize: '0.75rem',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Refresh
-                </button>
-              </div>
-              <div style={{
-                fontSize: '0.8rem',
-                color: '#6b7280',
-                lineHeight: '1.6'
-              }}>
-                <p>Room ID: {debugInfo.roomId}</p>
-                <p>User ID: {debugInfo.userId || 'Not set'}</p>
-                <p>Participants Found: {debugInfo.participantsCount}</p>
-                <p>Peer Connections: {Object.keys(peerConnectionsRef.current).length}</p>
-                <p>Remote Streams: {Object.keys(remoteStreamsRef.current).length}</p>
-                <p>Database: {debugInfo.databaseConnected ? '✅ Connected' : '⚠️ Limited Mode'}</p>
-                {debugInfo.participantsCount === 0 && debugInfo.databaseConnected && (
-                  <p style={{ color: '#f59e0b', fontWeight: 600, marginTop: '0.5rem' }}>
-                    💡 No other participants yet - invite friends!
-                  </p>
-                )}
-                {!debugInfo.databaseConnected && (
-                  <div style={{ 
-                    marginTop: '0.5rem',
-                    padding: '0.75rem',
-                    background: '#fef3c7',
-                    borderRadius: '6px',
-                    border: '1px solid #fcd34d'
-                  }}>
-                    <p style={{ color: '#92400e', fontWeight: 600, margin: '0 0 0.5rem 0' }}>
-                      ℹ️ Database Not Connected
-                    </p>
-                    <p style={{ color: '#78350f', fontSize: '0.75rem', margin: 0 }}>
-                      Voice room is in limited mode. To enable multi-user features, update Firebase Realtime Database rules. Check FIREBASE_SETUP.md for instructions.
-                    </p>
-                  </div>
-                )}
-                {debugInfo.participantsCount > 0 && Object.keys(peerConnectionsRef.current).length === 0 && (
-                  <p style={{ color: '#f59e0b', fontWeight: 600, marginTop: '0.5rem' }}>
-                    🔄 Establishing connections...
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Info Box */}
-            <div style={{
-              background: '#dbeafe',
-              border: '1px solid #93c5fd',
-              borderRadius: '12px',
-              padding: '1.5rem'
-            }}>
-              <p style={{
-                fontSize: '0.95rem',
-                color: '#1e40af',
-                margin: '0 0 0.75rem 0',
-                fontWeight: 600
-              }}>
-                💡 Getting Started
-              </p>
-              <ul style={{
-                margin: 0,
-                paddingLeft: '1.5rem',
-                fontSize: '0.85rem',
-                color: '#1e3a8a',
-                lineHeight: '1.6'
-              }}>
-                <li>Make sure microphone permission is granted</li>
-                <li>Unmute to speak to others</li>
-                <li>You'll hear others when they speak</li>
-                <li>Mute when not speaking to save bandwidth</li>
-                <li>Click "Leave Room" to exit</li>
-              </ul>
-            </div>
-          </div>
+          <p style={{ fontSize: '0.85rem', color: '#1e40af', margin: 0, lineHeight: 1.6 }}>
+            💡 <strong>Tip:</strong> keep the tab open while chatting. Mute yourself when you're just
+            listening. If someone can't hear you, both of you leaving and rejoining fixes most issues.
+          </p>
         </div>
-
-        {/* Hidden Audio Element */}
-        <audio
-          ref={localAudioRef}
-          autoPlay
-          muted
-          style={{ display: 'none' }}
-        />
       </div>
 
-      <style>{`
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.7;
-          }
-        }
-      `}</style>
-      {/* Spacer so content isn't hidden behind the bottom nav */}
-      <div style={{ height: '80px' }} />
       <BottomNavigation />
     </div>
   );
