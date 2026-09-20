@@ -48,10 +48,7 @@ const Stories: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setAuthLoading(false);
-
-      if (!currentUser) {
-        navigate('/');
-      }
+      // Logged-out visitors can still view stories via shared permalinks
     });
 
     return () => unsubscribe();
@@ -80,11 +77,10 @@ const Stories: React.FC = () => {
       return;
     }
 
-    if (!user) {
-      navigate('/');
-      return;
+    if (user) {
+      fetchUserProfile();
     }
-    fetchUserProfile();
+    // Stories are publicly readable so shared permalinks work without login
     fetchStories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, navigate, authLoading]);
@@ -199,7 +195,7 @@ const Stories: React.FC = () => {
       setCurrentView('topics');
       setSelectedTopic('all');
     } else {
-      navigate('/dashboard');
+      navigate(user ? '/dashboard' : '/');
     }
   };
 
@@ -351,9 +347,8 @@ const Stories: React.FC = () => {
     );
   }
 
-  if (!user) {
-    return null; // Will be redirected by useEffect
-  }
+  // Logged-out visitors can view stories (via shared permalinks); only
+  // logged-in users see add/edit/like controls.
 
   return (
     <div style={{
@@ -420,7 +415,7 @@ const Stories: React.FC = () => {
           </h1>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {currentView === 'stories' && (
+            {currentView === 'stories' && user && (
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
                 style={{
@@ -678,6 +673,7 @@ const Stories: React.FC = () => {
               <p style={{ fontSize: '14px', fontWeight: 400, lineHeight: '1.4', color: '#65676B', marginBottom: '16px' }}>
                 Be the first to share a story!
               </p>
+              {user && (
               <button
                 onClick={() => setShowAddForm(true)}
                 style={{
@@ -704,6 +700,7 @@ const Stories: React.FC = () => {
               >
                 📝 Write First Story
               </button>
+              )}
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -903,7 +900,7 @@ const Stories: React.FC = () => {
 
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
                         {/* Edit button - only show to story author */}
-                        {story.authorEmail === user?.email && (
+                        {user && story.authorEmail === user.email && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -935,6 +932,7 @@ const Stories: React.FC = () => {
                           </button>
                         )}
 
+                        {user ? (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -965,6 +963,19 @@ const Stories: React.FC = () => {
                         >
                           ♥ {story.likes}
                         </button>
+                        ) : (
+                          <span style={{
+                            border: '1px solid #E4E6EA',
+                            borderRadius: '8px',
+                            padding: '6px 12px',
+                            fontSize: '12px',
+                            fontWeight: 500,
+                            color: '#65676B',
+                            flexShrink: 0
+                          }}>
+                            ♥ {story.likes}
+                          </span>
+                        )}
                       </div>
                     </div>
                   )}
