@@ -14,6 +14,10 @@ import RoyalBank from './RoyalBank';
 import VoiceRoom from './VoiceRoom';
 import OurTrips from './OurTrips';
 import Krabi from './Krabi';
+import Baku from './Baku';
+import September7th2025Meeting from './September7th2025Meeting';
+import October5th2025Meeting from './October5th2025Meeting';
+import November2nd2025Meeting from './November2nd2025Meeting';
 
 function App() {
   return (
@@ -29,9 +33,14 @@ function App() {
         <Route path="/hangout" element={<Hangout />} />
         <Route path="/power-group" element={<PowerGroup />} />
         <Route path="/meeting-minutes" element={<MeetingMinutes />} />
+        <Route path="/meeting-minutes/september-7th-2025" element={<September7th2025Meeting />} />
+        <Route path="/meeting-minutes/october-5th-2025" element={<October5th2025Meeting />} />
+        <Route path="/meeting-minutes/november-2nd-2025" element={<November2nd2025Meeting />} />
         <Route path="/royal-bank" element={<RoyalBank />} />
         <Route path="/voice-room" element={<VoiceRoom />} />
         <Route path="/our-trips" element={<OurTrips />} />
+        <Route path="/our-trips/krabi" element={<Krabi />} />
+        <Route path="/our-trips/baku" element={<Baku />} />
         <Route path="/krabi" element={<Krabi />} />
       </Routes>
     </BrowserRouter>

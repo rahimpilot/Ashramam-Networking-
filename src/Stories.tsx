@@ -179,7 +179,6 @@ const Stories: React.FC = () => {
         : [...story.likedBy, user.uid];
 
       await setDoc(doc(db, 'stories', storyId), {
-        ...story,
         likes: updatedLikedBy.length,
         likedBy: updatedLikedBy
       }, { merge: true });

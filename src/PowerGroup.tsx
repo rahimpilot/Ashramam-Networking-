@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import BottomNavigation from './BottomNavigation';
 
 // Add keyframe animation styles
 const styleSheet = document.createElement("style");
@@ -699,6 +700,9 @@ const PowerGroup: React.FC = () => {
           </button>
         </div>
       </div>
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div style={{ height: '80px' }} />
+      <BottomNavigation />
     </div>
   );
 };

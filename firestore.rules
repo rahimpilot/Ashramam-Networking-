@@ -2,14 +2,23 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Admin identity: the account that can approve new signups.
+    // Keep in sync with ADMIN_EMAIL in src/adminConfig.ts
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'mshanir@gmail.com';
+    }
+
     // Critical collections for authentication flow
     match /pendingUsers/{userId} {
       // Allow users to create their own pending user document during signup
       allow create: if request.auth != null && request.auth.uid == userId;
-      // Allow users to read their own pending status
-      allow read: if request.auth != null && request.auth.uid == userId;
-      // Allow admin to read/write all pending users (for approval process)
-      allow read, write: if request.auth != null;
+      // Users can read their own pending status; admin can read any single doc
+      allow get: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      // Listing is restricted: admin sees everything, members only see approved members
+      // (client queries must include where('approved', '==', true))
+      allow list: if isAdmin() || (request.auth != null && resource.data.approved == true);
+      // Only the admin can approve / modify / remove signup requests
+      allow update, delete: if isAdmin();
     }
     
     match /profiles/{userId} {
@@ -32,12 +41,18 @@ service cloud.firestore {
     }
     
     // Community posts/stories - public can read (shared permalinks work in any browser),
-    // authenticated users can create, authors can update/delete
+    // authenticated users can create, authors can edit/delete, anyone logged in can like
     match /stories/{storyId} {
       allow read: if true;
       allow create: if request.auth != null;
-      allow update, delete: if request.auth != null && 
-        (resource.data.authorId == request.auth.uid || request.data.authorId == request.auth.uid);
+      // Authors can update/delete their own stories (matched by author email);
+      // any logged-in user may update only the like counters
+      allow update: if request.auth != null && (
+        request.auth.token.email == resource.data.authorEmail ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes', 'likedBy'])
+      );
+      allow delete: if request.auth != null &&
+        request.auth.token.email == resource.data.authorEmail;
     }
     
     // Hangout/trip planning - authenticated users can read and create, participants can edit

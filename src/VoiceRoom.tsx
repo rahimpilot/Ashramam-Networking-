@@ -3,6 +3,7 @@ import { auth, rtdb } from './firebase';
 import { ref, set, onValue, remove, update } from 'firebase/database';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import BottomNavigation from './BottomNavigation';
 
 interface Participant {
   id: string;
@@ -50,7 +51,7 @@ const VoiceRoom: React.FC = () => {
       } else {
         console.log('❌ User not authenticated, redirecting to login');
         setCurrentStep('Redirecting to login...');
-        navigate('/login');
+        navigate('/');
       }
     });
 
@@ -1063,6 +1064,9 @@ const VoiceRoom: React.FC = () => {
           }
         }
       `}</style>
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div style={{ height: '80px' }} />
+      <BottomNavigation />
     </div>
   );
 };

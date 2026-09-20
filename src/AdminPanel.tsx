@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { db } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { db, auth } from './firebase';
+import { ADMIN_EMAIL } from './adminConfig';
 
 interface PendingUser {
   uid: string;
@@ -12,8 +15,23 @@ const AdminPanel: React.FC = () => {
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [authorized, setAuthorized] = useState(false);
+  const navigate = useNavigate();
+
+  // Only the admin may use this panel (rules enforce it server-side too)
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser && currentUser.email === ADMIN_EMAIL) {
+        setAuthorized(true);
+      } else {
+        navigate('/');
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
   useEffect(() => {
+    if (!authorized) return;
     const fetchPending = async () => {
       setLoading(true);
       setError('');
@@ -38,7 +56,7 @@ const AdminPanel: React.FC = () => {
       }
     };
     fetchPending();
-  }, []);
+  }, [authorized]);
 
   const approveUser = async (uid: string) => {
     setError('');

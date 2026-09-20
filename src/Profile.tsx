@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db } from './firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import BottomNavigation from './BottomNavigation';
 
 const Profile: React.FC = () => {
   const user = auth.currentUser;
@@ -70,6 +71,9 @@ const Profile: React.FC = () => {
       ) : (
         <p>Not logged in.</p>
       )}
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div style={{ height: '80px' }} />
+      <BottomNavigation />
     </div>
   );
 };

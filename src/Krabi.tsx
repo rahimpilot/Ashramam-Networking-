@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BottomNavigation from './BottomNavigation';
 
 interface PhotoComment {
   id: string;
@@ -694,6 +695,9 @@ const Krabi: React.FC = () => {
           to { opacity: 1; }
         }
       `}</style>
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div style={{ height: '80px' }} />
+      <BottomNavigation />
     </div>
   );
 };

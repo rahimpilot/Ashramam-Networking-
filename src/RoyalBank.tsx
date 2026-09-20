@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoanApplicationForm from './LoanApplicationForm';
+import BottomNavigation from './BottomNavigation';
 
 const RoyalBank: React.FC = () => {
   const navigate = useNavigate();
@@ -459,6 +460,9 @@ const RoyalBank: React.FC = () => {
 
       {/* Loan Application Form Modal */}
       <LoanApplicationForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div style={{ height: '80px' }} />
+      <BottomNavigation />
     </div>
   );
 };

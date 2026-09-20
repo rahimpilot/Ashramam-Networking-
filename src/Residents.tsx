@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db } from './firebase';
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
@@ -472,8 +472,9 @@ const Residents: React.FC = () => {
     const fetchResidents = async () => {
       setLoading(true);
       try {
-        // Get approved users from pendingUsers collection
-        const pendingUsersRef = collection(db, 'pendingUsers');
+        // Get approved users from pendingUsers collection (rule requires the
+        // approved-only filter so unapproved signups stay hidden)
+        const pendingUsersRef = query(collection(db, 'pendingUsers'), where('approved', '==', true));
         const pendingSnapshot = await getDocs(pendingUsersRef);
 
         const approvedUsers: ResidentUser[] = [];

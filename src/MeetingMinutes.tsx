@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import BottomNavigation from './BottomNavigation';
 
 const MeetingMinutes: React.FC = () => {
   const navigate = useNavigate();
@@ -222,6 +223,9 @@ const MeetingMinutes: React.FC = () => {
           </button>
         </div>
       </div>
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div style={{ height: '80px' }} />
+      <BottomNavigation />
     </div>
   );
 };
