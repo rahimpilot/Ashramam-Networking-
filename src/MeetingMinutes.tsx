@@ -1,6 +1,51 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
+import PageHeader from './PageHeader';
+
+interface Meeting {
+  path: string;
+  month: string;
+  day: string;
+  title: string;
+  weekday: string;
+  points: number;
+  accent: string;
+  accentBg: string;
+}
+
+const MEETINGS: Meeting[] = [
+  {
+    path: '/meeting-minutes/november-2nd-2025',
+    month: 'NOV',
+    day: '2',
+    title: 'November 2nd, 2025',
+    weekday: 'Sunday',
+    points: 3,
+    accent: '#7C5CBF',
+    accentBg: '#EFE9FA',
+  },
+  {
+    path: '/meeting-minutes/october-5th-2025',
+    month: 'OCT',
+    day: '5',
+    title: 'October 5th, 2025',
+    weekday: 'Sunday',
+    points: 3,
+    accent: '#2563EB',
+    accentBg: '#DBEAFE',
+  },
+  {
+    path: '/meeting-minutes/september-7th-2025',
+    month: 'SEP',
+    day: '7',
+    title: 'September 7th, 2025',
+    weekday: 'Sunday',
+    points: 5,
+    accent: '#059669',
+    accentBg: '#D1FAE5',
+  },
+];
 
 const MeetingMinutes: React.FC = () => {
   const navigate = useNavigate();
@@ -8,223 +53,135 @@ const MeetingMinutes: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#ffffff',
-      padding: window.innerWidth <= 768 ? '1rem 0.5rem' : '2rem 1rem',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      background: '#F6F7F9',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
+      <style>{`
+        .minutes-card { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+        .minutes-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08); }
+        .minutes-card:active { transform: translateY(0); }
+      `}</style>
+
+      <PageHeader title="Meeting Minutes" backTo="/hangout" backLabel="Back to Hangout" />
+
       <div style={{
-        maxWidth: 800,
+        maxWidth: 640,
         margin: '0 auto',
-        padding: window.innerWidth <= 768 ? '0 0.5rem' : '0'
+        padding: '24px 16px 110px 16px'
       }}>
-        {/* Header */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: window.innerWidth <= 768 ? 16 : 20,
-          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-          marginBottom: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-          backdropFilter: 'blur(10px)'
-        }}>
+        {/* Hero */}
+        <div style={{ marginBottom: '20px', padding: '0 4px' }}>
           <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            textAlign: 'center'
+            display: 'inline-block',
+            fontSize: '11px',
+            fontWeight: 700,
+            letterSpacing: '1.5px',
+            color: '#7C5CBF',
+            background: '#EFE9FA',
+            borderRadius: '999px',
+            padding: '5px 12px',
+            marginBottom: '10px'
           }}>
-            {/* Logo */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginBottom: '1rem',
-              width: '100%'
-            }}>
-              <img
-                src="/newlogo.svg"
-                alt="Ashramam Vibes Logo"
-                style={{
-                  height: window.innerWidth <= 768 ? '48px' : '64px',
-                  width: 'auto',
-                  objectFit: 'contain',
-                  filter: 'drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07))'
-                }}
-              />
+            MEETING NOTES
+          </div>
+          <h2 style={{
+            fontSize: '28px',
+            fontWeight: 700,
+            color: '#111318',
+            margin: '0 0 6px 0',
+            letterSpacing: '-0.5px'
+          }}>
+            Minutes of Meeting
+          </h2>
+          <p style={{
+            fontSize: '15px',
+            color: '#6B7280',
+            margin: 0,
+            lineHeight: 1.5
+          }}>
+            What was discussed, decided and laughed about — newest first.
+          </p>
+        </div>
+
+        {/* Meeting list */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {MEETINGS.map((m) => (
+            <div
+              key={m.path}
+              className="minutes-card"
+              onClick={() => navigate(m.path)}
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid #ECEEF1',
+                borderRadius: '16px',
+                padding: '16px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+              }}
+            >
+              {/* Calendar badge */}
+              <div style={{
+                width: '58px',
+                flexShrink: 0,
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: '1px solid #ECEEF1',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  background: m.accent,
+                  color: '#FFFFFF',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  letterSpacing: '1px',
+                  padding: '4px 0'
+                }}>
+                  {m.month}
+                </div>
+                <div style={{
+                  background: '#FFFFFF',
+                  color: '#111318',
+                  fontSize: '22px',
+                  fontWeight: 700,
+                  padding: '6px 0 8px 0',
+                  lineHeight: 1
+                }}>
+                  {m.day}
+                </div>
+              </div>
+
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  color: '#111318',
+                  marginBottom: '3px'
+                }}>
+                  {m.title}
+                </div>
+                <div style={{
+                  fontSize: '13px',
+                  color: '#6B7280'
+                }}>
+                  {m.weekday} · {m.points} discussion points
+                </div>
+              </div>
+
+              <div style={{
+                fontSize: '20px',
+                color: '#C4C9D4',
+                flexShrink: 0
+              }}>
+                ›
+              </div>
             </div>
-            <h1 style={{
-              fontSize: window.innerWidth <= 768 ? '2rem' : '2.5rem',
-              fontWeight: 700,
-              margin: '0 0 1rem 0',
-              color: '#1f2937'
-            }}>
-              Minutes of Meeting
-            </h1>
-          </div>
-        </div>
-
-        {/* Meeting Content */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: window.innerWidth <= 768 ? 16 : 20,
-          padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-          backdropFilter: 'blur(10px)'
-        }}>
-          {/* September 7th 2025 Meeting Tile */}
-          <div style={{
-            background: 'linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)',
-            borderRadius: window.innerWidth <= 768 ? 12 : 16,
-            padding: window.innerWidth <= 768 ? '2rem 1rem' : '2.5rem 1.5rem',
-            textAlign: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            border: '2px solid #6366f1',
-            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)',
-            marginBottom: '1rem'
-          }}
-          onClick={() => navigate('/meeting-minutes/september-7th-2025')}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 8px 25px rgba(99, 102, 241, 0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 12px rgba(99, 102, 241, 0.2)';
-          }}
-          >
-            <h3 style={{
-              fontSize: window.innerWidth <= 768 ? '1.4rem' : '1.6rem',
-              fontWeight: 700,
-              margin: '0 0 0.5rem 0',
-              color: '#4f46e5'
-            }}>
-              September 7th 2025
-            </h3>
-            <p style={{
-              fontSize: '0.95rem',
-              color: '#4f46e5',
-              margin: 0,
-              fontWeight: 500
-            }}>
-              Meeting minutes and discussions
-            </p>
-          </div>
-
-          {/* October 5th 2025 Meeting Tile */}
-          <div style={{
-            background: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)',
-            borderRadius: window.innerWidth <= 768 ? 12 : 16,
-            padding: window.innerWidth <= 768 ? '2rem 1rem' : '2.5rem 1.5rem',
-            textAlign: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            border: '2px solid #3b82f6',
-            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)',
-            marginBottom: '1rem'
-          }}
-          onClick={() => navigate('/meeting-minutes/october-5th-2025')}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.2)';
-          }}
-          >
-            <h3 style={{
-              fontSize: window.innerWidth <= 768 ? '1.4rem' : '1.6rem',
-              fontWeight: 700,
-              margin: '0 0 0.5rem 0',
-              color: '#1e40af'
-            }}>
-              October 5th 2025
-            </h3>
-            <p style={{
-              fontSize: '0.95rem',
-              color: '#1d4ed8',
-              margin: 0,
-              fontWeight: 500
-            }}>
-              Meeting minutes and discussions
-            </p>
-          </div>
-
-          {/* November 2nd 2025 Meeting Tile */}
-          <div style={{
-            background: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)',
-            borderRadius: window.innerWidth <= 768 ? 12 : 16,
-            padding: window.innerWidth <= 768 ? '2rem 1rem' : '2.5rem 1.5rem',
-            textAlign: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            border: '2px solid #16a34a',
-            boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)',
-            marginBottom: '1rem'
-          }}
-          onClick={() => navigate('/meeting-minutes/november-2nd-2025')}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = '0 8px 25px rgba(22, 163, 74, 0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 12px rgba(22, 163, 74, 0.2)';
-          }}
-          >
-            <h3 style={{
-              fontSize: window.innerWidth <= 768 ? '1.4rem' : '1.6rem',
-              fontWeight: 700,
-              margin: '0 0 0.5rem 0',
-              color: '#166534'
-            }}>
-              November 2nd 2025
-            </h3>
-            <p style={{
-              fontSize: '0.95rem',
-              color: '#15803d',
-              margin: 0,
-              fontWeight: 500
-            }}>
-              Meeting minutes and discussions
-            </p>
-          </div>
-        </div>
-
-        {/* Back Button */}
-        <div style={{
-          textAlign: 'center',
-          marginTop: window.innerWidth <= 768 ? '1.5rem' : '2rem'
-        }}>
-          <button
-            onClick={() => navigate('/hangout')}
-            style={{
-              background: 'linear-gradient(135deg, #1f2937 0%, #374151 100%)',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: 25,
-              padding: '0.75rem 2rem',
-              fontSize: '1rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
-            }}
-          >
-            ← Back to Hangout
-          </button>
+          ))}
         </div>
       </div>
-      {/* Spacer so content isn't hidden behind the bottom nav */}
-      <div style={{ height: '80px' }} />
+
       <BottomNavigation />
     </div>
   );
