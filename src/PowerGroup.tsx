@@ -1,40 +1,6 @@
 import React from 'react';
-import PageHeader from './PageHeader';
+import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
-
-interface MemberTheme {
-  badge: string;
-  coin: string;
-  text: string;
-  glow: string;
-}
-
-const THEMES: MemberTheme[] = [
-  {
-    badge: '👑',
-    coin: 'radial-gradient(circle at 30% 30%, #8f7bf0, #4a3a9e 55%, #241a5e)',
-    text: '#ffe9a3',
-    glow: 'rgba(143, 123, 240, 0.45)',
-  },
-  {
-    badge: '💰',
-    coin: 'radial-gradient(circle at 30% 30%, #ffe9a3, #f5c542 48%, #a8740a)',
-    text: '#5c3d00',
-    glow: 'rgba(245, 197, 66, 0.5)',
-  },
-  {
-    badge: '💎',
-    coin: 'radial-gradient(circle at 30% 30%, #e6f9ff, #9bdcf5 52%, #3d8fc2)',
-    text: '#0b3b5c',
-    glow: 'rgba(155, 220, 245, 0.45)',
-  },
-  {
-    badge: '💵',
-    coin: 'radial-gradient(circle at 30% 30%, #c4f5d2, #52c47e 55%, #1c6e38)',
-    text: '#08331b',
-    glow: 'rgba(82, 196, 126, 0.45)',
-  },
-];
 
 const MEMBERS = [
   'Niaz Kamaru',
@@ -43,201 +9,220 @@ const MEMBERS = [
   'Mohasin Ali',
 ];
 
-const SPARKLES = [
-  { left: '6%', delay: '0s', duration: '11s', size: '1.1rem', char: '💸' },
-  { left: '18%', delay: '2.5s', duration: '13s', size: '0.9rem', char: '✨' },
-  { left: '32%', delay: '1s', duration: '10s', size: '1.2rem', char: '🪙' },
-  { left: '47%', delay: '4s', duration: '14s', size: '0.85rem', char: '✨' },
-  { left: '61%', delay: '0.8s', duration: '12s', size: '1.1rem', char: '💸' },
-  { left: '74%', delay: '3.2s', duration: '11s', size: '0.9rem', char: '🪙' },
-  { left: '88%', delay: '1.8s', duration: '15s', size: '1rem', char: '✨' },
-];
-
 const PowerGroup: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div
       style={{
         minHeight: '100vh',
-        background: 'linear-gradient(180deg, #0d2417 0%, #08130d 60%, #050b08 100%)',
+        background:
+          'radial-gradient(120% 55% at 50% 0%, #2b2113 0%, #0b0b0d 58%) #0b0b0d',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        position: 'relative',
-        overflow: 'hidden',
+        color: '#f5eeda',
       }}
     >
       <style>{`
-        @keyframes pgSlideUp {
-          from { opacity: 0; transform: translateY(24px) scale(0.96); }
+        @keyframes pgCardIn {
+          from { opacity: 0; transform: translateY(26px) scale(0.97); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyframes pgShine {
-          0% { transform: translateX(-160%) skewX(-18deg); }
-          55%, 100% { transform: translateX(260%) skewX(-18deg); }
-        }
-        @keyframes pgRise {
-          0% { transform: translateY(20vh) rotate(0deg); opacity: 0; }
-          12% { opacity: 0.55; }
-          88% { opacity: 0.4; }
-          100% { transform: translateY(-110vh) rotate(40deg); opacity: 0; }
-        }
-        @keyframes pgGlowPulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.0); }
-          50% { box-shadow: 0 0 26px 4px rgba(245, 197, 66, 0.25); }
+        @keyframes pgSheen {
+          0% { transform: translateX(-170%) skewX(-18deg); }
+          60%, 100% { transform: translateX(280%) skewX(-18deg); }
         }
       `}</style>
 
-      {/* Floating money sparkles (decor only) */}
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-        {SPARKLES.map((s, i) => (
-          <span
-            key={i}
-            style={{
-              position: 'absolute',
-              bottom: '-8vh',
-              left: s.left,
-              fontSize: s.size,
-              opacity: 0,
-              animation: `pgRise ${s.duration} linear ${s.delay} infinite`,
-            }}
-          >
-            {s.char}
-          </span>
-        ))}
-      </div>
-
-      <PageHeader title="💰 Power Group" backTo="/hangout" backLabel="Back to Hangout" />
-
+      {/* Dark header matching the black-card theme */}
       <div
         style={{
-          maxWidth: 640,
-          margin: '0 auto',
-          padding: '28px 16px 0 16px',
-          position: 'relative',
-          zIndex: 1,
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          background: 'rgba(11, 11, 13, 0.92)',
+          backdropFilter: 'blur(6px)',
+          borderBottom: '1px solid rgba(212, 175, 55, 0.22)',
         }}
       >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            maxWidth: 640,
+            margin: '0 auto',
+            height: '60px',
+            padding: '0 8px 0 4px',
+          }}
+        >
+          <button
+            onClick={() => navigate('/hangout')}
+            aria-label="Back to Hangout"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#f5c542',
+              fontSize: '26px',
+              cursor: 'pointer',
+              width: '44px',
+              height: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            ‹
+          </button>
+          <h1
+            style={{
+              flex: 1,
+              minWidth: 0,
+              textAlign: 'center',
+              fontSize: '18px',
+              fontWeight: 700,
+              letterSpacing: '1px',
+              margin: 0,
+              paddingRight: '44px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Power Group
+          </h1>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 640, margin: '0 auto', padding: '22px 18px 0 18px' }}>
         <p
           style={{
             textAlign: 'center',
-            color: 'rgba(255, 233, 163, 0.85)',
-            fontSize: '0.95rem',
-            margin: '0 0 28px 0',
-            lineHeight: 1.5,
+            color: 'rgba(245, 197, 66, 0.75)',
+            fontSize: '0.9rem',
             fontStyle: 'italic',
+            margin: '0 0 24px 0',
           }}
         >
           where money meet needs
         </p>
 
         <div
+          className="pg-card-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
+            gridTemplateColumns: '1fr',
             gap: '16px',
           }}
         >
-          {MEMBERS.map((name, index) => {
-            const theme = THEMES[index % THEMES.length];
-            const initial = name.trim().charAt(0).toUpperCase();
-            return (
+          {MEMBERS.map((name, index) => (
+            <div
+              key={name}
+              style={{
+                borderRadius: '14px',
+                padding: '18px 20px',
+                background:
+                  'linear-gradient(135deg, #232328 0%, #101013 60%, #1b1b20 100%)',
+                border: '1px solid rgba(212, 175, 55, 0.65)',
+                boxShadow:
+                  '0 10px 26px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08)',
+                aspectRatio: '1.586',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                position: 'relative',
+                overflow: 'hidden',
+                animation: `pgCardIn 0.5s ease ${index * 0.1}s both`,
+              }}
+            >
+              {/* Sheen sweep */}
               <div
-                key={name}
+                aria-hidden="true"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.045)',
-                  border: '1px solid rgba(212, 175, 55, 0.35)',
-                  borderRadius: '20px',
-                  padding: '26px 12px 20px 12px',
+                  position: 'absolute',
+                  top: '-20%',
+                  bottom: '-20%',
+                  width: '34%',
+                  background:
+                    'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,235,180,0.14) 50%, rgba(255,255,255,0) 100%)',
+                  animation: `pgSheen 5s ease-in-out ${index * 0.6}s infinite`,
+                  pointerEvents: 'none',
+                }}
+              />
+
+              <div
+                style={{
                   display: 'flex',
-                  flexDirection: 'column',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  gap: '14px',
-                  animation: `pgSlideUp 0.45s ease ${index * 0.09}s both, pgGlowPulse 4s ease ${index * 0.7}s infinite`,
-                  backdropFilter: 'blur(2px)',
                 }}
               >
-                {/* Coin avatar */}
-                <div style={{ position: 'relative', width: '88px', height: '88px' }}>
-                  <div
-                    style={{
-                      width: '88px',
-                      height: '88px',
-                      borderRadius: '50%',
-                      background: theme.coin,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '2.4rem',
-                      fontWeight: 800,
-                      fontFamily: 'Georgia, "Times New Roman", serif',
-                      color: theme.text,
-                      boxShadow: `0 6px 18px ${theme.glow}, inset 0 2px 6px rgba(255,255,255,0.45), inset 0 -3px 8px rgba(0,0,0,0.25)`,
-                      position: 'relative',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {/* Coin reeding ring */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: '9px',
-                        borderRadius: '50%',
-                        border: '2px dashed rgba(255,255,255,0.4)',
-                        pointerEvents: 'none',
-                      }}
-                    />
-                    <span style={{ position: 'relative', zIndex: 1 }}>{initial}</span>
-                    {/* Shine sweep */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '-20%',
-                        bottom: '-20%',
-                        width: '38%',
-                        background:
-                          'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 50%, rgba(255,255,255,0) 100%)',
-                        animation: `pgShine 3.6s ease-in-out ${index * 0.5}s infinite`,
-                        pointerEvents: 'none',
-                      }}
-                    />
-                  </div>
-                  {/* Persona badge */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      right: '-6px',
-                      bottom: '-6px',
-                      width: '34px',
-                      height: '34px',
-                      borderRadius: '50%',
-                      background: '#0d2417',
-                      border: '2px solid rgba(212, 175, 55, 0.8)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '1.15rem',
-                    }}
-                  >
-                    {theme.badge}
-                  </div>
-                </div>
-
-                {/* Name only — no actions */}
-                <div
+                <span
                   style={{
-                    color: '#f5f0dd',
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    textAlign: 'center',
-                    lineHeight: 1.35,
-                    overflowWrap: 'anywhere',
-                    minWidth: 0,
+                    fontSize: '0.62rem',
+                    letterSpacing: '4px',
+                    fontWeight: 800,
+                    color: '#d4af37',
                   }}
                 >
-                  {name}
-                </div>
+                  POWER GROUP
+                </span>
+                <span
+                  style={{
+                    width: '22px',
+                    height: '22px',
+                    borderRadius: '50%',
+                    background:
+                      'radial-gradient(circle at 35% 35%, #ffe9a3, #b8860b)',
+                    boxShadow: '0 0 8px rgba(245, 197, 66, 0.6)',
+                  }}
+                />
               </div>
-            );
-          })}
+
+              <div
+                style={{
+                  width: '40px',
+                  height: '30px',
+                  borderRadius: '6px',
+                  background: 'linear-gradient(135deg, #ffe9a3, #c9971f)',
+                  border: '1px solid rgba(120, 80, 0, 0.55)',
+                  boxShadow: 'inset 0 0 0 4px rgba(120, 80, 0, 0.18)',
+                }}
+              />
+
+              <div
+                style={{
+                  color: 'rgba(240, 230, 200, 0.55)',
+                  letterSpacing: '3px',
+                  fontSize: '0.85rem',
+                }}
+              >
+                •••• •••• •••• {String(index + 1).padStart(4, '0')}
+              </div>
+
+              <div
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 700,
+                  letterSpacing: '2.5px',
+                  textTransform: 'uppercase',
+                  background: 'linear-gradient(180deg, #fff3c4, #d4af37)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                  overflowWrap: 'anywhere',
+                }}
+              >
+                {name}
+              </div>
+            </div>
+          ))}
         </div>
+
+        {/* Two-column grid on wider screens */}
+        <style>{`
+          @media (min-width: 560px) {
+            .pg-card-grid { grid-template-columns: 1fr 1fr !important; }
+          }
+        `}</style>
       </div>
 
       {/* Spacer so content isn't hidden behind the bottom nav */}
