@@ -125,7 +125,7 @@ const PowerGroup: React.FC = () => {
             fontStyle: 'italic',
           }}
         >
-          The money club — membership by net worth only 😎
+          where money meet needs
         </p>
 
         <div
