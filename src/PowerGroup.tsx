@@ -106,6 +106,36 @@ const PowerGroup: React.FC = () => {
         </p>
 
         <div
+          style={{
+            border: '1px solid rgba(212, 175, 55, 0.4)',
+            borderRadius: '14px',
+            background:
+              'linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%)',
+            padding: '18px 20px',
+            marginBottom: '24px',
+            textAlign: 'center',
+          }}
+        >
+          <div style={{ fontSize: '1.4rem', marginBottom: '8px' }}>🏦</div>
+          <p
+            style={{
+              color: '#f0e6c8',
+              fontSize: '0.92rem',
+              lineHeight: 1.65,
+              margin: 0,
+            }}
+          >
+            Meet the Power Group — the backbone of this crew. Officially they
+            focus on leisure; unofficially, naughty activities only. On boys'
+            trips and gatherings, their mission is simple: maximum mischief,
+            zero regrets. They don't care about money — enjoyment only.{' '}
+            <span style={{ color: 'rgba(245, 197, 66, 0.8)', fontStyle: 'italic' }}>
+              (The black cards are purely decorative. Probably.)
+            </span>
+          </p>
+        </div>
+
+        <div
           className="pg-card-grid"
           style={{
             display: 'grid',
