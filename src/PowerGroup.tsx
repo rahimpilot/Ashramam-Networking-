@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 
 const MEMBERS = [
-  'Niaz Kamaru',
-  'Shanir Musliyamveetil',
-  'Hyder Mohamed',
+  'Mohamed Niyas',
+  'Mohammed Shanir Musluyamveettil Kunchimohammed',
+  'Mohamed Hyder',
   'Mohasin Ali',
 ];
 
