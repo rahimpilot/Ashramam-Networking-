@@ -128,10 +128,7 @@ const PowerGroup: React.FC = () => {
             Meet the Power Group — the backbone of this crew. Officially they
             focus on leisure; unofficially, naughty activities only. On boys'
             trips and gatherings, their mission is simple: maximum mischief,
-            zero regrets. They don't care about money — enjoyment only.{' '}
-            <span style={{ color: 'rgba(245, 197, 66, 0.8)', fontStyle: 'italic' }}>
-              (The black cards are just for the photo.)
-            </span>
+            zero regrets. They don't care about money — enjoyment only.
           </p>
         </div>
 
