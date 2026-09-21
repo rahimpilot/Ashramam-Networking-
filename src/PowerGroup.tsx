@@ -130,7 +130,7 @@ const PowerGroup: React.FC = () => {
             trips and gatherings, their mission is simple: maximum mischief,
             zero regrets. They don't care about money — enjoyment only.{' '}
             <span style={{ color: 'rgba(245, 197, 66, 0.8)', fontStyle: 'italic' }}>
-              (The black cards are purely decorative. Probably.)
+              (The black cards are just for the photo.)
             </span>
           </p>
         </div>
