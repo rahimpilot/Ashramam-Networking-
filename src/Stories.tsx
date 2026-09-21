@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from './firebase';
 import { collection, getDocs, doc, setDoc, query, orderBy, Timestamp, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 import PageHeader from './PageHeader';
 
@@ -27,7 +26,6 @@ interface Topic {
 }
 
 const Stories: React.FC = () => {
-  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [stories, setStories] = useState<Story[]>([]);
