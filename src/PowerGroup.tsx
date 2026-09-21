@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 
 const MEMBERS = [
-  'Mohamed Niyas',
-  'Mohammed Shanir Musluyamveettil Kunchimohammed',
-  'Mohamed Hyder',
-  'Mohasin Ali',
+  { name: 'Mohamed Niyas', photo: '/niaz.jpeg' },
+  { name: 'Mohammed Shanir Musluyamveettil Kunchimohammed', photo: '/shanir.jpeg' },
+  { name: 'Mohamed Hyder', photo: '/hyder.JPG' },
+  { name: 'Mohasin Ali', photo: '/appan.JPG' },
 ];
 
 const PowerGroup: React.FC = () => {
@@ -140,9 +140,9 @@ const PowerGroup: React.FC = () => {
             gap: '16px',
           }}
         >
-          {MEMBERS.map((name, index) => (
+          {MEMBERS.map((member, index) => (
             <div
-              key={name}
+              key={member.name}
               style={{
                 borderRadius: '14px',
                 padding: '18px 20px',
@@ -192,14 +192,20 @@ const PowerGroup: React.FC = () => {
                 >
                   POWER GROUP
                 </span>
-                <span
+                <img
+                  src={member.photo}
+                  alt={member.name}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
                   style={{
-                    width: '22px',
-                    height: '22px',
+                    width: '46px',
+                    height: '46px',
                     borderRadius: '50%',
-                    background:
-                      'radial-gradient(circle at 35% 35%, #ffe9a3, #b8860b)',
-                    boxShadow: '0 0 8px rgba(245, 197, 66, 0.6)',
+                    objectFit: 'cover',
+                    border: '2px solid rgba(212, 175, 55, 0.9)',
+                    boxShadow: '0 0 10px rgba(245, 197, 66, 0.45)',
+                    flexShrink: 0,
                   }}
                 />
               </div>
@@ -238,7 +244,7 @@ const PowerGroup: React.FC = () => {
                   overflowWrap: 'anywhere',
                 }}
               >
-                {name}
+                {member.name}
               </div>
             </div>
           ))}
