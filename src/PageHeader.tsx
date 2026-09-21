@@ -5,10 +5,12 @@ interface PageHeaderProps {
   title: string;
   backTo: string;
   backLabel?: string;
+  /** When provided, the back button calls this instead of navigating (e.g. for in-page back steps). */
+  onBack?: () => void;
 }
 
 /** Shared sticky page header used across the Hangout section. */
-const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel }) => {
+const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBack }) => {
   const navigate = useNavigate();
 
   return (
@@ -31,7 +33,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel }) => 
         padding: '0 16px'
       }}>
         <button
-          onClick={() => navigate(backTo)}
+          onClick={() => (onBack ? onBack() : navigate(backTo))}
           style={{
             background: 'none',
             border: 'none',
@@ -58,7 +60,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel }) => 
           fontWeight: 600,
           color: '#050505',
           lineHeight: '1.3',
-          margin: 0
+          margin: 0,
+          flex: 1,
+          minWidth: 0,
+          textAlign: 'center',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          padding: '0 8px'
         }}>
           {title}
         </h1>

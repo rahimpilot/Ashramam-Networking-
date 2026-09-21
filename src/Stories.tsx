@@ -4,6 +4,7 @@ import { collection, getDocs, doc, setDoc, query, orderBy, Timestamp, getDoc } f
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
+import PageHeader from './PageHeader';
 
 interface Story {
   id: string;
@@ -52,7 +53,7 @@ const Stories: React.FC = () => {
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, []);
 
   const topics: Topic[] = [
     { id: 'life', name: 'ഞങ്ങളുടെ താർ', description: 'Personal experiences and life lessons', icon: '', color: '#000000' },
@@ -83,7 +84,7 @@ const Stories: React.FC = () => {
     // Stories are publicly readable so shared permalinks work without login
     fetchStories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, navigate, authLoading]);
+  }, [user, authLoading]);
 
   const fetchUserProfile = async () => {
     if (!user?.uid) return;
@@ -189,18 +190,16 @@ const Stories: React.FC = () => {
     }
   };
 
-  const goBack = () => {
-    if (currentView === 'stories') {
-      setCurrentView('topics');
-      setSelectedTopic('all');
-    } else {
-      navigate(user ? '/dashboard' : '/');
-    }
+  const goBackToTopics = () => {
+    setCurrentView('topics');
+    setSelectedTopic('all');
+    setExpandedStory(null);
   };
 
   const handleTopicSelect = (topicId: string) => {
     setSelectedTopic(topicId);
     setCurrentView('stories');
+    setExpandedStory(null);
     fetchStories();
   };
 
@@ -212,6 +211,8 @@ const Stories: React.FC = () => {
   const getCurrentTopic = () => {
     return topics.find(topic => topic.id === selectedTopic);
   };
+
+  const getStoryCount = (topicId: string) => stories.filter(s => s.topic === topicId).length;
 
   const handleEditStory = (story: Story) => {
     setEditingStory(story.id);
@@ -290,698 +291,629 @@ const Stories: React.FC = () => {
     }
   }, [expandedStory, stories]);
 
-
-
-  if (loading) {
-    return (
+  const renderLoading = (label: string) => (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
+    }}>
       <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
+        textAlign: 'center',
+        color: '#FFFFFF',
+        background: 'rgba(255,255,255,0.15)',
+        padding: '32px',
+        borderRadius: '16px',
+        backdropFilter: 'blur(10px)',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
       }}>
-        <div style={{
-          textAlign: 'center',
-          color: '#FFFFFF',
-          background: 'rgba(255,255,255,0.15)',
-          padding: '32px',
-          borderRadius: '16px',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
-          <p style={{ margin: 0, fontSize: '18px', fontWeight: 500, lineHeight: '1.3' }}>
-            Loading stories...
-          </p>
-        </div>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
+        <p style={{ margin: 0, fontSize: '18px', fontWeight: 500, lineHeight: '1.3' }}>
+          {label}
+        </p>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (authLoading) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
-      }}>
-        <div style={{
-          textAlign: 'center',
-          color: '#FFFFFF',
-          background: 'rgba(255,255,255,0.15)',
-          padding: '32px',
-          borderRadius: '16px',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
-          <p style={{ margin: 0, fontSize: '18px', fontWeight: 500, lineHeight: '1.3' }}>
-            Checking authentication...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (loading) return renderLoading('Loading stories...');
+  if (authLoading) return renderLoading('Checking authentication...');
 
   // Logged-out visitors can view stories (via shared permalinks); only
   // logged-in users see add/edit/like controls.
 
+  const currentTopic = getCurrentTopic();
+  const filteredStories = getFilteredStories();
+  const formValid = newStory.title.trim() && newStory.content.trim() && newStory.topic;
+
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#F8F9FA',
+      background: '#F6F7F9',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
-      {/* Modern Mobile Header - 60px height */}
-      <div style={{
-        background: '#FFFFFF',
-        height: '60px',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        borderBottom: '1px solid #E4E6EA'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          maxWidth: 480,
-          margin: '0 auto',
-          height: '100%',
-          padding: '0 16px'
-        }}>
-          <button
-            onClick={goBack}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#1877F2',
-              fontSize: '20px',
-              cursor: 'pointer',
-              padding: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '44px',
-              height: '44px',
-              borderRadius: '50%',
-              transition: 'background-color 0.2s ease'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-          >
-            ←
-          </button>
+      <style>{`
+        .story-card { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+        .story-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08); }
+        .story-card:active { transform: translateY(0); }
+        .topics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (min-width: 600px) { .topics-grid { grid-template-columns: repeat(3, 1fr); } }
+        .topic-card { transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; }
+        .topic-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08); border-color: #1877F2; }
+        .topic-card:active { transform: translateY(0); }
+        .story-input:focus { border-color: #1877F2 !important; }
+      `}</style>
 
-          <h1 style={{
-            fontSize: '18px',
-            fontWeight: 600,
-            color: '#050505',
-            lineHeight: '1.3',
-            margin: 0,
-            flex: 1,
-            textAlign: 'center',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            padding: '0 8px'
-          }}>
-            {currentView === 'topics' ? 'Our Stories' : getCurrentTopic()?.name}
-          </h1>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {currentView === 'stories' && user && (
-              <button
-                onClick={() => setShowAddForm(!showAddForm)}
-                style={{
-                  background: showAddForm ? '#E4E6EA' : 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
-                  border: 'none',
-                  borderRadius: '12px',
-                  padding: '8px 12px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  color: showAddForm ? '#050505' : '#FFFFFF',
-                  transition: 'all 0.2s ease',
-                  minHeight: '36px',
-                  whiteSpace: 'nowrap'
-                }}
-                onMouseEnter={(e) => {
-                  if (!showAddForm) {
-                    e.currentTarget.style.transform = 'scale(1.02)';
-                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                {showAddForm ? 'Cancel' : '+ Add'}
-              </button>
-            )}
-            <img
-              src="/newlogo.svg"
-              alt="Logo"
-              style={{
-                height: 32,
-                width: 'auto',
-                maxWidth: '100px',
-                opacity: 0.8
-              }}
-            />
-          </div>
-        </div>
-      </div>
+      {currentView === 'topics' ? (
+        <PageHeader title="Our Stories" backTo={user ? '/dashboard' : '/'} backLabel="Back" />
+      ) : (
+        <PageHeader
+          title={currentTopic?.name || 'Stories'}
+          backTo="/stories"
+          backLabel="Back to topics"
+          onBack={goBackToTopics}
+        />
+      )}
 
       <div style={{
-        maxWidth: 480,
+        maxWidth: 640,
         margin: '0 auto',
-        padding: '16px'
+        padding: '24px 16px 110px 16px'
       }}>
 
-        {/* Add Story Form */}
-        {showAddForm && (
-          <div style={{
-            background: '#FFFFFF',
-            borderRadius: '12px',
-            padding: '16px',
-            marginBottom: '8px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-          }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 600, lineHeight: '1.3', marginBottom: '16px', color: '#050505' }}>
-              Share Your Story
-            </h3>
-
-            <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
-                  Topic Category
-                </label>
-                <select
-                  value={newStory.topic}
-                  onChange={(e) => setNewStory({ ...newStory, topic: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    borderRadius: '12px',
-                    border: '1px solid #E4E6EA',
-                    fontSize: '16px',
-                    fontWeight: 400,
-                    lineHeight: '1.4',
-                    outline: 'none',
-                    transition: 'border-color 0.2s',
-                    background: '#FFF'
-                  }}
-                  onFocus={e => e.target.style.borderColor = '#1877F2'}
-                  onBlur={e => e.target.style.borderColor = '#E4E6EA'}
-                  required
-                >
-                  <option value="">Select a topic...</option>
-                  {topics.map(topic => (
-                    <option key={topic.id} value={topic.id}>
-                      {topic.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
-                  Story Title
-                </label>
-                <input
-                  type="text"
-                  value={newStory.title}
-                  onChange={(e) => setNewStory({ ...newStory, title: e.target.value })}
-                  placeholder="Give your story a catchy title..."
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    borderRadius: '12px',
-                    border: '1px solid #E4E6EA',
-                    fontSize: '16px',
-                    fontWeight: 400,
-                    lineHeight: '1.4',
-                    outline: 'none',
-                    transition: 'border-color 0.2s'
-                  }}
-                  onFocus={e => e.target.style.borderColor = '#1877F2'}
-                  onBlur={e => e.target.style.borderColor = '#E4E6EA'}
-                  required
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, fontSize: '14px', color: '#050505' }}>
-                  Your Story
-                </label>
-                <textarea
-                  value={newStory.content}
-                  onChange={(e) => setNewStory({ ...newStory, content: e.target.value })}
-                  placeholder="Tell us your story..."
-                  rows={6}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    borderRadius: '12px',
-                    border: '1px solid #E4E6EA',
-                    fontSize: '16px',
-                    fontWeight: 400,
-                    lineHeight: '1.4',
-                    outline: 'none',
-                    transition: 'border-color 0.2s',
-                    resize: 'vertical'
-                  }}
-                  onFocus={e => e.target.style.borderColor = '#1877F2'}
-                  onBlur={e => e.target.style.borderColor = '#E4E6EA'}
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic}
-                style={{
-                  background: submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic
-                    ? '#E4E6EA'
-                    : 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
-                  border: 'none',
-                  borderRadius: '12px',
-                  padding: '12px 24px',
-                  cursor: (submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic) ? 'not-allowed' : 'pointer',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  minHeight: '44px',
-                  color: submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic ? '#9A9DA1' : '#FFFFFF',
-                  transition: 'all 0.2s ease',
-                  boxShadow: (submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic) ? 'none' : '0 2px 4px rgba(24, 119, 242, 0.2)'
-                }}
-                onMouseEnter={(e) => {
-                  if (!submitting && newStory.title.trim() && newStory.content.trim() && newStory.topic) {
-                    e.currentTarget.style.transform = 'scale(1.02)';
-                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = (submitting || !newStory.title.trim() || !newStory.content.trim() || !newStory.topic) ? 'none' : '0 2px 4px rgba(24, 119, 242, 0.2)';
-                }}
-              >
-                {submitting ? 'Publishing...' : 'Publish Story'}
-              </button>
-            </form>
-          </div>
-        )}
-
-        {/* Topics Grid or Stories List */}
         {currentView === 'topics' ? (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '8px'
-          }}>
-            {topics.map((topic) => (
-              <div
-                key={topic.id}
-                onClick={() => handleTopicSelect(topic.id)}
-                style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #E4E6EA',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  textAlign: 'center',
-                  minHeight: '100px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-                }}
-                onMouseOver={e => {
-                  e.currentTarget.style.transform = 'scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
-                  e.currentTarget.style.borderColor = '#1877F2';
-                }}
-                onMouseOut={e => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-                  e.currentTarget.style.borderColor = '#E4E6EA';
-                }}
-              >
-                <h3 style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  lineHeight: '1.3',
-                  margin: '0 0 8px 0',
-                  color: '#050505'
-                }}>
-                  {topic.name}
-                </h3>
+          <>
+            {/* Hero */}
+            <div style={{ marginBottom: '20px', padding: '0 4px' }}>
+              <div style={{
+                display: 'inline-block',
+                fontSize: '11px',
+                fontWeight: 700,
+                letterSpacing: '1.5px',
+                color: '#1877F2',
+                background: '#E7F0FE',
+                borderRadius: '999px',
+                padding: '5px 12px',
+                marginBottom: '10px'
+              }}>
+                COMMUNITY
+              </div>
+              <h2 style={{
+                fontSize: '28px',
+                fontWeight: 700,
+                color: '#111318',
+                margin: '0 0 6px 0',
+                letterSpacing: '-0.5px'
+              }}>
+                Our Stories
+              </h2>
+              <p style={{
+                fontSize: '15px',
+                color: '#6B7280',
+                margin: 0,
+                lineHeight: 1.5
+              }}>
+                Pick a corner of Ashramam life and read what members shared — newest first.
+              </p>
+            </div>
+
+            {/* Topics grid */}
+            <div className="topics-grid">
+              {topics.map((topic) => {
+                const count = getStoryCount(topic.id);
+                return (
+                  <div
+                    key={topic.id}
+                    className="topic-card"
+                    onClick={() => handleTopicSelect(topic.id)}
+                    style={{
+                      background: '#FFFFFF',
+                      border: '1px solid #ECEEF1',
+                      borderRadius: '16px',
+                      padding: '20px 12px',
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      minHeight: '112px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+                    }}
+                  >
+                    <div style={{
+                      fontSize: '15px',
+                      fontWeight: 700,
+                      lineHeight: 1.35,
+                      color: '#111318',
+                      overflowWrap: 'break-word',
+                      maxWidth: '100%'
+                    }}>
+                      {topic.name}
+                    </div>
+                    <div style={{
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      color: '#6B7280',
+                      background: '#F1F3F5',
+                      borderRadius: '999px',
+                      padding: '3px 10px',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {count} {count === 1 ? 'story' : 'stories'}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Stories view hero */}
+            <div style={{ marginBottom: '16px', padding: '0 4px' }}>
+              <div style={{
+                display: 'inline-block',
+                fontSize: '11px',
+                fontWeight: 700,
+                letterSpacing: '1.5px',
+                color: '#1877F2',
+                background: '#E7F0FE',
+                borderRadius: '999px',
+                padding: '5px 12px',
+                marginBottom: '10px'
+              }}>
+                STORIES
+              </div>
+              <h2 style={{
+                fontSize: '26px',
+                fontWeight: 700,
+                color: '#111318',
+                margin: '0 0 6px 0',
+                letterSpacing: '-0.5px',
+                overflowWrap: 'break-word'
+              }}>
+                {currentTopic?.name}
+              </h2>
+              <p style={{
+                fontSize: '15px',
+                color: '#6B7280',
+                margin: '0 0 14px 0',
+                lineHeight: 1.5
+              }}>
+                {currentTopic?.description}
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                 <span style={{
                   fontSize: '12px',
-                  fontWeight: 400,
-                  color: '#65676B'
-                }}>
-                  {stories.filter(s => s.topic === topic.id).length} stories
-                </span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          // Stories List for selected topic
-          getFilteredStories().length === 0 ? (
-            <div style={{
-              background: '#FFFFFF',
-              border: '1px solid #E4E6EA',
-              borderRadius: '12px',
-              padding: '32px 16px',
-              textAlign: 'center',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📖</div>
-              <h3 style={{ fontSize: '18px', fontWeight: 600, lineHeight: '1.3', color: '#050505', marginBottom: '8px' }}>
-                No stories yet
-              </h3>
-              <p style={{ fontSize: '14px', fontWeight: 400, lineHeight: '1.4', color: '#65676B', marginBottom: '16px' }}>
-                Be the first to share a story!
-              </p>
-              {user && (
-              <button
-                onClick={() => setShowAddForm(true)}
-                style={{
-                  background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
-                  border: 'none',
-                  borderRadius: '12px',
-                  padding: '10px 20px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  minHeight: '44px',
-                  color: '#FFFFFF',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 4px rgba(24, 119, 242, 0.2)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(24, 119, 242, 0.2)';
-                }}
-              >
-                📝 Write First Story
-              </button>
-              )}
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {getFilteredStories().map((story) => (
-                <div key={story.id} id={'story-' + story.id} style={{
+                  fontWeight: 600,
+                  color: '#6B7280',
                   background: '#FFFFFF',
-                  border: '1px solid #E4E6EA',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  transition: 'all 0.2s ease',
-                  cursor: 'pointer',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-                }}
-                  onClick={() => setExpandedStory(expandedStory === story.id ? null : story.id)}
-                  onMouseOver={e => {
-                    e.currentTarget.style.transform = 'scale(1.01)';
-                    e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
-                  }}
-                  onMouseOut={e => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-                  }}>
-                  {editingStory === story.id ? (
-                    // Edit Mode
-                    <div style={{ width: '100%' }}>
-                      <input
-                        type="text"
-                        value={editStoryData.title}
-                        onChange={(e) => setEditStoryData({ ...editStoryData, title: e.target.value })}
-                        placeholder="Story title"
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          marginBottom: '12px',
-                          border: '1px solid #E4E6EA',
-                          borderRadius: '12px',
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          lineHeight: '1.3',
-                          outline: 'none'
-                        }}
-                        onFocus={e => e.target.style.borderColor = '#1877F2'}
-                        onBlur={e => e.target.style.borderColor = '#E4E6EA'}
-                      />
-                      <textarea
-                        value={editStoryData.content}
-                        onChange={(e) => setEditStoryData({ ...editStoryData, content: e.target.value })}
-                        placeholder="Write your story here..."
-                        rows={10}
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          marginBottom: '12px',
-                          border: '1px solid #E4E6EA',
-                          borderRadius: '12px',
-                          fontSize: '14px',
-                          fontWeight: 400,
-                          lineHeight: '1.4',
-                          resize: 'vertical',
-                          fontFamily: 'inherit',
-                          outline: 'none'
-                        }}
-                        onFocus={e => e.target.style.borderColor = '#1877F2'}
-                        onBlur={e => e.target.style.borderColor = '#E4E6EA'}
-                      />
-                      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                        <button
-                          onClick={handleCancelEdit}
-                          disabled={submitting}
-                          style={{
-                            background: 'transparent',
-                            border: '1px solid #E4E6EA',
-                            color: '#65676B',
-                            borderRadius: '12px',
-                            padding: '10px 16px',
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            minHeight: '44px',
-                            transition: 'all 0.2s ease'
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => handleSaveEdit(story.id)}
-                          disabled={submitting}
-                          style={{
-                            background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
-                            border: 'none',
-                            color: '#FFFFFF',
-                            borderRadius: '12px',
-                            padding: '10px 16px',
-                            cursor: submitting ? 'not-allowed' : 'pointer',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            minHeight: '44px',
-                            opacity: submitting ? 0.7 : 1,
-                            transition: 'all 0.2s ease',
-                            boxShadow: '0 2px 4px rgba(24, 119, 242, 0.2)'
-                          }}
-                          onMouseEnter={(e) => {
-                            if (!submitting) {
-                              e.currentTarget.style.transform = 'scale(1.02)';
-                              e.currentTarget.style.boxShadow = '0 4px 8px rgba(24, 119, 242, 0.3)';
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                            e.currentTarget.style.boxShadow = '0 2px 4px rgba(24, 119, 242, 0.2)';
-                          }}
-                        >
-                          {submitting ? 'Saving...' : 'Save Changes'}
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <div style={{ flex: 1, marginRight: '12px' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: 600, lineHeight: '1.3', margin: '0 0 8px 0', color: '#050505' }}>
-                          {story.title}
-                        </h3>
-                        <div style={{ fontSize: '12px', fontWeight: 400, color: '#65676B', marginBottom: '12px' }}>
-                          By <span style={{ fontWeight: 600, color: '#050505' }}>
-                            {authorNames[story.authorEmail] || story.author || 'Anonymous'}
-                          </span> • {story.createdAt.toDate().toLocaleDateString()}
-                        </div>
-
-                        {/* Story Content Preview */}
-                        <div style={{
-                          fontSize: '14px',
-                          fontWeight: 400,
-                          lineHeight: '1.4',
-                          color: '#050505',
-                          marginBottom: '12px'
-                        }}>
-                          {expandedStory === story.id ? (
-                            // Full content
-                            <div style={{ whiteSpace: 'pre-wrap' }}>
-                              {story.content}
-                            </div>
-                          ) : (
-                            // Preview with truncation
-                            <div>
-                              {story.content.length > 150
-                                ? story.content.substring(0, 150) + '...'
-                                : story.content
-                              }
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Read More/Less indicator */}
-                        <div style={{
-                          fontSize: '12px',
-                          color: '#1877F2',
-                          fontWeight: 500,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px'
-                        }}>
-                          {expandedStory === story.id ? (
-                            <>📖 Click to collapse</>
-                          ) : (
-                            <>👆 Click to read full story</>
-                          )}
-                        </div>
-
-                        {/* Copy permalink - bottom right, underneath the content */}
-                        <div style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          marginTop: '8px'
-                        }}>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCopyPermalink(story);
-                            }}
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              color: '#1877F2',
-                              fontSize: '12px',
-                              fontWeight: 500,
-                              cursor: 'pointer',
-                              padding: '4px 2px',
-                              textDecoration: 'underline'
-                            }}
-                          >
-                            {copiedStoryId === story.id ? '✓ Copied!' : '🔗 copy permalink'}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
-                        {/* Edit button - only show to story author */}
-                        {user && story.authorEmail === user.email && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleEditStory(story);
-                            }}
-                            style={{
-                              background: 'transparent',
-                              border: '1px solid #E4E6EA',
-                              color: '#65676B',
-                              borderRadius: '8px',
-                              padding: '6px 12px',
-                              cursor: 'pointer',
-                              fontSize: '12px',
-                              fontWeight: 500,
-                              transition: 'all 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.backgroundColor = '#F8F9FA';
-                              e.currentTarget.style.borderColor = '#1877F2';
-                              e.currentTarget.style.color = '#1877F2';
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = 'transparent';
-                              e.currentTarget.style.borderColor = '#E4E6EA';
-                              e.currentTarget.style.color = '#65676B';
-                            }}
-                          >
-                            ✏️ Edit
-                          </button>
-                        )}
-
-                        {user ? (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleLikeStory(story.id);
-                          }}
-                          style={{
-                            background: story.likedBy.includes(user?.uid || '') ? 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)' : 'transparent',
-                            border: '1px solid #1877F2',
-                            borderRadius: '8px',
-                            padding: '6px 12px',
-                            cursor: 'pointer',
-                            fontSize: '12px',
-                            fontWeight: 500,
-                            color: story.likedBy.includes(user?.uid || '') ? '#FFFFFF' : '#1877F2',
-                            transition: 'all 0.2s ease',
-                            flexShrink: 0
-                          }}
-                          onMouseEnter={(e) => {
-                            if (!story.likedBy.includes(user?.uid || '')) {
-                              e.currentTarget.style.backgroundColor = '#F8F9FA';
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!story.likedBy.includes(user?.uid || '')) {
-                              e.currentTarget.style.backgroundColor = 'transparent';
-                            }
-                          }}
-                        >
-                          ♥ {story.likes}
-                        </button>
-                        ) : (
-                          <span style={{
-                            border: '1px solid #E4E6EA',
-                            borderRadius: '8px',
-                            padding: '6px 12px',
-                            fontSize: '12px',
-                            fontWeight: 500,
-                            color: '#65676B',
-                            flexShrink: 0
-                          }}>
-                            ♥ {story.likes}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                  border: '1px solid #ECEEF1',
+                  borderRadius: '999px',
+                  padding: '6px 12px',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {filteredStories.length} {filteredStories.length === 1 ? 'story' : 'stories'}
+                </span>
+                {user && (
+                  <button
+                    onClick={() => setShowAddForm(!showAddForm)}
+                    style={{
+                      background: showAddForm ? '#ECEEF1' : '#1877F2',
+                      border: 'none',
+                      borderRadius: '999px',
+                      padding: '8px 16px',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      color: showAddForm ? '#111318' : '#FFFFFF',
+                      transition: 'all 0.2s ease',
+                      minHeight: '36px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {showAddForm ? 'Cancel' : '+ Add story'}
+                  </button>
+                )}
+              </div>
             </div>
-          )
+
+            {/* Add story form */}
+            {showAddForm && (
+              <div style={{
+                background: '#FFFFFF',
+                border: '1px solid #ECEEF1',
+                borderRadius: '16px',
+                padding: '20px 16px',
+                marginBottom: '12px',
+                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+              }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px 0', color: '#111318' }}>
+                  Share your story
+                </h3>
+                <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#111318' }}>
+                      Topic
+                    </label>
+                    <select
+                      value={newStory.topic}
+                      onChange={(e) => setNewStory({ ...newStory, topic: e.target.value })}
+                      className="story-input"
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        borderRadius: '12px',
+                        border: '1px solid #E4E6EA',
+                        fontSize: '16px',
+                        outline: 'none',
+                        background: '#FFF'
+                      }}
+                      required
+                    >
+                      <option value="">Select a topic...</option>
+                      {topics.map(topic => (
+                        <option key={topic.id} value={topic.id}>{topic.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#111318' }}>
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      value={newStory.title}
+                      onChange={(e) => setNewStory({ ...newStory, title: e.target.value })}
+                      placeholder="Give your story a catchy title..."
+                      className="story-input"
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        borderRadius: '12px',
+                        border: '1px solid #E4E6EA',
+                        fontSize: '16px',
+                        outline: 'none'
+                      }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#111318' }}>
+                      Your story
+                    </label>
+                    <textarea
+                      value={newStory.content}
+                      onChange={(e) => setNewStory({ ...newStory, content: e.target.value })}
+                      placeholder="Tell us your story..."
+                      rows={6}
+                      className="story-input"
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        borderRadius: '12px',
+                        border: '1px solid #E4E6EA',
+                        fontSize: '16px',
+                        outline: 'none',
+                        resize: 'vertical',
+                        fontFamily: 'inherit',
+                        lineHeight: 1.5
+                      }}
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={submitting || !formValid}
+                    style={{
+                      background: (submitting || !formValid) ? '#ECEEF1' : '#1877F2',
+                      border: 'none',
+                      borderRadius: '12px',
+                      padding: '12px 24px',
+                      cursor: (submitting || !formValid) ? 'not-allowed' : 'pointer',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      minHeight: '44px',
+                      color: (submitting || !formValid) ? '#9A9DA1' : '#FFFFFF',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    {submitting ? 'Publishing...' : 'Publish story'}
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {/* Stories list */}
+            {filteredStories.length === 0 ? (
+              <div style={{
+                background: '#FFFFFF',
+                border: '1px solid #ECEEF1',
+                borderRadius: '16px',
+                padding: '40px 20px',
+                textAlign: 'center',
+                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+              }}>
+                <div style={{ fontSize: '48px', marginBottom: '16px' }}>📖</div>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#111318', margin: '0 0 8px 0' }}>
+                  No stories yet
+                </h3>
+                <p style={{ fontSize: '14px', color: '#6B7280', margin: '0 0 16px 0', lineHeight: 1.5 }}>
+                  Be the first to share a story in {currentTopic?.name}!
+                </p>
+                {user && (
+                  <button
+                    onClick={() => setShowAddForm(true)}
+                    style={{
+                      background: '#1877F2',
+                      border: 'none',
+                      borderRadius: '12px',
+                      padding: '10px 20px',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      minHeight: '44px',
+                      color: '#FFFFFF'
+                    }}
+                  >
+                    Write the first story
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {filteredStories.map((story) => {
+                  const isExpanded = expandedStory === story.id;
+                  const isEditing = editingStory === story.id;
+                  const isAuthor = !!user && story.authorEmail === user.email;
+                  const isLiked = !!user && story.likedBy.includes(user.uid);
+                  const preview = story.content.length > 180
+                    ? story.content.substring(0, 180).trimEnd() + '…'
+                    : story.content;
+
+                  return (
+                    <div
+                      key={story.id}
+                      id={'story-' + story.id}
+                      className="story-card"
+                      onClick={() => !isEditing && setExpandedStory(isExpanded ? null : story.id)}
+                      style={{
+                        background: '#FFFFFF',
+                        border: '1px solid #ECEEF1',
+                        borderRadius: '16px',
+                        padding: '18px 16px',
+                        cursor: isEditing ? 'default' : 'pointer',
+                        boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
+                        scrollMarginTop: '76px',
+                        minWidth: 0
+                      }}
+                    >
+                      {isEditing ? (
+                        <div onClick={(e) => e.stopPropagation()} style={{ minWidth: 0 }}>
+                          <input
+                            type="text"
+                            value={editStoryData.title}
+                            onChange={(e) => setEditStoryData({ ...editStoryData, title: e.target.value })}
+                            placeholder="Story title"
+                            className="story-input"
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              marginBottom: '12px',
+                              border: '1px solid #E4E6EA',
+                              borderRadius: '12px',
+                              fontSize: '16px',
+                              fontWeight: 600,
+                              outline: 'none'
+                            }}
+                          />
+                          <textarea
+                            value={editStoryData.content}
+                            onChange={(e) => setEditStoryData({ ...editStoryData, content: e.target.value })}
+                            placeholder="Write your story here..."
+                            rows={10}
+                            className="story-input"
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              marginBottom: '12px',
+                              border: '1px solid #E4E6EA',
+                              borderRadius: '12px',
+                              fontSize: '15px',
+                              resize: 'vertical',
+                              fontFamily: 'inherit',
+                              lineHeight: 1.5,
+                              outline: 'none'
+                            }}
+                          />
+                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                            <button
+                              onClick={handleCancelEdit}
+                              disabled={submitting}
+                              style={{
+                                background: 'transparent',
+                                border: '1px solid #E4E6EA',
+                                color: '#6B7280',
+                                borderRadius: '12px',
+                                padding: '10px 16px',
+                                cursor: 'pointer',
+                                fontSize: '14px',
+                                fontWeight: 600,
+                                minHeight: '44px'
+                              }}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={() => handleSaveEdit(story.id)}
+                              disabled={submitting}
+                              style={{
+                                background: '#1877F2',
+                                border: 'none',
+                                color: '#FFFFFF',
+                                borderRadius: '12px',
+                                padding: '10px 16px',
+                                cursor: submitting ? 'not-allowed' : 'pointer',
+                                fontSize: '14px',
+                                fontWeight: 700,
+                                minHeight: '44px',
+                                opacity: submitting ? 0.7 : 1
+                              }}
+                            >
+                              {submitting ? 'Saving...' : 'Save changes'}
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          {/* Title row */}
+                          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '6px' }}>
+                            <h3 style={{
+                              flex: 1,
+                              minWidth: 0,
+                              fontSize: '17px',
+                              fontWeight: 700,
+                              lineHeight: 1.35,
+                              margin: 0,
+                              color: '#111318',
+                              overflowWrap: 'break-word'
+                            }}>
+                              {story.title}
+                            </h3>
+                            {user ? (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleLikeStory(story.id);
+                                }}
+                                aria-label={isLiked ? 'Unlike this story' : 'Like this story'}
+                                style={{
+                                  background: isLiked ? '#1877F2' : 'transparent',
+                                  border: '1px solid #1877F2',
+                                  borderRadius: '999px',
+                                  padding: '6px 12px',
+                                  cursor: 'pointer',
+                                  fontSize: '13px',
+                                  fontWeight: 700,
+                                  color: isLiked ? '#FFFFFF' : '#1877F2',
+                                  transition: 'all 0.2s ease',
+                                  flexShrink: 0,
+                                  minHeight: '32px',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                ♥ {story.likes}
+                              </button>
+                            ) : (
+                              <span style={{
+                                border: '1px solid #ECEEF1',
+                                borderRadius: '999px',
+                                padding: '6px 12px',
+                                fontSize: '13px',
+                                fontWeight: 700,
+                                color: '#6B7280',
+                                flexShrink: 0,
+                                whiteSpace: 'nowrap'
+                              }}>
+                                ♥ {story.likes}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Byline */}
+                          <div style={{
+                            fontSize: '13px',
+                            color: '#6B7280',
+                            marginBottom: '10px',
+                            overflowWrap: 'break-word'
+                          }}>
+                            By <span style={{ fontWeight: 700, color: '#111318' }}>
+                              {authorNames[story.authorEmail] || story.author || 'Anonymous'}
+                            </span>
+                            {' '}· {story.createdAt.toDate().toLocaleDateString()}
+                          </div>
+
+                          {/* Content */}
+                          <div style={{
+                            fontSize: '15px',
+                            lineHeight: 1.6,
+                            color: '#1F2329',
+                            marginBottom: '10px',
+                            minWidth: 0,
+                            overflowWrap: 'break-word',
+                            wordBreak: 'break-word',
+                            whiteSpace: isExpanded ? 'pre-wrap' : 'normal'
+                          }}>
+                            {isExpanded ? story.content : preview}
+                          </div>
+
+                          {/* Footer actions */}
+                          <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '8px',
+                            flexWrap: 'wrap'
+                          }}>
+                            <span style={{
+                              fontSize: '13px',
+                              color: '#1877F2',
+                              fontWeight: 700
+                            }}>
+                              {isExpanded ? 'Show less' : 'Read full story ›'}
+                            </span>
+                            <span style={{ display: 'flex', gap: '4px', alignItems: 'center', flexWrap: 'wrap' }}>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCopyPermalink(story);
+                                }}
+                                style={{
+                                  background: 'none',
+                                  border: 'none',
+                                  color: '#1877F2',
+                                  fontSize: '13px',
+                                  fontWeight: 600,
+                                  cursor: 'pointer',
+                                  padding: '8px 6px',
+                                  minHeight: '36px',
+                                  textDecoration: 'underline'
+                                }}
+                              >
+                                {copiedStoryId === story.id ? '✓ Copied!' : 'Copy link'}
+                              </button>
+                              {isAuthor && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEditStory(story);
+                                  }}
+                                  style={{
+                                    background: 'transparent',
+                                    border: '1px solid #ECEEF1',
+                                    color: '#6B7280',
+                                    borderRadius: '999px',
+                                    padding: '6px 12px',
+                                    cursor: 'pointer',
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    minHeight: '36px'
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                              )}
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
 
