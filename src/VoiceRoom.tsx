@@ -71,6 +71,13 @@ const VoiceRoom: React.FC = () => {
   const listenersRef = useRef<Unsubscribe[]>([]);
   const speakingRef = useRef<Set<string>>(new Set());
   const joinedRef = useRef(false);
+  // Voice-server connection state (null = not known yet)
+  const [dbConnected, setDbConnected] = useState<boolean | null>(null);
+  const isMutedRef = useRef(false);
+  // Base participant payload so presence can be re-asserted after a reconnect
+  const participantPayloadRef = useRef<{ id: string; name: string; email: string; joinedAt: number } | null>(null);
+  // Tracks which nested offer listeners are attached (SDK re-fires onChildAdded on reconnect)
+  const offerListenersRef = useRef<Set<string>>(new Set());
 
   const setSpeaking = useCallback((id: string, speaking: boolean) => {
     const s = speakingRef.current;
@@ -106,6 +113,34 @@ const VoiceRoom: React.FC = () => {
     });
     return () => unsub();
   }, [authReady, user]);
+
+  // Connection monitor + presence re-assertion.
+  // Mobile networks drop and reconnect often; when the socket drops, the server
+  // fires our onDisconnect and removes our participant entry. Without
+  // re-asserting, we'd be invisibly stuck in the room (we see the room UI, but
+  // nobody sees us). So on every (re)connect while joined, re-write our entry
+  // and re-arm onDisconnect.
+  useEffect(() => {
+    if (!authReady) return;
+    const unsub = onValue(ref(rtdb, '.info/connected'), (snap) => {
+      const connected = snap.val() === true;
+      setDbConnected(connected);
+      if (connected && joinedRef.current && participantPayloadRef.current) {
+        const p = participantPayloadRef.current;
+        const pref = roomRef(`participants/${p.id}`);
+        set(pref, {
+          id: p.id,
+          name: p.name,
+          email: p.email,
+          isMuted: isMutedRef.current,
+          isActive: true,
+          joinedAt: p.joinedAt,
+        }).catch(() => {});
+        onDisconnect(pref).remove().catch(() => {});
+      }
+    });
+    return () => unsub();
+  }, [authReady]);
 
   // ---------- peer connection management ----------
   const cleanupPeer = useCallback((peerId: string) => {
@@ -315,15 +350,28 @@ const VoiceRoom: React.FC = () => {
 
       // 3. Presence — onDisconnect removes us even if the tab crashes
       const participantRef = roomRef(`participants/${me.uid}`);
-      await set(participantRef, {
+      participantPayloadRef.current = {
         id: me.uid,
         name: me.displayName || me.email || 'Anonymous',
         email: me.email || '',
+        joinedAt: Date.now(),
+      };
+      const presencePayload = {
+        ...participantPayloadRef.current,
         isMuted: false,
         isActive: true,
-        joinedAt: Date.now(),
-      });
-      await onDisconnect(participantRef).remove();
+      };
+      // Never hang forever on a dead/flaky connection — fail loudly instead.
+      const joinTimeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('JOIN_TIMEOUT')), 15000)
+      );
+      await Promise.race([
+        (async () => {
+          await set(participantRef, presencePayload);
+          await onDisconnect(participantRef).remove();
+        })(),
+        joinTimeout,
+      ]);
 
       // 4. Clear any stale signaling from a previous session
       await Promise.all([
@@ -362,6 +410,9 @@ const VoiceRoom: React.FC = () => {
       // Offers addressed to me
       unsubs.push(onChildAdded(roomRef('offers'), (fromSnap) => {
         const fromUid = fromSnap.key!;
+        // onChildAdded re-fires for existing children on reconnect — attach once
+        if (offerListenersRef.current.has(fromUid)) return;
+        offerListenersRef.current.add(fromUid);
         const targetRef = roomRef(`offers/${fromUid}`);
         const unsubTargets = onChildAdded(targetRef, (targetSnap) => {
           if (targetSnap.key === me.uid) {
@@ -426,6 +477,11 @@ const VoiceRoom: React.FC = () => {
       console.error('joinRoom failed:', err);
       if (err instanceof Error && err.name === 'NotAllowedError') {
         setError('Microphone access was denied. Please allow the microphone and try again.');
+      } else if (err instanceof Error && err.message === 'JOIN_TIMEOUT') {
+        participantPayloadRef.current = null;
+        // Best-effort: clear any entry the timed-out attempt may have written late
+        if (me) remove(roomRef(`participants/${me.uid}`)).catch(() => {});
+        setError('Could not reach the voice server (timed out after 15 seconds). Check your internet connection / VPN and try again.');
       } else if (err instanceof Error && /permission_denied/i.test(err.message)) {
         setError('Could not reach the voice server (permission denied). The database rules need to be published — see database.rules.json in the project, then Firebase console → Realtime Database → Rules → Publish.');
       } else {
@@ -439,6 +495,8 @@ const VoiceRoom: React.FC = () => {
   const leaveRoom = useCallback(async () => {
     const me = userRef.current;
     joinedRef.current = false;
+    participantPayloadRef.current = null;
+    offerListenersRef.current.clear();
 
     // Stop listeners
     listenersRef.current.forEach(unsub => {
@@ -506,6 +564,7 @@ const VoiceRoom: React.FC = () => {
     const me = userRef.current;
     if (!localStreamRef.current || !me) return;
     const newMuted = !isMuted;
+    isMutedRef.current = newMuted;
     localStreamRef.current.getAudioTracks().forEach(t => { t.enabled = !newMuted; });
     setIsMuted(newMuted);
     setSpeaking('me', false);
@@ -540,11 +599,21 @@ const VoiceRoom: React.FC = () => {
           <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#991b1b', margin: '0 0 0.5rem 0' }}>
             Happening Now
           </h1>
-          <p style={{ fontSize: '1rem', color: '#6b7280', margin: '0 0 1.5rem 0' }}>
+          <p style={{ fontSize: '1rem', color: '#6b7280', margin: '0 0 1rem 0' }}>
             {othersCount > 0
               ? `🟢 ${othersCount} friend${othersCount === 1 ? '' : 's'} ${othersCount === 1 ? 'is' : 'are'} in the room right now`
               : 'The room is quiet — be the first one in! 🎉'}
           </p>
+          <div style={{
+            margin: '0 0 1.25rem 0', fontSize: '0.85rem', fontWeight: 600,
+            color: dbConnected === false ? '#991b1b' : dbConnected ? '#15803d' : '#92400e',
+          }}>
+            {dbConnected === false
+              ? '🔴 Voice server unreachable — check your internet / VPN'
+              : dbConnected
+                ? '🟢 Voice server connected'
+                : '🟡 Connecting to voice server…'}
+          </div>
           {error && (
             <div style={{
               background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px',
@@ -555,12 +624,12 @@ const VoiceRoom: React.FC = () => {
           )}
           <button
             onClick={joinRoom}
-            disabled={joining}
+            disabled={joining || dbConnected === false}
             style={{
-              background: joining ? '#9ca3af' : 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+              background: joining || dbConnected === false ? '#9ca3af' : 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
               color: '#ffffff', border: 'none', borderRadius: '12px',
               padding: '1.1rem 2rem', fontSize: '1.15rem', fontWeight: 700,
-              cursor: joining ? 'default' : 'pointer', width: '100%',
+              cursor: joining || dbConnected === false ? 'default' : 'pointer', width: '100%',
               boxShadow: '0 4px 12px rgba(220,38,38,0.3)',
             }}
           >
@@ -622,6 +691,16 @@ const VoiceRoom: React.FC = () => {
             </span>
           </div>
         </div>
+
+        {dbConnected === false && (
+          <div style={{
+            background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px',
+            padding: '0.6rem 0.75rem', marginBottom: '1rem', fontSize: '0.85rem', color: '#991b1b',
+          }}>
+            🔴 Lost connection to the voice server — you'll reappear automatically when it
+            reconnects. Check your internet / VPN.
+          </div>
+        )}
 
         {error && (
           <div style={{
