@@ -165,6 +165,8 @@ const UnoGame: React.FC = () => {
       } else {
         setOpenTables([]);
       }
+    }, (err) => {
+      console.error('openTables listener failed:', err);
     });
     return () => unsub();
   }, [authReady, roomId]);
@@ -176,6 +178,9 @@ const UnoGame: React.FC = () => {
     const unsub = onValue(gameRef, (snap) => {
       const data = snap.val();
       setGameState(data || null);
+    }, (err) => {
+      console.error('room listener failed:', err);
+      showNotice(`Connection issue: ${err?.message || 'unknown error'}`);
     });
     return () => unsub();
   }, [roomId]);
@@ -207,32 +212,42 @@ const UnoGame: React.FC = () => {
       direction: 1,
       hostId: myId,
     };
-    await set(ref(rtdb, `games/${code}`), initialState);
-    setRoomId(code);
+    try {
+      await set(ref(rtdb, `games/${code}`), initialState);
+      setRoomId(code);
+    } catch (err: any) {
+      console.error('createRoom failed:', err);
+      showNotice(`Couldn't create table: ${err?.message || 'unknown error'}`);
+    }
   };
 
   const joinSpecificRoom = async (code: string) => {
     if (!user) return;
-    const snap = await get(child(ref(rtdb), `games/${code}`));
-    if (!snap.exists()) {
-      showNotice('Table not found — check the code.');
-      return;
-    }
-    const game = snap.val() as GameState;
-    if (game.gameStarted) {
-      showNotice('That game already started.');
-      return;
-    }
-    const players = game.players || [];
-    if (!players.find((p) => p.id === myId)) {
-      if (players.length >= 10) {
-        showNotice('Table is full.');
+    try {
+      const snap = await get(child(ref(rtdb), `games/${code}`));
+      if (!snap.exists()) {
+        showNotice('Table not found — check the code.');
         return;
       }
-      players.push({ id: myId, name: myName, hand: [] });
-      await set(ref(rtdb, `games/${code}/players`), players);
+      const game = snap.val() as GameState;
+      if (game.gameStarted) {
+        showNotice('That game already started.');
+        return;
+      }
+      const players = game.players || [];
+      if (!players.find((p) => p.id === myId)) {
+        if (players.length >= 10) {
+          showNotice('Table is full.');
+          return;
+        }
+        players.push({ id: myId, name: myName, hand: [] });
+        await set(ref(rtdb, `games/${code}/players`), players);
+      }
+      setRoomId(code);
+    } catch (err: any) {
+      console.error('joinSpecificRoom failed:', err);
+      showNotice(`Couldn't join table: ${err?.message || 'unknown error'}`);
     }
-    setRoomId(code);
   };
 
   const joinByCode = () => {
@@ -245,20 +260,25 @@ const UnoGame: React.FC = () => {
 
   const startGame = async () => {
     if (!gameState || gameState.hostId !== myId) return;
-    const newDeck = generateDeck();
-    const players = [...gameState.players].map((p) => ({ ...p, hand: newDeck.splice(0, 7) }));
-    let firstCardIndex = newDeck.findIndex((c) => c.color !== 'Black');
-    if (firstCardIndex === -1) firstCardIndex = 0;
-    const firstDiscard = newDeck.splice(firstCardIndex, 1);
-    await set(ref(rtdb, `games/${roomId}`), {
-      ...gameState,
-      gameStarted: true,
-      deck: newDeck,
-      discardPile: firstDiscard,
-      players,
-      currentPlayerIndex: 0,
-      direction: 1,
-    });
+    try {
+      const newDeck = generateDeck();
+      const players = [...gameState.players].map((p) => ({ ...p, hand: newDeck.splice(0, 7) }));
+      let firstCardIndex = newDeck.findIndex((c) => c.color !== 'Black');
+      if (firstCardIndex === -1) firstCardIndex = 0;
+      const firstDiscard = newDeck.splice(firstCardIndex, 1);
+      await set(ref(rtdb, `games/${roomId}`), {
+        ...gameState,
+        gameStarted: true,
+        deck: newDeck,
+        discardPile: firstDiscard,
+        players,
+        currentPlayerIndex: 0,
+        direction: 1,
+      });
+    } catch (err: any) {
+      console.error('startGame failed:', err);
+      showNotice(`Couldn't start game: ${err?.message || 'unknown error'}`);
+    }
   };
 
   const leaveRoom = () => {
@@ -358,10 +378,15 @@ const UnoGame: React.FC = () => {
     const turnAdvancement = skipNext ? newDir * 2 : newDir;
     const nextIndex = (currentPlayerIndex + turnAdvancement + players.length * 2) % players.length;
 
-    await set(ref(rtdb, `games/${roomId}`), {
-      ...currentState, deck, discardPile, players,
-      currentPlayerIndex: nextIndex, direction: newDir,
-    });
+    try {
+      await set(ref(rtdb, `games/${roomId}`), {
+        ...currentState, deck, discardPile, players,
+        currentPlayerIndex: nextIndex, direction: newDir,
+      });
+    } catch (err: any) {
+      console.error('executePlayCard failed:', err);
+      showNotice(`Couldn't play card: ${err?.message || 'unknown error'}`);
+    }
   };
 
   const drawCard = async () => {
@@ -380,9 +405,14 @@ const UnoGame: React.FC = () => {
       players[myIndex].hand.push(drawn);
     }
     const nextIndex = (currentPlayerIndex + direction + players.length) % players.length;
-    await set(ref(rtdb, `games/${roomId}`), {
-      ...gameState, deck, discardPile, players, currentPlayerIndex: nextIndex,
-    });
+    try {
+      await set(ref(rtdb, `games/${roomId}`), {
+        ...gameState, deck, discardPile, players, currentPlayerIndex: nextIndex,
+      });
+    } catch (err: any) {
+      console.error('drawCard failed:', err);
+      showNotice(`Couldn't draw card: ${err?.message || 'unknown error'}`);
+    }
   };
 
   const pageStyle: React.CSSProperties = {
