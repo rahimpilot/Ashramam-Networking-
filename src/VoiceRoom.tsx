@@ -48,6 +48,10 @@ const ICE_SERVERS: RTCIceServer[] = [
 
 const roomRef = (path: string) => ref(rtdb, `voiceRooms/${ROOM_ID}/${path}`);
 
+// Video is temporarily disabled while voice-call reliability is fixed.
+// Flip back to true to re-enable the camera button + camera permission at join.
+const VIDEO_ENABLED = false;
+
 const VoiceRoom: React.FC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
@@ -79,6 +83,8 @@ const VoiceRoom: React.FC = () => {
   const participantPayloadRef = useRef<{ id: string; name: string; email: string; joinedAt: number } | null>(null);
   // Tracks which nested offer listeners are attached (SDK re-fires onChildAdded on reconnect)
   const offerListenersRef = useRef<Set<string>>(new Set());
+  const retryCountRef = useRef<Map<string, number>>(new Map());
+  const makeOfferRef = useRef<(peerId: string) => Promise<void>>(async () => {});
   // Camera toggle state
   const [cameraOn, setCameraOn] = useState(false);
   const cameraOnRef = useRef(false);
@@ -226,10 +232,14 @@ const VoiceRoom: React.FC = () => {
       pc.onicecandidate = (event) => {
         if (event.candidate && userRef.current) {
           // push() => every candidate is kept; set() would overwrite the previous one
+          // NOTE: sdpMLineIndex is null in modern browsers (deprecated in favour
+          // of sdpMid). The RTDB validate rule requires the field to be present,
+          // so default it — addIceCandidate() prefers sdpMid anyway. Without
+          // this, every candidate push is rejected and calls never connect.
           push(roomRef(`iceCandidates/${userRef.current.uid}/${peerId}`), {
             candidate: event.candidate.candidate,
-            sdpMLineIndex: event.candidate.sdpMLineIndex,
-            sdpMid: event.candidate.sdpMid,
+            sdpMLineIndex: event.candidate.sdpMLineIndex ?? 0,
+            sdpMid: event.candidate.sdpMid ?? '0',
             timestamp: Date.now(),
           }).catch(err => console.error('ICE push failed:', err));
         }
@@ -237,9 +247,28 @@ const VoiceRoom: React.FC = () => {
 
       pc.onconnectionstatechange = () => {
         if (pc.connectionState === 'connected') {
+          retryCountRef.current.delete(peerId);
           setConnectedPeers(prev => (prev.includes(peerId) ? prev : [...prev, peerId]));
+        } else if (pc.connectionState === 'failed') {
+          // ICE/connectivity failed (flaky mobile networks) — clean up and let
+          // the offerer retry a few times instead of leaving the call stuck.
+          console.warn(`Voice connection to ${peerId} failed — retrying`);
+          cleanupPeer(peerId);
+          const meNow = userRef.current;
+          if (meNow && meNow.uid > peerId && joinedRef.current) {
+            const attempts = (retryCountRef.current.get(peerId) || 0) + 1;
+            retryCountRef.current.set(peerId, attempts);
+            if (attempts <= 3) {
+              setTimeout(() => {
+                if (joinedRef.current && !peerConnectionsRef.current.has(peerId)) {
+                  void makeOfferRef.current(peerId);
+                }
+              }, 2500);
+            } else {
+              console.warn(`Giving up retrying ${peerId} after 3 attempts`);
+            }
+          }
         } else if (
-          pc.connectionState === 'failed' ||
           pc.connectionState === 'disconnected' ||
           pc.connectionState === 'closed'
         ) {
@@ -300,6 +329,7 @@ const VoiceRoom: React.FC = () => {
       cleanupPeer(peerId);
     }
   }, [createPeerConnection, cleanupPeer]);
+  makeOfferRef.current = makeOffer;
 
   // Re-negotiate an EXISTING peer connection (e.g. camera toggled).
   // Retries a few times if a negotiation is still in flight.
@@ -414,12 +444,14 @@ const VoiceRoom: React.FC = () => {
       // The video track starts muted — the camera stays OFF until the user taps
       // the camera button. Falls back to audio-only if the camera is denied.
       const audioConstraints = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
-      const videoConstraints = {
-        width: { ideal: 640 },
-        height: { ideal: 480 },
-        frameRate: { ideal: 24 },
-        facingMode: 'user',
-      };
+      const videoConstraints = VIDEO_ENABLED
+        ? {
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+            frameRate: { ideal: 24 },
+            facingMode: 'user',
+          }
+        : false;
       let stream: MediaStream;
       try {
         stream = await navigator.mediaDevices.getUserMedia({
@@ -427,11 +459,16 @@ const VoiceRoom: React.FC = () => {
           video: videoConstraints,
         });
       } catch (err) {
-        console.warn('Camera unavailable at join — falling back to audio-only:', err);
-        stream = await navigator.mediaDevices.getUserMedia({
-          audio: audioConstraints,
-          video: false,
-        });
+        if (VIDEO_ENABLED) {
+          // Camera may be denied/unavailable — fall back to audio-only
+          console.warn('Camera unavailable at join — falling back to audio-only:', err);
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: audioConstraints,
+            video: false,
+          });
+        } else {
+          throw err;
+        }
       }
       localStreamRef.current = stream;
       const joinVtrack = stream.getVideoTracks()[0] || null;
@@ -804,7 +841,7 @@ const VoiceRoom: React.FC = () => {
             {joining ? 'Joining…' : '🎙️ Join Voice Chat'}
           </button>
           <p style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '1rem' }}>
-            You'll be asked for microphone and camera access.
+            You'll be asked for microphone access.
           </p>
           <button
             onClick={() => navigate('/hangout')}
@@ -985,18 +1022,20 @@ const VoiceRoom: React.FC = () => {
           >
             {isMuted ? '🔓 Unmute' : '🔇 Mute'}
           </button>
-          <button
-            onClick={toggleCamera}
-            style={{
-              flex: 1,
-              background: cameraOn ? '#7c3aed' : '#374151',
-              color: '#fff', border: 'none', borderRadius: '14px',
-              padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-            }}
-          >
-            {cameraOn ? '📷 On' : '📷 Off'}
-          </button>
+          {VIDEO_ENABLED && (
+            <button
+              onClick={toggleCamera}
+              style={{
+                flex: 1,
+                background: cameraOn ? '#7c3aed' : '#374151',
+                color: '#fff', border: 'none', borderRadius: '14px',
+                padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+              }}
+            >
+              {cameraOn ? '📷 On' : '📷 Off'}
+            </button>
+          )}
           <button
             onClick={leaveRoom}
             style={{
@@ -1015,8 +1054,7 @@ const VoiceRoom: React.FC = () => {
         }}>
           <p style={{ fontSize: '0.85rem', color: '#1e40af', margin: 0, lineHeight: 1.6 }}>
             💡 <strong>Tip:</strong> keep the tab open while chatting. Mute yourself when you're just
-            listening. Tap 📷 to turn your camera on/off anytime. Video uses more mobile data —
-            it works best with a few people. If someone can't hear you, both of you leaving and
+            listening. If someone can't hear you, both of you leaving and
             rejoining fixes most issues.
           </p>
         </div>
