@@ -200,30 +200,46 @@ const UnoGame: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authReady, user]);
 
+  const [busy, setBusy] = useState(false);
+
   const createRoom = async () => {
-    if (!user) return;
-    const code = Math.random().toString(36).substring(2, 6).toUpperCase();
-    const initialState: GameState = {
-      gameStarted: false,
-      deck: [],
-      discardPile: [],
-      players: [{ id: myId, name: myName, hand: [] }],
-      currentPlayerIndex: 0,
-      direction: 1,
-      hostId: myId,
-    };
+    if (busy) return;
+    setBusy(true);
+    showNotice('Creating table…');
     try {
+      if (!user) {
+        showNotice('Not signed in — please sign in again.');
+        return;
+      }
+      const code = Math.random().toString(36).substring(2, 6).toUpperCase();
+      const initialState: GameState = {
+        gameStarted: false,
+        deck: [],
+        discardPile: [],
+        players: [{ id: myId, name: myName, hand: [] }],
+        currentPlayerIndex: 0,
+        direction: 1,
+        hostId: myId,
+      };
       await set(ref(rtdb, `games/${code}`), initialState);
       setRoomId(code);
     } catch (err: any) {
       console.error('createRoom failed:', err);
       showNotice(`Couldn't create table: ${err?.message || 'unknown error'}`);
+    } finally {
+      setBusy(false);
     }
   };
 
   const joinSpecificRoom = async (code: string) => {
-    if (!user) return;
+    if (busy) return;
+    setBusy(true);
+    showNotice('Joining table…');
     try {
+      if (!user) {
+        showNotice('Not signed in — please sign in again.');
+        return;
+      }
       const snap = await get(child(ref(rtdb), `games/${code}`));
       if (!snap.exists()) {
         showNotice('Table not found — check the code.');
@@ -247,6 +263,8 @@ const UnoGame: React.FC = () => {
     } catch (err: any) {
       console.error('joinSpecificRoom failed:', err);
       showNotice(`Couldn't join table: ${err?.message || 'unknown error'}`);
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -460,7 +478,13 @@ const UnoGame: React.FC = () => {
           </div>
 
           <div style={{ ...card, marginBottom: 14 }}>
-            <button style={btnPrimary} onClick={createRoom}>+ Create a table</button>
+            <button
+              style={{ ...btnPrimary, opacity: busy ? 0.6 : 1 }}
+              onClick={createRoom}
+              disabled={busy}
+            >
+              {busy ? 'Working…' : '+ Create a table'}
+            </button>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '14px 0' }}>
               <div style={{ flex: 1, height: 1, background: '#ECEEF1' }} />
               <span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 600 }}>OR JOIN WITH CODE</span>
@@ -479,9 +503,10 @@ const UnoGame: React.FC = () => {
               />
               <button
                 onClick={joinByCode}
-                style={{ ...btnPrimary, width: 'auto', padding: '12px 22px' }}
+                disabled={busy}
+                style={{ ...btnPrimary, width: 'auto', padding: '12px 22px', opacity: busy ? 0.6 : 1 }}
               >
-                Join
+                {busy ? '…' : 'Join'}
               </button>
             </div>
           </div>
