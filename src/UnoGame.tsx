@@ -132,6 +132,8 @@ const UnoGame: React.FC = () => {
   const [openTables, setOpenTables] = useState<OpenTable[]>([]);
   const [copied, setCopied] = useState(false);
   const [notice, setNotice] = useState('');
+  // null = still checking, true = RTDB reachable, false = unreachable
+  const [dbConnected, setDbConnected] = useState<boolean | null>(null);
 
   const myName = user?.displayName || user?.email || 'Player';
   const myId = user?.uid || '';
@@ -142,6 +144,14 @@ const UnoGame: React.FC = () => {
       setUser(u);
       setAuthReady(true);
     });
+    return () => unsub();
+  }, []);
+
+  // Realtime Database connection indicator (.info/connected is a local,
+  // client-side flag — it tells us whether THIS device can reach the DB)
+  useEffect(() => {
+    const connRef = ref(rtdb, '.info/connected');
+    const unsub = onValue(connRef, (snap) => setDbConnected(snap.val() === true));
     return () => unsub();
   }, []);
 
@@ -202,6 +212,19 @@ const UnoGame: React.FC = () => {
 
   const [busy, setBusy] = useState(false);
 
+  // Never let a database call hang the UI forever: if the DB doesn't answer
+  // in `ms`, fail with a helpful message instead of a stuck "Working…" button.
+  const withDbTimeout = <T,>(p: Promise<T>, ms: number, label: string): Promise<T> =>
+    Promise.race([
+      p,
+      new Promise<T>((_, reject) =>
+        setTimeout(
+          () => reject(new Error(`${label} timed out — no response from the game database. Check VPN, Private DNS, or an ad blocker on this device.`)),
+          ms
+        )
+      ),
+    ]);
+
   const createRoom = async () => {
     if (busy) return;
     setBusy(true);
@@ -221,7 +244,7 @@ const UnoGame: React.FC = () => {
         direction: 1,
         hostId: myId,
       };
-      await set(ref(rtdb, `games/${code}`), initialState);
+      await withDbTimeout(set(ref(rtdb, `games/${code}`), initialState), 15000, 'Create table');
       setRoomId(code);
     } catch (err: any) {
       console.error('createRoom failed:', err);
@@ -240,7 +263,7 @@ const UnoGame: React.FC = () => {
         showNotice('Not signed in — please sign in again.');
         return;
       }
-      const snap = await get(child(ref(rtdb), `games/${code}`));
+      const snap = await withDbTimeout(get(child(ref(rtdb), `games/${code}`)), 15000, 'Join table');
       if (!snap.exists()) {
         showNotice('Table not found — check the code.');
         return;
@@ -257,7 +280,7 @@ const UnoGame: React.FC = () => {
           return;
         }
         players.push({ id: myId, name: myName, hand: [] });
-        await set(ref(rtdb, `games/${code}/players`), players);
+        await withDbTimeout(set(ref(rtdb, `games/${code}/players`), players), 15000, 'Join table');
       }
       setRoomId(code);
     } catch (err: any) {
@@ -478,10 +501,18 @@ const UnoGame: React.FC = () => {
           </div>
 
           <div style={{ ...card, marginBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 12, fontSize: 13, fontWeight: 600, color: dbConnected === false ? '#B91C1C' : dbConnected ? '#15803D' : '#B45309' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: dbConnected === false ? '#EF4444' : dbConnected ? '#22C55E' : '#F59E0B' }} />
+              {dbConnected === null
+                ? 'Connecting to game database…'
+                : dbConnected
+                  ? 'Game database connected'
+                  : 'Game database unreachable — check VPN / Private DNS / ad blocker'}
+            </div>
             <button
-              style={{ ...btnPrimary, opacity: busy ? 0.6 : 1 }}
+              style={{ ...btnPrimary, opacity: busy || dbConnected === false ? 0.6 : 1 }}
               onClick={createRoom}
-              disabled={busy}
+              disabled={busy || dbConnected === false}
             >
               {busy ? 'Working…' : '+ Create a table'}
             </button>
@@ -503,8 +534,8 @@ const UnoGame: React.FC = () => {
               />
               <button
                 onClick={joinByCode}
-                disabled={busy}
-                style={{ ...btnPrimary, width: 'auto', padding: '12px 22px', opacity: busy ? 0.6 : 1 }}
+                disabled={busy || dbConnected === false}
+                style={{ ...btnPrimary, width: 'auto', padding: '12px 22px', opacity: busy || dbConnected === false ? 0.6 : 1 }}
               >
                 {busy ? '…' : 'Join'}
               </button>
