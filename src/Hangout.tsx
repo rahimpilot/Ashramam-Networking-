@@ -48,6 +48,7 @@ const TILES: Tile[] = [
 const Hangout: React.FC = () => {
   const navigate = useNavigate();
   const [liveCount, setLiveCount] = useState<number | null>(null);
+  const [openTables, setOpenTables] = useState<number | null>(null);
 
   useEffect(() => {
     const participantsRef = ref(rtdb, `voiceRooms/${ROOM_ID}/participants`);
@@ -62,6 +63,26 @@ const Hangout: React.FC = () => {
         setLiveCount(count);
       },
       () => setLiveCount(null)
+    );
+    return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    const gamesRef = ref(rtdb, 'games');
+    const unsub = onValue(
+      gamesRef,
+      (snap) => {
+        let count = 0;
+        snap.forEach((child) => {
+          const room = child.val();
+          if (room && !room.gameStarted && room.players && room.players.length > 0) {
+            count += 1;
+          }
+          return false;
+        });
+        setOpenTables(count);
+      },
+      () => setOpenTables(null)
     );
     return () => unsub();
   }, []);
@@ -286,6 +307,50 @@ const Hangout: React.FC = () => {
           gridTemplateColumns: '1fr 1fr',
           gap: '12px'
         }}>
+          <div
+            className="hangout-tile"
+            onClick={() => navigate('/hangout/games/uno')}
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #ECEEF1',
+              borderRadius: '16px',
+              padding: '18px 16px',
+              cursor: 'pointer',
+              boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+            }}
+          >
+            <div style={{
+              width: '46px',
+              height: '46px',
+              borderRadius: '14px',
+              background: '#FEF3C7',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '24px',
+              marginBottom: '12px'
+            }}>
+              🃏
+            </div>
+            <div style={{
+              fontSize: '15px',
+              fontWeight: 700,
+              color: '#111318',
+              marginBottom: '3px',
+              lineHeight: 1.3
+            }}>
+              UNO
+            </div>
+            <div style={{
+              fontSize: '12.5px',
+              color: '#6B7280',
+              lineHeight: 1.4
+            }}>
+              {openTables !== null && openTables > 0
+                ? `${openTables} open table${openTables === 1 ? '' : 's'} — jump in`
+                : 'Game night with the crew'}
+            </div>
+          </div>
           {TILES.map((tile) => (
             <div
               key={tile.path}

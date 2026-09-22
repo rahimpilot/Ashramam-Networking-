@@ -12,6 +12,7 @@ import PowerGroup from './PowerGroup';
 import MeetingMinutes from './MeetingMinutes';
 import RoyalBank from './RoyalBank';
 import VoiceRoom from './VoiceRoom';
+import UnoGame from './UnoGame';
 import OurTrips from './OurTrips';
 import Krabi from './Krabi';
 import Baku from './Baku';
@@ -31,6 +32,7 @@ function App() {
         <Route path="/stories" element={<Stories />} />
         <Route path="/residents" element={<Residents />} />
         <Route path="/hangout" element={<Hangout />} />
+        <Route path="/hangout/games/uno" element={<UnoGame />} />
         <Route path="/power-group" element={<PowerGroup />} />
         <Route path="/meeting-minutes" element={<MeetingMinutes />} />
         <Route path="/meeting-minutes/september-7th-2025" element={<September7th2025Meeting />} />
