@@ -370,9 +370,10 @@ const VoiceRoom: React.FC = () => {
         type: answer.type,
         timestamp: Date.now(),
       });
-      // If our camera is on but the offer was audio-only, bring video up
-      // (delayed so the answer is processed first — avoids offer/answer races)
-      if (cameraOnRef.current) {
+      // If our camera is on but the peer's offer was audio-only (they joined
+      // without a camera), renegotiate to bring our video up. Delayed so the
+      // answer is processed first — avoids offer/answer races.
+      if (cameraOnRef.current && !offer.sdp.includes('m=video')) {
         setTimeout(() => renegotiateOffer(peerId), 1500);
       }
     } catch (err) {
@@ -408,12 +409,36 @@ const VoiceRoom: React.FC = () => {
     setError(null);
 
     try {
-      // 1. Microphone (inside the tap gesture, so mobile browsers allow it)
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-        video: false,
-      });
+      // 1. Microphone + camera (inside the tap gesture, so mobile browsers allow it).
+      // The camera is requested up front so toggling video later is instant.
+      // The video track starts muted — the camera stays OFF until the user taps
+      // the camera button. Falls back to audio-only if the camera is denied.
+      const audioConstraints = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
+      const videoConstraints = {
+        width: { ideal: 640 },
+        height: { ideal: 480 },
+        frameRate: { ideal: 24 },
+        facingMode: 'user',
+      };
+      let stream: MediaStream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: audioConstraints,
+          video: videoConstraints,
+        });
+      } catch (err) {
+        console.warn('Camera unavailable at join — falling back to audio-only:', err);
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: audioConstraints,
+          video: false,
+        });
+      }
       localStreamRef.current = stream;
+      const joinVtrack = stream.getVideoTracks()[0] || null;
+      if (joinVtrack) {
+        joinVtrack.enabled = false; // camera off until toggled
+        localVideoTrackRef.current = joinVtrack;
+      }
 
       // 2. AudioContext for the speaking indicator (must resume in a gesture)
       const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -660,60 +685,57 @@ const VoiceRoom: React.FC = () => {
     const participantRef = roomRef(`participants/${me.uid}`);
 
     if (!cameraOnRef.current) {
-      // ---- Enable camera (lazy: only ask for camera permission when toggled) ----
-      let vtrack: MediaStreamTrack;
-      try {
-        const vstream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            width: { ideal: 640 },
-            height: { ideal: 480 },
-            frameRate: { ideal: 24 },
-            facingMode: 'user',
-          },
-        });
-        vtrack = vstream.getVideoTracks()[0];
-        if (!vtrack) throw new Error('no video track');
-      } catch (err) {
-        console.error('enableCamera failed:', err);
-        setError('Could not access the camera. Please allow camera access and try again.');
-        return;
+      // ---- Enable camera ----
+      let vtrack = localVideoTrackRef.current;
+      if (vtrack && vtrack.readyState === 'ended') {
+        localVideoTrackRef.current = null;
+        vtrack = null;
       }
-      localVideoTrackRef.current = vtrack;
-      localStreamRef.current.addTrack(vtrack);
+      if (!vtrack) {
+        // No camera track (denied/unavailable at join) — try acquiring now.
+        // This needs a renegotiation since the track was never negotiated.
+        try {
+          const vstream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              frameRate: { ideal: 24 },
+              facingMode: 'user',
+            },
+          });
+          vtrack = vstream.getVideoTracks()[0];
+          if (!vtrack) throw new Error('no video track');
+          localVideoTrackRef.current = vtrack;
+          localStreamRef.current.addTrack(vtrack);
+          await update(participantRef, { isCameraOn: true }).catch(() => {});
+          for (const peerId of Array.from(peerConnectionsRef.current.keys())) {
+            const pc = peerConnectionsRef.current.get(peerId);
+            if (pc && pc.signalingState !== 'closed') {
+              try { pc.addTrack(vtrack, localStreamRef.current); } catch { /* already added */ }
+              await renegotiateOffer(peerId);
+            }
+          }
+        } catch (err) {
+          console.error('enableCamera failed:', err);
+          setError('Could not access the camera. Please allow camera access and try again.');
+          return;
+        }
+      } else {
+        // Track already negotiated at join — just unmute it. Instant, no renegotiation.
+        vtrack.enabled = true;
+        await update(participantRef, { isCameraOn: true }).catch(() => {});
+      }
       cameraOnRef.current = true;
       setCameraOn(true);
       if (localVideoElRef.current) localVideoElRef.current.srcObject = localStreamRef.current;
-      await update(participantRef, { isCameraOn: true }).catch(() => {});
-      // Add the track to every existing connection and renegotiate
-      for (const peerId of Array.from(peerConnectionsRef.current.keys())) {
-        const pc = peerConnectionsRef.current.get(peerId);
-        if (pc && pc.signalingState !== 'closed') {
-          try { pc.addTrack(vtrack, localStreamRef.current); } catch { /* already added */ }
-          await renegotiateOffer(peerId);
-        }
-      }
     } else {
-      // ---- Disable camera ----
+      // ---- Disable camera: mute the track, keep it negotiated for instant re-enable ----
       const vtrack = localVideoTrackRef.current;
+      if (vtrack) vtrack.enabled = false;
       cameraOnRef.current = false;
       setCameraOn(false);
       if (localVideoElRef.current) localVideoElRef.current.srcObject = null;
       await update(participantRef, { isCameraOn: false }).catch(() => {});
-      for (const peerId of Array.from(peerConnectionsRef.current.keys())) {
-        const pc = peerConnectionsRef.current.get(peerId);
-        if (pc && pc.signalingState !== 'closed') {
-          const sender = pc.getSenders().find(s => s.track === vtrack);
-          if (sender) {
-            try { pc.removeTrack(sender); } catch { /* noop */ }
-          }
-          await renegotiateOffer(peerId);
-        }
-      }
-      if (vtrack) {
-        try { vtrack.stop(); } catch { /* noop */ }
-        try { localStreamRef.current.removeTrack(vtrack); } catch { /* noop */ }
-      }
-      localVideoTrackRef.current = null;
     }
   }, [renegotiateOffer]);
 
@@ -782,7 +804,7 @@ const VoiceRoom: React.FC = () => {
             {joining ? 'Joining…' : '🎙️ Join Voice Chat'}
           </button>
           <p style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '1rem' }}>
-            You'll be asked for microphone access.
+            You'll be asked for microphone and camera access.
           </p>
           <button
             onClick={() => navigate('/hangout')}
