@@ -7,7 +7,7 @@ import { getDatabase } from 'firebase/database';
 const firebaseConfig = {
   apiKey: "AIzaSyAto1Q5Bq2nHNNecCdsXLkLmpdNR2X_RdI",
   authDomain: "ashramam-network.firebaseapp.com",
-  databaseURL: "https://ashramam-network-default-rtdb.firebasedatabase.app",
+  databaseURL: "https://ashramam-network-default-rtdb.firebaseio.com",
   projectId: "ashramam-network",
   storageBucket: "ashramam-network.firebasestorage.app",
   messagingSenderId: "135445089005",
@@ -20,7 +20,7 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 // Initialize Realtime Database with explicit URL
-export const rtdb = getDatabase(app, "https://ashramam-network-default-rtdb.firebasedatabase.app");
+export const rtdb = getDatabase(app, "https://ashramam-network-default-rtdb.firebaseio.com");
 
 // Enhanced security: Connect to emulators in development for testing security rules
 if (process.env.NODE_ENV === 'development' && !auth.app.options.projectId?.includes('demo')) {
