@@ -14,6 +14,7 @@ interface Participant {
   isMuted: boolean;
   isActive: boolean;
   joinedAt: number;
+  isCameraOn?: boolean;
 }
 
 const ROOM_ID = 'happening-now-room';
@@ -78,6 +79,13 @@ const VoiceRoom: React.FC = () => {
   const participantPayloadRef = useRef<{ id: string; name: string; email: string; joinedAt: number } | null>(null);
   // Tracks which nested offer listeners are attached (SDK re-fires onChildAdded on reconnect)
   const offerListenersRef = useRef<Set<string>>(new Set());
+  // Camera toggle state
+  const [cameraOn, setCameraOn] = useState(false);
+  const cameraOnRef = useRef(false);
+  const localVideoTrackRef = useRef<MediaStreamTrack | null>(null);
+  const localVideoElRef = useRef<HTMLVideoElement | null>(null);
+  // Remote media streams by peer (drives the video tiles)
+  const [remoteStreams, setRemoteStreams] = useState<Map<string, MediaStream>>(new Map());
 
   const setSpeaking = useCallback((id: string, speaking: boolean) => {
     const s = speakingRef.current;
@@ -134,6 +142,7 @@ const VoiceRoom: React.FC = () => {
           email: p.email,
           isMuted: isMutedRef.current,
           isActive: true,
+          isCameraOn: cameraOnRef.current,
           joinedAt: p.joinedAt,
         }).catch(() => {});
         onDisconnect(pref).remove().catch(() => {});
@@ -157,6 +166,11 @@ const VoiceRoom: React.FC = () => {
     }
     remoteAnalysersRef.current.delete(peerId);
     pendingCandidatesRef.current.delete(peerId);
+    setRemoteStreams(prev => {
+      const next = new Map(prev);
+      next.delete(peerId);
+      return next;
+    });
     setSpeaking(peerId, false);
     setConnectedPeers(prev => prev.filter(id => id !== peerId));
   }, [setSpeaking]);
@@ -168,7 +182,8 @@ const VoiceRoom: React.FC = () => {
       const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
 
       if (localStreamRef.current) {
-        localStreamRef.current.getAudioTracks().forEach(track => {
+        // All tracks (audio always; video too when the camera is on)
+        localStreamRef.current.getTracks().forEach(track => {
           pc.addTrack(track, localStreamRef.current!);
         });
       }
@@ -176,6 +191,15 @@ const VoiceRoom: React.FC = () => {
       pc.ontrack = (event) => {
         const remoteStream = event.streams[0];
         if (!remoteStream) return;
+        // Declarative state drives the video tiles; refresh when tracks are removed too
+        setRemoteStreams(prev => {
+          const next = new Map(prev);
+          next.set(peerId, remoteStream);
+          return next;
+        });
+        remoteStream.onremovetrack = () => setRemoteStreams(prev => new Map(prev));
+        // Video is rendered by the tiles below; only audio needs the imperative element
+        if (event.track.kind !== 'audio') return;
         let audio = remoteAudiosRef.current.get(peerId);
         if (!audio) {
           audio = new Audio();
@@ -277,12 +301,61 @@ const VoiceRoom: React.FC = () => {
     }
   }, [createPeerConnection, cleanupPeer]);
 
+  // Re-negotiate an EXISTING peer connection (e.g. camera toggled).
+  // Retries a few times if a negotiation is still in flight.
+  const renegotiateOffer = useCallback(async (peerId: string, attempt = 0) => {
+    const me = userRef.current;
+    const pc = peerConnectionsRef.current.get(peerId);
+    if (!me || !pc || pc.signalingState === 'closed') return;
+    if (pc.signalingState !== 'stable') {
+      if (attempt < 4) setTimeout(() => renegotiateOffer(peerId, attempt + 1), 800);
+      return;
+    }
+    try {
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      await set(roomRef(`offers/${me.uid}/${peerId}`), {
+        sdp: offer.sdp,
+        type: offer.type,
+        timestamp: Date.now(),
+      });
+    } catch (err) {
+      console.error('renegotiateOffer failed:', err);
+    }
+  }, []);
+
   const handleRemoteOffer = useCallback(async (peerId: string, offer: { sdp: string; type: string }) => {
     const me = userRef.current;
     if (!me) return;
-    // If we already have a connection, ignore duplicate offers
-    if (peerConnectionsRef.current.has(peerId)) {
-      remove(roomRef(`offers/${peerId}/${me.uid}`)).catch(() => {});
+    const existing = peerConnectionsRef.current.get(peerId);
+    if (existing) {
+      // Renegotiation (e.g. peer toggled camera) or simultaneous offers (glare).
+      // Polite peer (lower UID) accepts even mid-negotiation via implicit rollback;
+      // impolite peer only accepts when stable.
+      const polite = me.uid < peerId;
+      const canAccept =
+        existing.signalingState === 'stable' ||
+        (polite && existing.signalingState === 'have-local-offer');
+      try {
+        if (canAccept) {
+          await existing.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp: offer.sdp }));
+          await flushPendingCandidates(peerId);
+          const answer = await existing.createAnswer();
+          await existing.setLocalDescription(answer);
+          await set(roomRef(`answers/${me.uid}/${peerId}`), {
+            sdp: answer.sdp,
+            type: answer.type,
+            timestamp: Date.now(),
+          });
+          // If glare made us offer too, drop our own stale offer
+          await remove(roomRef(`offers/${me.uid}/${peerId}`)).catch(() => {});
+        }
+      } catch (err) {
+        console.error('handleRemoteOffer (renegotiation) failed:', err);
+      } finally {
+        // Consumed — remove so it can never be reprocessed
+        remove(roomRef(`offers/${peerId}/${me.uid}`)).catch(() => {});
+      }
       return;
     }
     const pc = createPeerConnection(peerId);
@@ -297,6 +370,11 @@ const VoiceRoom: React.FC = () => {
         type: answer.type,
         timestamp: Date.now(),
       });
+      // If our camera is on but the offer was audio-only, bring video up
+      // (delayed so the answer is processed first — avoids offer/answer races)
+      if (cameraOnRef.current) {
+        setTimeout(() => renegotiateOffer(peerId), 1500);
+      }
     } catch (err) {
       console.error('handleRemoteOffer failed:', err);
       cleanupPeer(peerId);
@@ -304,7 +382,7 @@ const VoiceRoom: React.FC = () => {
       // Consumed — remove so it can never be reprocessed
       remove(roomRef(`offers/${peerId}/${me.uid}`)).catch(() => {});
     }
-  }, [createPeerConnection, flushPendingCandidates, cleanupPeer]);
+  }, [createPeerConnection, flushPendingCandidates, cleanupPeer, renegotiateOffer]);
 
   const handleRemoteAnswer = useCallback(async (peerId: string, answer: { sdp: string; type: string }) => {
     const me = userRef.current;
@@ -360,6 +438,7 @@ const VoiceRoom: React.FC = () => {
         ...participantPayloadRef.current,
         isMuted: false,
         isActive: true,
+        isCameraOn: false,
       };
       // Never hang forever on a dead/flaky connection — fail loudly instead.
       const joinTimeout = new Promise<never>((_, reject) =>
@@ -497,6 +576,10 @@ const VoiceRoom: React.FC = () => {
     joinedRef.current = false;
     participantPayloadRef.current = null;
     offerListenersRef.current.clear();
+    cameraOnRef.current = false;
+    localVideoTrackRef.current = null;
+    setCameraOn(false);
+    setRemoteStreams(new Map());
 
     // Stop listeners
     listenersRef.current.forEach(unsub => {
@@ -570,6 +653,69 @@ const VoiceRoom: React.FC = () => {
     setSpeaking('me', false);
     await update(roomRef(`participants/${me.uid}`), { isMuted: newMuted }).catch(() => {});
   }, [isMuted, setSpeaking]);
+
+  const toggleCamera = useCallback(async () => {
+    const me = userRef.current;
+    if (!me || !joinedRef.current || !localStreamRef.current) return;
+    const participantRef = roomRef(`participants/${me.uid}`);
+
+    if (!cameraOnRef.current) {
+      // ---- Enable camera (lazy: only ask for camera permission when toggled) ----
+      let vtrack: MediaStreamTrack;
+      try {
+        const vstream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+            frameRate: { ideal: 24 },
+            facingMode: 'user',
+          },
+        });
+        vtrack = vstream.getVideoTracks()[0];
+        if (!vtrack) throw new Error('no video track');
+      } catch (err) {
+        console.error('enableCamera failed:', err);
+        setError('Could not access the camera. Please allow camera access and try again.');
+        return;
+      }
+      localVideoTrackRef.current = vtrack;
+      localStreamRef.current.addTrack(vtrack);
+      cameraOnRef.current = true;
+      setCameraOn(true);
+      if (localVideoElRef.current) localVideoElRef.current.srcObject = localStreamRef.current;
+      await update(participantRef, { isCameraOn: true }).catch(() => {});
+      // Add the track to every existing connection and renegotiate
+      for (const peerId of Array.from(peerConnectionsRef.current.keys())) {
+        const pc = peerConnectionsRef.current.get(peerId);
+        if (pc && pc.signalingState !== 'closed') {
+          try { pc.addTrack(vtrack, localStreamRef.current); } catch { /* already added */ }
+          await renegotiateOffer(peerId);
+        }
+      }
+    } else {
+      // ---- Disable camera ----
+      const vtrack = localVideoTrackRef.current;
+      cameraOnRef.current = false;
+      setCameraOn(false);
+      if (localVideoElRef.current) localVideoElRef.current.srcObject = null;
+      await update(participantRef, { isCameraOn: false }).catch(() => {});
+      for (const peerId of Array.from(peerConnectionsRef.current.keys())) {
+        const pc = peerConnectionsRef.current.get(peerId);
+        if (pc && pc.signalingState !== 'closed') {
+          const sender = pc.getSenders().find(s => s.track === vtrack);
+          if (sender) {
+            try { pc.removeTrack(sender); } catch { /* noop */ }
+          }
+          await renegotiateOffer(peerId);
+        }
+      }
+      if (vtrack) {
+        try { vtrack.stop(); } catch { /* noop */ }
+        try { localStreamRef.current.removeTrack(vtrack); } catch { /* noop */ }
+      }
+      localVideoTrackRef.current = null;
+    }
+  }, [renegotiateOffer]);
 
   // ---------- UI ----------
   if (!authReady) {
@@ -719,14 +865,29 @@ const VoiceRoom: React.FC = () => {
 
           {/* You */}
           <div style={cardStyle(isSpeaking('me'), '#3b82f6')}>
-            <div style={{
-              width: '48px', height: '48px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
-            }}>
-              {user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || '?'}
-            </div>
+            {cameraOn ? (
+              <video
+                ref={(el) => {
+                  localVideoElRef.current = el;
+                  if (el && localStreamRef.current) el.srcObject = localStreamRef.current;
+                }}
+                autoPlay playsInline muted
+                style={{
+                  width: '96px', aspectRatio: '16 / 9', borderRadius: '10px', objectFit: 'cover',
+                  transform: 'scaleX(-1)', background: '#111827',
+                  marginRight: '1rem', flexShrink: 0,
+                }}
+              />
+            ) : (
+              <div style={{
+                width: '48px', height: '48px', borderRadius: '50%',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#fff', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
+              }}>
+                {user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || '?'}
+              </div>
+            )}
             <div style={{ flex: 1 }}>
               <p style={{ margin: '0 0 0.25rem 0', fontWeight: 600, color: '#1f2937' }}>
                 {user?.displayName || user?.email} (You)
@@ -741,25 +902,51 @@ const VoiceRoom: React.FC = () => {
             <div style={{ textAlign: 'center', padding: '1.5rem', color: '#6b7280' }}>
               <p style={{ margin: 0 }}>No one else here yet — share the Hangout and get them in! 🎉</p>
             </div>
-          ) : others.map(p => (
-            <div key={p.id} style={cardStyle(isSpeaking(p.id), '#22c55e')}>
-              <div style={{
-                width: '48px', height: '48px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: '#fff', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
-              }}>
-                {p.name?.[0]?.toUpperCase() || '?'}
+          ) : others.map(p => {
+            const rstream = remoteStreams.get(p.id);
+            const hasVideo = !!rstream && rstream.getVideoTracks().length > 0;
+            const showVideo = !!p.isCameraOn && hasVideo;
+            return (
+              <div key={p.id} style={cardStyle(isSpeaking(p.id), '#22c55e')}>
+                {showVideo ? (
+                  <video
+                    ref={(el) => { if (el && rstream && el.srcObject !== rstream) el.srcObject = rstream; }}
+                    autoPlay playsInline muted
+                    style={{
+                      width: '96px', aspectRatio: '16 / 9', borderRadius: '10px', objectFit: 'cover',
+                      background: '#111827', marginRight: '1rem', flexShrink: 0,
+                    }}
+                  />
+                ) : p.isCameraOn ? (
+                  <div style={{
+                    width: '96px', aspectRatio: '16 / 9', borderRadius: '10px', background: '#111827',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#9ca3af', fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
+                  }}>
+                    📷…
+                  </div>
+                ) : (
+                  <div style={{
+                    width: '48px', height: '48px', borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
+                  }}>
+                    {p.name?.[0]?.toUpperCase() || '?'}
+                  </div>
+                )}
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: '0 0 0.25rem 0', fontWeight: 600, color: '#1f2937' }}>
+                    {p.name}{p.isCameraOn ? ' 📷' : ''}
+                  </p>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>{statusFor(p, p.id)}</p>
+                </div>
+                {connectedPeers.includes(p.id) && (
+                  <span style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 600 }}>● live</span>
+                )}
               </div>
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: '0 0 0.25rem 0', fontWeight: 600, color: '#1f2937' }}>{p.name}</p>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>{statusFor(p, p.id)}</p>
-              </div>
-              {connectedPeers.includes(p.id) && (
-                <span style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 600 }}>● live</span>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Controls */}
@@ -770,18 +957,30 @@ const VoiceRoom: React.FC = () => {
               flex: 1,
               background: isMuted ? '#10b981' : '#374151',
               color: '#fff', border: 'none', borderRadius: '14px',
-              padding: '1.1rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
+              padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
             }}
           >
             {isMuted ? '🔓 Unmute' : '🔇 Mute'}
           </button>
           <button
+            onClick={toggleCamera}
+            style={{
+              flex: 1,
+              background: cameraOn ? '#7c3aed' : '#374151',
+              color: '#fff', border: 'none', borderRadius: '14px',
+              padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+            }}
+          >
+            {cameraOn ? '📷 On' : '📷 Off'}
+          </button>
+          <button
             onClick={leaveRoom}
             style={{
               flex: 1,
               background: '#dc2626', color: '#fff', border: 'none', borderRadius: '14px',
-              padding: '1.1rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
+              padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
             }}
           >
             👋 Leave
@@ -794,7 +993,9 @@ const VoiceRoom: React.FC = () => {
         }}>
           <p style={{ fontSize: '0.85rem', color: '#1e40af', margin: 0, lineHeight: 1.6 }}>
             💡 <strong>Tip:</strong> keep the tab open while chatting. Mute yourself when you're just
-            listening. If someone can't hear you, both of you leaving and rejoining fixes most issues.
+            listening. Tap 📷 to turn your camera on/off anytime. Video uses more mobile data —
+            it works best with a few people. If someone can't hear you, both of you leaving and
+            rejoining fixes most issues.
           </p>
         </div>
       </div>
