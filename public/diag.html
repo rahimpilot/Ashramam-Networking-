@@ -21,6 +21,13 @@ h1 { font-size: 20px; }
 var logEl = document.getElementById('log');
 function log(html){ var d = document.createElement('div'); d.innerHTML = html; logEl.appendChild(d); }
 var DB = 'ashramam-network-default-rtdb.firebaseio.com';
+// T0: clear the SDK's stale "websocket failed" memory left over from the
+// CSP-blocked era (the SDK otherwise refuses to try WebSockets at all)
+try {
+  var hadFlag = localStorage.getItem('previous_websocket_failure');
+  localStorage.removeItem('previous_websocket_failure');
+  log('T0: cleared stale SDK websocket-failure flag (was: ' + hadFlag + ')');
+} catch(e){ log('T0: localStorage unavailable — ' + e.message); }
 // T1: plain HTTPS reachability
 log('T1: HTTPS to game database…');
 fetch('https://' + DB + '/.json').then(function(r){ return r.text().then(function(){

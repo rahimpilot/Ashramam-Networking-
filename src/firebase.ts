@@ -19,6 +19,17 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
+// Clear the SDK's stale "websocket failed" memory. While the site's CSP blocked
+// wss://*.firebaseio.com, the Firebase SDK persisted previous_websocket_failure
+// in localStorage and now refuses to try WebSockets at all (falling back to
+// iframe long-polling). The CSP is fixed, so drop the stale flag and let the
+// SDK retry WebSocket. Safe: if WebSocket genuinely fails, the SDK re-sets it.
+try {
+  localStorage.removeItem('previous_websocket_failure');
+} catch {
+  /* storage unavailable (non-browser context) — ignore */
+}
+
 // Initialize Realtime Database with explicit URL
 export const rtdb = getDatabase(app, "https://ashramam-network-default-rtdb.firebaseio.com");
 
