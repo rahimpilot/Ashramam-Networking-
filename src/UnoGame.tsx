@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User, signInAnonymously, updateProfile } from 'firebase/auth';
 import { ref, onValue, set, get, child } from 'firebase/database';
 import { auth, rtdb } from './firebase';
 import PageHeader from './PageHeader';
@@ -132,10 +132,15 @@ const UnoGame: React.FC = () => {
   const [openTables, setOpenTables] = useState<OpenTable[]>([]);
   const [copied, setCopied] = useState(false);
   const [notice, setNotice] = useState('');
+  // Guest name for public invite links (remembered on this device)
+  const [guestName, setGuestName] = useState(() => {
+    try { return localStorage.getItem('uno_guest_name') || ''; } catch { return ''; }
+  });
+  const [guestNameInput, setGuestNameInput] = useState(guestName);
   // null = still checking, true = RTDB reachable, false = unreachable
   const [dbConnected, setDbConnected] = useState<boolean | null>(null);
 
-  const myName = user?.displayName || user?.email || 'Player';
+  const myName = user?.displayName || user?.email || guestName || 'Player';
   const myId = user?.uid || '';
 
   // Auth
@@ -297,6 +302,35 @@ const UnoGame: React.FC = () => {
       return;
     }
     joinSpecificRoom(inputCode.trim().toUpperCase());
+  };
+
+  // Guest entry: someone opened a public invite link (?room=CODE) without an
+  // account. Sign them in anonymously so they can play — no password needed.
+  // Requires "Anonymous" sign-in enabled in the Firebase console.
+  const joinAsGuest = async () => {
+    const name = guestNameInput.trim();
+    if (!name) {
+      showNotice('Enter your name to join.');
+      return;
+    }
+    if (busy) return;
+    setBusy(true);
+    try {
+      try { localStorage.setItem('uno_guest_name', name); } catch { /* ignore */ }
+      setGuestName(name);
+      const cred = await signInAnonymously(auth);
+      try { await updateProfile(cred.user, { displayName: name }); } catch { /* non-fatal */ }
+      // The ?room= deep-link effect below auto-joins once auth state lands.
+    } catch (err: any) {
+      console.error('guest sign-in failed:', err);
+      if (err?.code === 'auth/admin-restricted-operation' || err?.code === 'auth/operation-not-allowed') {
+        showNotice('Guest play is not switched on yet — ask the host to enable it.');
+      } else {
+        showNotice(`Couldn't join: ${err?.message || 'unknown error'}`);
+      }
+    } finally {
+      setBusy(false);
+    }
   };
 
   const startGame = async () => {
@@ -474,15 +508,50 @@ const UnoGame: React.FC = () => {
   }
 
   if (!user) {
+    const inviteCode = searchParams.get('room');
     return (
       <div style={pageStyle}>
         <PageHeader backTo="/hangout" title="UNO" onBack={() => navigate('/hangout')} />
         <div style={wrapStyle}>
-          <div style={card}>
-            <p style={{ textAlign: 'center', color: '#6B7280' }}>Please sign in to play UNO with your circle.</p>
-            <button style={btnPrimary} onClick={() => navigate('/')}>Go to sign in</button>
-          </div>
+          {inviteCode ? (
+            <div style={card}>
+              <div style={{ textAlign: 'center', marginBottom: 14 }}>
+                <div style={{ fontSize: 44, marginBottom: 4 }}>🃏</div>
+                <h2 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 4px 0', color: '#111318' }}>You're invited to UNO!</h2>
+                <p style={{ fontSize: 14, color: '#6B7280', margin: 0 }}>
+                  Table code <b>{inviteCode.toUpperCase()}</b> · no account needed, just pick a name.
+                </p>
+              </div>
+              <input
+                value={guestNameInput}
+                onChange={(e) => setGuestNameInput(e.target.value)}
+                placeholder="Your name"
+                maxLength={20}
+                style={{
+                  width: '100%', boxSizing: 'border-box', border: '1px solid #E5E7EB',
+                  borderRadius: 12, padding: '12px 14px', fontSize: 16, marginBottom: 10,
+                }}
+              />
+              <button
+                style={{ ...btnPrimary, opacity: busy ? 0.6 : 1 }}
+                disabled={busy}
+                onClick={joinAsGuest}
+              >
+                {busy ? 'Joining…' : 'Join table as guest'}
+              </button>
+            </div>
+          ) : (
+            <div style={card}>
+              <p style={{ textAlign: 'center', color: '#6B7280' }}>Please sign in to play UNO with your circle.</p>
+              <button style={btnPrimary} onClick={() => navigate('/')}>Go to sign in</button>
+            </div>
+          )}
         </div>
+        {notice && (
+          <div style={{ position: 'fixed', bottom: 90, left: '50%', transform: 'translateX(-50%)', background: '#111318', color: '#fff', padding: '10px 18px', borderRadius: 999, fontSize: 13, zIndex: 200 }}>
+            {notice}
+          </div>
+        )}
         <BottomNavigation />
       </div>
     );
@@ -497,7 +566,7 @@ const UnoGame: React.FC = () => {
           <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <div style={{ fontSize: 44, marginBottom: 4 }}>🃏</div>
             <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 4px 0', color: '#111318' }}>Game Night</h2>
-            <p style={{ fontSize: 14, color: '#6B7280', margin: 0 }}>Start a table and invite your circle.</p>
+            <p style={{ fontSize: 14, color: '#6B7280', margin: 0 }}>Start a table and invite anyone with the link.</p>
           </div>
 
           <div style={{ ...card, marginBottom: 14 }}>
@@ -604,7 +673,7 @@ const UnoGame: React.FC = () => {
             >
               {copied ? '✓ Link copied!' : '🔗 Copy invite link'}
             </button>
-            <p style={{ fontSize: 13, color: '#6B7280', margin: '12px 0 0 0' }}>Share the code or link with your circle.</p>
+            <p style={{ fontSize: 13, color: '#6B7280', margin: '12px 0 0 0' }}>Share the link — anyone who opens it can join as a guest, no account needed.</p>
           </div>
 
           <div style={{ ...card, marginBottom: 14 }}>
