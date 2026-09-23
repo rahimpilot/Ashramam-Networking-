@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 import PageHeader from './PageHeader';
-import Skeleton from './Skeleton';
+import { SkeletonPost } from './Skeleton';
 import { auth } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
@@ -76,7 +76,7 @@ const AshramamExclusive: React.FC = () => {
       <div style={{ minHeight: '100vh', background: '#e9f1f8' }}>
         <PageHeader title="Ashramam Exclusive" backTo="/hangout" backLabel="Back to hangout" />
         <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px' }}>
-          <Skeleton />
+          <SkeletonPost />
         </div>
         <BottomNavigation />
       </div>
