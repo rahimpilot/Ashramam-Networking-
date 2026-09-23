@@ -13,18 +13,33 @@ interface ExclusiveStory {
   badgeColor: string;
   title: string;
   excerpt: string;
+  body?: string;
   date: string;
 }
 
-// Placeholder — first real story lands here when Abdu shares it.
 const STORIES: ExclusiveStory[] = [
   {
-    id: 'coming-soon',
-    badge: 'COMING SOON',
-    badgeColor: '#6b7f92',
-    title: 'First exclusive dropping soon…',
-    excerpt: 'The hottest news from inside the group lands here first. Stay tuned — Abdu is cooking up the first exclusive as we speak.',
-    date: '',
+    id: 'dhoomakethu',
+    badge: 'EXCLUSIVE',
+    badgeColor: '#e63946',
+    title: 'Dhoomakethu',
+    excerpt: "Shanir Musliyamveetil's first cinema drops this Friday — a comedy loop thriller.",
+    body: `Shanir Musliyamveetil's first cinema drops this Friday — and the project is titled Dhoomakethu, a comedy loop thriller.
+
+Shanir stepped into the industry almost by accident, but once he was in, there was no looking back. He threw himself into it — engaging with artists on and off set, exploring the craft, and discovering a genuine passion for the work. Along the way he made friends, gathered his Power Group members around him, and now travels everywhere with them, honouring their little inner selves.
+
+Coming back to the topic — Dhoomakethu. Our whole crew is set to watch the movie first-day-first-show, from different parts of the world. We wish Shanir Musliyamveetil the very best of luck — and many more to come.
+
+He even arranged a special screening for his friend Niyaz Kamaru, who insisted on watching the film with his family at any cost — a true family man, a one-woman man, and ever truthful to his wife. And though Shanir is an evergreen fraud, he decided to honour the request.
+
+Back to the movie — we will pack the cinema hall, cheer it on, and wait to celebrate its success.
+
+While post-production was underway, Shanir's friend Asif travelled to Kochi to meet and congratulate the entire cast. While congratulating them, Asif honoured his own little inner self so many times that he forgot the purpose of his Kochi visit last week.
+
+Shanir will be watching the film from Kerala, alongside his naughty close friends Hyder, Riyaz, and Farhad. I don't want to get into Hyder too much and get lost in the loop — rather, go watch this loop thriller with your loved ones.
+
+All the best — and chests.`,
+    date: 'September 25, 2026',
   },
 ];
 
@@ -87,8 +102,8 @@ const AshramamExclusive: React.FC = () => {
               <h3 style={{ margin: '0 0 8px 0', fontSize: 17, fontWeight: 700, color: '#1c2733', lineHeight: 1.35 }}>
                 {story.title}
               </h3>
-              <p style={{ margin: 0, fontSize: 14, color: '#5b6b7c', lineHeight: 1.6 }}>
-                {story.excerpt}
+              <p style={{ margin: 0, fontSize: 14, color: '#5b6b7c', lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                {story.body || story.excerpt}
               </p>
               {story.date && (
                 <div style={{ marginTop: 10, fontSize: 12, color: '#8a9aaB' }}>{story.date}</div>
