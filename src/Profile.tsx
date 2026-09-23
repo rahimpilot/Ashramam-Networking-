@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth, db } from './firebase';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore';
 import BottomNavigation from './BottomNavigation';
 
@@ -21,6 +22,21 @@ const Profile: React.FC = () => {
   const [otherProfile, setOtherProfile] = useState<{ name: string; location: string; bio: string } | null>(null);
   const [otherLoading, setOtherLoading] = useState(false);
   const [otherMissing, setOtherMissing] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetError, setResetError] = useState('');
+
+  const handleChangePassword = async () => {
+    if (!user?.email) return;
+    setResetSent(false);
+    setResetError('');
+    try {
+      await sendPasswordResetEmail(auth, user.email);
+      setResetSent(true);
+    } catch (e) {
+      console.error('Password reset failed', e);
+      setResetError('Could not send the reset email. Please try again.');
+    }
+  };
 
   useEffect(() => {
     if (user && !isOtherUser) {
@@ -162,7 +178,15 @@ const Profile: React.FC = () => {
             Email
             <input type="email" value={user.email || ''} disabled style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #eee', marginTop: 4, background: '#d8e6f2', color: '#888' }} />
           </label>
-          <a href="https://www.ashramamvibes.com/reset-password" style={{ color: '#4a86c8', fontWeight: 500, marginBottom: 8 }}>Change Password</a>
+          <button
+            type="button"
+            onClick={handleChangePassword}
+            style={{ background: 'none', border: 'none', padding: 0, color: '#4a86c8', fontWeight: 500, marginBottom: 8, cursor: 'pointer', fontSize: 15, textAlign: 'left', textDecoration: 'underline' }}
+          >
+            Change Password
+          </button>
+          {resetSent && <div style={{ color: 'green', fontSize: 13 }}>Reset email sent — check your inbox.</div>}
+          {resetError && <div style={{ color: '#b91c1c', fontSize: 13 }}>{resetError}</div>}
           <button type="submit" disabled={loading} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #5b9bd5, #4a86c8)', color: '#ffffff', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Save</button>
           {message && <div style={{ color: 'green', marginTop: 8 }}>{message}</div>}
         </form>

@@ -76,6 +76,8 @@ function AnimatedRoutes() {
         <Route path="/our-trips/krabi" element={<RequireAuth><Krabi /></RequireAuth>} />
         <Route path="/our-trips/baku" element={<RequireAuth><Baku /></RequireAuth>} />
         <Route path="/krabi" element={<RequireAuth><Krabi /></RequireAuth>} />
+        {/* Unknown URLs go to the login screen instead of a blank page */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
