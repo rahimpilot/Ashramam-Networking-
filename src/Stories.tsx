@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth, db } from './firebase';
 import { collection, getDocs, doc, setDoc, query, orderBy, Timestamp, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -26,6 +27,7 @@ interface Topic {
 }
 
 const Stories: React.FC = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [stories, setStories] = useState<Story[]>([]);
@@ -47,11 +49,14 @@ const Stories: React.FC = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setAuthLoading(false);
-      // Logged-out visitors can still view stories via shared permalinks
+      if (!currentUser) {
+        // Stories are members-only — send visitors to login
+        navigate('/');
+      }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const topics: Topic[] = [
     { id: 'life', name: 'ഞങ്ങളുടെ താർ', description: 'Personal experiences and life lessons', icon: '', color: '#1c1915' },
@@ -78,9 +83,8 @@ const Stories: React.FC = () => {
 
     if (user) {
       fetchUserProfile();
+      fetchStories();
     }
-    // Stories are publicly readable so shared permalinks work without login
-    fetchStories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading]);
 

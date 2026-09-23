@@ -1,8 +1,12 @@
 /**
  * Email Notification Service
- * This file handles sending email notifications for loan applications
- * For now, it uses a simple backend service. Later this can be upgraded to Firebase Cloud Functions
+ * Sends real emails via EmailJS (free tier: 200 emails/month).
+ * Configure credentials in src/emailConfig.ts — until then, falls back
+ * to console logging so loan applications still succeed.
  */
+
+import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG, isEmailConfigured } from './emailConfig';
 
 interface LoanApplicationData {
   fullName: string;
@@ -17,34 +21,36 @@ interface LoanApplicationData {
 const ADMIN_EMAIL = 'raimu456@gmail.com';
 
 /**
- * Send email notification for loan application
- * Currently logs to console - will be replaced with actual email service
- * TODO: Integrate with Firebase Cloud Functions or Nodemailer
+ * Send email notification for a new loan application.
+ * Uses EmailJS when configured; otherwise logs to console.
  */
 export const sendLoanApplicationEmail = async (applicationData: LoanApplicationData): Promise<void> => {
   try {
-    console.log('Attempting to send email notification...');
-    console.log('Application Data:', applicationData);
+    if (!isEmailConfigured()) {
+      console.log('EmailJS not configured — logging loan application instead.');
+      console.log('Application Data:', applicationData);
+      console.log(`📧 Email would be sent to: ${ADMIN_EMAIL}`);
+      console.log(`From applicant: ${applicationData.applicantEmail}`);
+      return;
+    }
 
-    // For MVP, we'll log to console
-    // This can later be replaced with:
-    // 1. Firebase Cloud Functions
-    // 2. SendGrid API
-    // 3. Nodemailer backend service
-    // 4. AWS SES
-    // 5. Any other email service
+    await emailjs.send(
+      EMAILJS_CONFIG.SERVICE_ID,
+      EMAILJS_CONFIG.TEMPLATE_ID,
+      {
+        to_email: ADMIN_EMAIL,
+        applicant_name: applicationData.fullName,
+        applicant_email: applicationData.applicantEmail,
+        loan_purpose: applicationData.purposeOfLoan,
+        loan_amount: applicationData.amount,
+        repayment_period: applicationData.repaymentPeriod,
+        existing_lender: applicationData.existingLender,
+        submitted_at: applicationData.submittedAt,
+      },
+      { publicKey: EMAILJS_CONFIG.PUBLIC_KEY }
+    );
 
-    console.log(`📧 Email would be sent to: ${ADMIN_EMAIL}`);
-    console.log(`From applicant: ${applicationData.applicantEmail}`);
-
-    // TODO: Implement actual email sending
-    // const response = await fetch('/api/send-loan-email', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(applicationData)
-    // });
-    // if (!response.ok) throw new Error('Failed to send email');
-
+    console.log(`📧 Loan application email sent to ${ADMIN_EMAIL}`);
   } catch (error) {
     console.error('Error sending email:', error);
     // Don't throw - let the application submission succeed even if email fails
