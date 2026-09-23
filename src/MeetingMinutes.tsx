@@ -33,7 +33,7 @@ const MEETINGS: Meeting[] = [
     weekday: 'Sunday',
     points: 3,
     accent: '#5b9bd5',
-    accentBg: '#f1e6cf',
+    accentBg: '#e0eaf4',
   },
   {
     path: '/meeting-minutes/september-7th-2025',
@@ -53,7 +53,7 @@ const MeetingMinutes: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#f6f1e8',
+      background: '#e9f1f8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <style>{`
@@ -96,7 +96,7 @@ const MeetingMinutes: React.FC = () => {
           </h2>
           <p style={{
             fontSize: '15px',
-            color: '#7a7264',
+            color: '#6b7f92',
             margin: 0,
             lineHeight: 1.5
           }}>
@@ -112,8 +112,8 @@ const MeetingMinutes: React.FC = () => {
               className="minutes-card"
               onClick={() => navigate(m.path)}
               style={{
-                background: '#fffdf8',
-                border: '1px solid #e7ddcc',
+                background: '#ffffff',
+                border: '1px solid #d3dfee',
                 borderRadius: '16px',
                 padding: '16px',
                 cursor: 'pointer',
@@ -129,12 +129,12 @@ const MeetingMinutes: React.FC = () => {
                 flexShrink: 0,
                 borderRadius: '12px',
                 overflow: 'hidden',
-                border: '1px solid #e7ddcc',
+                border: '1px solid #d3dfee',
                 textAlign: 'center'
               }}>
                 <div style={{
                   background: m.accent,
-                  color: '#fffdf8',
+                  color: '#ffffff',
                   fontSize: '10px',
                   fontWeight: 700,
                   letterSpacing: '1px',
@@ -143,7 +143,7 @@ const MeetingMinutes: React.FC = () => {
                   {m.month}
                 </div>
                 <div style={{
-                  background: '#fffdf8',
+                  background: '#ffffff',
                   color: '#1e1a14',
                   fontSize: '22px',
                   fontWeight: 700,
@@ -165,7 +165,7 @@ const MeetingMinutes: React.FC = () => {
                 </div>
                 <div style={{
                   fontSize: '13px',
-                  color: '#7a7264'
+                  color: '#6b7f92'
                 }}>
                   {m.weekday} · {m.points} discussion points
                 </div>

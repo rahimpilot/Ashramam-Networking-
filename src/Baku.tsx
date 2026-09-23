@@ -73,18 +73,18 @@ const Baku: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#f6f1e8',
+      background: '#e9f1f8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       {/* Modern Mobile Header - 60px height */}
       <div style={{
-        background: '#fffdf8',
+        background: '#ffffff',
         height: '60px',
         position: 'sticky',
         top: 0,
         zIndex: 100,
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        borderBottom: '1px solid #e2d7bf'
+        borderBottom: '1px solid #c9d9e8'
       }}>
         <div style={{
           display: 'flex',
@@ -112,7 +112,7 @@ const Baku: React.FC = () => {
               borderRadius: '50%',
               transition: 'background-color 0.2s ease'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             ←
@@ -180,11 +180,11 @@ const Baku: React.FC = () => {
 
         {/* Add Story Section */}
         <div style={{
-          background: '#fffdf8',
+          background: '#ffffff',
           borderRadius: '12px',
           padding: '16px',
           marginBottom: '20px',
-          border: '1px solid #e2d7bf'
+          border: '1px solid #c9d9e8'
         }}>
           {!showStoryInput ? (
             <button
@@ -195,7 +195,7 @@ const Baku: React.FC = () => {
                 background: 'linear-gradient(135deg, #6aa5d8 0%, #5b9bd5 100%)',
                 border: 'none',
                 borderRadius: '8px',
-                color: '#fffdf8',
+                color: '#ffffff',
                 fontSize: '14px',
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -222,7 +222,7 @@ const Baku: React.FC = () => {
                   width: '100%',
                   padding: '12px',
                   borderRadius: '8px',
-                  border: '1px solid #d8c9ae',
+                  border: '1px solid #bccfdd',
                   fontSize: '14px',
                   fontFamily: 'inherit',
                   minHeight: '100px',
@@ -243,7 +243,7 @@ const Baku: React.FC = () => {
                     background: 'linear-gradient(135deg, #16A34A 0%, #15803D 100%)',
                     border: 'none',
                     borderRadius: '8px',
-                    color: '#fffdf8',
+                    color: '#ffffff',
                     fontSize: '14px',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -262,8 +262,8 @@ const Baku: React.FC = () => {
                   style={{
                     flex: 1,
                     padding: '10px',
-                    background: '#ece3d0',
-                    border: '1px solid #d8c9ae',
+                    background: '#d8e6f2',
+                    border: '1px solid #bccfdd',
                     borderRadius: '8px',
                     color: '#332e26',
                     fontSize: '14px',
@@ -271,8 +271,8 @@ const Baku: React.FC = () => {
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#e7ddcc'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = '#ece3d0'}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#d3dfee'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = '#d8e6f2'}
                 >
                   Cancel
                 </button>
@@ -283,11 +283,11 @@ const Baku: React.FC = () => {
 
         {/* Photo Upload Section */}
         <div style={{
-          background: '#fffdf8',
+          background: '#ffffff',
           borderRadius: '12px',
           padding: '16px',
           marginBottom: '20px',
-          border: '1px solid #e2d7bf'
+          border: '1px solid #c9d9e8'
         }}>
           <label style={{
             display: 'block',
@@ -296,7 +296,7 @@ const Baku: React.FC = () => {
             background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
             border: 'none',
             borderRadius: '8px',
-            color: '#fffdf8',
+            color: '#ffffff',
             fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
@@ -344,10 +344,10 @@ const Baku: React.FC = () => {
               <div
                 key={story.id}
                 style={{
-                  background: '#fffdf8',
+                  background: '#ffffff',
                   borderRadius: '12px',
                   padding: '16px',
-                  border: '1px solid #e2d7bf',
+                  border: '1px solid #c9d9e8',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                 }}
               >
@@ -368,7 +368,7 @@ const Baku: React.FC = () => {
                     </p>
                     <p style={{
                       fontSize: '12px',
-                      color: '#a89a80',
+                      color: '#9dafbe',
                       margin: 0
                     }}>
                       {story.timestamp}
@@ -412,8 +412,8 @@ const Baku: React.FC = () => {
                   borderRadius: '12px',
                   overflow: 'hidden',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  background: '#fffdf8',
-                  border: '1px solid #e2d7bf'
+                  background: '#ffffff',
+                  border: '1px solid #c9d9e8'
                 }}
               >
                 <img
@@ -442,7 +442,7 @@ const Baku: React.FC = () => {
                   </p>
                   <p style={{
                     fontSize: '11px',
-                    color: '#a89a80',
+                    color: '#9dafbe',
                     margin: 0
                   }}>
                     by {photo.uploadedBy}

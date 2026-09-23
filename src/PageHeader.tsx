@@ -15,7 +15,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
 
   return (
     <div style={{
-      background: 'rgba(255, 253, 248, 0.88)',
+      background: 'rgba(255, 255, 255, 0.88)',
       backdropFilter: 'blur(14px)',
       WebkitBackdropFilter: 'blur(14px)',
       height: '64px',
@@ -51,7 +51,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
             borderRadius: '50%',
             transition: 'background-color 0.2s ease'
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           aria-label={backLabel || 'Back'}
         >

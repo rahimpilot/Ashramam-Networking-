@@ -10,13 +10,13 @@ const RoyalBank: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#fffdf8',
+      background: '#ffffff',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
       {/* Back Button */}
       <div style={{
         padding: window.innerWidth <= 768 ? '1rem 0.5rem' : '1.5rem 1rem',
-        background: '#fffdf8',
+        background: '#ffffff',
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -86,7 +86,7 @@ const RoyalBank: React.FC = () => {
             fontFamily: "'Cormorant Garamond', Georgia, serif",
             fontWeight: 600,
             margin: '0 0 1rem 0',
-            color: '#fffdf8',
+            color: '#ffffff',
             textShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
           }}>
             Royal Bank of Chaandiyar
@@ -109,7 +109,7 @@ const RoyalBank: React.FC = () => {
           {/* Subtitle */}
           <p style={{
             fontSize: window.innerWidth <= 768 ? '0.9rem' : '1rem',
-            color: '#d8c9ae',
+            color: '#bccfdd',
             margin: '1rem 0 0 0',
             letterSpacing: '0.5px'
           }}>
@@ -168,7 +168,7 @@ const RoyalBank: React.FC = () => {
         }}>
           {/* Service Card 1 */}
           <div style={{
-            background: 'linear-gradient(135deg, #e8e8e8 0%, #d8c9ae 100%)',
+            background: 'linear-gradient(135deg, #e8e8e8 0%, #bccfdd 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
             border: '2px solid #3a332a'
@@ -243,7 +243,7 @@ const RoyalBank: React.FC = () => {
 
           {/* Service Card 4 */}
           <div style={{
-            background: 'linear-gradient(135deg, #d8c9ae 0%, #b8b8b8 100%)',
+            background: 'linear-gradient(135deg, #bccfdd 0%, #b8b8b8 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
             border: '2px solid #3a332a'
@@ -345,7 +345,7 @@ const RoyalBank: React.FC = () => {
           <h3 style={{
             fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
             fontWeight: 700,
-            color: '#fffdf8',
+            color: '#ffffff',
             margin: '0 0 1rem 0'
           }}>
             Ready to Join Us?
@@ -386,7 +386,7 @@ const RoyalBank: React.FC = () => {
 
         {/* Contact Section */}
         <div style={{
-          background: '#ece3d0',
+          background: '#d8e6f2',
           padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
           borderRadius: '12px',
           marginBottom: '2rem'
@@ -407,7 +407,7 @@ const RoyalBank: React.FC = () => {
             <div>
               <p style={{
                 fontSize: '0.9rem',
-                color: '#7a7264',
+                color: '#6b7f92',
                 margin: '0 0 0.5rem 0'
               }}>
                 📞 Phone
@@ -424,7 +424,7 @@ const RoyalBank: React.FC = () => {
             <div>
               <p style={{
                 fontSize: '0.9rem',
-                color: '#7a7264',
+                color: '#6b7f92',
                 margin: '0 0 0.5rem 0'
               }}>
                 📧 Email
@@ -441,7 +441,7 @@ const RoyalBank: React.FC = () => {
             <div>
               <p style={{
                 fontSize: '0.9rem',
-                color: '#7a7264',
+                color: '#6b7f92',
                 margin: '0 0 0.5rem 0'
               }}>
                 🌐 Website

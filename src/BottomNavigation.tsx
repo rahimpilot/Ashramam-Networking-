@@ -45,7 +45,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
         bottom: 0,
         left: 0,
         right: 0,
-        background: 'rgba(255, 253, 248, 0.94)',
+        background: 'rgba(255, 255, 255, 0.94)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderTop: '1px solid rgba(91, 155, 213, 0.16)',
@@ -95,7 +95,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
               fontSize: '0.68rem',
               fontWeight: active ? 700 : 500,
               letterSpacing: '0.4px',
-              color: active ? '#5b9bd5' : '#a89a80'
+              color: active ? '#5b9bd5' : '#9dafbe'
             }}>
               {tab.label}
             </span>

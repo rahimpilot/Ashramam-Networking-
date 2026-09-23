@@ -142,7 +142,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
       overflowY: 'auto'
     }}>
       <div style={{
-        backgroundColor: '#fffdf8',
+        backgroundColor: '#ffffff',
         borderRadius: '12px',
         padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
         maxWidth: '600px',
@@ -157,7 +157,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: '1.5rem',
-          borderBottom: '2px solid #e7ddcc',
+          borderBottom: '2px solid #d3dfee',
           paddingBottom: '1rem'
         }}>
           <h2 style={{
@@ -175,7 +175,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               border: 'none',
               fontSize: '1.5rem',
               cursor: 'pointer',
-              color: '#7a7264'
+              color: '#6b7f92'
             }}
           >
             ✕
@@ -204,7 +204,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d8c9ae',
+                border: '1px solid #bccfdd',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -212,7 +212,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
+              onBlur={(e) => e.target.style.borderColor = '#bccfdd'}
             />
           </div>
 
@@ -235,7 +235,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d8c9ae',
+                border: '1px solid #bccfdd',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -245,7 +245,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
+              onBlur={(e) => e.target.style.borderColor = '#bccfdd'}
             />
           </div>
 
@@ -267,7 +267,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d8c9ae',
+                border: '1px solid #bccfdd',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -276,7 +276,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
+              onBlur={(e) => e.target.style.borderColor = '#bccfdd'}
             >
               <option value="">Select repayment period...</option>
               <option value="3_months">3 Months</option>
@@ -309,7 +309,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d8c9ae',
+                border: '1px solid #bccfdd',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -317,7 +317,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
+              onBlur={(e) => e.target.style.borderColor = '#bccfdd'}
             />
           </div>
 
@@ -341,7 +341,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d8c9ae',
+                border: '1px solid #bccfdd',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -349,7 +349,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
+              onBlur={(e) => e.target.style.borderColor = '#bccfdd'}
             />
           </div>
 
@@ -375,8 +375,8 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
             style={{
               width: '100%',
               padding: '1rem',
-              backgroundColor: loading ? '#a89a80' : '#16a34a',
-              color: '#fffdf8',
+              backgroundColor: loading ? '#9dafbe' : '#16a34a',
+              color: '#ffffff',
               border: 'none',
               borderRadius: '6px',
               fontSize: '1rem',
@@ -406,9 +406,9 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
         <div style={{
           marginTop: '1.5rem',
           paddingTop: '1rem',
-          borderTop: '1px solid #e7ddcc',
+          borderTop: '1px solid #d3dfee',
           fontSize: '0.85rem',
-          color: '#7a7264',
+          color: '#6b7f92',
           textAlign: 'center'
         }}>
           We'll review your application and contact you within 2-3 business days.

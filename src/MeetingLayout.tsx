@@ -30,7 +30,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#f6f1e8',
+      background: '#e9f1f8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <PageHeader title="Meeting Minutes" backTo="/meeting-minutes" backLabel="Back to all meetings" />
@@ -66,7 +66,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
           </h2>
           <p style={{
             fontSize: '15px',
-            color: '#7a7264',
+            color: '#6b7f92',
             margin: 0
           }}>
             {weekday} · {points.length} discussion {points.length === 1 ? 'point' : 'points'}
@@ -76,8 +76,8 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
         {/* Participants */}
         {participants && participants.length > 0 && (
           <div style={{
-            background: '#fffdf8',
-            border: '1px solid #e7ddcc',
+            background: '#ffffff',
+            border: '1px solid #d3dfee',
             borderRadius: '16px',
             padding: '18px',
             marginBottom: '12px',
@@ -87,7 +87,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
               fontSize: '13px',
               fontWeight: 700,
               letterSpacing: '1px',
-              color: '#a89a80',
+              color: '#9dafbe',
               marginBottom: '12px'
             }}>
               PARTICIPANTS
@@ -118,8 +118,8 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
             <div
               key={i}
               style={{
-                background: '#fffdf8',
-                border: '1px solid #e7ddcc',
+                background: '#ffffff',
+                border: '1px solid #d3dfee',
                 borderRadius: '16px',
                 padding: '18px',
                 boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
@@ -170,7 +170,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
         <p style={{
           fontSize: '14px',
           fontStyle: 'italic',
-          color: '#a89a80',
+          color: '#9dafbe',
           margin: '20px 4px 0 4px',
           lineHeight: 1.6
         }}>

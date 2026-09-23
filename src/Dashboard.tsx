@@ -113,7 +113,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, onClose }) =>
             top: '-2rem',
             right: '0',
             background: 'rgba(0, 0, 0, 0.7)',
-            color: '#fffdf8',
+            color: '#ffffff',
             border: 'none',
             borderRadius: '50%',
             width: '2.5rem',
@@ -807,7 +807,7 @@ const Dashboard: React.FC = () => {
       }}>
         <div style={{ 
           textAlign: 'center',
-          color: '#fffdf8',
+          color: '#ffffff',
           background: 'rgba(255,255,255,0.15)',
           padding: '32px',
           borderRadius: '16px',
@@ -826,18 +826,18 @@ const Dashboard: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#f6f1e8',
+      background: '#e9f1f8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       {/* Modern Mobile Header - 60px height */}
       <div style={{
-        background: '#fffdf8',
+        background: '#ffffff',
         height: '60px',
         position: 'sticky',
         top: 0,
         zIndex: 100,
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        borderBottom: '1px solid #e2d7bf'
+        borderBottom: '1px solid #c9d9e8'
       }}>
         <div style={{
           display: 'flex',
@@ -854,7 +854,7 @@ const Dashboard: React.FC = () => {
               width: 48,
               height: 48,
               borderRadius: '50%',
-              border: '2px solid #e2d7bf',
+              border: '2px solid #c9d9e8',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -870,7 +870,7 @@ const Dashboard: React.FC = () => {
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.borderColor = '#e2d7bf';
+              e.currentTarget.style.borderColor = '#c9d9e8';
             }}>
               {user?.email && getProfilePicture(user.email, userProfile.name || user.displayName || '') ? (
                 <img
@@ -884,12 +884,12 @@ const Dashboard: React.FC = () => {
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.parentElement!.innerHTML = `
-                      <span style="font-size: 1.2rem; color: #7a7264;">👤</span>
+                      <span style="font-size: 1.2rem; color: #6b7f92;">👤</span>
                     `;
                   }}
                 />
               ) : (
-                <span style={{ fontSize: '1.2rem', color: '#7a7264' }}>👤</span>
+                <span style={{ fontSize: '1.2rem', color: '#6b7f92' }}>👤</span>
               )}
             </div>
             
@@ -909,7 +909,7 @@ const Dashboard: React.FC = () => {
                 <div style={{
                   fontSize: '14px',
                   fontWeight: 400,
-                  color: '#7a7264',
+                  color: '#6b7f92',
                   lineHeight: '1.4',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -939,8 +939,8 @@ const Dashboard: React.FC = () => {
 
       {/* Tab Navigation - Cleaner Design */}
       <div style={{
-        background: '#fffdf8',
-        borderBottom: '1px solid #e2d7bf',
+        background: '#ffffff',
+        borderBottom: '1px solid #c9d9e8',
         position: 'sticky',
         top: '60px',
         zIndex: 50
@@ -974,14 +974,14 @@ const Dashboard: React.FC = () => {
       <div style={{
         maxWidth: 480,
         margin: '0 auto',
-        background: '#f6f1e8',
+        background: '#e9f1f8',
         minHeight: '100vh'
       }}>
         {/* Story/Post Composer - Card Style */}
         <div style={{
           margin: '16px 16px 8px 16px',
           padding: '16px',
-          background: '#fffdf8',
+          background: '#ffffff',
           borderRadius: '12px',
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           position: 'relative'
@@ -1013,8 +1013,8 @@ const Dashboard: React.FC = () => {
                 top: '100px',
                 left: '16px',
                 right: '16px',
-                background: '#fffdf8',
-                border: '1px solid #e2d7bf',
+                background: '#ffffff',
+                border: '1px solid #c9d9e8',
                 borderRadius: '12px',
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                 zIndex: 1000,
@@ -1028,7 +1028,7 @@ const Dashboard: React.FC = () => {
                     style={{
                       padding: '12px',
                       cursor: 'pointer',
-                      borderBottom: index < mentionUsers.length - 1 ? '1px solid #f6f1e8' : 'none',
+                      borderBottom: index < mentionUsers.length - 1 ? '1px solid #e9f1f8' : 'none',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '12px',
@@ -1036,7 +1036,7 @@ const Dashboard: React.FC = () => {
                       transition: 'background-color 0.2s, transform 0.1s'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#f6f1e8';
+                      e.currentTarget.style.backgroundColor = '#e9f1f8';
                       e.currentTarget.style.transform = 'scale(1.01)';
                     }}
                     onMouseLeave={(e) => {
@@ -1049,12 +1049,12 @@ const Dashboard: React.FC = () => {
                       height: 40,
                       borderRadius: '50%',
                       overflow: 'hidden',
-                      border: '2px solid #e2d7bf',
+                      border: '2px solid #c9d9e8',
                       background: user.profilePicture ? 'transparent' : 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#fffdf8',
+                      color: '#ffffff',
                       fontSize: '16px',
                       fontWeight: 600
                     }}>
@@ -1091,7 +1091,7 @@ const Dashboard: React.FC = () => {
                     top: '8px',
                     right: '8px',
                     background: 'rgba(0,0,0,0.7)',
-                    color: '#fffdf8',
+                    color: '#ffffff',
                     border: 'none',
                     borderRadius: '50%',
                     width: '32px',
@@ -1131,7 +1131,7 @@ const Dashboard: React.FC = () => {
                   borderRadius: '50%',
                   transition: 'background-color 0.2s ease'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                 >
                   📷
@@ -1149,8 +1149,8 @@ const Dashboard: React.FC = () => {
                 style={{
                   background: (newMessage.trim() || selectedImage) 
                     ? 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)' 
-                    : '#e2d7bf',
-                  color: (newMessage.trim() || selectedImage) ? '#fffdf8' : '#a89a80',
+                    : '#c9d9e8',
+                  color: (newMessage.trim() || selectedImage) ? '#ffffff' : '#9dafbe',
                   border: 'none',
                   borderRadius: '12px',
                   padding: '12px 24px',
@@ -1187,7 +1187,7 @@ const Dashboard: React.FC = () => {
               style={{
                 marginBottom: '8px',
                 padding: '16px',
-                background: '#fffdf8',
+                background: '#ffffff',
                 borderRadius: '12px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 transition: 'box-shadow 0.2s ease',
@@ -1202,7 +1202,7 @@ const Dashboard: React.FC = () => {
                   height: 48,
                   borderRadius: '50%',
                   overflow: 'hidden',
-                  border: '2px solid #e2d7bf',
+                  border: '2px solid #c9d9e8',
                   flexShrink: 0,
                   cursor: 'pointer',
                   transition: 'transform 0.2s ease, border-color 0.2s ease'
@@ -1214,7 +1214,7 @@ const Dashboard: React.FC = () => {
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.borderColor = '#e2d7bf';
+                  e.currentTarget.style.borderColor = '#c9d9e8';
                 }}
                 >
                   {(() => {
@@ -1242,7 +1242,7 @@ const Dashboard: React.FC = () => {
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
-                                color: #fffdf8;
+                                color: #ffffff;
                                 font-size: 1.2rem;
                                 font-weight: 600;
                               ">
@@ -1261,7 +1261,7 @@ const Dashboard: React.FC = () => {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: '#fffdf8',
+                          color: '#ffffff',
                           fontSize: '18px',
                           fontWeight: 600
                         }}>
@@ -1286,7 +1286,7 @@ const Dashboard: React.FC = () => {
                       fontSize: '12px',
                       fontWeight: 400,
                       lineHeight: '1.4',
-                      color: '#7a7264'
+                      color: '#6b7f92'
                     }}>
                       {post.createdAt.toDate().toLocaleDateString()}
                     </span>
@@ -1299,7 +1299,7 @@ const Dashboard: React.FC = () => {
                         style={{
                           width: '100%',
                           minHeight: '80px',
-                          border: '1px solid #e2d7bf',
+                          border: '1px solid #c9d9e8',
                           borderRadius: '12px',
                           padding: '12px',
                           fontSize: '16px',
@@ -1334,7 +1334,7 @@ const Dashboard: React.FC = () => {
                                 }}
                                 style={{
                                   background: '#DC2626',
-                                  color: '#fffdf8',
+                                  color: '#ffffff',
                                   border: 'none',
                                   borderRadius: '8px',
                                   padding: '6px 12px',
@@ -1365,7 +1365,7 @@ const Dashboard: React.FC = () => {
                           onClick={() => saveEditedPost(post.id)}
                           style={{
                             background: '#10B981',
-                            color: '#fffdf8',
+                            color: '#ffffff',
                             border: 'none',
                             borderRadius: '12px',
                             padding: '10px 16px',
@@ -1383,8 +1383,8 @@ const Dashboard: React.FC = () => {
                         <button
                           onClick={cancelEditingPost}
                           style={{
-                            background: '#7a7264',
-                            color: '#fffdf8',
+                            background: '#6b7f92',
+                            color: '#ffffff',
                             border: 'none',
                             borderRadius: '12px',
                             padding: '10px 16px',
@@ -1450,7 +1450,7 @@ const Dashboard: React.FC = () => {
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: post.likes?.includes(user?.email || '') ? '#EF4444' : '#7a7264',
+                          color: post.likes?.includes(user?.email || '') ? '#EF4444' : '#6b7f92',
                           fontSize: '20px',
                           cursor: 'pointer',
                           padding: '8px',
@@ -1463,7 +1463,7 @@ const Dashboard: React.FC = () => {
                           transition: 'background-color 0.2s ease, transform 0.2s ease'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#f6f1e8';
+                          e.currentTarget.style.backgroundColor = '#e9f1f8';
                           e.currentTarget.style.transform = 'scale(1.1)';
                         }}
                         onMouseLeave={(e) => {
@@ -1476,7 +1476,7 @@ const Dashboard: React.FC = () => {
                       <span 
                         onClick={() => setShowLikes(prev => ({ ...prev, [post.id]: !prev[post.id] }))}
                         style={{
-                          color: '#7a7264',
+                          color: '#6b7f92',
                           fontSize: '14px',
                           fontWeight: 400,
                           cursor: 'pointer',
@@ -1491,7 +1491,7 @@ const Dashboard: React.FC = () => {
                       style={{
                         background: 'none',
                         border: 'none',
-                        color: '#7a7264',
+                        color: '#6b7f92',
                         fontSize: '14px',
                         fontWeight: 400,
                         cursor: 'pointer',
@@ -1502,7 +1502,7 @@ const Dashboard: React.FC = () => {
                         borderRadius: '8px',
                         transition: 'background-color 0.2s ease'
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
                       💬 {post.replyCount || 0}
@@ -1513,7 +1513,7 @@ const Dashboard: React.FC = () => {
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: '#7a7264',
+                          color: '#6b7f92',
                           fontSize: '14px',
                           fontWeight: 400,
                           cursor: 'pointer',
@@ -1524,7 +1524,7 @@ const Dashboard: React.FC = () => {
                           borderRadius: '8px',
                           transition: 'background-color 0.2s ease'
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
                         ✏️ Edit
@@ -1534,8 +1534,8 @@ const Dashboard: React.FC = () => {
                   
                   {/* Likes Section */}
                   {showLikes[post.id] && post.likes && post.likes.length > 0 && (
-                    <div style={{ marginTop: '8px', padding: '12px', backgroundColor: '#f6f1e8', borderRadius: '12px', border: '1px solid #e2d7bf' }}>
-                      <div style={{ fontSize: '12px', color: '#7a7264', fontWeight: 500, marginBottom: '8px' }}>
+                    <div style={{ marginTop: '8px', padding: '12px', backgroundColor: '#e9f1f8', borderRadius: '12px', border: '1px solid #c9d9e8' }}>
+                      <div style={{ fontSize: '12px', color: '#6b7f92', fontWeight: 500, marginBottom: '8px' }}>
                         Liked by:
                       </div>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -1544,7 +1544,7 @@ const Dashboard: React.FC = () => {
                             key={email}
                             onClick={() => viewUserProfile(email, getUserName(email))}
                             style={{
-                              backgroundColor: '#e2d7bf',
+                              backgroundColor: '#c9d9e8',
                               color: '#1c1915',
                               padding: '6px 12px',
                               borderRadius: '12px',
@@ -1555,11 +1555,11 @@ const Dashboard: React.FC = () => {
                             }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = '#5b9bd5';
-                              e.currentTarget.style.color = '#fffdf8';
+                              e.currentTarget.style.color = '#ffffff';
                               e.currentTarget.style.transform = 'scale(1.05)';
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = '#e2d7bf';
+                              e.currentTarget.style.backgroundColor = '#c9d9e8';
                               e.currentTarget.style.color = '#1c1915';
                               e.currentTarget.style.transform = 'scale(1)';
                             }}
@@ -1573,7 +1573,7 @@ const Dashboard: React.FC = () => {
                   
                   {/* Comments Section */}
                   {showComments[post.id] && (
-                    <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #e2d7bf' }}>
+                    <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #c9d9e8' }}>
                       {/* Existing Comments */}
                       {post.replies && post.replies.map((reply) => (
                         <div key={reply.id} style={{ marginBottom: '12px', fontSize: '14px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
@@ -1583,7 +1583,7 @@ const Dashboard: React.FC = () => {
                             height: 32,
                             borderRadius: '50%',
                             overflow: 'hidden',
-                            border: '2px solid #e2d7bf',
+                            border: '2px solid #c9d9e8',
                             flexShrink: 0,
                             cursor: 'pointer',
                             transition: 'transform 0.2s ease, border-color 0.2s ease'
@@ -1595,7 +1595,7 @@ const Dashboard: React.FC = () => {
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.transform = 'scale(1)';
-                            e.currentTarget.style.borderColor = '#e2d7bf';
+                            e.currentTarget.style.borderColor = '#c9d9e8';
                           }}
                           >
                             {(() => {
@@ -1622,7 +1622,7 @@ const Dashboard: React.FC = () => {
                                           display: flex;
                                           align-items: center;
                                           justify-content: center;
-                                          color: #fffdf8;
+                                          color: #ffffff;
                                           font-size: 0.7rem;
                                           font-weight: 600;
                                         ">
@@ -1641,7 +1641,7 @@ const Dashboard: React.FC = () => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    color: '#fffdf8',
+                                    color: '#ffffff',
                                     fontSize: '12px',
                                     fontWeight: 600
                                   }}>
@@ -1655,10 +1655,10 @@ const Dashboard: React.FC = () => {
                           {/* Reply Content */}
                           <div style={{ flex: 1 }}>
                             <strong style={{ color: '#1c1915', fontSize: '14px', fontWeight: 600 }}>{reply.author}:</strong>{' '}
-                            <span style={{ color: '#7a7264', fontSize: '14px', fontWeight: 400, lineHeight: '1.4' }}>
+                            <span style={{ color: '#6b7f92', fontSize: '14px', fontWeight: 400, lineHeight: '1.4' }}>
                               {renderMessageWithMentions(reply.message)}
                             </span>
-                            <div style={{ fontSize: '11px', color: '#a89a80', marginTop: '4px' }}>
+                            <div style={{ fontSize: '11px', color: '#9dafbe', marginTop: '4px' }}>
                               {reply.createdAt.toDate().toLocaleDateString()}
                             </div>
                           </div>
@@ -1675,7 +1675,7 @@ const Dashboard: React.FC = () => {
                           style={{
                             flex: 1,
                             padding: '10px 12px',
-                            border: '1px solid #e2d7bf',
+                            border: '1px solid #c9d9e8',
                             borderRadius: '20px',
                             fontSize: '14px',
                             fontWeight: 400,
@@ -1685,7 +1685,7 @@ const Dashboard: React.FC = () => {
                             minHeight: '44px'
                           }}
                           onFocus={(e) => e.currentTarget.style.borderColor = '#5b9bd5'}
-                          onBlur={(e) => e.currentTarget.style.borderColor = '#e2d7bf'}
+                          onBlur={(e) => e.currentTarget.style.borderColor = '#c9d9e8'}
                           onKeyPress={(e) => {
                             if (e.key === 'Enter') {
                               handleAddComment(post.id);
@@ -1700,8 +1700,8 @@ const Dashboard: React.FC = () => {
                             bottom: '100%',
                             left: '0',
                             right: '80px',
-                            background: '#fffdf8',
-                            border: '1px solid #e2d7bf',
+                            background: '#ffffff',
+                            border: '1px solid #c9d9e8',
                             borderRadius: '12px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                             zIndex: 1000,
@@ -1716,20 +1716,20 @@ const Dashboard: React.FC = () => {
                                 style={{
                                   padding: '8px',
                                   cursor: 'pointer',
-                                  borderBottom: index < commentMentionUsers[post.id].length - 1 ? '1px solid #f6f1e8' : 'none',
+                                  borderBottom: index < commentMentionUsers[post.id].length - 1 ? '1px solid #e9f1f8' : 'none',
                                   display: 'flex',
                                   alignItems: 'center',
                                   gap: '8px'
                                 }}
-                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
-                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fffdf8'}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
                               >
                                 <div style={{
                                   width: '32px',
                                   height: '32px',
                                   borderRadius: '50%',
-                                  border: '2px solid #e2d7bf',
-                                  background: '#e2d7bf',
+                                  border: '2px solid #c9d9e8',
+                                  background: '#c9d9e8',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
@@ -1747,7 +1747,7 @@ const Dashboard: React.FC = () => {
                           onClick={() => handleAddComment(post.id)}
                           style={{
                             background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
-                            color: '#fffdf8',
+                            color: '#ffffff',
                             border: 'none',
                             borderRadius: '20px',
                             padding: '10px 20px',

@@ -28,7 +28,7 @@ const TILES: Tile[] = [
     title: 'Meeting Minutes',
     subtitle: 'Catch up on decisions',
     path: '/meeting-minutes',
-    iconBg: '#f1e6cf',
+    iconBg: '#e0eaf4',
   },
   {
     icon: '🏦',
@@ -95,7 +95,7 @@ const Hangout: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#f6f1e8',
+      background: '#e9f1f8',
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
     }}>
       <style>{`
@@ -149,7 +149,7 @@ const Hangout: React.FC = () => {
           </h2>
           <p style={{
             fontSize: '14.5px',
-            color: '#7a7264',
+            color: '#6b7f92',
             margin: 0,
             lineHeight: 1.6
           }}>
@@ -244,7 +244,7 @@ const Hangout: React.FC = () => {
           fontSize: '11px',
           fontWeight: 800,
           letterSpacing: '2.5px',
-          color: '#a89a80',
+          color: '#9dafbe',
           margin: '0 0 14px 4px',
           display: 'flex',
           alignItems: 'center',
@@ -262,7 +262,7 @@ const Hangout: React.FC = () => {
             className="hangout-tile"
             onClick={() => navigate('/hangout/games/uno')}
             style={{
-              background: '#fffdf8',
+              background: '#ffffff',
               border: '1px solid rgba(91, 155, 213, 0.16)',
               borderRadius: '20px',
               padding: '18px 16px',
@@ -295,7 +295,7 @@ const Hangout: React.FC = () => {
             </div>
             <div style={{
               fontSize: '12.5px',
-              color: '#7a7264',
+              color: '#6b7f92',
               lineHeight: 1.45
             }}>
               {openTables !== null && openTables > 0
@@ -309,7 +309,7 @@ const Hangout: React.FC = () => {
               className="hangout-tile"
               onClick={() => navigate(tile.path)}
               style={{
-                background: '#fffdf8',
+                background: '#ffffff',
                 border: '1px solid rgba(91, 155, 213, 0.16)',
                 borderRadius: '20px',
                 padding: '18px 16px',
@@ -342,7 +342,7 @@ const Hangout: React.FC = () => {
               </div>
               <div style={{
                 fontSize: '12.5px',
-                color: '#7a7264',
+                color: '#6b7f92',
                 lineHeight: 1.45
               }}>
                 {tile.subtitle}

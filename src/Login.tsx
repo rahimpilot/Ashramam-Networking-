@@ -77,7 +77,7 @@ const Login: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(to bottom right, #f1e6cf, #fffdf8, #faf6ec)',
+      background: 'linear-gradient(to bottom right, #e0eaf4, #ffffff, #faf6ec)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -125,7 +125,7 @@ const Login: React.FC = () => {
               {isSignUp ? 'Join Ashramam Vibes' : ''}
             </h2>
             <p style={{
-              color: '#7a7264',
+              color: '#6b7f92',
               fontSize: '0.875rem',
               fontWeight: isSignUp ? 'normal' : 'bold'
             }}>
@@ -152,7 +152,7 @@ const Login: React.FC = () => {
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
-                  border: '1px solid #d8c9ae',
+                  border: '1px solid #bccfdd',
                   borderRadius: '0.75rem',
                   boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
                   outline: 'none',
@@ -185,7 +185,7 @@ const Login: React.FC = () => {
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
-                  border: '1px solid #d8c9ae',
+                  border: '1px solid #bccfdd',
                   borderRadius: '0.75rem',
                   boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
                   outline: 'none',

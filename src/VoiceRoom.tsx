@@ -779,8 +779,8 @@ const VoiceRoom: React.FC = () => {
   // ---------- UI ----------
   if (!authReady) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ece3d0' }}>
-        <p style={{ fontSize: '1.1rem', color: '#7a7264' }}>Loading…</p>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#d8e6f2' }}>
+        <p style={{ fontSize: '1.1rem', color: '#6b7f92' }}>Loading…</p>
       </div>
     );
   }
@@ -797,14 +797,14 @@ const VoiceRoom: React.FC = () => {
         padding: '2rem',
       }}>
         <div style={{
-          background: '#fffdf8', borderRadius: '20px', padding: '2.5rem 2rem',
+          background: '#ffffff', borderRadius: '20px', padding: '2.5rem 2rem',
           boxShadow: '0 8px 24px rgba(0,0,0,0.1)', maxWidth: '420px', width: '100%', textAlign: 'center',
         }}>
           <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔥</div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#991b1b', margin: '0 0 0.5rem 0' }}>
             Happening Now
           </h1>
-          <p style={{ fontSize: '1rem', color: '#7a7264', margin: '0 0 1rem 0' }}>
+          <p style={{ fontSize: '1rem', color: '#6b7f92', margin: '0 0 1rem 0' }}>
             {othersCount > 0
               ? `🟢 ${othersCount} friend${othersCount === 1 ? '' : 's'} ${othersCount === 1 ? 'is' : 'are'} in the room right now`
               : 'The room is quiet — be the first one in! 🎉'}
@@ -831,8 +831,8 @@ const VoiceRoom: React.FC = () => {
             onClick={joinRoom}
             disabled={joining || dbConnected === false}
             style={{
-              background: joining || dbConnected === false ? '#a89a80' : 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
-              color: '#fffdf8', border: 'none', borderRadius: '12px',
+              background: joining || dbConnected === false ? '#9dafbe' : 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+              color: '#ffffff', border: 'none', borderRadius: '12px',
               padding: '1.1rem 2rem', fontSize: '1.15rem', fontWeight: 700,
               cursor: joining || dbConnected === false ? 'default' : 'pointer', width: '100%',
               boxShadow: '0 4px 12px rgba(220,38,38,0.3)',
@@ -840,12 +840,12 @@ const VoiceRoom: React.FC = () => {
           >
             {joining ? 'Joining…' : '🎙️ Join Voice Chat'}
           </button>
-          <p style={{ fontSize: '0.8rem', color: '#a89a80', marginTop: '1rem' }}>
+          <p style={{ fontSize: '0.8rem', color: '#9dafbe', marginTop: '1rem' }}>
             You'll be asked for microphone access.
           </p>
           <button
             onClick={() => navigate('/hangout')}
-            style={{ background: 'none', border: 'none', color: '#7a7264', fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.5rem' }}
+            style={{ background: 'none', border: 'none', color: '#6b7f92', fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.5rem' }}
           >
             ← Back to Hangout
           </button>
@@ -864,8 +864,8 @@ const VoiceRoom: React.FC = () => {
 
   const cardStyle = (speaking: boolean, highlight: string): React.CSSProperties => ({
     display: 'flex', alignItems: 'center', padding: '1rem',
-    background: '#f6f1e8', borderRadius: '12px', marginBottom: '0.75rem',
-    border: '1px solid #e7ddcc',
+    background: '#e9f1f8', borderRadius: '12px', marginBottom: '0.75rem',
+    border: '1px solid #d3dfee',
     boxShadow: speaking ? `0 0 0 3px ${highlight}, 0 4px 12px rgba(0,0,0,0.1)` : 'none',
     transition: 'box-shadow 0.2s ease',
   });
@@ -917,7 +917,7 @@ const VoiceRoom: React.FC = () => {
         )}
 
         {/* Participants */}
-        <div style={{ background: '#fffdf8', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', marginBottom: '1.25rem' }}>
+        <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', marginBottom: '1.25rem' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0', color: '#2a241c' }}>
             👥 In the room ({participants.length})
           </h2>
@@ -942,7 +942,7 @@ const VoiceRoom: React.FC = () => {
                 width: '48px', height: '48px', borderRadius: '50%',
                 background: 'linear-gradient(135deg, #6aa5d8 0%, #1e40af 100%)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: '#fffdf8', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
+                color: '#ffffff', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
               }}>
                 {user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || '?'}
               </div>
@@ -951,14 +951,14 @@ const VoiceRoom: React.FC = () => {
               <p style={{ margin: '0 0 0.25rem 0', fontWeight: 600, color: '#2a241c' }}>
                 {user?.displayName || user?.email} (You)
               </p>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: '#7a7264' }}>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7f92' }}>
                 {isMuted ? '🔇 Muted' : isSpeaking('me') ? '🎤 Speaking' : '🎧 Listening'}
               </p>
             </div>
           </div>
 
           {others.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '1.5rem', color: '#7a7264' }}>
+            <div style={{ textAlign: 'center', padding: '1.5rem', color: '#6b7f92' }}>
               <p style={{ margin: 0 }}>No one else here yet — share the Hangout and get them in! 🎉</p>
             </div>
           ) : others.map(p => {
@@ -980,7 +980,7 @@ const VoiceRoom: React.FC = () => {
                   <div style={{
                     width: '96px', aspectRatio: '16 / 9', borderRadius: '10px', background: '#1c1915',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#a89a80', fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
+                    color: '#9dafbe', fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
                   }}>
                     📷…
                   </div>
@@ -989,7 +989,7 @@ const VoiceRoom: React.FC = () => {
                     width: '48px', height: '48px', borderRadius: '50%',
                     background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#fffdf8', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
+                    color: '#ffffff', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
                   }}>
                     {p.name?.[0]?.toUpperCase() || '?'}
                   </div>
@@ -998,7 +998,7 @@ const VoiceRoom: React.FC = () => {
                   <p style={{ margin: '0 0 0.25rem 0', fontWeight: 600, color: '#2a241c' }}>
                     {p.name}{p.isCameraOn ? ' 📷' : ''}
                   </p>
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#7a7264' }}>{statusFor(p, p.id)}</p>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7f92' }}>{statusFor(p, p.id)}</p>
                 </div>
                 {connectedPeers.includes(p.id) && (
                   <span style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 600 }}>● live</span>
@@ -1015,7 +1015,7 @@ const VoiceRoom: React.FC = () => {
             style={{
               flex: 1,
               background: isMuted ? '#10b981' : '#332e26',
-              color: '#fffdf8', border: 'none', borderRadius: '14px',
+              color: '#ffffff', border: 'none', borderRadius: '14px',
               padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
             }}
@@ -1028,7 +1028,7 @@ const VoiceRoom: React.FC = () => {
               style={{
                 flex: 1,
                 background: cameraOn ? '#5b9bd5' : '#332e26',
-                color: '#fffdf8', border: 'none', borderRadius: '14px',
+                color: '#ffffff', border: 'none', borderRadius: '14px',
                 padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
               }}
@@ -1040,7 +1040,7 @@ const VoiceRoom: React.FC = () => {
             onClick={leaveRoom}
             style={{
               flex: 1,
-              background: '#dc2626', color: '#fffdf8', border: 'none', borderRadius: '14px',
+              background: '#dc2626', color: '#ffffff', border: 'none', borderRadius: '14px',
               padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
             }}
           >
@@ -1049,7 +1049,7 @@ const VoiceRoom: React.FC = () => {
         </div>
 
         <div style={{
-          background: '#f1e6cf', border: '1px solid #93c5fd', borderRadius: '12px',
+          background: '#e0eaf4', border: '1px solid #93c5fd', borderRadius: '12px',
           padding: '1rem', marginTop: '1.25rem',
         }}>
           <p style={{ fontSize: '0.85rem', color: '#1e40af', margin: 0, lineHeight: 1.6 }}>

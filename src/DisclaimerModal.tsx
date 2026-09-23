@@ -24,7 +24,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
       padding: '1rem'
     }}>
       <div style={{
-        backgroundColor: '#fffdf8',
+        backgroundColor: '#ffffff',
         borderRadius: '1rem',
         padding: '2rem',
         maxWidth: '600px',
@@ -32,7 +32,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
         maxHeight: '80vh',
         overflowY: 'auto',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-        border: '1px solid #e7ddcc'
+        border: '1px solid #d3dfee'
       }}>
         <div style={{
           display: 'flex',
@@ -87,18 +87,18 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
             style={{
               padding: '0.75rem 1.5rem',
               borderRadius: '0.5rem',
-              border: '1px solid #d8c9ae',
-              backgroundColor: '#fffdf8',
+              border: '1px solid #bccfdd',
+              backgroundColor: '#ffffff',
               color: '#332e26',
               fontWeight: '500',
               cursor: 'pointer',
               transition: 'all 0.2s'
             }}
             onMouseOver={e => {
-              e.currentTarget.style.backgroundColor = '#f6f1e8';
+              e.currentTarget.style.backgroundColor = '#e9f1f8';
             }}
             onMouseOut={e => {
-              e.currentTarget.style.backgroundColor = '#fffdf8';
+              e.currentTarget.style.backgroundColor = '#ffffff';
             }}
           >
             Cancel
@@ -110,7 +110,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
               borderRadius: '0.5rem',
               border: 'none',
               background: 'linear-gradient(to right, #5b9bd5, #4a86c8)',
-              color: '#fffdf8',
+              color: '#ffffff',
               fontWeight: '600',
               cursor: 'pointer',
               transition: 'all 0.2s',

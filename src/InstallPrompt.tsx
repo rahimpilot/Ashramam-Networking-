@@ -80,7 +80,7 @@ export const InstallPrompt: React.FC = () => {
       <p style={{
         margin: '0 0 16px 0',
         fontSize: '14px',
-        color: '#7a7264'
+        color: '#6b7f92'
       }}>
         Add Ashramam to your home screen for quick access!
       </p>
@@ -108,7 +108,7 @@ export const InstallPrompt: React.FC = () => {
           onClick={() => setShowInstallPrompt(false)}
           style={{
             padding: '10px 16px',
-            backgroundColor: '#e7ddcc',
+            backgroundColor: '#d3dfee',
             color: '#332e26',
             border: 'none',
             borderRadius: '6px',
@@ -117,8 +117,8 @@ export const InstallPrompt: React.FC = () => {
             fontSize: '14px',
             transition: 'background-color 0.2s'
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d8c9ae')}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#e7ddcc')}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#bccfdd')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#d3dfee')}
         >
           Later
         </button>
