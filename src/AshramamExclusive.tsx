@@ -14,6 +14,7 @@ interface ExclusiveStory {
   title: string;
   excerpt: string;
   body?: string;
+  image?: string;
   date: string;
 }
 
@@ -24,6 +25,7 @@ const STORIES: ExclusiveStory[] = [
     badgeColor: '#e63946',
     title: 'Dhoomakethu',
     excerpt: "Shanir Musliyamveetil's first cinema drops this Friday — a comedy loop thriller.",
+    image: '/dhoomakethu-poster.jpg',
     body: `Shanir Musliyamveetil's first cinema drops this Friday — and the project is titled Dhoomakethu, a comedy loop thriller.
 
 Shanir stepped into the industry almost by accident, but once he was in, there was no looking back. He threw himself into it — engaging with artists on and off set, exploring the craft, and discovering a genuine passion for the work. Along the way he made friends, gathered his Power Group members around him, and now travels everywhere with them, honouring their little inner selves.
@@ -85,7 +87,15 @@ const AshramamExclusive: React.FC = () => {
         {/* Stories */}
         <div className="iv-stagger">
           {STORIES.map((story) => (
-            <article key={story.id} className="iv-card iv-press" style={{ padding: 18, marginBottom: 12 }}>
+            <article key={story.id} className="iv-card iv-press" style={{ padding: 0, marginBottom: 12, overflow: 'hidden' }}>
+              {story.image && (
+                <img
+                  src={story.image}
+                  alt={story.title}
+                  style={{ width: '100%', display: 'block' }}
+                />
+              )}
+              <div style={{ padding: 18 }}>
               <div style={{
                 display: 'inline-block',
                 fontSize: 10,
@@ -108,6 +118,7 @@ const AshramamExclusive: React.FC = () => {
               {story.date && (
                 <div style={{ marginTop: 10, fontSize: 12, color: '#8a9aaB' }}>{story.date}</div>
               )}
+              </div>
             </article>
           ))}
         </div>
