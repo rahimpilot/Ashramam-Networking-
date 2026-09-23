@@ -239,6 +239,22 @@ const BelovedArticles: React.FC = () => {
   const navigate = useNavigate();
   const { articleId } = useParams<{ articleId: string }>();
   const [user, setUser] = useState<User | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  const copyArticleLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = window.location.href;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
+  };
 
   // Public section — track login only so members can comment
   useEffect(() => {
@@ -371,6 +387,34 @@ const BelovedArticles: React.FC = () => {
               collectionName="belovedArticles"
               emptyText="No comments yet — be the first to share your thoughts."
             />
+            {/* Floating share button — bottom right corner */}
+            <button
+              onClick={copyArticleLink}
+              aria-label="Copy article link"
+              className="iv-press"
+              style={{
+                position: 'fixed',
+                right: 16,
+                bottom: 88,
+                zIndex: 40,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '12px 18px',
+                borderRadius: 999,
+                border: '1px solid rgba(91,155,213,.4)',
+                background: 'linear-gradient(135deg,#2f7fc4,#5b9bd5)',
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: 14,
+                fontFamily: 'inherit',
+                boxShadow: '0 8px 24px rgba(47,127,196,.38)',
+                cursor: 'pointer',
+              }}
+            >
+              <span style={{ fontSize: 16 }}>{linkCopied ? '✓' : '🔗'}</span>
+              {linkCopied ? 'Link copied!' : 'Copy link'}
+            </button>
           </>
         )}
       </div>
