@@ -97,6 +97,56 @@ There are many reasons humans became the dominant form of life — not least our
 Stray animals are part of our everyday life. They survive on garbage, restaurant leftovers, and scraps — yet no proper system exists to feed them. Project Animalia took up this task: an initiative for the welfare of stray animals, feeding them, sheltering them through extreme conditions, and caring for everything they deserve.`,
     date: 'From the archives',
   },
+  {
+    id: 'volunteering-change-your-life',
+    badge: 'BELOVED',
+    badgeColor: '#d97706',
+    title: 'Why Volunteering Will Change Your Life',
+    excerpt: 'New skills, new friends, better health — the science and soul of giving your time.',
+    image: '/volunteering.jpg',
+    body: `Volunteering is a globally encouraged way of giving back — a platform for building community and nurturing a helping mindset in the individual. The term describes a person who freely offers to take part in an enterprise, or to undertake a task, wherever help is needed. It is social work; some approach it as an internship, others simply as service at events. Volunteering improves our attitude toward serving others and deepens our understanding of one another — and it plays a vital role in our development: communication, self-expression, behaviour, and much more. Here are some of its greatest benefits.
+
+## Learn new skills
+Volunteering programmes span many areas of expertise, bringing together people of different backgrounds and interests under one roof. It is an excellent chance to share skills with one another — and a rare opportunity to develop new knowledge, ideas, and talents.
+
+## Connect with others
+One of the best-known benefits of volunteering is its impact on the community. It connects you to your neighbourhood and makes it a better place. Even the smallest tasks can make a real difference to people, animals, and organisations in need. And volunteering is a two-way street: it benefits you and your family as much as the cause you choose. Giving your time helps you make new friends, expand your network, and sharpen your social skills.
+
+## Build social and relationship skills
+Some people are naturally outgoing; others are shy and find it hard to meet new people. Volunteering lets you practise and develop your social skills as you meet regularly with a group who share your interests. Once you find your momentum, it becomes easier to branch out and make new friends and contacts.
+
+## Make new friends and contacts
+One of the best ways to make new friends — and strengthen existing relationships — is to commit to a shared activity. Volunteering is a wonderful way to meet people, especially when you are new to an area. It deepens your ties to the community and broadens your support network, introducing you to people with common interests, local resources, and fun, fulfilling activities. If you are feeling lonely or isolated, or simply want to widen your social circle, volunteering in your local community is an important — and often joyful — way to meet new people. And if you have recently moved to a new city or country, it is one of the easiest ways to feel at home, strengthening your bond with the community while connecting you with people who may become lifelong friends.
+
+## Build self-confidence and self-esteem
+Doing good for others creates a natural sense of accomplishment. Volunteering also gives you pride and identity, lifting your self-confidence by taking you out of your comfort zone. It helps you feel better about yourself — a feeling you carry back into your everyday routine, shaping a more positive view of your life and your goals.
+
+## Strengthen your physical health
+Interestingly, volunteering benefits the body as well as the mind. A growing body of evidence suggests that those who give their time to others enjoy lower blood pressure and even longer lives. A 1999 study found that committed volunteers — those helping at two or more organisations — had a 63% lower mortality rate than non-volunteers. More recent research from Carnegie Mellon University (2013) found that adults over 50 who volunteered regularly were less likely to develop high blood pressure than those who didn't. Hypertension matters: it contributes to stroke, heart disease, and premature death.
+
+I have been part of several volunteering teams during my career, and I can say these benefits are real. Volunteering has cheered me up more than once, and in a short time I developed skills I never expected. Today, volunteering organisations work hand in hand with social workers and NGOs to run their programmes reliably. Most of us want to do good in the world — and volunteering is good not only for the community but for your own health too. And of course, the greatest benefit of volunteering is the reason we do it at all: it makes a difference. Wherever you volunteer, you are changing lives — your own, your fellow volunteers', and those who benefit from your efforts.`,
+    date: 'From the archives',
+  },
+  {
+    id: 'sustainable-energy-future',
+    badge: 'BELOVED',
+    badgeColor: '#d97706',
+    title: 'Sustainable Energy and Its Future',
+    excerpt: 'Solar, wind, and the race to power tomorrow without costing the Earth.',
+    image: '/sustainable-energy.jpg',
+    body: `Sustainable energy meets today's demand without depleting the resources of tomorrow — energy that can be used over and over again. In many ways it is eco-friendly, causing far less harm to our surroundings, because it is drawn directly from nature with the help of modern equipment. The UNECE's work on sustainable energy aims to bring affordable, clean energy to all, while cutting greenhouse gas emissions and the carbon footprint of the energy sector. And with the Sun at the heart of our solar system, we have a greater source of energy than any artificial plan could offer. Hundreds of inventions now run on solar power — astronauts, for example, rely on solar energy to operate spacecraft long after launch. Through this living ecosystem, we have discovered many forms of sustainable energy.
+
+Kerala, India, set a remarkable example: Cochin International Airport — the country's first airport built under the PPP model — runs on a 12 MW solar plant of 46,150 panels spread across 45 acres. Today the entire airport operates on power drawn from these panels — a landmark achievement and a lasting gift to the environment. It proves the mechanism works: we need not depend on artificial resources that harm the planet. The same applies to wind turbines. Renewable power is booming — innovation is driving down costs and delivering on the promise of a clean energy future. American solar and wind generation is breaking records, feeding the national grid without compromising reliability. Renewable — often called clean — energy comes from natural sources that constantly replenish themselves: sunlight and wind keep coming, even if their availability shifts with time and weather.
+
+Today we have ever more innovative and affordable ways to capture wind and solar power, and renewables are becoming a major power source — already more than one-eighth of U.S. electricity generation. Growth is happening at every scale, from rooftop panels that sell power back to the grid to giant offshore wind farms; some rural communities now rely on renewables for all their heating and lighting. On the other side stand non-renewables — the so-called dirty energy of fossil fuels: gas, oil, and coal. These exist in limited quantities and take ages to replenish. They are also unevenly distributed, leaving some nations rich and others dependent. Sunshine and wind, by contrast, belong to every country. Renewable energy is now a thriving global market, with wind turbines, solar plants, hydroelectric power, biomass, geothermal energy, and small wind systems leading the way.
+
+Sustainable energy, in essence, meets the needs of the present without compromising the ability of future generations to meet theirs. Managing it well means treating a complex process as a sequence of operations performed at the right time and in the right way — analysing, planning, directing, implementing, and controlling — all aimed at sustainability alongside healthy economic outcomes. Sustainable sources are those not expected to run out on any timescale that matters to humanity, and so they sustain all species. This closely matches the standard definition of renewable energy — though the two terms differ in emphasis. Notably, even Wikipedia's definition of sustainable sources has at times included nuclear power — controversial, for social and political reasons. At our present stage of technology, nuclear is not sustainable: it depends on uranium, a scarce resource on the relevant timescale.
+
+Using sustainable energy without harming nature is always the better path — it can transform our daily production, even if the initial investment is a little high.
+
+Sustainable energy management is central to managing natural resources and sustainable development itself. Sustainable development is an integrated system — economic, environmental, social, and institutional — where a change in one part ripples through the rest. Nothing should be viewed in isolation. The modern concept questions economic development at any cost, introducing new measures of progress: environmental quality and quality of life now stand beside economic growth as equals. Economic development, historically built on exploiting natural resources and polluting the environment, becomes a subject of deeper study. Modern business reveals a tight link between energy consumption and development. The world consumes vast amounts of energy, unevenly across regions — and while energy production and consumption affect environmental quality, they remain essential to economic progress. Balancing the consequences of energy use against the welfare that development brings is one of our most sensitive challenges, tangled in global disagreements at every level.`,
+    date: 'From the archives',
+  },
 ];
 
 const BelovedArticles: React.FC = () => {
@@ -230,9 +280,19 @@ const BelovedArticles: React.FC = () => {
                 {selected.date && (
                   <div style={{ fontSize: 13, color: '#8a9aab', marginBottom: 14 }}>{selected.date}</div>
                 )}
-                <p style={{ margin: 0, fontSize: 15, color: '#3d4b5c', lineHeight: 1.75, whiteSpace: 'pre-line' }}>
-                  {selected.body || selected.excerpt}
-                </p>
+                <div style={{ fontSize: 15, color: '#3d4b5c', lineHeight: 1.75 }}>
+                  {(selected.body || selected.excerpt).split('\n').map((line, i) =>
+                    line.startsWith('## ') ? (
+                      <h4 key={i} style={{ margin: '20px 0 6px 0', fontSize: 16, fontWeight: 800, color: '#1c2733' }}>
+                        {line.slice(3)}
+                      </h4>
+                    ) : line.trim() === '' ? (
+                      <div key={i} style={{ height: 8 }} />
+                    ) : (
+                      <p key={i} style={{ margin: '0 0 10px 0' }}>{line}</p>
+                    )
+                  )}
+                </div>
               </div>
             </article>
             <StoryEngagement
