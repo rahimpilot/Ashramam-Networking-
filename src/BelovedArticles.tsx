@@ -7,7 +7,7 @@ import { auth } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
 /**
- * Beloved Articles — timeless pieces from Abdu's old WordPress site,
+ * Articles — timeless pieces from Abdu's old WordPress site,
  * proofread and republished. PUBLIC — no login required.
  * Topic list at /beloved-articles, full article at /beloved-articles/:articleId.
  */
@@ -182,7 +182,7 @@ const BelovedArticles: React.FC = () => {
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <PageHeader
-        title="Beloved Articles"
+        title="Articles"
         backTo="/hangout"
         backLabel={selected ? 'Back to articles' : 'Back to hangout'}
         onBack={selected ? () => navigate('/beloved-articles') : undefined}
@@ -199,22 +199,6 @@ const BelovedArticles: React.FC = () => {
               border: 'none',
               color: '#ffffff'
             }}>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                background: '#d97706',
-                color: '#fff',
-                fontSize: 11,
-                fontWeight: 800,
-                letterSpacing: '0.12em',
-                padding: '5px 10px',
-                borderRadius: 6,
-                marginBottom: 12
-              }}>
-                <span style={{ fontSize: 12 }}>📖</span>
-                BELOVED
-              </div>
               <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 700 }}>
                 Words worth keeping.
               </h2>
@@ -228,7 +212,7 @@ const BelovedArticles: React.FC = () => {
                   The first article is on its way…
                 </h3>
                 <p style={{ margin: 0, fontSize: 14, color: '#5b6b7c', lineHeight: 1.6 }}>
-                  Beloved pieces from the old site, polished and republished here.
+                  Articles from the old site, polished and republished here.
                 </p>
               </div>
             ) : (

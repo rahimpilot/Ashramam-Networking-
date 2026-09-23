@@ -53,7 +53,7 @@ const TILES: Tile[] = [
   },
   {
     icon: '📖',
-    title: 'Beloved Articles',
+    title: 'Articles',
     subtitle: 'Words worth keeping',
     path: '/beloved-articles',
     iconBg: '#FFF7ED',
