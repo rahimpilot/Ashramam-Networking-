@@ -89,8 +89,7 @@ const Hangout: React.FC = () => {
     return () => unsub();
   }, []);
 
-  const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const greeting = "What's up cocks?";
 
   return (
     <div style={{
