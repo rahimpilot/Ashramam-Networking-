@@ -45,6 +45,7 @@ function AnimatedRoutes() {
         <Route path="/voice-room" element={<VoiceRoom />} />
         <Route path="/our-trips" element={<OurTrips />} />
         <Route path="/ashramam-exclusive" element={<AshramamExclusive />} />
+        <Route path="/ashramam-exclusive/:storyId" element={<AshramamExclusive />} />
         <Route path="/our-trips/krabi" element={<Krabi />} />
         <Route path="/our-trips/baku" element={<Baku />} />
         <Route path="/krabi" element={<Krabi />} />

@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 import PageHeader from './PageHeader';
+import Skeleton from './Skeleton';
+import { auth } from './firebase';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 /**
- * Ashramam Exclusive — the group's hot & exclusive news desk.
- * Topic list → tap a topic to read the full story. More to come.
+ * Ashramam Exclusive — the group's hot & exclusive news desk. Members only.
+ * Topic list at /ashramam-exclusive, full story at /ashramam-exclusive/:storyId.
  */
 
 interface ExclusiveStory {
@@ -15,6 +19,8 @@ interface ExclusiveStory {
   excerpt: string;
   body?: string;
   image?: string;
+  footerImage?: string;
+  footerCaption?: string;
   date: string;
 }
 
@@ -41,13 +47,43 @@ Shanir will be watching the film from Kerala, alongside his naughty close friend
 
 All the best and chests.`,
     image: '/dhoomakethu-poster.jpg',
+    footerImage: '/shanir-honour.jpg',
+    footerCaption: 'Shanir Musliyamveetil — the man of the moment. Respect. 🙏',
     date: 'September 25, 2026',
   },
 ];
 
 const AshramamExclusive: React.FC = () => {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selected = STORIES.find((s) => s.id === selectedId) || null;
+  const navigate = useNavigate();
+  const { storyId } = useParams<{ storyId: string }>();
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  // Members only — same gate as Stories
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+      if (!currentUser) {
+        navigate('/');
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
+
+  if (authLoading || !user) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#e9f1f8' }}>
+        <PageHeader title="Ashramam Exclusive" backTo="/hangout" backLabel="Back to hangout" />
+        <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px' }}>
+          <Skeleton />
+        </div>
+        <BottomNavigation />
+      </div>
+    );
+  }
+
+  const selected = storyId ? STORIES.find((s) => s.id === storyId) || null : null;
 
   return (
     <div style={{
@@ -59,7 +95,7 @@ const AshramamExclusive: React.FC = () => {
         title="Ashramam Exclusive"
         backTo="/hangout"
         backLabel={selected ? 'Back to exclusives' : 'Back to hangout'}
-        onBack={selected ? () => setSelectedId(null) : undefined}
+        onBack={selected ? () => navigate('/ashramam-exclusive') : undefined}
       />
 
       <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px 110px 16px' }}>
@@ -100,7 +136,7 @@ const AshramamExclusive: React.FC = () => {
                 <article
                   key={story.id}
                   className="iv-card iv-press"
-                  onClick={() => setSelectedId(story.id)}
+                  onClick={() => navigate(`/ashramam-exclusive/${story.id}`)}
                   style={{ marginBottom: 12, overflow: 'hidden', cursor: 'pointer' }}
                 >
                   <div style={{ display: 'flex', gap: 14, padding: 14, alignItems: 'center' }}>
@@ -183,6 +219,23 @@ const AshramamExclusive: React.FC = () => {
               <p style={{ margin: 0, fontSize: 15, color: '#3d4b5c', lineHeight: 1.75, whiteSpace: 'pre-line' }}>
                 {selected.body || selected.excerpt}
               </p>
+              {selected.footerImage && (
+                <figure style={{ margin: '22px 0 0 0' }}>
+                  <img
+                    src={selected.footerImage}
+                    alt="Shanir Musliyamveetil"
+                    style={{ width: '100%', display: 'block', borderRadius: 12 }}
+                  />
+                  {selected.footerCaption && (
+                    <figcaption style={{
+                      textAlign: 'center', fontSize: 13, color: '#5b6b7c',
+                      marginTop: 10, fontStyle: 'italic', lineHeight: 1.5
+                    }}>
+                      {selected.footerCaption}
+                    </figcaption>
+                  )}
+                </figure>
+              )}
             </div>
           </article>
         )}
