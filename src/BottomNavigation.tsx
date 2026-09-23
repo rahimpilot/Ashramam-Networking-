@@ -5,6 +5,22 @@ interface BottomNavigationProps {
   className?: string;
 }
 
+interface Tab {
+  id: string;
+  icon: string;
+  label: string;
+  go: (navigate: (path: string) => void) => void;
+}
+
+const TABS: Tab[] = [
+  { id: 'scrapbook', icon: '🏠', label: 'Scrap Book', go: (n) => n('/dashboard') },
+  { id: 'stories', icon: '📚', label: 'Stories', go: (n) => n('/stories') },
+  { id: 'hangout', icon: '🍸', label: 'Hangout', go: (n) => n('/hangout') },
+  { id: 'people', icon: '👥', label: 'People', go: (n) => n('/residents') },
+  { id: 'settings', icon: '⚙️', label: 'Settings', go: (n) => n('/account') },
+];
+
+/** Shared bottom tab bar — Ivory Atelier edition. */
 const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,12 +37,6 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
 
   const activeTab = getActiveTab();
 
-  const goToScrapbook = () => navigate('/dashboard');
-  const goToStories = () => navigate('/stories');
-  const goToHangout = () => navigate('/hangout');
-  const goToPeople = () => navigate('/residents');
-  const goToSettings = () => navigate('/account');
-
   return (
     <div
       className={className}
@@ -35,125 +45,63 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
         bottom: 0,
         left: 0,
         right: 0,
-        background: '#ffffff',
-        borderTop: '1px solid #e2e8f0',
-        padding: '0.5rem',
+        background: 'rgba(255, 253, 248, 0.94)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderTop: '1px solid rgba(154, 107, 63, 0.16)',
+        padding: '0.6rem 0.5rem calc(0.6rem + env(safe-area-inset-bottom))',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
         zIndex: 1000,
-        boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)'
+        boxShadow: '0 -4px 20px rgba(90, 70, 45, 0.08)'
       }}
     >
-      <button
-        onClick={goToScrapbook}
-        style={{
-          background: activeTab === 'scrapbook' ? 'rgba(59, 130, 246, 0.1)' : 'none',
-          border: 'none',
-          padding: '0.5rem',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.25rem',
-          color: activeTab === 'scrapbook' ? '#1f2937' : '#64748b',
-          transition: 'all 0.2s ease',
-          transform: activeTab === 'scrapbook' ? 'scale(1.05)' : 'scale(1)',
-          minWidth: '60px'
-        }}
-      >
-        <span style={{ fontSize: '1.5rem' }}>🏠</span>
-        <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>Scrap Book</span>
-      </button>
-
-      <button
-        onClick={goToStories}
-        style={{
-          background: activeTab === 'stories' ? 'rgba(59, 130, 246, 0.1)' : 'none',
-          border: 'none',
-          padding: '0.5rem',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.25rem',
-          color: activeTab === 'stories' ? '#1f2937' : '#64748b',
-          transition: 'all 0.2s ease',
-          transform: activeTab === 'stories' ? 'scale(1.05)' : 'scale(1)',
-          minWidth: '60px'
-        }}
-      >
-        <span style={{ fontSize: '1.5rem' }}>📚</span>
-        <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>Stories</span>
-      </button>
-
-      <button
-        onClick={goToHangout}
-        style={{
-          background: activeTab === 'hangout' ? 'rgba(59, 130, 246, 0.1)' : 'none',
-          border: 'none',
-          padding: '0.5rem',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.25rem',
-          color: activeTab === 'hangout' ? '#1f2937' : '#64748b',
-          transition: 'all 0.2s ease',
-          transform: activeTab === 'hangout' ? 'scale(1.05)' : 'scale(1)',
-          minWidth: '60px'
-        }}
-      >
-        <span style={{ fontSize: '1.5rem' }}>🍸</span>
-        <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>Hangout</span>
-      </button>
-
-      <button
-        onClick={goToPeople}
-        style={{
-          background: activeTab === 'people' ? 'rgba(59, 130, 246, 0.1)' : 'none',
-          border: 'none',
-          padding: '0.5rem',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.25rem',
-          color: activeTab === 'people' ? '#1f2937' : '#64748b',
-          transition: 'all 0.2s ease',
-          transform: activeTab === 'people' ? 'scale(1.05)' : 'scale(1)',
-          minWidth: '60px'
-        }}
-      >
-        <span style={{ fontSize: '1.5rem' }}>👥</span>
-        <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>People</span>
-      </button>
-
-      <button
-        onClick={goToSettings}
-        style={{
-          background: activeTab === 'settings' ? 'rgba(59, 130, 246, 0.1)' : 'none',
-          border: 'none',
-          padding: '0.5rem',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.25rem',
-          color: activeTab === 'settings' ? '#1f2937' : '#64748b',
-          transition: 'all 0.2s ease',
-          transform: activeTab === 'settings' ? 'scale(1.05)' : 'scale(1)',
-          minWidth: '60px'
-        }}
-      >
-        <span style={{ fontSize: '1.5rem' }}>⚙️</span>
-        <span style={{ fontSize: '0.7rem', fontWeight: 500 }}>Settings</span>
-      </button>
+      {TABS.map((tab) => {
+        const active = activeTab === tab.id;
+        return (
+          <button
+            key={tab.id}
+            onClick={() => tab.go(navigate)}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.4rem 0.5rem',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.3rem',
+              transition: 'all 0.2s ease',
+              minWidth: '60px'
+            }}
+          >
+            <span style={{
+              fontSize: '1.35rem',
+              lineHeight: 1,
+              width: '46px',
+              height: '34px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '14px',
+              background: active ? 'rgba(154, 107, 63, 0.12)' : 'transparent',
+              border: active ? '1px solid rgba(154, 107, 63, 0.28)' : '1px solid transparent',
+              transition: 'all 0.2s ease'
+            }}>
+              {tab.icon}
+            </span>
+            <span style={{
+              fontSize: '0.68rem',
+              fontWeight: active ? 700 : 500,
+              letterSpacing: '0.4px',
+              color: active ? '#9a6b3f' : '#a89a80'
+            }}>
+              {tab.label}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 };

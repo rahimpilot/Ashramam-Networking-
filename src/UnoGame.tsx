@@ -90,7 +90,7 @@ const UnoCardView: React.FC<{ card: UnoCardT; onClick?: () => void; small?: bool
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         cursor: onClick ? 'pointer' : 'default',
         boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
-        border: '3px solid #fff', position: 'relative', userSelect: 'none',
+        border: '3px solid #fffdf8', position: 'relative', userSelect: 'none',
       }}
     >
       <div style={{
@@ -102,7 +102,7 @@ const UnoCardView: React.FC<{ card: UnoCardT; onClick?: () => void; small?: bool
           {card.value}
         </span>
       </div>
-      <span style={{ position: 'absolute', top: 3, left: 6, color: '#fff', fontSize: 11, fontWeight: 800 }}>
+      <span style={{ position: 'absolute', top: 3, left: 6, color: '#fffdf8', fontSize: 11, fontWeight: 800 }}>
         {card.value.length > 6 ? card.value.slice(0, 6) : card.value}
       </span>
     </div>
@@ -110,13 +110,13 @@ const UnoCardView: React.FC<{ card: UnoCardT; onClick?: () => void; small?: bool
 };
 
 const btnPrimary: React.CSSProperties = {
-  width: '100%', background: '#1877F2', color: '#fff', border: 'none',
+  width: '100%', background: '#9a6b3f', color: '#fffdf8', border: 'none',
   borderRadius: 12, padding: '13px', fontSize: 15, fontWeight: 700, cursor: 'pointer',
 };
 
 const card: React.CSSProperties = {
-  background: '#fff', borderRadius: 18, padding: 20,
-  boxShadow: '0 1px 4px rgba(15,23,42,0.06)', border: '1px solid #ECEEF1',
+  background: '#fffdf8', borderRadius: 18, padding: 20,
+  boxShadow: '0 1px 4px rgba(15,23,42,0.06)', border: '1px solid #e7ddcc',
 };
 
 // ---------- Main component ----------
@@ -457,7 +457,7 @@ const UnoGame: React.FC = () => {
   };
 
   const pageStyle: React.CSSProperties = {
-    minHeight: '100vh', background: '#F6F7F9',
+    minHeight: '100vh', background: '#f6f1e8',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
   };
   const wrapStyle: React.CSSProperties = { maxWidth: 520, margin: '0 auto', padding: '20px 16px 110px 16px' };
@@ -467,7 +467,7 @@ const UnoGame: React.FC = () => {
     return (
       <div style={pageStyle}>
         <PageHeader backTo="/hangout" title="UNO" onBack={() => navigate('/hangout')} />
-        <div style={wrapStyle}><div style={card}><p style={{ textAlign: 'center', color: '#6B7280' }}>Connecting…</p></div></div>
+        <div style={wrapStyle}><div style={card}><p style={{ textAlign: 'center', color: '#7a7264' }}>Connecting…</p></div></div>
         <BottomNavigation />
       </div>
     );
@@ -479,7 +479,7 @@ const UnoGame: React.FC = () => {
         <PageHeader backTo="/hangout" title="UNO" onBack={() => navigate('/hangout')} />
         <div style={wrapStyle}>
           <div style={card}>
-            <p style={{ textAlign: 'center', color: '#6B7280' }}>Please sign in to play UNO with your circle.</p>
+            <p style={{ textAlign: 'center', color: '#7a7264' }}>Please sign in to play UNO with your circle.</p>
             <button style={btnPrimary} onClick={() => navigate('/')}>Go to sign in</button>
           </div>
         </div>
@@ -496,8 +496,8 @@ const UnoGame: React.FC = () => {
         <div style={wrapStyle}>
           <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <div style={{ fontSize: 44, marginBottom: 4 }}>🃏</div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 4px 0', color: '#111318' }}>Game Night</h2>
-            <p style={{ fontSize: 14, color: '#6B7280', margin: 0 }}>Start a table and invite your circle.</p>
+            <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 4px 0', color: '#1e1a14' }}>Game Night</h2>
+            <p style={{ fontSize: 14, color: '#7a7264', margin: 0 }}>Start a table and invite your circle.</p>
           </div>
 
           <div style={{ ...card, marginBottom: 14 }}>
@@ -517,9 +517,9 @@ const UnoGame: React.FC = () => {
               {busy ? 'Working…' : '+ Create a table'}
             </button>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '14px 0' }}>
-              <div style={{ flex: 1, height: 1, background: '#ECEEF1' }} />
-              <span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 600 }}>OR JOIN WITH CODE</span>
-              <div style={{ flex: 1, height: 1, background: '#ECEEF1' }} />
+              <div style={{ flex: 1, height: 1, background: '#e7ddcc' }} />
+              <span style={{ fontSize: 12, color: '#a89a80', fontWeight: 600 }}>OR JOIN WITH CODE</span>
+              <div style={{ flex: 1, height: 1, background: '#e7ddcc' }} />
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <input
@@ -528,7 +528,7 @@ const UnoGame: React.FC = () => {
                 placeholder="ABCD"
                 maxLength={4}
                 style={{
-                  flex: 1, border: '1px solid #E5E7EB', borderRadius: 12, padding: '12px 14px',
+                  flex: 1, border: '1px solid #e7ddcc', borderRadius: 12, padding: '12px 14px',
                   fontSize: 16, fontWeight: 700, letterSpacing: 4, textAlign: 'center', textTransform: 'uppercase',
                 }}
               />
@@ -542,11 +542,11 @@ const UnoGame: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1, color: '#9CA3AF', margin: '4px 0 10px 4px' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1, color: '#a89a80', margin: '4px 0 10px 4px' }}>
             OPEN TABLES
           </div>
           {openTables.length === 0 ? (
-            <div style={{ ...card, textAlign: 'center', color: '#9CA3AF', fontSize: 14 }}>
+            <div style={{ ...card, textAlign: 'center', color: '#a89a80', fontSize: 14 }}>
               No open tables right now. Create one and invite the crew!
             </div>
           ) : (
@@ -557,16 +557,16 @@ const UnoGame: React.FC = () => {
                 style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, cursor: 'pointer', padding: '14px 18px' }}
               >
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: 15, color: '#111318' }}>{t.hostName}'s table</div>
-                  <div style={{ fontSize: 12.5, color: '#6B7280' }}>{t.playerCount}/10 players · Code {t.id}</div>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: '#1e1a14' }}>{t.hostName}'s table</div>
+                  <div style={{ fontSize: 12.5, color: '#7a7264' }}>{t.playerCount}/10 players · Code {t.id}</div>
                 </div>
-                <span style={{ color: '#1877F2', fontWeight: 700, fontSize: 14 }}>Join →</span>
+                <span style={{ color: '#9a6b3f', fontWeight: 700, fontSize: 14 }}>Join →</span>
               </div>
             ))
           )}
         </div>
         {notice && (
-          <div style={{ position: 'fixed', bottom: 90, left: '50%', transform: 'translateX(-50%)', background: '#111318', color: '#fff', padding: '10px 18px', borderRadius: 999, fontSize: 13, zIndex: 200 }}>
+          <div style={{ position: 'fixed', bottom: 90, left: '50%', transform: 'translateX(-50%)', background: '#1e1a14', color: '#fffdf8', padding: '10px 18px', borderRadius: 999, fontSize: 13, zIndex: 200 }}>
             {notice}
           </div>
         )}
@@ -579,7 +579,7 @@ const UnoGame: React.FC = () => {
     return (
       <div style={pageStyle}>
         <PageHeader backTo="/hangout" title="UNO" onBack={leaveRoom} />
-        <div style={wrapStyle}><div style={card}><p style={{ textAlign: 'center', color: '#6B7280' }}>Joining table…</p></div></div>
+        <div style={wrapStyle}><div style={card}><p style={{ textAlign: 'center', color: '#7a7264' }}>Joining table…</p></div></div>
         <BottomNavigation />
       </div>
     );
@@ -593,22 +593,22 @@ const UnoGame: React.FC = () => {
         <PageHeader backTo="/hangout" title="UNO" onBack={leaveRoom} />
         <div style={wrapStyle}>
           <div style={{ ...card, textAlign: 'center', marginBottom: 14 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1.5, color: '#9CA3AF', marginBottom: 8 }}>TABLE CODE</div>
-            <div style={{ fontSize: 40, fontWeight: 800, letterSpacing: 8, color: '#111318', marginBottom: 12 }}>{roomId}</div>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1.5, color: '#a89a80', marginBottom: 8 }}>TABLE CODE</div>
+            <div style={{ fontSize: 40, fontWeight: 800, letterSpacing: 8, color: '#1e1a14', marginBottom: 12 }}>{roomId}</div>
             <button
               onClick={copyInvite}
               style={{
-                background: '#EEF4FF', color: '#1877F2', border: 'none', borderRadius: 999,
+                background: '#f3e9d7', color: '#9a6b3f', border: 'none', borderRadius: 999,
                 padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
               }}
             >
               {copied ? '✓ Link copied!' : '🔗 Copy invite link'}
             </button>
-            <p style={{ fontSize: 13, color: '#6B7280', margin: '12px 0 0 0' }}>Share the code or link with your circle.</p>
+            <p style={{ fontSize: 13, color: '#7a7264', margin: '12px 0 0 0' }}>Share the code or link with your circle.</p>
           </div>
 
           <div style={{ ...card, marginBottom: 14 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1, color: '#9CA3AF', marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1, color: '#a89a80', marginBottom: 12 }}>
               PLAYERS ({gameState.players?.length || 0}/10)
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -616,19 +616,19 @@ const UnoGame: React.FC = () => {
                 <div
                   key={p.id}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: 8, background: '#F6F7F9',
-                    borderRadius: 999, padding: '8px 14px 8px 8px', fontSize: 14, fontWeight: 600, color: '#111318',
+                    display: 'flex', alignItems: 'center', gap: 8, background: '#f6f1e8',
+                    borderRadius: 999, padding: '8px 14px 8px 8px', fontSize: 14, fontWeight: 600, color: '#1e1a14',
                   }}
                 >
                   <div style={{
-                    width: 28, height: 28, borderRadius: '50%', background: '#1877F2', color: '#fff',
+                    width: 28, height: 28, borderRadius: '50%', background: '#9a6b3f', color: '#fffdf8',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800,
                   }}>
                     {p.name[0]?.toUpperCase() || '?'}
                   </div>
                   {p.name}
                   {p.id === gameState.hostId && <span style={{ fontSize: 11, color: '#B45309', fontWeight: 700 }}>HOST</span>}
-                  {p.id === myId && <span style={{ fontSize: 11, color: '#6B7280' }}>(you)</span>}
+                  {p.id === myId && <span style={{ fontSize: 11, color: '#7a7264' }}>(you)</span>}
                 </div>
               ))}
             </div>
@@ -640,12 +640,12 @@ const UnoGame: React.FC = () => {
               ▶ Start game
             </button>
           ) : (
-            <div style={{ ...card, textAlign: 'center', color: '#6B7280', fontSize: 14 }}>
+            <div style={{ ...card, textAlign: 'center', color: '#7a7264', fontSize: 14 }}>
               Waiting for the host to start…
             </div>
           )}
           {(gameState.players?.length || 0) < 2 && isHost && (
-            <p style={{ textAlign: 'center', color: '#9CA3AF', fontSize: 13, marginTop: 10 }}>
+            <p style={{ textAlign: 'center', color: '#a89a80', fontSize: 13, marginTop: 10 }}>
               Need at least 2 players to start.
             </p>
           )}
@@ -670,9 +670,9 @@ const UnoGame: React.FC = () => {
         {/* Turn banner */}
         <div style={{
           ...card, marginBottom: 14, padding: '12px 18px', textAlign: 'center',
-          background: isMyTurn ? '#1877F2' : '#fff',
+          background: isMyTurn ? '#9a6b3f' : '#fffdf8',
         }}>
-          <span style={{ fontWeight: 700, fontSize: 15, color: isMyTurn ? '#fff' : '#111318' }}>
+          <span style={{ fontWeight: 700, fontSize: 15, color: isMyTurn ? '#fffdf8' : '#1e1a14' }}>
             {isMyTurn ? "🎯 Your turn — play a card or draw" : `⏳ ${currentPlayer?.name || '…'}'s turn`}
           </span>
         </div>
@@ -685,18 +685,18 @@ const UnoGame: React.FC = () => {
             return (
               <div key={p.id} style={{
                 ...card, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8,
-                whiteSpace: 'nowrap', border: active ? '2px solid #22A35A' : '1px solid #ECEEF1',
-                background: active ? '#F0FDF4' : '#fff',
+                whiteSpace: 'nowrap', border: active ? '2px solid #22A35A' : '1px solid #e7ddcc',
+                background: active ? '#F0FDF4' : '#fffdf8',
               }}>
                 <div style={{
-                  width: 26, height: 26, borderRadius: '50%', background: active ? '#22A35A' : '#9CA3AF',
-                  color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 26, height: 26, borderRadius: '50%', background: active ? '#22A35A' : '#a89a80',
+                  color: '#fffdf8', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 12, fontWeight: 800,
                 }}>
                   {p.name[0]?.toUpperCase() || '?'}
                 </div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: '#111318' }}>{p.name}</span>
-                <span style={{ fontSize: 12, color: '#6B7280' }}>🂠 {p.hand ? p.hand.length : 0}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#1e1a14' }}>{p.name}</span>
+                <span style={{ fontSize: 12, color: '#7a7264' }}>🂠 {p.hand ? p.hand.length : 0}</span>
               </div>
             );
           })}
@@ -711,27 +711,27 @@ const UnoGame: React.FC = () => {
                 title="Draw a card"
                 style={{
                   width: 68, height: 96, borderRadius: 10, cursor: isMyTurn ? 'pointer' : 'default',
-                  background: 'repeating-linear-gradient(45deg, #1F2937, #1F2937 8px, #374151 8px, #374151 16px)',
-                  border: '3px solid #fff', boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+                  background: 'repeating-linear-gradient(45deg, #2a241c, #2a241c 8px, #332e26 8px, #332e26 16px)',
+                  border: '3px solid #fffdf8', boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   opacity: isMyTurn ? 1 : 0.55,
                 }}
               >
                 <span style={{ color: '#F5B800', fontWeight: 900, fontSize: 18, transform: 'rotate(-18deg)' }}>UNO</span>
               </div>
-              <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 6, fontWeight: 600 }}>
+              <div style={{ fontSize: 11, color: '#a89a80', marginTop: 6, fontWeight: 600 }}>
                 DRAW ({gameState.deck ? gameState.deck.length : 0})
               </div>
             </div>
             <div style={{ textAlign: 'center' }}>
               {topCard && <UnoCardView card={topCard} />}
-              <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 6, fontWeight: 600 }}>DISCARD</div>
+              <div style={{ fontSize: 11, color: '#a89a80', marginTop: 6, fontWeight: 600 }}>DISCARD</div>
             </div>
           </div>
           <button
             onClick={() => navigate('/voice-room')}
             style={{
-              width: '100%', marginTop: 12, background: '#EEF4FF', color: '#1877F2', border: 'none',
+              width: '100%', marginTop: 12, background: '#f3e9d7', color: '#9a6b3f', border: 'none',
               borderRadius: 12, padding: '11px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
             }}
           >
@@ -742,7 +742,7 @@ const UnoGame: React.FC = () => {
         {/* My hand */}
         {myPlayer && (
           <div style={card}>
-            <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1, color: '#9CA3AF', marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1, color: '#a89a80', marginBottom: 12 }}>
               YOUR HAND ({myPlayer.hand ? myPlayer.hand.length : 0})
             </div>
             <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 6 }}>
@@ -751,7 +751,7 @@ const UnoGame: React.FC = () => {
               ))}
             </div>
             {(!myPlayer.hand || myPlayer.hand.length === 0) && (
-              <p style={{ color: '#9CA3AF', fontSize: 14 }}>No cards.</p>
+              <p style={{ color: '#a89a80', fontSize: 14 }}>No cards.</p>
             )}
           </div>
         )}
@@ -764,8 +764,8 @@ const UnoGame: React.FC = () => {
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
         }}>
           <div style={{ ...card, maxWidth: 340, width: '100%', textAlign: 'center' }}>
-            <h3 style={{ margin: '0 0 6px 0', fontSize: 17, color: '#111318' }}>Choose a color</h3>
-            <p style={{ fontSize: 13, color: '#6B7280', margin: '0 0 16px 0' }}>for your {pendingCard.value}</p>
+            <h3 style={{ margin: '0 0 6px 0', fontSize: 17, color: '#1e1a14' }}>Choose a color</h3>
+            <p style={{ fontSize: 13, color: '#7a7264', margin: '0 0 16px 0' }}>for your {pendingCard.value}</p>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
               {(['Red', 'Blue', 'Green', 'Yellow'] as CardColor[]).map((c) => (
                 <button
@@ -774,7 +774,7 @@ const UnoGame: React.FC = () => {
                   aria-label={c}
                   style={{
                     width: 52, height: 52, borderRadius: '50%', background: getColorHex(c),
-                    border: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.25)', cursor: 'pointer',
+                    border: '3px solid #fffdf8', boxShadow: '0 2px 8px rgba(0,0,0,0.25)', cursor: 'pointer',
                   }}
                 />
               ))}
@@ -791,10 +791,10 @@ const UnoGame: React.FC = () => {
         }}>
           <div style={{ ...card, maxWidth: 340, width: '100%', textAlign: 'center' }}>
             <div style={{ fontSize: 48, marginBottom: 8 }}>🏆</div>
-            <h3 style={{ margin: '0 0 6px 0', fontSize: 20, color: '#111318' }}>
+            <h3 style={{ margin: '0 0 6px 0', fontSize: 20, color: '#1e1a14' }}>
               {winner.id === myId ? 'You win!' : `${winner.name} wins!`}
             </h3>
-            <p style={{ fontSize: 14, color: '#6B7280', margin: '0 0 16px 0' }}>
+            <p style={{ fontSize: 14, color: '#7a7264', margin: '0 0 16px 0' }}>
               {winner.id === myId ? 'Champion of the table. Rematch?' : 'Better luck next time.'}
             </p>
             <button style={btnPrimary} onClick={leaveRoom}>Back to lobby</button>
@@ -803,7 +803,7 @@ const UnoGame: React.FC = () => {
       )}
 
       {notice && (
-        <div style={{ position: 'fixed', bottom: 90, left: '50%', transform: 'translateX(-50%)', background: '#111318', color: '#fff', padding: '10px 18px', borderRadius: 999, fontSize: 13, zIndex: 400 }}>
+        <div style={{ position: 'fixed', bottom: 90, left: '50%', transform: 'translateX(-50%)', background: '#1e1a14', color: '#fffdf8', padding: '10px 18px', borderRadius: 999, fontSize: 13, zIndex: 400 }}>
           {notice}
         </div>
       )}

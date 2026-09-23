@@ -24,7 +24,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
       padding: '1rem'
     }}>
       <div style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fffdf8',
         borderRadius: '1rem',
         padding: '2rem',
         maxWidth: '600px',
@@ -32,7 +32,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
         maxHeight: '80vh',
         overflowY: 'auto',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-        border: '1px solid #e5e7eb'
+        border: '1px solid #e7ddcc'
       }}>
         <div style={{
           display: 'flex',
@@ -44,13 +44,13 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
           <h2 style={{
             fontSize: '1.5rem',
             fontWeight: '700',
-            color: '#111827',
+            color: '#1c1915',
             margin: 0
           }}>Terms and Disclaimer</h2>
         </div>
 
         <div style={{
-          color: '#374151',
+          color: '#332e26',
           lineHeight: '1.7',
           fontSize: '1rem',
           textAlign: 'left'
@@ -87,18 +87,18 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
             style={{
               padding: '0.75rem 1.5rem',
               borderRadius: '0.5rem',
-              border: '1px solid #d1d5db',
-              backgroundColor: '#ffffff',
-              color: '#374151',
+              border: '1px solid #d8c9ae',
+              backgroundColor: '#fffdf8',
+              color: '#332e26',
               fontWeight: '500',
               cursor: 'pointer',
               transition: 'all 0.2s'
             }}
             onMouseOver={e => {
-              e.currentTarget.style.backgroundColor = '#f9fafb';
+              e.currentTarget.style.backgroundColor = '#f6f1e8';
             }}
             onMouseOut={e => {
-              e.currentTarget.style.backgroundColor = '#ffffff';
+              e.currentTarget.style.backgroundColor = '#fffdf8';
             }}
           >
             Cancel
@@ -109,8 +109,8 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
               padding: '0.75rem 1.5rem',
               borderRadius: '0.5rem',
               border: 'none',
-              background: 'linear-gradient(to right, #2563eb, #9333ea)',
-              color: '#ffffff',
+              background: 'linear-gradient(to right, #9a6b3f, #9333ea)',
+              color: '#fffdf8',
               fontWeight: '600',
               cursor: 'pointer',
               transition: 'all 0.2s',

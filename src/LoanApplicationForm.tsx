@@ -142,7 +142,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
       overflowY: 'auto'
     }}>
       <div style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fffdf8',
         borderRadius: '12px',
         padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
         maxWidth: '600px',
@@ -157,7 +157,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: '1.5rem',
-          borderBottom: '2px solid #e5e7eb',
+          borderBottom: '2px solid #e7ddcc',
           paddingBottom: '1rem'
         }}>
           <h2 style={{
@@ -175,7 +175,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               border: 'none',
               fontSize: '1.5rem',
               cursor: 'pointer',
-              color: '#64748b'
+              color: '#7a7264'
             }}
           >
             ✕
@@ -191,7 +191,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               fontSize: '0.95rem',
               fontWeight: 600,
               marginBottom: '0.4rem',
-              color: '#1f2937'
+              color: '#2a241c'
             }}>
               📝 Full Name <span style={{ color: '#ef4444' }}>*</span>
             </label>
@@ -204,7 +204,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d1d5db',
+                border: '1px solid #d8c9ae',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -212,7 +212,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
             />
           </div>
 
@@ -223,7 +223,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               fontSize: '0.95rem',
               fontWeight: 600,
               marginBottom: '0.4rem',
-              color: '#1f2937'
+              color: '#2a241c'
             }}>
               🎯 Purpose of Loan <span style={{ color: '#ef4444' }}>*</span>
             </label>
@@ -235,7 +235,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d1d5db',
+                border: '1px solid #d8c9ae',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -245,7 +245,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
             />
           </div>
 
@@ -256,7 +256,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               fontSize: '0.95rem',
               fontWeight: 600,
               marginBottom: '0.4rem',
-              color: '#1f2937'
+              color: '#2a241c'
             }}>
               ⏰ Repayment Period <span style={{ color: '#ef4444' }}>*</span>
             </label>
@@ -267,7 +267,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d1d5db',
+                border: '1px solid #d8c9ae',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -276,7 +276,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
             >
               <option value="">Select repayment period...</option>
               <option value="3_months">3 Months</option>
@@ -296,7 +296,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               fontSize: '0.95rem',
               fontWeight: 600,
               marginBottom: '0.4rem',
-              color: '#1f2937'
+              color: '#2a241c'
             }}>
               💰 Amount Looking For <span style={{ color: '#ef4444' }}>*</span>
             </label>
@@ -309,7 +309,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d1d5db',
+                border: '1px solid #d8c9ae',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -317,7 +317,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
             />
           </div>
 
@@ -328,7 +328,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               fontSize: '0.95rem',
               fontWeight: 600,
               marginBottom: '0.4rem',
-              color: '#1f2937'
+              color: '#2a241c'
             }}>
               🏦 Existing Lender (Optional)
             </label>
@@ -341,7 +341,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
               style={{
                 width: '100%',
                 padding: '0.8rem',
-                border: '1px solid #d1d5db',
+                border: '1px solid #d8c9ae',
                 borderRadius: '6px',
                 fontSize: '0.95rem',
                 fontFamily: 'inherit',
@@ -349,7 +349,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
                 transition: 'border-color 0.2s'
               }}
               onFocus={(e) => e.target.style.borderColor = '#16a34a'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              onBlur={(e) => e.target.style.borderColor = '#d8c9ae'}
             />
           </div>
 
@@ -375,8 +375,8 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
             style={{
               width: '100%',
               padding: '1rem',
-              backgroundColor: loading ? '#9ca3af' : '#16a34a',
-              color: '#ffffff',
+              backgroundColor: loading ? '#a89a80' : '#16a34a',
+              color: '#fffdf8',
               border: 'none',
               borderRadius: '6px',
               fontSize: '1rem',
@@ -406,9 +406,9 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
         <div style={{
           marginTop: '1.5rem',
           paddingTop: '1rem',
-          borderTop: '1px solid #e5e7eb',
+          borderTop: '1px solid #e7ddcc',
           fontSize: '0.85rem',
-          color: '#6b7280',
+          color: '#7a7264',
           textAlign: 'center'
         }}>
           We'll review your application and contact you within 2-3 business days.
