@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { auth, db } from './firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore';
 import BottomNavigation from './BottomNavigation';
 
 const Profile: React.FC = () => {
   const user = auth.currentUser;
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const viewEmail = searchParams.get('user');
+  const viewName = searchParams.get('name');
+  const isOtherUser = !!viewEmail && viewEmail.toLowerCase() !== (user?.email || '').toLowerCase();
+
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [bio, setBio] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
+  const [otherProfile, setOtherProfile] = useState<{ name: string; location: string; bio: string } | null>(null);
+  const [otherLoading, setOtherLoading] = useState(false);
+  const [otherMissing, setOtherMissing] = useState(false);
+
   useEffect(() => {
-    if (user) {
+    if (user && !isOtherUser) {
       const fetchProfile = async () => {
         const ref = doc(db, 'profiles', user.uid);
         const snap = await getDoc(ref);
@@ -25,7 +36,41 @@ const Profile: React.FC = () => {
       };
       fetchProfile();
     }
-  }, [user]);
+  }, [user, isOtherUser]);
+
+  useEffect(() => {
+    if (isOtherUser && viewEmail) {
+      const fetchOther = async () => {
+        setOtherLoading(true);
+        setOtherMissing(false);
+        try {
+          const snap = await getDocs(collection(db, 'profiles'));
+          const target = viewEmail.toLowerCase();
+          let found: { name: string; location: string; bio: string } | null = null;
+          snap.forEach(d => {
+            const data = d.data();
+            if (typeof data.email === 'string' && data.email.toLowerCase() === target) {
+              found = {
+                name: data.name || viewName || '',
+                location: data.location || '',
+                bio: data.bio || ''
+              };
+            }
+          });
+          if (found) {
+            setOtherProfile(found);
+          } else {
+            setOtherMissing(true);
+          }
+        } catch (e) {
+          console.error('Error fetching profile for', viewEmail, e);
+          setOtherMissing(true);
+        }
+        setOtherLoading(false);
+      };
+      fetchOther();
+    }
+  }, [isOtherUser, viewEmail, viewName]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +88,61 @@ const Profile: React.FC = () => {
     setLoading(false);
   };
 
+  const cardStyle: React.CSSProperties = {
+    maxWidth: 400,
+    margin: '2rem auto',
+    padding: '2rem',
+    background: '#ffffff',
+    borderRadius: 16,
+    boxShadow: '0 2px 16px rgba(0,0,0,0.10)'
+  };
+
+  if (isOtherUser) {
+    const displayName = otherProfile?.name || viewName || viewEmail || '';
+    const initial = (displayName || '?').charAt(0).toUpperCase();
+    return (
+      <div style={cardStyle}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{ background: 'none', border: 'none', color: '#4a86c8', fontWeight: 600, cursor: 'pointer', padding: 0, marginBottom: '1rem', fontSize: 15 }}
+        >
+          ← Back
+        </button>
+        {otherLoading ? (
+          <p style={{ color: '#7a8ba0' }}>Loading profile…</p>
+        ) : otherMissing ? (
+          <div>
+            <h2 className="iv-display" style={{ fontSize: '1.6rem', fontWeight: 600, color: '#5b9bd5', marginBottom: '0.5rem' }}>{displayName}</h2>
+            <p style={{ color: '#7a8ba0' }}>This member hasn't set up a profile yet.</p>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0.5rem' }}>
+            <div style={{
+              width: 84, height: 84, borderRadius: '50%',
+              background: 'linear-gradient(135deg, #5b9bd5, #4a86c8)',
+              color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 36, fontWeight: 700
+            }}>
+              {initial}
+            </div>
+            <h2 className="iv-display" style={{ fontSize: '1.8rem', fontWeight: 600, color: '#1c2733', margin: '0.5rem 0 0 0' }}>{displayName}</h2>
+            {otherProfile?.location ? (
+              <p style={{ margin: 0, color: '#7a8ba0', fontSize: 14 }}>📍 {otherProfile.location}</p>
+            ) : null}
+            {otherProfile?.bio ? (
+              <p style={{ margin: '0.5rem 0 0 0', color: '#3d4b5c', fontSize: 15, lineHeight: 1.6 }}>{otherProfile.bio}</p>
+            ) : null}
+          </div>
+        )}
+        {/* Spacer so content isn't hidden behind the bottom nav */}
+        <div style={{ height: '80px' }} />
+        <BottomNavigation />
+      </div>
+    );
+  }
+
   return (
-    <div style={{ maxWidth: 400, margin: '2rem auto', padding: '2rem', background: '#ffffff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.10)' }}>
+    <div style={cardStyle}>
       <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '1rem', color: '#5b9bd5' }}>Edit Profile</h2>
       {user ? (
         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
