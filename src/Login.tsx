@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
 
@@ -10,7 +10,23 @@ const Login: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError('Enter your email address first, then tap "Forgot password?".');
+      return;
+    }
+    setError('');
+    setResetSent(false);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetSent(true);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -234,6 +250,29 @@ const Login: React.FC = () => {
             >
               {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
             </button>
+            {!isSignUp && (
+              <div style={{ marginTop: '0.75rem' }}>
+                <button
+                  onClick={handleForgotPassword}
+                  style={{
+                    color: '#9a6b3f',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    border: 'none',
+                    background: 'none',
+                    cursor: 'pointer',
+                    textDecoration: 'underline'
+                  }}
+                >
+                  Forgot password?
+                </button>
+                {resetSent && (
+                  <p style={{ color: '#15803d', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+                    Password reset email sent — check your inbox.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
