@@ -8,10 +8,10 @@
   --iv-ink-soft: #2a241c;
   --iv-muted: #7a7264;
   --iv-faint: #a89a80;
-  --iv-accent: #9a6b3f;
-  --iv-accent-deep: #6f4c2c;
+  --iv-accent: #5b9bd5;
+  --iv-accent-deep: #2e6da4;
   --iv-accent-ink: #fffdf8;
-  --iv-accent-soft: #f3e9d7;
+  --iv-accent-soft: #dbe9f7;
   --iv-hairline: #e7ddcc;
   --iv-display: 'Cormorant Garamond', Georgia, serif;
 }
@@ -86,7 +86,7 @@ button:focus,
 input:focus,
 textarea:focus,
 select:focus {
-  outline: 2px solid #9a6b3f;
+  outline: 2px solid #5b9bd5;
   outline-offset: 2px;
 }
 

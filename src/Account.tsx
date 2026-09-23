@@ -31,7 +31,7 @@ const Account: React.FC = () => {
   return (
     <div style={{ maxWidth: 400, margin: '2rem auto 100px auto', padding: '2rem', background: '#fffdf8', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <img src="/newlogo.svg" alt="Logo" style={{ height: 48, marginBottom: 24 }} />
-      <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '0.5rem', color: '#9a6b3f' }}>Welcome!</h2>
+      <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '0.5rem', color: '#5b9bd5' }}>Welcome!</h2>
       {authLoading ? (
         <p>Loading...</p>
       ) : user ? (
@@ -47,7 +47,7 @@ const Account: React.FC = () => {
             </div>
           </div>
           <button onClick={goToProfile} style={{ marginBottom: 12, padding: '10px 32px', borderRadius: 8, background: '#9333ea', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Profile</button>
-          <button onClick={handleLogout} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #9a6b3f, #9333ea)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Logout</button>
+          <button onClick={handleLogout} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #5b9bd5, #9333ea)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Logout</button>
         </>
       ) : (
         <p>Not logged in.</p>

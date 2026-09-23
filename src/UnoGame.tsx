@@ -110,7 +110,7 @@ const UnoCardView: React.FC<{ card: UnoCardT; onClick?: () => void; small?: bool
 };
 
 const btnPrimary: React.CSSProperties = {
-  width: '100%', background: '#9a6b3f', color: '#fffdf8', border: 'none',
+  width: '100%', background: '#5b9bd5', color: '#fffdf8', border: 'none',
   borderRadius: 12, padding: '13px', fontSize: 15, fontWeight: 700, cursor: 'pointer',
 };
 
@@ -560,7 +560,7 @@ const UnoGame: React.FC = () => {
                   <div style={{ fontWeight: 700, fontSize: 15, color: '#1e1a14' }}>{t.hostName}'s table</div>
                   <div style={{ fontSize: 12.5, color: '#7a7264' }}>{t.playerCount}/10 players · Code {t.id}</div>
                 </div>
-                <span style={{ color: '#9a6b3f', fontWeight: 700, fontSize: 14 }}>Join →</span>
+                <span style={{ color: '#5b9bd5', fontWeight: 700, fontSize: 14 }}>Join →</span>
               </div>
             ))
           )}
@@ -598,7 +598,7 @@ const UnoGame: React.FC = () => {
             <button
               onClick={copyInvite}
               style={{
-                background: '#f3e9d7', color: '#9a6b3f', border: 'none', borderRadius: 999,
+                background: '#dbe9f7', color: '#5b9bd5', border: 'none', borderRadius: 999,
                 padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
               }}
             >
@@ -621,7 +621,7 @@ const UnoGame: React.FC = () => {
                   }}
                 >
                   <div style={{
-                    width: 28, height: 28, borderRadius: '50%', background: '#9a6b3f', color: '#fffdf8',
+                    width: 28, height: 28, borderRadius: '50%', background: '#5b9bd5', color: '#fffdf8',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800,
                   }}>
                     {p.name[0]?.toUpperCase() || '?'}
@@ -670,7 +670,7 @@ const UnoGame: React.FC = () => {
         {/* Turn banner */}
         <div style={{
           ...card, marginBottom: 14, padding: '12px 18px', textAlign: 'center',
-          background: isMyTurn ? '#9a6b3f' : '#fffdf8',
+          background: isMyTurn ? '#5b9bd5' : '#fffdf8',
         }}>
           <span style={{ fontWeight: 700, fontSize: 15, color: isMyTurn ? '#fffdf8' : '#1e1a14' }}>
             {isMyTurn ? "🎯 Your turn — play a card or draw" : `⏳ ${currentPlayer?.name || '…'}'s turn`}
@@ -731,7 +731,7 @@ const UnoGame: React.FC = () => {
           <button
             onClick={() => navigate('/voice-room')}
             style={{
-              width: '100%', marginTop: 12, background: '#f3e9d7', color: '#9a6b3f', border: 'none',
+              width: '100%', marginTop: 12, background: '#dbe9f7', color: '#5b9bd5', border: 'none',
               borderRadius: 12, padding: '11px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
             }}
           >

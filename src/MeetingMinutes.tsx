@@ -32,7 +32,7 @@ const MEETINGS: Meeting[] = [
     title: 'October 5th, 2025',
     weekday: 'Sunday',
     points: 3,
-    accent: '#9a6b3f',
+    accent: '#5b9bd5',
     accentBg: '#f1e6cf',
   },
   {

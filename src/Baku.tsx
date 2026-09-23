@@ -100,7 +100,7 @@ const Baku: React.FC = () => {
             style={{
               background: 'none',
               border: 'none',
-              color: '#9a6b3f',
+              color: '#5b9bd5',
               fontSize: '20px',
               cursor: 'pointer',
               padding: '8px',
@@ -192,7 +192,7 @@ const Baku: React.FC = () => {
               style={{
                 width: '100%',
                 padding: '12px',
-                background: 'linear-gradient(135deg, #a3764a 0%, #9a6b3f 100%)',
+                background: 'linear-gradient(135deg, #6aa5d8 0%, #5b9bd5 100%)',
                 border: 'none',
                 borderRadius: '8px',
                 color: '#fffdf8',

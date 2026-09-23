@@ -127,9 +127,9 @@ const Hangout: React.FC = () => {
             fontSize: '10.5px',
             fontWeight: 800,
             letterSpacing: '2.5px',
-            color: '#9a6b3f',
-            background: 'rgba(154, 107, 63, 0.08)',
-            border: '1px solid rgba(154, 107, 63, 0.25)',
+            color: '#5b9bd5',
+            background: 'rgba(91, 155, 213, 0.08)',
+            border: '1px solid rgba(91, 155, 213, 0.25)',
             borderRadius: '999px',
             padding: '6px 14px',
             marginBottom: '14px'
@@ -163,7 +163,7 @@ const Hangout: React.FC = () => {
           onClick={() => navigate('/voice-room')}
           style={{
             background: 'linear-gradient(150deg, #211c16 0%, #171310 60%, #0f0d0a 100%)',
-            border: '1px solid rgba(154, 107, 63, 0.35)',
+            border: '1px solid rgba(91, 155, 213, 0.35)',
             borderRadius: '24px',
             padding: '24px 22px',
             cursor: 'pointer',
@@ -226,13 +226,13 @@ const Hangout: React.FC = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '10px',
-            background: 'linear-gradient(135deg, #c9a96a, #9a6b3f)',
+            background: 'linear-gradient(135deg, #c9a96a, #5b9bd5)',
             color: '#171310',
             fontSize: '14px',
             fontWeight: 800,
             borderRadius: '999px',
             padding: '12px 22px',
-            boxShadow: '0 8px 20px rgba(154, 107, 63, 0.35)'
+            boxShadow: '0 8px 20px rgba(91, 155, 213, 0.35)'
           }}>
             🎙️ Join voice chat
             <span style={{ fontSize: '16px' }}>→</span>
@@ -251,7 +251,7 @@ const Hangout: React.FC = () => {
           gap: '12px'
         }}>
           EXPLORE
-          <span style={{ flex: 1, height: '1px', background: 'rgba(154, 107, 63, 0.18)' }} />
+          <span style={{ flex: 1, height: '1px', background: 'rgba(91, 155, 213, 0.18)' }} />
         </div>
         <div style={{
           display: 'grid',
@@ -263,7 +263,7 @@ const Hangout: React.FC = () => {
             onClick={() => navigate('/hangout/games/uno')}
             style={{
               background: '#fffdf8',
-              border: '1px solid rgba(154, 107, 63, 0.16)',
+              border: '1px solid rgba(91, 155, 213, 0.16)',
               borderRadius: '20px',
               padding: '18px 16px',
               cursor: 'pointer',
@@ -275,7 +275,7 @@ const Hangout: React.FC = () => {
               height: '48px',
               borderRadius: '15px',
               background: '#FEF3C7',
-              border: '1px solid rgba(154, 107, 63, 0.18)',
+              border: '1px solid rgba(91, 155, 213, 0.18)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -310,7 +310,7 @@ const Hangout: React.FC = () => {
               onClick={() => navigate(tile.path)}
               style={{
                 background: '#fffdf8',
-                border: '1px solid rgba(154, 107, 63, 0.16)',
+                border: '1px solid rgba(91, 155, 213, 0.16)',
                 borderRadius: '20px',
                 padding: '18px 16px',
                 cursor: 'pointer',
@@ -322,7 +322,7 @@ const Hangout: React.FC = () => {
                 height: '48px',
                 borderRadius: '15px',
                 background: tile.iconBg,
-                border: '1px solid rgba(154, 107, 63, 0.18)',
+                border: '1px solid rgba(91, 155, 213, 0.18)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

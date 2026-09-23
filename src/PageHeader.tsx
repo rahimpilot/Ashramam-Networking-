@@ -23,7 +23,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
       top: 0,
       zIndex: 100,
       boxShadow: '0 1px 12px rgba(90, 70, 45, 0.07)',
-      borderBottom: '1px solid rgba(154, 107, 63, 0.18)'
+      borderBottom: '1px solid rgba(91, 155, 213, 0.18)'
     }}>
       <div style={{
         display: 'flex',
@@ -38,8 +38,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
           onClick={() => (onBack ? onBack() : navigate(backTo))}
           style={{
             background: 'transparent',
-            border: '1px solid rgba(154, 107, 63, 0.35)',
-            color: '#9a6b3f',
+            border: '1px solid rgba(91, 155, 213, 0.35)',
+            color: '#5b9bd5',
             fontSize: '19px',
             cursor: 'pointer',
             padding: '8px',

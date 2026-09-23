@@ -45,7 +45,7 @@ const Profile: React.FC = () => {
 
   return (
     <div style={{ maxWidth: 400, margin: '2rem auto', padding: '2rem', background: '#fffdf8', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.10)' }}>
-      <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '1rem', color: '#9a6b3f' }}>Edit Profile</h2>
+      <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '1rem', color: '#5b9bd5' }}>Edit Profile</h2>
       {user ? (
         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <label>
@@ -65,7 +65,7 @@ const Profile: React.FC = () => {
             <input type="email" value={user.email || ''} disabled style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #eee', marginTop: 4, background: '#ece3d0', color: '#888' }} />
           </label>
           <a href="https://www.ashramamvibes.com/reset-password" style={{ color: '#9333ea', fontWeight: 500, marginBottom: 8 }}>Change Password</a>
-          <button type="submit" disabled={loading} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #9a6b3f, #9333ea)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Save</button>
+          <button type="submit" disabled={loading} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #5b9bd5, #9333ea)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Save</button>
           {message && <div style={{ color: 'green', marginTop: 8 }}>{message}</div>}
         </form>
       ) : (

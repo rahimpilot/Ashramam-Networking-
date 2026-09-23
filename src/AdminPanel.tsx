@@ -79,7 +79,7 @@ const AdminPanel: React.FC = () => {
               {pendingUsers.map(user => (
                 <li key={user.uid} style={{ marginBottom: 16, padding: 12, border: '1px solid #eee', borderRadius: 8 }}>
                   <span style={{ fontWeight: 500 }}>{user.email}</span>
-                  <button onClick={() => approveUser(user.uid)} style={{ marginLeft: 16, padding: '6px 16px', borderRadius: 6, background: '#9a6b3f', color: '#fffdf8', border: 'none', cursor: 'pointer' }}>Approve</button>
+                  <button onClick={() => approveUser(user.uid)} style={{ marginLeft: 16, padding: '6px 16px', borderRadius: 6, background: '#5b9bd5', color: '#fffdf8', border: 'none', cursor: 'pointer' }}>Approve</button>
                 </li>
               ))}
             </ul>

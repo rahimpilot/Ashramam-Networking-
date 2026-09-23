@@ -923,7 +923,7 @@ const VoiceRoom: React.FC = () => {
           </h2>
 
           {/* You */}
-          <div style={cardStyle(isSpeaking('me'), '#a3764a')}>
+          <div style={cardStyle(isSpeaking('me'), '#6aa5d8')}>
             {cameraOn ? (
               <video
                 ref={(el) => {
@@ -940,7 +940,7 @@ const VoiceRoom: React.FC = () => {
             ) : (
               <div style={{
                 width: '48px', height: '48px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, #a3764a 0%, #1e40af 100%)',
+                background: 'linear-gradient(135deg, #6aa5d8 0%, #1e40af 100%)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: '#fffdf8', fontWeight: 700, fontSize: '1.2rem', marginRight: '1rem', flexShrink: 0,
               }}>

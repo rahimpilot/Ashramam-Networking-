@@ -263,7 +263,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
                       <div style="
                         width: 100%;
                         height: 100%;
-                        background: linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%);
+                        background: linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%);
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -281,7 +281,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               <div style={{
                 width: '100%',
                 height: '100%',
-                background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)',
+                background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -551,7 +551,7 @@ const Residents: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)'
+        background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
@@ -581,7 +581,7 @@ const Residents: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)'
+        background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
@@ -820,7 +820,7 @@ const Residents: React.FC = () => {
                             <div style="
                               width: 100%;
                               height: 100%;
-                              background: linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%);
+                              background: linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%);
                               display: flex;
                               align-items: center;
                               justify-content: center;
@@ -838,7 +838,7 @@ const Residents: React.FC = () => {
                     <div style={{
                       width: '100%',
                       height: '100%',
-                      background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)',
+                      background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',

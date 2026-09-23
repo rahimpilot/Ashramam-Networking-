@@ -6,7 +6,7 @@ const October5th2025Meeting: React.FC = () => {
     <MeetingLayout
       dateTitle="October 5th, 2025"
       weekday="Sunday"
-      accent="#9a6b3f"
+      accent="#5b9bd5"
       accentBg="#f1e6cf"
       points={[
         {

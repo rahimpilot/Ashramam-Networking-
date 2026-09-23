@@ -295,7 +295,7 @@ const Stories: React.FC = () => {
       justifyContent: 'center',
       alignItems: 'center',
       height: '100vh',
-      background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)'
+      background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
     }}>
       <div style={{
         textAlign: 'center',
@@ -337,9 +337,9 @@ const Stories: React.FC = () => {
         .topics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         @media (min-width: 600px) { .topics-grid { grid-template-columns: repeat(3, 1fr); } }
         .topic-card { transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; }
-        .topic-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08); border-color: #9a6b3f; }
+        .topic-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08); border-color: #5b9bd5; }
         .topic-card:active { transform: translateY(0); }
-        .story-input:focus { border-color: #9a6b3f !important; }
+        .story-input:focus { border-color: #5b9bd5 !important; }
       `}</style>
 
       {currentView === 'topics' ? (
@@ -368,7 +368,7 @@ const Stories: React.FC = () => {
                 fontSize: '11px',
                 fontWeight: 700,
                 letterSpacing: '1.5px',
-                color: '#9a6b3f',
+                color: '#5b9bd5',
                 background: '#E7F0FE',
                 borderRadius: '999px',
                 padding: '5px 12px',
@@ -456,7 +456,7 @@ const Stories: React.FC = () => {
                 fontSize: '11px',
                 fontWeight: 700,
                 letterSpacing: '1.5px',
-                color: '#9a6b3f',
+                color: '#5b9bd5',
                 background: '#E7F0FE',
                 borderRadius: '999px',
                 padding: '5px 12px',
@@ -499,7 +499,7 @@ const Stories: React.FC = () => {
                   <button
                     onClick={() => setShowAddForm(!showAddForm)}
                     style={{
-                      background: showAddForm ? '#e7ddcc' : '#9a6b3f',
+                      background: showAddForm ? '#e7ddcc' : '#5b9bd5',
                       border: 'none',
                       borderRadius: '999px',
                       padding: '8px 16px',
@@ -606,7 +606,7 @@ const Stories: React.FC = () => {
                     type="submit"
                     disabled={submitting || !formValid}
                     style={{
-                      background: (submitting || !formValid) ? '#e7ddcc' : '#9a6b3f',
+                      background: (submitting || !formValid) ? '#e7ddcc' : '#5b9bd5',
                       border: 'none',
                       borderRadius: '12px',
                       padding: '12px 24px',
@@ -645,7 +645,7 @@ const Stories: React.FC = () => {
                   <button
                     onClick={() => setShowAddForm(true)}
                     style={{
-                      background: '#9a6b3f',
+                      background: '#5b9bd5',
                       border: 'none',
                       borderRadius: '12px',
                       padding: '10px 20px',
@@ -748,7 +748,7 @@ const Stories: React.FC = () => {
                               onClick={() => handleSaveEdit(story.id)}
                               disabled={submitting}
                               style={{
-                                background: '#9a6b3f',
+                                background: '#5b9bd5',
                                 border: 'none',
                                 color: '#fffdf8',
                                 borderRadius: '12px',
@@ -788,14 +788,14 @@ const Stories: React.FC = () => {
                                 }}
                                 aria-label={isLiked ? 'Unlike this story' : 'Like this story'}
                                 style={{
-                                  background: isLiked ? '#9a6b3f' : 'transparent',
-                                  border: '1px solid #9a6b3f',
+                                  background: isLiked ? '#5b9bd5' : 'transparent',
+                                  border: '1px solid #5b9bd5',
                                   borderRadius: '999px',
                                   padding: '6px 12px',
                                   cursor: 'pointer',
                                   fontSize: '13px',
                                   fontWeight: 700,
-                                  color: isLiked ? '#fffdf8' : '#9a6b3f',
+                                  color: isLiked ? '#fffdf8' : '#5b9bd5',
                                   transition: 'all 0.2s ease',
                                   flexShrink: 0,
                                   minHeight: '32px',
@@ -857,7 +857,7 @@ const Stories: React.FC = () => {
                           }}>
                             <span style={{
                               fontSize: '13px',
-                              color: '#9a6b3f',
+                              color: '#5b9bd5',
                               fontWeight: 700
                             }}>
                               {isExpanded ? 'Show less' : 'Read full story ›'}
@@ -871,7 +871,7 @@ const Stories: React.FC = () => {
                                 style={{
                                   background: 'none',
                                   border: 'none',
-                                  color: '#9a6b3f',
+                                  color: '#5b9bd5',
                                   fontSize: '13px',
                                   fontWeight: 600,
                                   cursor: 'pointer',

@@ -420,7 +420,7 @@ const Dashboard: React.FC = () => {
         <span
           key={match.index}
           style={{
-            color: '#9a6b3f',
+            color: '#5b9bd5',
             fontWeight: 600,
             background: 'rgba(24, 119, 242, 0.1)',
             borderRadius: '6px',
@@ -833,7 +833,7 @@ const Dashboard: React.FC = () => {
         justifyContent: 'center', 
         alignItems: 'center', 
         height: '100vh',
-        background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)'
+        background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
       }}>
         <div style={{ 
           textAlign: 'center',
@@ -896,7 +896,7 @@ const Dashboard: React.FC = () => {
             onClick={() => navigate('/profile')}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.borderColor = '#9a6b3f';
+              e.currentTarget.style.borderColor = '#5b9bd5';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = 'scale(1)';
@@ -992,7 +992,7 @@ const Dashboard: React.FC = () => {
               fontSize: '16px',
               fontWeight: 500,
               cursor: 'pointer',
-              borderBottom: '3px solid #9a6b3f',
+              borderBottom: '3px solid #5b9bd5',
               transition: 'all 0.2s ease'
             }}
           >
@@ -1081,7 +1081,7 @@ const Dashboard: React.FC = () => {
                       borderRadius: '50%',
                       overflow: 'hidden',
                       border: '2px solid #e2d7bf',
-                      background: user.profilePicture ? 'transparent' : 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)',
+                      background: user.profilePicture ? 'transparent' : 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -1179,7 +1179,7 @@ const Dashboard: React.FC = () => {
                 disabled={(!newMessage.trim() && !selectedImage) || submitting}
                 style={{
                   background: (newMessage.trim() || selectedImage) 
-                    ? 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)' 
+                    ? 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)' 
                     : '#e2d7bf',
                   color: (newMessage.trim() || selectedImage) ? '#fffdf8' : '#a89a80',
                   border: 'none',
@@ -1239,7 +1239,7 @@ const Dashboard: React.FC = () => {
                 onClick={() => viewUserProfile(post.authorEmail || post.author, post.author)}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'scale(1.05)';
-                  e.currentTarget.style.borderColor = '#9a6b3f';
+                  e.currentTarget.style.borderColor = '#5b9bd5';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
@@ -1288,7 +1288,7 @@ const Dashboard: React.FC = () => {
                         <div style={{
                           width: '100%',
                           height: '100%',
-                          background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)',
+                          background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -1585,7 +1585,7 @@ const Dashboard: React.FC = () => {
                               transition: 'background-color 0.2s ease, transform 0.1s ease'
                             }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.backgroundColor = '#9a6b3f';
+                              e.currentTarget.style.backgroundColor = '#5b9bd5';
                               e.currentTarget.style.color = '#fffdf8';
                               e.currentTarget.style.transform = 'scale(1.05)';
                             }}
@@ -1622,7 +1622,7 @@ const Dashboard: React.FC = () => {
                           onClick={() => viewUserProfile(reply.authorEmail || reply.author, reply.author)}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.transform = 'scale(1.05)';
-                            e.currentTarget.style.borderColor = '#9a6b3f';
+                            e.currentTarget.style.borderColor = '#5b9bd5';
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.transform = 'scale(1)';
@@ -1668,7 +1668,7 @@ const Dashboard: React.FC = () => {
                                   <div style={{
                                     width: '100%',
                                     height: '100%',
-                                    background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)',
+                                    background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -1715,7 +1715,7 @@ const Dashboard: React.FC = () => {
                             transition: 'border-color 0.2s ease',
                             minHeight: '44px'
                           }}
-                          onFocus={(e) => e.currentTarget.style.borderColor = '#9a6b3f'}
+                          onFocus={(e) => e.currentTarget.style.borderColor = '#5b9bd5'}
                           onBlur={(e) => e.currentTarget.style.borderColor = '#e2d7bf'}
                           onKeyPress={(e) => {
                             if (e.key === 'Enter') {
@@ -1777,7 +1777,7 @@ const Dashboard: React.FC = () => {
                         <button
                           onClick={() => handleAddComment(post.id)}
                           style={{
-                            background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)',
+                            background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
                             color: '#fffdf8',
                             border: 'none',
                             borderRadius: '20px',

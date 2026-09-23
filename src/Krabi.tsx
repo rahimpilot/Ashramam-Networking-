@@ -129,7 +129,7 @@ const Krabi: React.FC = () => {
             style={{
               background: 'none',
               border: 'none',
-              color: '#9a6b3f',
+              color: '#5b9bd5',
               fontSize: '20px',
               cursor: 'pointer',
               padding: '8px',

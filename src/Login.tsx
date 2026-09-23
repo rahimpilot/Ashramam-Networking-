@@ -219,7 +219,7 @@ const Login: React.FC = () => {
               disabled={loading}
               style={{
                 width: '100%',
-                background: 'linear-gradient(to right, #9a6b3f, #9333ea)',
+                background: 'linear-gradient(to right, #5b9bd5, #9333ea)',
                 color: 'white',
                 padding: '0.75rem 1.5rem',
                 borderRadius: '0.75rem',
@@ -239,7 +239,7 @@ const Login: React.FC = () => {
             <button
               onClick={() => setIsSignUp(!isSignUp)}
               style={{
-                color: '#9a6b3f',
+                color: '#5b9bd5',
                 fontSize: '0.875rem',
                 fontWeight: '500',
                 transition: 'color 0.2s',
@@ -255,7 +255,7 @@ const Login: React.FC = () => {
                 <button
                   onClick={handleForgotPassword}
                   style={{
-                    color: '#9a6b3f',
+                    color: '#5b9bd5',
                     fontSize: '0.875rem',
                     fontWeight: '500',
                     border: 'none',
