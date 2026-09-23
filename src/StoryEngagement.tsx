@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
 import { User } from 'firebase/auth';
 import {
-  collection, doc, setDoc, deleteDoc, addDoc,
+  collection, addDoc,
   query, orderBy, onSnapshot, Timestamp, getDocs
 } from 'firebase/firestore';
 
@@ -14,13 +14,11 @@ interface StoryComment {
 }
 
 /**
- * Like button + comments for an exclusive story.
- * Data: exclusiveStories/{storyId}/comments and .../likes/{uid}
+ * Copy-link + comments for an exclusive story.
+ * Data: exclusiveStories/{storyId}/comments
  */
 const StoryEngagement: React.FC<{ storyId: string; user: User }> = ({ storyId, user }) => {
   const [comments, setComments] = useState<StoryComment[]>([]);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
   const [authorName, setAuthorName] = useState('');
   const [newComment, setNewComment] = useState('');
   const [posting, setPosting] = useState(false);
@@ -58,28 +56,6 @@ const StoryEngagement: React.FC<{ storyId: string; user: User }> = ({ storyId, u
     });
     return () => unsub();
   }, [storyId]);
-
-  // Live likes
-  useEffect(() => {
-    const unsub = onSnapshot(
-      collection(db, 'exclusiveStories', storyId, 'likes'),
-      (snap) => {
-        setLikeCount(snap.size);
-        setLiked(snap.docs.some((d) => d.id === user.uid));
-      }
-    );
-    return () => unsub();
-  }, [storyId, user.uid]);
-
-  const toggleLike = async () => {
-    const likeDoc = doc(db, 'exclusiveStories', storyId, 'likes', user.uid);
-    try {
-      if (liked) await deleteDoc(likeDoc);
-      else await setDoc(likeDoc, { createdAt: Timestamp.now() });
-    } catch (e) {
-      console.error('Like failed', e);
-    }
-  };
 
   const postComment = async () => {
     const text = newComment.trim();
@@ -126,24 +102,8 @@ const StoryEngagement: React.FC<{ storyId: string; user: User }> = ({ storyId, u
 
   return (
     <div>
-      {/* Like + copy link row */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 }}>
-        <button
-          onClick={toggleLike}
-          className="iv-press"
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: liked ? '#e63946' : '#ffffff',
-            color: liked ? '#ffffff' : '#1c2733',
-            border: liked ? 'none' : '1px solid #d5e0ec',
-            borderRadius: 24, padding: '10px 18px',
-            fontSize: 14, fontWeight: 700, cursor: 'pointer',
-            boxShadow: '0 4px 14px rgba(28, 39, 51, 0.12)'
-          }}
-        >
-          <span style={{ fontSize: 16 }}>{liked ? '❤️' : '🤍'}</span>
-          {likeCount > 0 ? likeCount : 'Like'}
-        </button>
+      {/* Copy link row */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 14 }}>
         <button
           onClick={copyLink}
           className="iv-press"
