@@ -41,6 +41,20 @@ Changing direction was a bold move — never an easy one — yet he succeeded in
 Through his long journey, he set aside time each day to keep his painter's soul alive, and today he holds a rich collection of his own paintings. His passion is boundless — a driving force that keeps him painting, rather than settling for photography as merely his bread and butter.`,
     date: 'From the archives',
   },
+  {
+    id: 'retro-life',
+    badge: 'BELOVED',
+    badgeColor: '#d97706',
+    title: 'Retro Life',
+    excerpt: 'On music, patience, and chasing the dream of mastering an instrument.',
+    image: '/retro-life.jpg',
+    body: `Music is an inspiration — it reveals the instrument you were meant to play. Every instrument finds its mentor in the player who chooses it with purpose, and with respect for what they aim to achieve.
+
+I have always been passionate, though quietly so. I carried ambitions I wanted to pursue, even as doubt and confusion haunted me like an unwelcome spoiler. But I decided not to hold back, and not to give up for just any reason.
+
+Learning an instrument demands patience — the kind that never stops you from dreaming. So chase your dreams, and discover what you are truly good at.`,
+    date: 'From the archives',
+  },
 ];
 
 const BelovedArticles: React.FC = () => {
