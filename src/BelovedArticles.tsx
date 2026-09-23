@@ -32,7 +32,7 @@ const ARTICLES: BelovedArticle[] = [
     title: 'Sahir Momey: The Artist Behind the Lens',
     excerpt: 'A born artist from Fort Kochi — 32 years of craft, from hand-drawn design to photography.',
     image: '/sahir-momey.jpg',
-    body: `Sahir Momey is a born artist who went on to become a photographer, carrying 32 years of experience in the field. He is widely regarded as a legend in hand-drawn design, and later moved into computer design — spanning product design, wall advertisements, theatre slides, portraits, logo design, screen printing, and spray painting. Gradually, he stepped back and moved partially into photography, to support his livelihood.
+    body: `Sahir Momey is a born artist who went on to become a photographer, with 32 years of experience in the field. He is widely regarded as a legend in hand-drawn design, and later moved into computer design — spanning product design, wall advertisements, theatre slides, portraits, logo design, screen printing, and spray painting. Gradually, he stepped back and moved partially into photography, to support his livelihood.
 
 Sahir was born and brought up in Fort Kochi, a historic port city in Kerala, India, where the community enjoys a vibrant cultural exposure unlike anywhere else in the state. He was raised in a middle-class Muslim family grounded in faith and spirituality. His father was a portrait artist and hand-drawn designer — a college dropout from Feroke, Kozhikode. Sahir's childhood was deeply creative; he accompanied his father to art workshops and grew up immersed in art.
 
@@ -48,7 +48,7 @@ Through his long journey, he set aside time each day to keep his painter's soul 
     title: 'Retro Life',
     excerpt: 'On music, patience, and chasing the dream of mastering an instrument.',
     image: '/retro-life.jpg',
-    body: `Music is an inspiration — it reveals the instrument you were meant to play. Every instrument finds its mentor in the player who chooses it with purpose, and with respect for what they aim to achieve.
+    body: `Music is an inspiration — it reveals the instrument you were meant to play. Every instrument finds its mentor in the player who chooses it with purpose and respect for what they aim to achieve.
 
 I have always been passionate, though quietly so. I carried ambitions I wanted to pursue, even as doubt and confusion haunted me like an unwelcome spoiler. But I decided not to hold back, and not to give up for just any reason.
 
@@ -70,7 +70,7 @@ Even where school fees are free, hidden costs remain: uniforms, food, books — 
 
 Children also face steep barriers on their educational path: lack of funding, untrained teachers, missing classrooms, scarce learning materials, hunger, and poor nutrition. Only dedicated, sustained campaigns can clear these barriers. More than grand infrastructure, what works is well-organised social service — and it can transform the lives of poor communities.
 
-Consider a recent story. Sreedhanya Suresh, a 25-year-old woman from a poor background, beat every odd to become a topper. From the Kurichiya tribe of Wayanad, Kerala, she became the first tribal woman from Kerala to clear the UPSC civil services examination — securing the 410th rank on her third attempt. This is not just news; it is history. Her will and courage prove a simple truth: talent lives in every crowd — all it needs is a little support to stretch its wings and fly. She is one example; there are a thousand more like her waiting to show their calibre.
+Consider a recent story. Sreedhanya Suresh, a 25-year-old woman from a poor background, beat all odds to become a topper. From the Kurichiya tribe of Wayanad, Kerala, she became the first tribal woman from Kerala to clear the UPSC civil services examination — securing the 410th rank on her third attempt. This is not just news; it is history. Her will and courage prove a simple truth: talent lives in every crowd — all it needs is a little support to stretch its wings and fly. She is one example; there are a thousand more like her waiting to show their calibre.
 
 Research points to practical ways of reaching unprivileged children: weekend mobile schools run from a rented van or minibus, turning a living room into a classroom, free libraries built from donated books, small skill-training sessions for children, weekend outdoor sports events — simple ideas, refined through years of experience by dedicated mentors. Social service interns across the country are already running such campaigns, gathering the materials they need to keep teaching alive.
 
