@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 import PageHeader from './PageHeader';
 import { SkeletonPost } from './Skeleton';
+import StoryEngagement from './StoryEngagement';
 import { auth } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
@@ -58,7 +59,6 @@ const AshramamExclusive: React.FC = () => {
   const { storyId } = useParams<{ storyId: string }>();
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [copied, setCopied] = useState(false);
 
   // Members only — same gate as Stories
   useEffect(() => {
@@ -71,22 +71,6 @@ const AshramamExclusive: React.FC = () => {
     });
     return () => unsubscribe();
   }, [navigate]);
-
-  const copyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-    } catch {
-      // Fallback for older browsers
-      const ta = document.createElement('textarea');
-      ta.value = window.location.href;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-    }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   if (authLoading || !user) {
     return (
@@ -259,29 +243,7 @@ const AshramamExclusive: React.FC = () => {
 
         {/* Copy link — bottom right, after everything */}
         {selected && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 14 }}>
-            <button
-              onClick={copyLink}
-              className="iv-press"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                background: '#1c2733',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: 24,
-                padding: '10px 18px',
-                fontSize: 14,
-                fontWeight: 600,
-                cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(28, 39, 51, 0.25)'
-              }}
-            >
-              <span style={{ fontSize: 15 }}>{copied ? '✓' : '🔗'}</span>
-              {copied ? 'Link copied!' : 'Copy link'}
-            </button>
-          </div>
+          <StoryEngagement storyId={selected.id} user={user} />
         )}
       </div>
 
