@@ -158,6 +158,81 @@ Sustainable energy management is central to managing natural resources and susta
     date: 'From the archives',
   },
 
+  {
+    id: 'lockdown-planet',
+    badge: 'BELOVED',
+    badgeColor: '#d97706',
+    title: 'Replenishment of the Planet During the Lockdown',
+    excerpt: 'When the world stood still, the Earth breathed again — and gave us a lesson.',
+    image: '/lockdown-planet.jpg',
+    body: `For years, humanity has taken the planet for granted, harming it in countless ways while rarely pausing to think about how to preserve it. As the population has grown day by day, so has our consumption of the Earth's resources — unchecked for a very long time. Many wondered what the future would hold if these habits continued, when consumption was already outpacing what the planet could bear.
+
+Then the coronavirus lockdown gave us an unexpected glimpse of the answer. The environmental changes were first visible from space; soon they could be sensed in the skies above our heads, the air in our lungs, and even the ground beneath our feet. As motorways emptied and factories closed, the dirty brown pollution belts shrank over cities and industrial centres — country after country, within days of lockdown. First China, then Italy, then the UK, Germany, and dozens of other nations saw temporary falls in carbon dioxide and nitrogen dioxide of as much as 40%, greatly improving air quality and reducing the risks of asthma, heart attacks, and lung disease.
+
+With the public staying home, vehicle movement stopped and airline traffic fell to little more than cargo fleets. The Earth, in effect, took a break. Dolphins and swans returned to the canals of Venice; elephants roamed freely in China — wildlife reclaiming a quieter, cleaner, human-free world. With less noise and purer air, even the weather seemed to turn for the better.
+
+## The lesson
+
+So the question arises: are we the reason the Earth was corrupted from its original state? The lockdown has given us the answer — and a lesson. Whether we act on it is in our hands; call it a responsibility. A single individual's decision can ripple through a community, and together we can keep the environment the way it is meant to be.
+
+The pandemic shut down industrial activity, slashing greenhouse gas emissions and air pollution worldwide. If there is anything positive to take from this crisis, it is a glimpse of the air we might breathe in a low-carbon future. We live in an age of intersecting global crises — inequality, environmental degradation, climate destabilisation, populism, conflict, economic uncertainty, and mounting public-health threats — and health organisations are witnessing the devastating cost of underprepared systems.
+
+Yet nature has been healing long before COVID-19 forced most of us indoors, and it will continue to do so with the help of good policies. Most countries took firm precautions to keep the lockdown serving its purpose and stop the virus spreading as it had elsewhere. If such stillness lasted for years, we might even see wildlife drift toward the cities in the absence of human bustle. The lockdown proved one thing beyond doubt: if humans can be disciplined enough, the impact on the environment will be profound.`,
+    date: 'From the archives',
+  },
+  {
+    id: 'mental-health',
+    badge: 'BELOVED',
+    badgeColor: '#d97706',
+    title: 'Mental Health',
+    excerpt: 'Our emotional, psychological, and social well-being — and why it deserves the same care as the body.',
+    image: '/mental-health.jpg',
+    body: `## What mental health means
+
+Mental health shapes how we think, feel, and behave — it is the foundation of our emotional, psychological, and social well-being, and it plays a decisive role in our daily lives. Whether a person is judged "normal" or "abnormal" comes down to behaviour, and behaviour is deeply tied to the state of the mind.
+
+## Why it matters
+
+Mental health must be protected, because when it suffers, mental illness can follow — affecting a person's thinking, feeling, behaviour, and mood. These conditions reach deep into day-to-day living and can damage our ability to relate to others. If you have, or think you might have, a mental illness, the first thing to know is this: you are not alone.
+
+## The roots of the struggle
+
+Mental health problems can arise from stress, loneliness, depression, anxiety, relationship difficulties, the death of a loved one, grief, addiction, self-harm, mood disorders, suicidal thoughts, and other conditions of varying severity — as well as learning disabilities.
+
+## A balanced mind
+
+Good mental health is essential to living a full life: it helps prevent mental disorders and protects our human dignity. It can be described as a satisfactory level of emotional and behavioural adjustment — the ability to enjoy life and keep a healthy balance between its many activities. Caring for the mind is not a luxury; it is as vital as caring for the body.`,
+    date: 'From the archives',
+  },
+  {
+    id: 'education-equality',
+    badge: 'BELOVED',
+    badgeColor: '#d97706',
+    title: 'Education Equality',
+    excerpt: 'Every child deserves the same chance to learn — regardless of wealth, background, or birthplace.',
+    image: '/education-equality.jpg',
+    body: `## What educational equity means
+
+Education is a right that belongs to everyone, regardless of caste, race, religion, or background. Educational equity is the pursuit of fairness, justice, and impartiality in education — accommodating and meeting the specific needs of specific individuals, so that everyone's learning needs are met. It rests on fairness in distributing resources, opportunities, treatment, and success to every student. True equity means differences in educational outcomes are not the result of differences in wealth, income, power, or possessions. The quality of education a child receives should never depend on the wealth or education of their family — a child who fails in school does not fail because they were poor or had fewer opportunities than their peers. Nor should a child's social, racial, or geographic background decide the education they receive. Students differ in what they need to succeed: some come from disadvantaged environments, others have special educational needs. Simply put, nothing should hold a child back from pursuing their talents and passions. Everyone deserves the same education.
+
+## The gap in the numbers
+
+Minority students remain at a disadvantage in access to advanced academic opportunities. Among surveyed high schools, 55% of those with few minority students offer calculus — but only 29% of those with many minority students do. Similarly, 82% of low-minority schools offer Algebra II, compared with 65% of high-minority schools. Black and Hispanic students made up 44% of those surveyed, yet only 26% of students in gifted and talented programmes — while being overrepresented among those repeating a grade. Across all grades, Black students were nearly three times as likely, and Hispanic students twice as likely, as white students to be held back.
+
+## Opportunity, not just access
+
+Equality of educational opportunity takes many forms — the value placed on education, the scarcity of high-quality schooling, state regulation, and more. These factors shape what each individual can achieve. Debates continue over whether equal opportunity demands equality or adequacy, but one principle stands: we all have a right to educational equality, because education is not merely about books and grades — it is about participating in the nation and building it. Giving the right education to skilled candidates fulfils their creative potential and gives them a true foundation for their careers.
+
+## Knowing our rights
+
+To participate, we must know our rights — otherwise we risk losing them. In the United States, the highest law of the land is the Constitution, whose amendments, known as the Bill of Rights, guarantee that the government can never deprive people of fundamental rights, including freedom of religion, free speech, and due process of law — with many federal and state laws adding further protections. But equal rights in life belong to everyone, everywhere. This is no abstract theory: we still witness violations of basic equality across the world. Setting ego aside and growing our communities is the path that leads, in turn, to equality in education. In today's globalised world, the centrality of education is increasingly recognised: it empowers individuals, transforms societies, prepares children for democratic citizenship, eradicates poverty, and advances our global commitments to sustainable development.
+
+## A right enshrined in law
+
+Education is both a human right in itself and an indispensable means of realising other human rights. Article 26 of the Universal Declaration of Human Rights proclaims the right to education as an inalienable right of every child — boys and girls alike. UNESCO's Convention against Discrimination in Education (1960) was the first instrument to provide for this right comprehensively, establishing universal access and equality of educational opportunity, and reflecting UNESCO's mission to advance "equality of educational opportunities without regard to race, sex, or any distinctions, economic or social." Its constitution affirms the founders' belief in "full and equal opportunities for education for all," and under Article 4, States Parties undertake to pursue national policies promoting equality of opportunity and treatment in education. Other human rights treaties reinforce the same duty: Article 10 of the Convention on the Elimination of All Forms of Discrimination against Women (CEDAW) sets out detailed provisions on equality of opportunity in education and the equal rights of women and men. These are the strong backbones carrying equality forward and improving educational systems across the planet — and as honest individuals, we can each take the initiative to support such causes and help our nations grow.`,
+    date: 'From the archives',
+  },
+
 ];
 
 const BelovedArticles: React.FC = () => {
