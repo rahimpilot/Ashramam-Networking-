@@ -22,7 +22,8 @@ const StoryEngagement: React.FC<{
   storyId: string;
   user: User | null;
   collectionName?: string;
-}> = ({ storyId, user, collectionName = 'exclusiveStories' }) => {
+  emptyText?: string;
+}> = ({ storyId, user, collectionName = 'exclusiveStories', emptyText = 'No comments yet — be the first to roast… err, congratulate. 😄' }) => {
   const [comments, setComments] = useState<StoryComment[]>([]);
   const [authorName, setAuthorName] = useState('');
   const [newComment, setNewComment] = useState('');
@@ -134,7 +135,7 @@ const StoryEngagement: React.FC<{
 
         {comments.length === 0 ? (
           <p style={{ fontSize: 13, color: '#8a9aab', margin: '0 0 12px 0' }}>
-            No comments yet — be the first to roast… err, congratulate. 😄
+            {emptyText}
           </p>
         ) : (
           <div style={{ marginBottom: 12 }}>

@@ -31,6 +31,7 @@ const ARTICLES: BelovedArticle[] = [
     badgeColor: '#d97706',
     title: 'Sahir Momey: The Artist Behind the Lens',
     excerpt: 'A born artist from Fort Kochi — 32 years of craft, from hand-drawn design to photography.',
+    image: '/sahir-momey.jpg',
     body: `Sahir Momey is a born artist who went on to become a photographer, carrying 32 years of experience in the field. He is widely regarded as a legend in hand-drawn design, and later moved into computer design — spanning product design, wall advertisements, theatre slides, portraits, logo design, screen printing, and spray painting. Gradually, he stepped back and moved partially into photography, to support his livelihood.
 
 Sahir was born and brought up in Fort Kochi, a historic port city in Kerala, India, where the community enjoys a vibrant cultural exposure unlike anywhere else in the state. He was raised in a middle-class Muslim family grounded in faith and spirituality. His father was a portrait artist and hand-drawn designer — a college dropout from Feroke, Kozhikode. Sahir's childhood was deeply creative; he accompanied his father to art workshops and grew up immersed in art.
@@ -194,7 +195,12 @@ const BelovedArticles: React.FC = () => {
                 </p>
               </div>
             </article>
-            <StoryEngagement storyId={selected.id} user={user} collectionName="belovedArticles" />
+            <StoryEngagement
+              storyId={selected.id}
+              user={user}
+              collectionName="belovedArticles"
+              emptyText="No comments yet — be the first to share your thoughts."
+            />
           </>
         )}
       </div>
