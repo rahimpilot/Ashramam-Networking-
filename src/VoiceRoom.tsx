@@ -62,6 +62,13 @@ const VoiceRoom: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [connectedPeers, setConnectedPeers] = useState<string[]>([]);
+  // Mic permission pre-check: explicit "allow" step before joining so the
+  // browser prompt isn't buried inside the join flow on mobile.
+  const [micStep, setMicStep] = useState<'idle' | 'checking' | 'ready' | 'denied'>('idle');
+  const [micLevel, setMicLevel] = useState(0);
+  const micCheckStreamRef = useRef<MediaStream | null>(null);
+  const micCheckCtxRef = useRef<AudioContext | null>(null);
+  const micCheckRafRef = useRef<number | null>(null);
   // speakingTick re-renders the UI when the speaking set changes
   const [, setSpeakingTick] = useState(0);
 
@@ -431,6 +438,85 @@ const VoiceRoom: React.FC = () => {
     }
   }, [flushPendingCandidates]);
 
+  // ---------- mic permission pre-check ----------
+  const stopMicCheck = useCallback(() => {
+    if (micCheckRafRef.current) cancelAnimationFrame(micCheckRafRef.current);
+    micCheckRafRef.current = null;
+    if (micCheckCtxRef.current) {
+      micCheckCtxRef.current.close().catch(() => {});
+      micCheckCtxRef.current = null;
+    }
+    if (micCheckStreamRef.current) {
+      micCheckStreamRef.current.getTracks().forEach(t => t.stop());
+      micCheckStreamRef.current = null;
+    }
+    setMicLevel(0);
+  }, []);
+
+  const startMicCheck = useCallback(async () => {
+    setMicStep('checking');
+    setError(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+        video: false,
+      });
+      micCheckStreamRef.current = stream;
+      // Live level meter so the user SEES the mic working
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const ctx = new Ctx();
+      if (ctx.state === 'suspended') await ctx.resume();
+      micCheckCtxRef.current = ctx;
+      const src = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 512;
+      src.connect(analyser);
+      const data = new Uint8Array(analyser.fftSize);
+      const loop = () => {
+        analyser.getByteTimeDomainData(data);
+        let sum = 0;
+        for (let i = 0; i < data.length; i++) {
+          const v = (data[i] - 128) / 128;
+          sum += v * v;
+        }
+        setMicLevel(Math.min(100, Math.round(Math.sqrt(sum / data.length) * 250)));
+        micCheckRafRef.current = requestAnimationFrame(loop);
+      };
+      loop();
+      setMicStep('ready');
+    } catch (err) {
+      console.warn('Mic check failed:', err);
+      setMicStep('denied');
+    }
+  }, []);
+
+  const cancelMicCheck = useCallback(() => {
+    stopMicCheck();
+    setMicStep('idle');
+  }, [stopMicCheck]);
+
+  // Quick speaker test — plays a short beep so the user can confirm audio output
+  const testSpeaker = useCallback(async () => {
+    try {
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const ctx = new Ctx();
+      if (ctx.state === 'suspended') await ctx.resume();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.4, ctx.currentTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.55);
+      osc.onended = () => { ctx.close().catch(() => {}); };
+    } catch (e) {
+      console.warn('Speaker test failed:', e);
+    }
+  }, []);
+
   // ---------- join / leave ----------
   const joinRoom = useCallback(async () => {
     const me = userRef.current;
@@ -439,35 +525,50 @@ const VoiceRoom: React.FC = () => {
     setError(null);
 
     try {
-      // 1. Microphone + camera (inside the tap gesture, so mobile browsers allow it).
-      // The camera is requested up front so toggling video later is instant.
-      // The video track starts muted — the camera stays OFF until the user taps
-      // the camera button. Falls back to audio-only if the camera is denied.
-      const audioConstraints = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
-      const videoConstraints = VIDEO_ENABLED
-        ? {
-            width: { ideal: 640 },
-            height: { ideal: 480 },
-            frameRate: { ideal: 24 },
-            facingMode: 'user',
-          }
-        : false;
+      // 1. Microphone — reuse the pre-approved mic-check stream when available
+      // (permission already granted, no second browser prompt).
       let stream: MediaStream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          audio: audioConstraints,
-          video: videoConstraints,
-        });
-      } catch (err) {
-        if (VIDEO_ENABLED) {
-          // Camera may be denied/unavailable — fall back to audio-only
-          console.warn('Camera unavailable at join — falling back to audio-only:', err);
+      if (micCheckStreamRef.current) {
+        stream = micCheckStreamRef.current;
+        micCheckStreamRef.current = null; // ownership moves to the call
+        if (micCheckRafRef.current) cancelAnimationFrame(micCheckRafRef.current);
+        micCheckRafRef.current = null;
+        if (micCheckCtxRef.current) {
+          micCheckCtxRef.current.close().catch(() => {});
+          micCheckCtxRef.current = null;
+        }
+        setMicLevel(0);
+        setMicStep('idle');
+      } else {
+        // (inside the tap gesture, so mobile browsers allow it).
+        // The camera is requested up front so toggling video later is instant.
+        // The video track starts muted — the camera stays OFF until the user taps
+        // the camera button. Falls back to audio-only if the camera is denied.
+        const audioConstraints = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
+        const videoConstraints = VIDEO_ENABLED
+          ? {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              frameRate: { ideal: 24 },
+              facingMode: 'user',
+            }
+          : false;
+        try {
           stream = await navigator.mediaDevices.getUserMedia({
             audio: audioConstraints,
-            video: false,
+            video: videoConstraints,
           });
-        } else {
-          throw err;
+        } catch (err) {
+          if (VIDEO_ENABLED) {
+            // Camera may be denied/unavailable — fall back to audio-only
+            console.warn('Camera unavailable at join — falling back to audio-only:', err);
+            stream = await navigator.mediaDevices.getUserMedia({
+              audio: audioConstraints,
+              video: false,
+            });
+          } else {
+            throw err;
+          }
         }
       }
       localStreamRef.current = stream;
@@ -687,6 +788,10 @@ const VoiceRoom: React.FC = () => {
     const audios = remoteAudiosRef.current;
     const localStream = localStreamRef.current;
     return () => {
+      // Release any mic-check resources if the user leaves mid-check
+      if (micCheckRafRef.current) cancelAnimationFrame(micCheckRafRef.current);
+      if (micCheckCtxRef.current) micCheckCtxRef.current.close().catch(() => {});
+      if (micCheckStreamRef.current) micCheckStreamRef.current.getTracks().forEach(t => { try { t.stop(); } catch { /* noop */ } });
       if (joinedRef.current) {
         joinedRef.current = false;
         listenersRef.current.forEach(unsub => {
@@ -827,8 +932,10 @@ const VoiceRoom: React.FC = () => {
               {error}
             </div>
           )}
+          {micStep === 'idle' ? (
+          <>
           <button
-            onClick={joinRoom}
+            onClick={startMicCheck}
             disabled={joining || dbConnected === false}
             style={{
               background: joining || dbConnected === false ? '#9dafbe' : 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
@@ -838,11 +945,120 @@ const VoiceRoom: React.FC = () => {
               boxShadow: '0 4px 12px rgba(220,38,38,0.3)',
             }}
           >
-            {joining ? 'Joining…' : '🎙️ Join Voice Chat'}
+            🎙️ Join Voice Chat
           </button>
           <p style={{ fontSize: '0.8rem', color: '#9dafbe', marginTop: '1rem' }}>
             You'll be asked for microphone access.
           </p>
+          </>
+          ) : micStep === 'checking' ? (
+          <div style={{ padding: '1.5rem 0' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>🎤</div>
+            <p style={{ fontSize: '1rem', color: '#6b7f92', margin: 0 }}>
+              Requesting microphone access…<br />
+              <span style={{ fontSize: '0.85rem' }}>Tap <strong>Allow</strong> in the browser prompt.</span>
+            </p>
+          </div>
+          ) : micStep === 'ready' ? (
+          <>
+            <div style={{
+              background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '12px',
+              padding: '1.25rem', marginBottom: '1rem',
+            }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>🎤</div>
+              <p style={{ fontSize: '1rem', fontWeight: 700, color: '#15803d', margin: '0 0 0.25rem 0' }}>
+                Microphone ready!
+              </p>
+              <p style={{ fontSize: '0.85rem', color: '#6b7f92', margin: '0 0 0.75rem 0' }}>
+                Speak — the bars should move:
+              </p>
+              {/* Live mic level meter */}
+              <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', alignItems: 'flex-end', height: '36px', marginBottom: '0.75rem' }}>
+                {Array.from({ length: 12 }).map((_, i) => {
+                  const active = micLevel > (i + 1) * (100 / 12);
+                  return (
+                    <div key={i} style={{
+                      width: '10px', borderRadius: '5px',
+                      height: `${8 + (i / 11) * 28}px`,
+                      background: active ? '#22c55e' : '#e2e8f0',
+                      transition: 'background 0.1s',
+                    }} />
+                  );
+                })}
+              </div>
+              <button
+                onClick={testSpeaker}
+                style={{
+                  background: '#ffffff', border: '1px solid #5b9bd5', color: '#2e6da4',
+                  borderRadius: '10px', padding: '0.6rem 1.2rem', fontSize: '0.9rem',
+                  fontWeight: 600, cursor: 'pointer',
+                }}
+              >
+                🔊 Test Speaker
+              </button>
+              <p style={{ fontSize: '0.75rem', color: '#9dafbe', margin: '0.5rem 0 0 0' }}>
+                You should hear a short beep.
+              </p>
+            </div>
+            <button
+              onClick={joinRoom}
+              disabled={joining}
+              style={{
+                background: joining ? '#9dafbe' : 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                color: '#ffffff', border: 'none', borderRadius: '12px',
+                padding: '1.1rem 2rem', fontSize: '1.15rem', fontWeight: 700,
+                cursor: joining ? 'default' : 'pointer', width: '100%',
+                boxShadow: '0 4px 12px rgba(220,38,38,0.3)',
+              }}
+            >
+              {joining ? 'Joining…' : 'Join the room →'}
+            </button>
+            <button
+              onClick={cancelMicCheck}
+              style={{ background: 'none', border: 'none', color: '#6b7f92', fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.75rem' }}
+            >
+              ← Back
+            </button>
+          </>
+          ) : (
+          <>
+            <div style={{
+              background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: '12px',
+              padding: '1.25rem', marginBottom: '1rem', textAlign: 'left',
+            }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.25rem', textAlign: 'center' }}>🚫</div>
+              <p style={{ fontSize: '1rem', fontWeight: 700, color: '#991b1b', margin: '0 0 0.5rem 0', textAlign: 'center' }}>
+                Microphone is blocked
+              </p>
+              <p style={{ fontSize: '0.85rem', color: '#6b7f92', margin: '0 0 0.5rem 0' }}>
+                To talk in the voice room, allow the microphone:
+              </p>
+              <ol style={{ fontSize: '0.85rem', color: '#6b7f92', margin: 0, paddingLeft: '1.2rem', lineHeight: 1.6 }}>
+                <li>Tap the <strong>🔒</strong> (or <strong>⋮ → ⓘ</strong>) icon in the address bar</li>
+                <li>Tap <strong>Permissions</strong> → <strong>Microphone</strong></li>
+                <li>Choose <strong>Allow</strong>, then tap Try Again below</li>
+              </ol>
+            </div>
+            <button
+              onClick={startMicCheck}
+              style={{
+                background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                color: '#ffffff', border: 'none', borderRadius: '12px',
+                padding: '1rem 2rem', fontSize: '1.05rem', fontWeight: 700,
+                cursor: 'pointer', width: '100%',
+                boxShadow: '0 4px 12px rgba(220,38,38,0.3)',
+              }}
+            >
+              🔄 Try Again
+            </button>
+            <button
+              onClick={cancelMicCheck}
+              style={{ background: 'none', border: 'none', color: '#6b7f92', fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.75rem' }}
+            >
+              ← Back
+            </button>
+          </>
+          )}
           <button
             onClick={() => navigate('/hangout')}
             style={{ background: 'none', border: 'none', color: '#6b7f92', fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.5rem' }}
