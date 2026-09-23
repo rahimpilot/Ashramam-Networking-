@@ -5,6 +5,8 @@ import { collection, getDocs, doc, setDoc, query, orderBy, Timestamp, getDoc } f
 import { onAuthStateChanged, User } from 'firebase/auth';
 import BottomNavigation from './BottomNavigation';
 import PageHeader from './PageHeader';
+import { SkeletonStory } from './Skeleton';
+import { tapMedium } from './haptics';
 
 interface Story {
   id: string;
@@ -171,6 +173,7 @@ const Stories: React.FC = () => {
 
   const handleLikeStory = async (storyId: string) => {
     if (!user) return;
+    tapMedium();
 
     try {
       const story = stories.find(s => s.id === storyId);
@@ -293,33 +296,23 @@ const Stories: React.FC = () => {
     }
   }, [expandedStory, stories]);
 
-  const renderLoading = (label: string) => (
+  const renderLoading = () => (
     <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
+      minHeight: '100vh',
+      background: '#e9f1f8',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
+      padding: '16px',
+      paddingTop: '76px',
+      maxWidth: '640px',
+      margin: '0 auto'
     }}>
-      <div style={{
-        textAlign: 'center',
-        color: '#ffffff',
-        background: 'rgba(255,255,255,0.15)',
-        padding: '32px',
-        borderRadius: '16px',
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-      }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
-        <p style={{ margin: 0, fontSize: '18px', fontWeight: 500, lineHeight: '1.3' }}>
-          {label}
-        </p>
-      </div>
+      <SkeletonStory />
+      <SkeletonStory />
+      <SkeletonStory />
     </div>
   );
 
-  if (loading) return renderLoading('Loading stories...');
-  if (authLoading) return renderLoading('Checking authentication...');
+  if (loading || authLoading) return renderLoading();
 
   // Logged-out visitors can view stories (via shared permalinks); only
   // logged-in users see add/edit/like controls.

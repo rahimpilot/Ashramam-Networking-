@@ -5,6 +5,8 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { ref, deleteObject } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
+import { SkeletonPost } from './Skeleton';
+import { tapMedium } from './haptics';
 
 // Admin-controlled profile picture mapping
 const getProfilePicture = (email: string, name: string) => {
@@ -164,6 +166,7 @@ const Dashboard: React.FC = () => {
   const [showComments, setShowComments] = useState<{[postId: string]: boolean}>({});
   const [newComment, setNewComment] = useState<{[postId: string]: string}>({});
   const [showLikes, setShowLikes] = useState<{[postId: string]: boolean}>({});
+  const [likePop, setLikePop] = useState<string | null>(null);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState<string | null>(null);
   
@@ -470,6 +473,9 @@ const Dashboard: React.FC = () => {
   // Like post handler
   const handleLike = async (postId: string) => {
     if (!user?.email) return;
+    tapMedium();
+    setLikePop(postId);
+    setTimeout(() => setLikePop(null), 400);
     
     try {
       const postRef = doc(db, 'scrapbook', postId);
@@ -798,27 +804,19 @@ const Dashboard: React.FC = () => {
 
   if (authLoading || loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
+      <div style={{
+        minHeight: '100vh',
+        background: '#e9f1f8',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
+        padding: '16px',
+        paddingTop: '76px',
+        maxWidth: '640px',
+        margin: '0 auto'
       }}>
-        <div style={{ 
-          textAlign: 'center',
-          color: '#ffffff',
-          background: 'rgba(255,255,255,0.15)',
-          padding: '32px',
-          borderRadius: '16px',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
-          <p style={{ margin: 0, fontSize: '18px', fontWeight: 500, lineHeight: '1.3' }}>
-            {authLoading ? 'Checking authentication...' : 'Loading your feed...'}
-          </p>
-        </div>
+        <div className="iv-skeleton" style={{ height: 60, borderRadius: 16, marginBottom: 16 }} />
+        <SkeletonPost />
+        <SkeletonPost />
+        <SkeletonPost />
       </div>
     );
   }
@@ -1197,26 +1195,29 @@ const Dashboard: React.FC = () => {
               onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <div style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  border: '2px solid #c9d9e8',
-                  flexShrink: 0,
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s ease, border-color 0.2s ease'
-                }}
+                <div
+                  className="iv-ring"
+                  style={{
+                    width: 53,
+                    height: 53,
+                    flexShrink: 0,
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s ease'
+                  }}
                 onClick={() => viewUserProfile(post.authorEmail || post.author, post.author)}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'scale(1.05)';
-                  e.currentTarget.style.borderColor = '#5b9bd5';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.borderColor = '#c9d9e8';
                 }}
                 >
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%',
+                    overflow: 'hidden'
+                  }}>
                   {(() => {
                     const avatarUrl = getUserAvatar(post);
                     
@@ -1270,6 +1271,7 @@ const Dashboard: React.FC = () => {
                       );
                     }
                   })()}
+                  </div>
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
@@ -1447,6 +1449,7 @@ const Dashboard: React.FC = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <button 
                         onClick={() => handleLike(post.id)}
+                        className={likePop === post.id ? 'iv-pop' : ''}
                         style={{
                           background: 'none',
                           border: 'none',

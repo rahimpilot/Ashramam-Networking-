@@ -161,7 +161,86 @@ select:focus {
 /* Tactile press feedback for buttons */
 .iv-press {
   transition: transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
 }
 .iv-press:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+}
+
+/* ---------- Rich touch layer (FB-app feel) ---------- */
+
+/* Shimmer skeleton loader */
+@keyframes ivShimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.iv-skeleton {
+  background: linear-gradient(90deg, #e4ecf5 25%, #f2f7fc 50%, #e4ecf5 75%);
+  background-size: 800px 100%;
+  animation: ivShimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* Like / reaction pop */
+@keyframes ivPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  70% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.iv-pop {
+  animation: ivPop 0.35s ease;
+  display: inline-block;
+}
+
+/* Story-style gradient ring for avatars */
+.iv-ring {
+  padding: 2.5px;
+  border-radius: 50%;
+  background: conic-gradient(from 210deg, #5b9bd5, #9cc8ee, #5b9bd5, #7fb5e3, #5b9bd5);
+}
+.iv-ring > img, .iv-ring > div {
+  border-radius: 50%;
+  border: 2.5px solid #ffffff;
+  display: block;
+}
+
+/* Bottom sheet slide-up */
+@keyframes ivSheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes ivFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.iv-sheet-backdrop {
+  animation: ivFadeIn 0.2s ease;
+}
+.iv-sheet {
+  animation: ivSheetUp 0.28s cubic-bezier(0.32, 0.72, 0.35, 1);
+}
+
+/* Sticky frosted-glass header */
+.iv-sticky-glass {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(233, 241, 248, 0.82);
+}
+
+/* Heart burst on double-tap like */
+@keyframes ivHeartBurst {
+  0% { transform: scale(0); opacity: 0; }
+  30% { transform: scale(1.25); opacity: 0.95; }
+  60% { transform: scale(0.95); opacity: 0.9; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+.iv-heart-burst {
+  animation: ivHeartBurst 0.7s ease forwards;
+  pointer-events: none;
 }
