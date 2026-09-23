@@ -176,14 +176,6 @@ const BelovedArticles: React.FC = () => {
                 <img src={selected.image} alt={selected.title} style={{ width: '100%', display: 'block' }} />
               )}
               <div style={{ padding: 20 }}>
-                <div style={{
-                  display: 'inline-block',
-                  fontSize: 10, fontWeight: 800, letterSpacing: '0.1em',
-                  color: '#ffffff', background: selected.badgeColor,
-                  padding: '4px 10px', borderRadius: 20, marginBottom: 10
-                }}>
-                  {selected.badge}
-                </div>
                 <h2 style={{ margin: '0 0 4px 0', fontSize: 22, fontWeight: 800, color: '#1c2733' }}>
                   {selected.title}
                 </h2>
