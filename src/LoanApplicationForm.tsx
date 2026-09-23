@@ -96,7 +96,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
         submittedAt: new Date().toISOString()
       });
 
-      console.log('Email notification sent/queued to mshanir@gmail.com');
+      console.log('Email notification sent/queued to raimu456@gmail.com');
 
       setMessage('✅ Loan application submitted successfully! We will review and contact you soon.');
       setMessageType('success');

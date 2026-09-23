@@ -5,7 +5,7 @@ service cloud.firestore {
     // Admin identity: the account that can approve new signups.
     // Keep in sync with ADMIN_EMAIL in src/adminConfig.ts
     function isAdmin() {
-      return request.auth != null && request.auth.token.email == 'mshanir@gmail.com';
+      return request.auth != null && request.auth.token.email == 'raimu456@gmail.com';
     }
 
     // Critical collections for authentication flow

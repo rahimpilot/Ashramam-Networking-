@@ -14,7 +14,7 @@ interface LoanApplicationData {
   submittedAt: string;
 }
 
-const ADMIN_EMAIL = 'mshanir@gmail.com';
+const ADMIN_EMAIL = 'raimu456@gmail.com';
 
 /**
  * Send email notification for loan application
