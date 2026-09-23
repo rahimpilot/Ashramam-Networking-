@@ -147,6 +147,17 @@ Using sustainable energy without harming nature is always the better path — it
 Sustainable energy management is central to managing natural resources and sustainable development itself. Sustainable development is an integrated system — economic, environmental, social, and institutional — where a change in one part ripples through the rest. Nothing should be viewed in isolation. The modern concept questions economic development at any cost, introducing new measures of progress: environmental quality and quality of life now stand beside economic growth as equals. Economic development, historically built on exploiting natural resources and polluting the environment, becomes a subject of deeper study. Modern business reveals a tight link between energy consumption and development. The world consumes vast amounts of energy, unevenly across regions — and while energy production and consumption affect environmental quality, they remain essential to economic progress. Balancing the consequences of energy use against the welfare that development brings is one of our most sensitive challenges, tangled in global disagreements at every level.`,
     date: 'From the archives',
   },
+  {
+    id: 'ashramam-nivasikal',
+    badge: 'BELOVED',
+    badgeColor: '#d97706',
+    title: 'ആശ്രമ നിവാസികളുടെ',
+    excerpt: 'അവിവാഹിത കാലഘട്ടം പൂർണമായും അസ്തമിച്ചു തുടങ്ങുമ്പോൾ നിവാസികൾക്ക്\u200cഉമ്മുൽഖുയിനിലെ കുറച്ചു…',
+    image: '/ashramam-nivasikal.jpg',
+    body: 'അവിവാഹിത കാലഘട്ടം പൂർണമായും അസ്തമിച്ചു തുടങ്ങുമ്പോൾ നിവാസികൾക്ക്\u200cഉമ്മുൽഖുയിനിലെ കുറച്ചു\nവൃക്ഷങ്ങളും വരണ്ടു കിടക്കുന്ന മണൽ തരികളാൽ പ്രത്യക്ഷപെട്ട ചെറു കുന്നുകൾ കൊണ്ട് വിജനമായ മരുഭൂമിയും\nഉല്ലാസ ആശ്രയമാവുകയായിരുന്നു. കഴിഞ്ഞ ചുട്ടുപൊള്ളുന്ന ചൂടുകാലത്തു ഒരു വരുംകാല തണുത്ത രാത്രികളിലെ\nആവേശകരമായ പരിഹാസവും , വഴക്കും , കോഴി ചുടലും ,തമ്പടിക്കലും, കൈകൊട്ടി പാട്ടുകളും , അസാധാരണമായ\nകാൽ ചുവടുകളെയും കുറിച്ച് ഓർത്തപ്പോൾ ഒരു വേഴാമ്പലിനെ പോലെ കാത്തിരിപ്പിന്റെ ഉത്കണ്ഠ വർദ്ധിപ്പിച്ചു\nഎന്നതിലുപരി ഫയർ ബിൽഡിംഗ് 111 എന്ന ആശ്രമ തട്ടകം ഈ ഉല്ലാസ കേന്ദ്രത്തിൽ ഒതുങ്ങി കൂടിയെന്ന്\nനമ്മൾ മനസിലാക്കിയിരുന്നു. ഒരു മുടക്കവും വരുത്താതെ ഇത്തവണ തണുപ്പ് കാലം നമ്മൾ തമ്പടിച്ചു\nവിനയോഗിച്ചിരിക്കും എന്ന ഉറച്ച തീരുമാനത്തിനെതിരെ ഇന്ന് ഇതാ വിധിയുടെ കാവൽ പക്ഷിയെ റാഞ്ചിയെടുത്തു\nകൊണ്ട് നമ്മുടെ മുന്നിൽ സ്വാതന്ത്രത്തെ അടക്കി ഭരിച്ചു അപ്രതീക്ഷിതമായ ഒരു കാലം. നിവാസികൾക്ക്\u200cഒരുപാട്\nപ്രിയപ്പെട്ടതായി കഴിഞ്ഞ ഈ ഇടം ഒരിക്കലും പ്രവചിക്കാൻ കഴിയാത്ത ഇപ്പോഴത്തെ അവസ്ഥയെ മറികടന്നു\nനമ്മളിലേക് തന്നെ ആനന്ദത്തിന്റെ നാളുകളുമായി തിരിച്ചുവരും എന്ന് നമുക്ക് കരുതാം\n... ശുഭം',
+    date: 'From the archives',
+  },
+
 ];
 
 const BelovedArticles: React.FC = () => {
