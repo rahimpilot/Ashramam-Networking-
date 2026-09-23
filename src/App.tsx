@@ -19,6 +19,7 @@ import Baku from './Baku';
 import September7th2025Meeting from './September7th2025Meeting';
 import October5th2025Meeting from './October5th2025Meeting';
 import November2nd2025Meeting from './November2nd2025Meeting';
+import DesignLab from './DesignLab';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Route path="/our-trips/krabi" element={<Krabi />} />
         <Route path="/our-trips/baku" element={<Baku />} />
         <Route path="/krabi" element={<Krabi />} />
+        <Route path="/design-lab" element={<DesignLab />} />
       </Routes>
     </BrowserRouter>
   );
