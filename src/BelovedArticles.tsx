@@ -154,14 +154,6 @@ const BelovedArticles: React.FC = () => {
                         </div>
                       )}
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{
-                          display: 'inline-block',
-                          fontSize: 10, fontWeight: 800, letterSpacing: '0.1em',
-                          color: '#ffffff', background: article.badgeColor,
-                          padding: '3px 9px', borderRadius: 20, marginBottom: 6
-                        }}>
-                          {article.badge}
-                        </div>
                         <h3 style={{ margin: '0 0 4px 0', fontSize: 17, fontWeight: 700, color: '#1c2733' }}>
                           {article.title}
                         </h3>
