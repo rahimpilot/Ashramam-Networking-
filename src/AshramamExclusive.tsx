@@ -45,7 +45,7 @@ While post-production was underway, Shanir's friend Asif travelled to Kochi to m
 
 Shanir will be watching the film from Kerala, alongside his naughty close friends Hyder, Riyaz, and Farhad. I don't want to get into Hyder too much and get lost in the loop — rather, go watch this loop thriller with your loved ones.
 
-All the best and chests.`,
+All the best and cheers.`,
     image: '/dhoomakethu-poster.jpg',
     footerImage: '/shanir-honour.jpg',
     footerCaption: 'Shanir Musliyamveetil — the man of the moment. Respect. 🙏',
