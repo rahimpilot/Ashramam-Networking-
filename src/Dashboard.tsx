@@ -1293,118 +1293,7 @@ const Dashboard: React.FC = () => {
                       {post.createdAt.toDate().toLocaleDateString()}
                     </span>
                   </div>
-                  {editingPostId === post.id ? (
-                    <div style={{ marginBottom: '16px' }}>
-                      <textarea
-                        value={editingMessage}
-                        onChange={(e) => setEditingMessage(e.target.value)}
-                        style={{
-                          width: '100%',
-                          minHeight: '80px',
-                          border: '1px solid #c9d9e8',
-                          borderRadius: '12px',
-                          padding: '12px',
-                          fontSize: '16px',
-                          fontWeight: 400,
-                          lineHeight: '1.4',
-                          fontFamily: 'inherit',
-                          resize: 'vertical',
-                          outline: 'none'
-                        }}
-                        placeholder="Edit your post..."
-                      />
-                      {post.image && !editingImageRemoved && (
-                        <div style={{ marginTop: '12px', padding: '12px', backgroundColor: '#FEF3C7', borderRadius: '12px', border: '1px solid #FCD34D' }}>
-                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                            <img
-                              src={post.image}
-                              alt="Post content"
-                              style={{
-                                width: '60px',
-                                height: '60px',
-                                objectFit: 'cover',
-                                borderRadius: '8px'
-                              }}
-                            />
-                            <div style={{ flex: 1 }}>
-                              <p style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#92400E', fontWeight: 500 }}>
-                                Image attached
-                              </p>
-                              <button
-                                onClick={() => {
-                                  setEditingImageRemoved(true);
-                                }}
-                                style={{
-                                  background: '#DC2626',
-                                  color: '#ffffff',
-                                  border: 'none',
-                                  borderRadius: '8px',
-                                  padding: '6px 12px',
-                                  fontSize: '12px',
-                                  fontWeight: 500,
-                                  minHeight: '32px',
-                                  cursor: 'pointer',
-                                  transition: 'transform 0.2s ease'
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                              >
-                                Remove Image
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {editingImageRemoved && (
-                        <div style={{ marginTop: '12px', padding: '12px', backgroundColor: '#FEE2E2', borderRadius: '12px', border: '1px solid #FCA5A5' }}>
-                          <p style={{ margin: 0, fontSize: '14px', color: '#991B1B', fontWeight: 500 }}>
-                            ✓ Image will be removed when you save
-                          </p>
-                        </div>
-                      )}
-                      <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
-                        <button
-                          onClick={() => saveEditedPost(post.id)}
-                          style={{
-                            background: '#10B981',
-                            color: '#ffffff',
-                            border: 'none',
-                            borderRadius: '12px',
-                            padding: '10px 16px',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            minHeight: '44px',
-                            cursor: 'pointer',
-                            transition: 'transform 0.2s ease'
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={cancelEditingPost}
-                          style={{
-                            background: '#6b7f92',
-                            color: '#ffffff',
-                            border: 'none',
-                            borderRadius: '12px',
-                            padding: '10px 16px',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            minHeight: '44px',
-                            cursor: 'pointer',
-                            transition: 'transform 0.2s ease'
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <p style={{
+                  <p style={{
                       margin: '0 0 16px 0',
                       fontSize: '16px',
                       fontWeight: 400,
@@ -1414,7 +1303,6 @@ const Dashboard: React.FC = () => {
                     }}>
                       {renderMessageWithMentions(post.message)}
                     </p>
-                  )}
                   
                   {/* Post Image */}
                   {post.image && (
@@ -1780,6 +1668,121 @@ const Dashboard: React.FC = () => {
           ))}
         </div>
       </div>
+
+
+      {/* Edit Post Modal */}
+      {editingPostId && (() => {
+        const editingPost = scrapPosts.find(p => p.id === editingPostId);
+        if (!editingPost) return null;
+        const avatarUrl = getUserAvatar(editingPost);
+        const authorInitial = (editingPost.author || '?').charAt(0).toUpperCase();
+        return (
+          <div
+            style={{
+              position: 'fixed', inset: 0, zIndex: 1000,
+              background: 'rgba(18, 28, 42, 0.55)',
+              backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: 16, animation: 'ivModalIn 0.22s ease'
+            }}
+            onClick={cancelEditingPost}
+          >
+            <div
+              style={{
+                background: '#ffffff', borderRadius: 20, width: '100%', maxWidth: 480,
+                maxHeight: '88vh', overflowY: 'auto',
+                boxShadow: '0 24px 64px rgba(10, 25, 45, 0.35)',
+                animation: 'ivModalCardIn 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.15)'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 12px 20px' }}>
+                <h3 className="iv-display" style={{ margin: 0, fontSize: '1.35rem', fontWeight: 600, color: '#1c2733' }}>Edit Post</h3>
+                <button
+                  onClick={cancelEditingPost}
+                  aria-label="Close"
+                  style={{ width: 36, height: 36, borderRadius: '50%', border: 'none', background: '#eef3f8', color: '#5b6b7d', fontSize: 16, cursor: 'pointer', lineHeight: 1 }}
+                >✕</button>
+              </div>
+              <div style={{ height: 1, background: '#e6edf4' }} />
+              <div style={{ padding: '16px 20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, background: '#d8e6f2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 20, color: '#4a86c8' }}>
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt={editingPost.author} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : authorInitial}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 600, color: '#1c2733', fontSize: 15 }}>{editingPost.author}</div>
+                    <div style={{ fontSize: 12, color: '#8a99ab' }}>{editingPost.createdAt.toDate().toLocaleDateString()}</div>
+                  </div>
+                </div>
+                <textarea
+                  value={editingMessage}
+                  onChange={(e) => setEditingMessage(e.target.value)}
+                  placeholder="What's on your mind?"
+                  autoFocus
+                  style={{
+                    width: '100%', minHeight: 110, border: 'none', background: '#f4f7fb',
+                    borderRadius: 14, padding: '14px', fontSize: 16, lineHeight: 1.5,
+                    fontFamily: 'inherit', resize: 'vertical', outline: 'none',
+                    color: '#1c2733', boxSizing: 'border-box'
+                  }}
+                />
+                {editingPost.image && !editingImageRemoved ? (
+                  <div style={{ position: 'relative', marginTop: 12 }}>
+                    <img
+                      src={editingPost.image}
+                      alt="Post attachment"
+                      style={{ width: '100%', borderRadius: 14, display: 'block', maxHeight: 320, objectFit: 'cover' }}
+                    />
+                    <button
+                      onClick={() => setEditingImageRemoved(true)}
+                      aria-label="Remove image"
+                      style={{
+                        position: 'absolute', top: 10, right: 10, width: 34, height: 34,
+                        borderRadius: '50%', border: 'none', background: 'rgba(15, 23, 36, 0.65)',
+                        color: '#ffffff', fontSize: 15, cursor: 'pointer', lineHeight: 1,
+                        backdropFilter: 'blur(2px)'
+                      }}
+                    >✕</button>
+                  </div>
+                ) : null}
+                {editingPost.image && editingImageRemoved ? (
+                  <button
+                    onClick={() => setEditingImageRemoved(false)}
+                    style={{
+                      marginTop: 12, width: '100%', background: '#f1f5f9',
+                      border: '1px dashed #bccfdd', borderRadius: 12, padding: '10px 14px',
+                      fontSize: 13, color: '#4a86c8', fontWeight: 600, cursor: 'pointer'
+                    }}
+                  >
+                    Image removed — tap to undo
+                  </button>
+                ) : null}
+              </div>
+              <div style={{ display: 'flex', gap: 10, padding: '4px 20px 20px 20px' }}>
+                <button
+                  onClick={cancelEditingPost}
+                  style={{
+                    flex: 1, padding: '12px 0', borderRadius: 12, border: '1px solid #d5e0ec',
+                    background: '#ffffff', color: '#5b6b7d', fontWeight: 600, fontSize: 15, cursor: 'pointer'
+                  }}
+                >Cancel</button>
+                <button
+                  onClick={() => saveEditedPost(editingPost.id)}
+                  style={{
+                    flex: 2, padding: '12px 0', borderRadius: 12, border: 'none',
+                    background: 'linear-gradient(135deg, #5b9bd5, #4a86c8)', color: '#ffffff',
+                    fontWeight: 700, fontSize: 15, cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(74, 134, 200, 0.35)'
+                  }}
+                >Save</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Image Modal */}
       <ImageModal
