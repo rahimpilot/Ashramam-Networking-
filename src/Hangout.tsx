@@ -44,6 +44,13 @@ const TILES: Tile[] = [
     path: '/our-trips',
     iconBg: '#EDE9FE',
   },
+  {
+    icon: '🔥',
+    title: 'Ashramam Exclusive',
+    subtitle: 'Hot news, members only',
+    path: '/ashramam-exclusive',
+    iconBg: '#FEE2E2',
+  },
 ];
 
 /** Hangout — Ivory Atelier edition. */
