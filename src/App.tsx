@@ -1,5 +1,8 @@
 
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { useEffect, useState, ReactNode } from 'react';
+import { auth } from './firebase';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import Login from './Login';
 import AdminPanel from './AdminPanel';
 import Account from './Account';
@@ -22,6 +25,25 @@ import September7th2025Meeting from './September7th2025Meeting';
 import October5th2025Meeting from './October5th2025Meeting';
 import November2nd2025Meeting from './November2nd2025Meeting';
 
+/** Sends logged-out visitors to the login page. Everything except the
+ *  login screen and the public Beloved Articles links sits behind this. */
+function RequireAuth({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setChecking(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (checking) return null;
+  if (!user) return <Navigate to="/" replace />;
+  return <>{children}</>;
+}
+
 /** Replays the soft page-entrance animation on every navigation. */
 function AnimatedRoutes() {
   const location = useLocation();
@@ -29,29 +51,31 @@ function AnimatedRoutes() {
     <div key={location.pathname} className="iv-page-enter">
       <Routes location={location}>
         <Route path="/" element={<Login />} />
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/stories" element={<Stories />} />
-        <Route path="/residents" element={<Residents />} />
-        <Route path="/hangout" element={<Hangout />} />
-        <Route path="/hangout/games/uno" element={<UnoGame />} />
-        <Route path="/power-group" element={<PowerGroup />} />
-        <Route path="/meeting-minutes" element={<MeetingMinutes />} />
-        <Route path="/meeting-minutes/september-7th-2025" element={<September7th2025Meeting />} />
-        <Route path="/meeting-minutes/october-5th-2025" element={<October5th2025Meeting />} />
-        <Route path="/meeting-minutes/november-2nd-2025" element={<November2nd2025Meeting />} />
-        <Route path="/royal-bank" element={<RoyalBank />} />
-        <Route path="/voice-room" element={<VoiceRoom />} />
-        <Route path="/our-trips" element={<OurTrips />} />
-        <Route path="/ashramam-exclusive" element={<AshramamExclusive />} />
-        <Route path="/ashramam-exclusive/:storyId" element={<AshramamExclusive />} />
+        {/* Public: beloved article links (Abdu shares these outside the app) */}
         <Route path="/beloved-articles" element={<BelovedArticles />} />
         <Route path="/beloved-articles/:articleId" element={<BelovedArticles />} />
-        <Route path="/our-trips/krabi" element={<Krabi />} />
-        <Route path="/our-trips/baku" element={<Baku />} />
-        <Route path="/krabi" element={<Krabi />} />
+        {/* Everything else requires login */}
+        <Route path="/admin" element={<RequireAuth><AdminPanel /></RequireAuth>} />
+        <Route path="/account" element={<RequireAuth><Account /></RequireAuth>} />
+        <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
+        <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+        <Route path="/stories" element={<RequireAuth><Stories /></RequireAuth>} />
+        <Route path="/residents" element={<RequireAuth><Residents /></RequireAuth>} />
+        <Route path="/hangout" element={<RequireAuth><Hangout /></RequireAuth>} />
+        <Route path="/hangout/games/uno" element={<RequireAuth><UnoGame /></RequireAuth>} />
+        <Route path="/power-group" element={<RequireAuth><PowerGroup /></RequireAuth>} />
+        <Route path="/meeting-minutes" element={<RequireAuth><MeetingMinutes /></RequireAuth>} />
+        <Route path="/meeting-minutes/september-7th-2025" element={<RequireAuth><September7th2025Meeting /></RequireAuth>} />
+        <Route path="/meeting-minutes/october-5th-2025" element={<RequireAuth><October5th2025Meeting /></RequireAuth>} />
+        <Route path="/meeting-minutes/november-2nd-2025" element={<RequireAuth><November2nd2025Meeting /></RequireAuth>} />
+        <Route path="/royal-bank" element={<RequireAuth><RoyalBank /></RequireAuth>} />
+        <Route path="/voice-room" element={<RequireAuth><VoiceRoom /></RequireAuth>} />
+        <Route path="/our-trips" element={<RequireAuth><OurTrips /></RequireAuth>} />
+        <Route path="/ashramam-exclusive" element={<RequireAuth><AshramamExclusive /></RequireAuth>} />
+        <Route path="/ashramam-exclusive/:storyId" element={<RequireAuth><AshramamExclusive /></RequireAuth>} />
+        <Route path="/our-trips/krabi" element={<RequireAuth><Krabi /></RequireAuth>} />
+        <Route path="/our-trips/baku" element={<RequireAuth><Baku /></RequireAuth>} />
+        <Route path="/krabi" element={<RequireAuth><Krabi /></RequireAuth>} />
       </Routes>
     </div>
   );
