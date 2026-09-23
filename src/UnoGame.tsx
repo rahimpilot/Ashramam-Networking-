@@ -598,7 +598,7 @@ const UnoGame: React.FC = () => {
             <button
               onClick={copyInvite}
               style={{
-                background: '#EEF4FF', color: '#9a6b3f', border: 'none', borderRadius: 999,
+                background: '#f3e9d7', color: '#9a6b3f', border: 'none', borderRadius: 999,
                 padding: '10px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
               }}
             >
@@ -731,7 +731,7 @@ const UnoGame: React.FC = () => {
           <button
             onClick={() => navigate('/voice-room')}
             style={{
-              width: '100%', marginTop: 12, background: '#EEF4FF', color: '#9a6b3f', border: 'none',
+              width: '100%', marginTop: 12, background: '#f3e9d7', color: '#9a6b3f', border: 'none',
               borderRadius: 12, padding: '11px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
             }}
           >
