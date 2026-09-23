@@ -61,7 +61,7 @@ const Login: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(to bottom right, #dbeafe, #ffffff, #faf5ff)',
+      background: 'linear-gradient(to bottom right, #f1e6cf, #fffdf8, #faf6ec)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -103,13 +103,13 @@ const Login: React.FC = () => {
             <h2 style={{
               fontSize: '1.5rem',
               fontWeight: 'bold',
-              color: '#1f2937',
+              color: '#2a241c',
               marginBottom: '0.5rem'
             }}>
               {isSignUp ? 'Join Ashramam Vibes' : ''}
             </h2>
             <p style={{
-              color: '#6b7280',
+              color: '#7a7264',
               fontSize: '0.875rem',
               fontWeight: isSignUp ? 'normal' : 'bold'
             }}>
@@ -123,7 +123,7 @@ const Login: React.FC = () => {
                 display: 'block',
                 fontSize: '0.875rem',
                 fontWeight: '600',
-                color: '#374151',
+                color: '#332e26',
                 marginBottom: '0.25rem'
               }}>
                 Email
@@ -136,11 +136,11 @@ const Login: React.FC = () => {
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
-                  border: '1px solid #d1d5db',
+                  border: '1px solid #d8c9ae',
                   borderRadius: '0.75rem',
                   boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
                   outline: 'none',
-                  color: '#111827',
+                  color: '#1c1915',
                   background: 'rgba(255, 255, 255, 0.7)',
                   backdropFilter: 'blur(8px)',
                   transition: 'all 0.2s',
@@ -156,7 +156,7 @@ const Login: React.FC = () => {
                 display: 'block',
                 fontSize: '0.875rem',
                 fontWeight: '600',
-                color: '#374151',
+                color: '#332e26',
                 marginBottom: '0.25rem'
               }}>
                 Password
@@ -169,11 +169,11 @@ const Login: React.FC = () => {
                 style={{
                   width: '100%',
                   padding: '0.75rem 1rem',
-                  border: '1px solid #d1d5db',
+                  border: '1px solid #d8c9ae',
                   borderRadius: '0.75rem',
                   boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
                   outline: 'none',
-                  color: '#111827',
+                  color: '#1c1915',
                   background: 'rgba(255, 255, 255, 0.7)',
                   backdropFilter: 'blur(8px)',
                   transition: 'all 0.2s',
@@ -203,7 +203,7 @@ const Login: React.FC = () => {
               disabled={loading}
               style={{
                 width: '100%',
-                background: 'linear-gradient(to right, #2563eb, #9333ea)',
+                background: 'linear-gradient(to right, #9a6b3f, #9333ea)',
                 color: 'white',
                 padding: '0.75rem 1.5rem',
                 borderRadius: '0.75rem',
@@ -223,7 +223,7 @@ const Login: React.FC = () => {
             <button
               onClick={() => setIsSignUp(!isSignUp)}
               style={{
-                color: '#2563eb',
+                color: '#9a6b3f',
                 fontSize: '0.875rem',
                 fontWeight: '500',
                 transition: 'color 0.2s',

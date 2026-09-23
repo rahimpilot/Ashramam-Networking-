@@ -30,7 +30,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#F6F7F9',
+      background: '#f6f1e8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <PageHeader title="Meeting Minutes" backTo="/meeting-minutes" backLabel="Back to all meetings" />
@@ -58,7 +58,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
           <h2 style={{
             fontSize: '28px',
             fontWeight: 700,
-            color: '#111318',
+            color: '#1e1a14',
             margin: '0 0 6px 0',
             letterSpacing: '-0.5px'
           }}>
@@ -66,7 +66,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
           </h2>
           <p style={{
             fontSize: '15px',
-            color: '#6B7280',
+            color: '#7a7264',
             margin: 0
           }}>
             {weekday} · {points.length} discussion {points.length === 1 ? 'point' : 'points'}
@@ -76,8 +76,8 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
         {/* Participants */}
         {participants && participants.length > 0 && (
           <div style={{
-            background: '#FFFFFF',
-            border: '1px solid #ECEEF1',
+            background: '#fffdf8',
+            border: '1px solid #e7ddcc',
             borderRadius: '16px',
             padding: '18px',
             marginBottom: '12px',
@@ -87,7 +87,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
               fontSize: '13px',
               fontWeight: 700,
               letterSpacing: '1px',
-              color: '#9CA3AF',
+              color: '#a89a80',
               marginBottom: '12px'
             }}>
               PARTICIPANTS
@@ -118,8 +118,8 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
             <div
               key={i}
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #ECEEF1',
+                background: '#fffdf8',
+                border: '1px solid #e7ddcc',
                 borderRadius: '16px',
                 padding: '18px',
                 boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
@@ -146,7 +146,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
                   <div style={{
                     fontSize: '15.5px',
                     fontWeight: 700,
-                    color: '#111318',
+                    color: '#1e1a14',
                     marginBottom: '6px',
                     lineHeight: 1.4
                   }}>
@@ -170,7 +170,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
         <p style={{
           fontSize: '14px',
           fontStyle: 'italic',
-          color: '#9CA3AF',
+          color: '#a89a80',
           margin: '20px 4px 0 4px',
           lineHeight: 1.6
         }}>

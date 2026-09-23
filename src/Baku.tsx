@@ -73,18 +73,18 @@ const Baku: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#F8F9FA',
+      background: '#f6f1e8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       {/* Modern Mobile Header - 60px height */}
       <div style={{
-        background: '#FFFFFF',
+        background: '#fffdf8',
         height: '60px',
         position: 'sticky',
         top: 0,
         zIndex: 100,
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        borderBottom: '1px solid #E4E6EA'
+        borderBottom: '1px solid #e2d7bf'
       }}>
         <div style={{
           display: 'flex',
@@ -100,7 +100,7 @@ const Baku: React.FC = () => {
             style={{
               background: 'none',
               border: 'none',
-              color: '#1877F2',
+              color: '#9a6b3f',
               fontSize: '20px',
               cursor: 'pointer',
               padding: '8px',
@@ -112,7 +112,7 @@ const Baku: React.FC = () => {
               borderRadius: '50%',
               transition: 'background-color 0.2s ease'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             ←
@@ -120,7 +120,7 @@ const Baku: React.FC = () => {
           <h1 style={{
             fontSize: '18px',
             fontWeight: 600,
-            color: '#050505',
+            color: '#1c1915',
             lineHeight: '1.3',
             margin: 0
           }}>
@@ -180,11 +180,11 @@ const Baku: React.FC = () => {
 
         {/* Add Story Section */}
         <div style={{
-          background: '#FFFFFF',
+          background: '#fffdf8',
           borderRadius: '12px',
           padding: '16px',
           marginBottom: '20px',
-          border: '1px solid #E4E6EA'
+          border: '1px solid #e2d7bf'
         }}>
           {!showStoryInput ? (
             <button
@@ -192,10 +192,10 @@ const Baku: React.FC = () => {
               style={{
                 width: '100%',
                 padding: '12px',
-                background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
+                background: 'linear-gradient(135deg, #a3764a 0%, #9a6b3f 100%)',
                 border: 'none',
                 borderRadius: '8px',
-                color: '#FFFFFF',
+                color: '#fffdf8',
                 fontSize: '14px',
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -222,7 +222,7 @@ const Baku: React.FC = () => {
                   width: '100%',
                   padding: '12px',
                   borderRadius: '8px',
-                  border: '1px solid #D1D5DB',
+                  border: '1px solid #d8c9ae',
                   fontSize: '14px',
                   fontFamily: 'inherit',
                   minHeight: '100px',
@@ -243,7 +243,7 @@ const Baku: React.FC = () => {
                     background: 'linear-gradient(135deg, #16A34A 0%, #15803D 100%)',
                     border: 'none',
                     borderRadius: '8px',
-                    color: '#FFFFFF',
+                    color: '#fffdf8',
                     fontSize: '14px',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -262,17 +262,17 @@ const Baku: React.FC = () => {
                   style={{
                     flex: 1,
                     padding: '10px',
-                    background: '#F3F4F6',
-                    border: '1px solid #D1D5DB',
+                    background: '#ece3d0',
+                    border: '1px solid #d8c9ae',
                     borderRadius: '8px',
-                    color: '#374151',
+                    color: '#332e26',
                     fontSize: '14px',
                     fontWeight: 600,
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#E5E7EB'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = '#F3F4F6'}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#e7ddcc'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = '#ece3d0'}
                 >
                   Cancel
                 </button>
@@ -283,11 +283,11 @@ const Baku: React.FC = () => {
 
         {/* Photo Upload Section */}
         <div style={{
-          background: '#FFFFFF',
+          background: '#fffdf8',
           borderRadius: '12px',
           padding: '16px',
           marginBottom: '20px',
-          border: '1px solid #E4E6EA'
+          border: '1px solid #e2d7bf'
         }}>
           <label style={{
             display: 'block',
@@ -296,7 +296,7 @@ const Baku: React.FC = () => {
             background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
             border: 'none',
             borderRadius: '8px',
-            color: '#FFFFFF',
+            color: '#fffdf8',
             fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
@@ -329,7 +329,7 @@ const Baku: React.FC = () => {
           <h3 style={{
             fontSize: '16px',
             fontWeight: 600,
-            color: '#050505',
+            color: '#1c1915',
             marginBottom: '12px',
             margin: '0 0 12px 0'
           }}>
@@ -344,10 +344,10 @@ const Baku: React.FC = () => {
               <div
                 key={story.id}
                 style={{
-                  background: '#FFFFFF',
+                  background: '#fffdf8',
                   borderRadius: '12px',
                   padding: '16px',
-                  border: '1px solid #E4E6EA',
+                  border: '1px solid #e2d7bf',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
                 }}
               >
@@ -361,14 +361,14 @@ const Baku: React.FC = () => {
                     <p style={{
                       fontSize: '14px',
                       fontWeight: 600,
-                      color: '#050505',
+                      color: '#1c1915',
                       margin: '0 0 4px 0'
                     }}>
                       {story.author}
                     </p>
                     <p style={{
                       fontSize: '12px',
-                      color: '#9CA3AF',
+                      color: '#a89a80',
                       margin: 0
                     }}>
                       {story.timestamp}
@@ -377,7 +377,7 @@ const Baku: React.FC = () => {
                 </div>
                 <p style={{
                   fontSize: '14px',
-                  color: '#374151',
+                  color: '#332e26',
                   lineHeight: '1.5',
                   margin: 0
                 }}>
@@ -395,7 +395,7 @@ const Baku: React.FC = () => {
           <h3 style={{
             fontSize: '16px',
             fontWeight: 600,
-            color: '#050505',
+            color: '#1c1915',
             margin: '0 0 12px 0'
           }}>
             Photos ({photos.length})
@@ -412,8 +412,8 @@ const Baku: React.FC = () => {
                   borderRadius: '12px',
                   overflow: 'hidden',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  background: '#FFFFFF',
-                  border: '1px solid #E4E6EA'
+                  background: '#fffdf8',
+                  border: '1px solid #e2d7bf'
                 }}
               >
                 <img
@@ -432,7 +432,7 @@ const Baku: React.FC = () => {
                   <p style={{
                     fontSize: '12px',
                     fontWeight: 600,
-                    color: '#050505',
+                    color: '#1c1915',
                     margin: '0 0 4px 0',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -442,7 +442,7 @@ const Baku: React.FC = () => {
                   </p>
                   <p style={{
                     fontSize: '11px',
-                    color: '#9CA3AF',
+                    color: '#a89a80',
                     margin: 0
                   }}>
                     by {photo.uploadedBy}

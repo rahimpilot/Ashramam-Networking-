@@ -69,7 +69,7 @@ const AdminPanel: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: '2rem auto', padding: '2rem', background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+    <div style={{ maxWidth: 500, margin: '2rem auto', padding: '2rem', background: '#fffdf8', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
       <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>Admin Panel</h2>
       {loading ? <p>Loading...</p> : (
         <>
@@ -79,7 +79,7 @@ const AdminPanel: React.FC = () => {
               {pendingUsers.map(user => (
                 <li key={user.uid} style={{ marginBottom: 16, padding: 12, border: '1px solid #eee', borderRadius: 8 }}>
                   <span style={{ fontWeight: 500 }}>{user.email}</span>
-                  <button onClick={() => approveUser(user.uid)} style={{ marginLeft: 16, padding: '6px 16px', borderRadius: 6, background: '#2563eb', color: '#fff', border: 'none', cursor: 'pointer' }}>Approve</button>
+                  <button onClick={() => approveUser(user.uid)} style={{ marginLeft: 16, padding: '6px 16px', borderRadius: 6, background: '#9a6b3f', color: '#fffdf8', border: 'none', cursor: 'pointer' }}>Approve</button>
                 </li>
               ))}
             </ul>

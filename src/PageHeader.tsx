@@ -9,19 +9,21 @@ interface PageHeaderProps {
   onBack?: () => void;
 }
 
-/** Shared sticky page header used across the Hangout section. */
+/** Shared sticky page header used across the Hangout section. — Ivory Atelier edition */
 const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBack }) => {
   const navigate = useNavigate();
 
   return (
     <div style={{
-      background: '#FFFFFF',
-      height: '60px',
+      background: 'rgba(255, 253, 248, 0.88)',
+      backdropFilter: 'blur(14px)',
+      WebkitBackdropFilter: 'blur(14px)',
+      height: '64px',
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-      borderBottom: '1px solid #ECEEF1'
+      boxShadow: '0 1px 12px rgba(90, 70, 45, 0.07)',
+      borderBottom: '1px solid rgba(154, 107, 63, 0.18)'
     }}>
       <div style={{
         display: 'flex',
@@ -35,30 +37,32 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
         <button
           onClick={() => (onBack ? onBack() : navigate(backTo))}
           style={{
-            background: 'none',
-            border: 'none',
-            color: '#1877F2',
-            fontSize: '20px',
+            background: 'transparent',
+            border: '1px solid rgba(154, 107, 63, 0.35)',
+            color: '#9a6b3f',
+            fontSize: '19px',
             cursor: 'pointer',
             padding: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '44px',
-            height: '44px',
+            width: '40px',
+            height: '40px',
             borderRadius: '50%',
             transition: 'background-color 0.2s ease'
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F6F7F9'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           aria-label={backLabel || 'Back'}
         >
           ←
         </button>
         <h1 style={{
-          fontSize: '18px',
+          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          fontSize: '23px',
           fontWeight: 600,
-          color: '#050505',
+          letterSpacing: '0.3px',
+          color: '#1c1915',
           lineHeight: '1.3',
           margin: 0,
           flex: 1,
@@ -78,7 +82,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
             height: 32,
             width: 'auto',
             maxWidth: '100px',
-            opacity: 0.8
+            opacity: 0.9
           }}
         />
       </div>

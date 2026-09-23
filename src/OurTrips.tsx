@@ -55,18 +55,18 @@ const OurTrips: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#F8F9FA',
+      background: '#f6f1e8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       {/* Modern Mobile Header - 60px height */}
       <div style={{
-        background: '#FFFFFF',
+        background: '#fffdf8',
         height: '60px',
         position: 'sticky',
         top: 0,
         zIndex: 100,
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        borderBottom: '1px solid #E4E6EA'
+        borderBottom: '1px solid #e2d7bf'
       }}>
         <div style={{
           display: 'flex',
@@ -82,7 +82,7 @@ const OurTrips: React.FC = () => {
             style={{
               background: 'none',
               border: 'none',
-              color: '#1877F2',
+              color: '#9a6b3f',
               fontSize: '20px',
               cursor: 'pointer',
               padding: '8px',
@@ -94,7 +94,7 @@ const OurTrips: React.FC = () => {
               borderRadius: '50%',
               transition: 'background-color 0.2s ease'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             ←
@@ -102,7 +102,7 @@ const OurTrips: React.FC = () => {
           <h1 style={{
             fontSize: '18px',
             fontWeight: 600,
-            color: '#050505',
+            color: '#1c1915',
             lineHeight: '1.3',
             margin: 0
           }}>

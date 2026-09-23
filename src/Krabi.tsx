@@ -102,18 +102,18 @@ const Krabi: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#F8F9FA',
+      background: '#f6f1e8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       {/* Modern Mobile Header */}
       <div style={{
-        background: '#FFFFFF',
+        background: '#fffdf8',
         height: '60px',
         position: 'sticky',
         top: 0,
         zIndex: 100,
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        borderBottom: '1px solid #E4E6EA'
+        borderBottom: '1px solid #e2d7bf'
       }}>
         <div style={{
           display: 'flex',
@@ -129,7 +129,7 @@ const Krabi: React.FC = () => {
             style={{
               background: 'none',
               border: 'none',
-              color: '#1877F2',
+              color: '#9a6b3f',
               fontSize: '20px',
               cursor: 'pointer',
               padding: '8px',
@@ -141,7 +141,7 @@ const Krabi: React.FC = () => {
               borderRadius: '50%',
               transition: 'background-color 0.2s ease'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F8F9FA'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f1e8'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             ←
@@ -149,7 +149,7 @@ const Krabi: React.FC = () => {
           <h1 style={{
             fontSize: '18px',
             fontWeight: 600,
-            color: '#050505',
+            color: '#1c1915',
             lineHeight: '1.3',
             margin: 0
           }}>
@@ -181,14 +181,14 @@ const Krabi: React.FC = () => {
           <h2 style={{
             fontSize: '24px',
             fontWeight: 700,
-            color: '#050505',
+            color: '#1c1915',
             margin: '0 0 8px 0'
           }}>
             Photo Gallery 📸
           </h2>
           <p style={{
             fontSize: '14px',
-            color: '#6B7280',
+            color: '#7a7264',
             margin: 0
           }}>
             {photos.length} {photos.length === 1 ? 'photo' : 'photos'} in the gallery
@@ -197,11 +197,11 @@ const Krabi: React.FC = () => {
 
         {/* Upload Section */}
         <div style={{
-          background: '#FFFFFF',
+          background: '#fffdf8',
           borderRadius: '12px',
           padding: '16px',
           marginBottom: '24px',
-          border: '1px solid #E4E6EA',
+          border: '1px solid #e2d7bf',
           textAlign: 'center'
         }}>
           <label style={{
@@ -211,7 +211,7 @@ const Krabi: React.FC = () => {
             background: 'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)',
             border: 'none',
             borderRadius: '8px',
-            color: '#FFFFFF',
+            color: '#fffdf8',
             fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
@@ -242,12 +242,12 @@ const Krabi: React.FC = () => {
         }}>
           {photos.length === 0 ? (
             <div style={{
-              background: '#FFFFFF',
+              background: '#fffdf8',
               borderRadius: '12px',
               padding: '40px 16px',
               textAlign: 'center',
-              border: '1px solid #E4E6EA',
-              color: '#9CA3AF'
+              border: '1px solid #e2d7bf',
+              color: '#a89a80'
             }}>
               <div style={{
                 fontSize: '48px',
@@ -274,8 +274,8 @@ const Krabi: React.FC = () => {
                     borderRadius: '12px',
                     overflow: 'hidden',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                    background: '#FFFFFF',
-                    border: '1px solid #E4E6EA',
+                    background: '#fffdf8',
+                    border: '1px solid #e2d7bf',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
@@ -292,7 +292,7 @@ const Krabi: React.FC = () => {
                     position: 'relative',
                     overflow: 'hidden',
                     height: '200px',
-                    background: '#F3F4F6'
+                    background: '#ece3d0'
                   }}>
                     <img
                       src={photo.url}
@@ -311,7 +311,7 @@ const Krabi: React.FC = () => {
                         top: '8px',
                         right: '8px',
                         background: '#EC4899',
-                        color: '#FFFFFF',
+                        color: '#fffdf8',
                         borderRadius: '20px',
                         padding: '4px 8px',
                         fontSize: '12px',
@@ -327,7 +327,7 @@ const Krabi: React.FC = () => {
                     <p style={{
                       fontSize: '12px',
                       fontWeight: 600,
-                      color: '#050505',
+                      color: '#1c1915',
                       margin: '0 0 4px 0',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
@@ -337,7 +337,7 @@ const Krabi: React.FC = () => {
                     </p>
                     <p style={{
                       fontSize: '11px',
-                      color: '#9CA3AF',
+                      color: '#a89a80',
                       margin: 0
                     }}>
                       by {photo.uploadedBy}
@@ -374,7 +374,7 @@ const Krabi: React.FC = () => {
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
             <div style={{
-              color: '#FFFFFF',
+              color: '#fffdf8',
               fontSize: '14px',
               fontWeight: 500
             }}>
@@ -385,7 +385,7 @@ const Krabi: React.FC = () => {
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#FFFFFF',
+                color: '#fffdf8',
                 fontSize: '24px',
                 cursor: 'pointer',
                 padding: '8px',
@@ -436,7 +436,7 @@ const Krabi: React.FC = () => {
                     transform: 'translateY(-50%)',
                     background: 'rgba(255, 255, 255, 0.2)',
                     border: 'none',
-                    color: '#FFFFFF',
+                    color: '#fffdf8',
                     fontSize: '24px',
                     cursor: 'pointer',
                     padding: '8px 12px',
@@ -460,7 +460,7 @@ const Krabi: React.FC = () => {
                     transform: 'translateY(-50%)',
                     background: 'rgba(255, 255, 255, 0.2)',
                     border: 'none',
-                    color: '#FFFFFF',
+                    color: '#fffdf8',
                     fontSize: '24px',
                     cursor: 'pointer',
                     padding: '8px 12px',
@@ -478,7 +478,7 @@ const Krabi: React.FC = () => {
             {/* Comments Section */}
             <div style={{
               width: '320px',
-              background: '#1F2937',
+              background: '#2a241c',
               display: 'flex',
               flexDirection: 'column',
               borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
@@ -491,7 +491,7 @@ const Krabi: React.FC = () => {
                 borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
               }}>
                 <p style={{
-                  color: '#FFFFFF',
+                  color: '#fffdf8',
                   fontSize: '14px',
                   fontWeight: 600,
                   margin: '0 0 4px 0'
@@ -499,14 +499,14 @@ const Krabi: React.FC = () => {
                   {selectedPhoto.caption}
                 </p>
                 <p style={{
-                  color: '#9CA3AF',
+                  color: '#a89a80',
                   fontSize: '12px',
                   margin: 0
                 }}>
                   by {selectedPhoto.uploadedBy}
                 </p>
                 <p style={{
-                  color: '#6B7280',
+                  color: '#7a7264',
                   fontSize: '11px',
                   margin: '4px 0 0 0'
                 }}>
@@ -522,7 +522,7 @@ const Krabi: React.FC = () => {
               }}>
                 {selectedPhoto.comments.length === 0 ? (
                   <p style={{
-                    color: '#9CA3AF',
+                    color: '#a89a80',
                     fontSize: '12px',
                     textAlign: 'center',
                     padding: '20px 0',
@@ -547,7 +547,7 @@ const Krabi: React.FC = () => {
                         }}
                       >
                         <p style={{
-                          color: '#FFFFFF',
+                          color: '#fffdf8',
                           fontSize: '12px',
                           fontWeight: 600,
                           margin: '0 0 4px 0'
@@ -555,7 +555,7 @@ const Krabi: React.FC = () => {
                           {comment.author}
                         </p>
                         <p style={{
-                          color: '#D1D5DB',
+                          color: '#d8c9ae',
                           fontSize: '12px',
                           margin: '0 0 4px 0',
                           lineHeight: '1.4'
@@ -563,7 +563,7 @@ const Krabi: React.FC = () => {
                           {comment.text}
                         </p>
                         <p style={{
-                          color: '#9CA3AF',
+                          color: '#a89a80',
                           fontSize: '10px',
                           margin: 0
                         }}>
@@ -598,7 +598,7 @@ const Krabi: React.FC = () => {
                         borderRadius: '6px',
                         border: '1px solid rgba(255, 255, 255, 0.2)',
                         background: 'rgba(255, 255, 255, 0.08)',
-                        color: '#FFFFFF',
+                        color: '#fffdf8',
                         fontSize: '12px',
                         boxSizing: 'border-box',
                         fontFamily: 'inherit'
@@ -621,7 +621,7 @@ const Krabi: React.FC = () => {
                           background: '#EC4899',
                           border: 'none',
                           borderRadius: '4px',
-                          color: '#FFFFFF',
+                          color: '#fffdf8',
                           fontSize: '12px',
                           fontWeight: 600,
                           cursor: 'pointer',
@@ -643,7 +643,7 @@ const Krabi: React.FC = () => {
                           background: 'rgba(255, 255, 255, 0.1)',
                           border: '1px solid rgba(255, 255, 255, 0.2)',
                           borderRadius: '4px',
-                          color: '#FFFFFF',
+                          color: '#fffdf8',
                           fontSize: '12px',
                           fontWeight: 600,
                           cursor: 'pointer',

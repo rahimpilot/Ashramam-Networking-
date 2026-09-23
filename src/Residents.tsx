@@ -56,7 +56,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, userName, onC
         position: 'relative',
         maxWidth: 'min(90vw, 480px)',
         maxHeight: '90vh',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#fffdf8',
         borderRadius: 12,
         padding: 16,
         boxShadow: '0 12px 48px rgba(0, 0, 0, 0.5)'
@@ -68,7 +68,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, userName, onC
             top: 8,
             right: 8,
             background: 'rgba(0, 0, 0, 0.7)',
-            color: '#FFFFFF',
+            color: '#fffdf8',
             border: 'none',
             borderRadius: '50%',
             width: 32,
@@ -105,7 +105,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, imageSrc, userName, onC
           marginTop: 12,
           fontSize: 16,
           fontWeight: 600,
-          color: '#050505',
+          color: '#1c1915',
           margin: '12px 0 0 0'
         }}>
           {userName}
@@ -162,7 +162,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
       padding: 16
     }}>
       <div style={{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#fffdf8',
         borderRadius: 12,
         padding: 20,
         maxWidth: 480,
@@ -170,7 +170,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
         maxHeight: '80vh',
         overflowY: 'auto',
         boxShadow: '0 12px 48px rgba(0, 0, 0, 0.25)',
-        border: '1px solid #E4E6EA'
+        border: '1px solid #e2d7bf'
       }}>
         <div style={{
           display: 'flex',
@@ -181,7 +181,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           <h2 style={{
             fontSize: 18,
             fontWeight: 600,
-            color: '#050505',
+            color: '#1c1915',
             margin: 0
           }}>Profile Information</h2>
           <button
@@ -191,7 +191,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               border: 'none',
               fontSize: 24,
               cursor: 'pointer',
-              color: '#65676B',
+              color: '#7a7264',
               width: 32,
               height: 32,
               display: 'flex',
@@ -200,7 +200,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               borderRadius: '50%',
               transition: 'background-color 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = '#F8F9FA'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f6f1e8'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
             ✕
@@ -221,7 +221,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               overflow: 'hidden',
               position: 'relative',
               cursor: getProfilePicture(user.email, user.name) ? 'pointer' : 'default',
-              border: '2px solid #E4E6EA'
+              border: '2px solid #e2d7bf'
             }}
             onMouseOver={(e) => {
               if (getProfilePicture(user.email, user.name)) {
@@ -263,7 +263,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
                       <div style="
                         width: 100%;
                         height: 100%;
-                        background: linear-gradient(135deg, #1877F2 0%, #166FE5 100%);
+                        background: linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%);
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -281,11 +281,11 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               <div style={{
                 width: '100%',
                 height: '100%',
-                background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
+                background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#FFFFFF',
+                color: '#fffdf8',
                 fontSize: 32,
                 fontWeight: 600
               }}>
@@ -314,7 +314,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
                 }}
               >
                 <div style={{
-                  color: '#ffffff',
+                  color: '#fffdf8',
                   fontSize: 24,
                   fontWeight: 600
                 }}>
@@ -327,7 +327,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
             <h3 style={{
               fontSize: 18,
               fontWeight: 600,
-              color: '#050505',
+              color: '#1c1915',
               margin: 0,
               marginBottom: 4
             }}>
@@ -335,7 +335,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
             </h3>
             <p style={{
               fontSize: 14,
-              color: '#65676B',
+              color: '#7a7264',
               margin: 0
             }}>
               {user.city && user.country ? `${user.city}, ${user.country}` : user.email}
@@ -343,11 +343,11 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           </div>
         </div>
 
-        <div style={{ color: '#050505', lineHeight: 1.4 }}>
+        <div style={{ color: '#1c1915', lineHeight: 1.4 }}>
           {user.bio && (
             <div style={{ marginBottom: 16 }}>
               <h4 style={{
-                color: '#050505',
+                color: '#1c1915',
                 marginBottom: 8,
                 fontSize: 14,
                 fontWeight: 600
@@ -357,7 +357,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               <p style={{
                 margin: 0,
                 fontSize: 14,
-                color: '#65676B'
+                color: '#7a7264'
               }}>{user.bio}</p>
             </div>
           )}
@@ -365,7 +365,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           {user.intellectual && (
             <div style={{ marginBottom: 16 }}>
               <h4 style={{
-                color: '#050505',
+                color: '#1c1915',
                 marginBottom: 8,
                 fontSize: 14,
                 fontWeight: 600
@@ -375,7 +375,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               <p style={{
                 margin: 0,
                 fontSize: 14,
-                color: '#65676B'
+                color: '#7a7264'
               }}>{user.intellectual}</p>
             </div>
           )}
@@ -383,7 +383,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           {user.umrah && (
             <div style={{ marginBottom: 16 }}>
               <h4 style={{
-                color: '#050505',
+                color: '#1c1915',
                 marginBottom: 8,
                 fontSize: 14,
                 fontWeight: 600
@@ -393,7 +393,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               <p style={{
                 margin: 0,
                 fontSize: 14,
-                color: '#65676B'
+                color: '#7a7264'
               }}>{user.umrah}</p>
             </div>
           )}
@@ -401,7 +401,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           {user.funLover && (
             <div style={{ marginBottom: 16 }}>
               <h4 style={{
-                color: '#050505',
+                color: '#1c1915',
                 marginBottom: 8,
                 fontSize: 14,
                 fontWeight: 600
@@ -411,19 +411,19 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
               <p style={{
                 margin: 0,
                 fontSize: 14,
-                color: '#65676B'
+                color: '#7a7264'
               }}>{user.funLover}</p>
             </div>
           )}
 
           <div style={{
-            backgroundColor: '#f3f4f6',
+            backgroundColor: '#ece3d0',
             padding: '1rem',
             borderRadius: '0.5rem',
             marginTop: '1rem',
-            border: '1px solid #d1d5db'
+            border: '1px solid #d8c9ae'
           }}>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: '#6b7280' }}>
+            <p style={{ margin: 0, fontSize: '0.9rem', color: '#7a7264' }}>
               <strong>Profile Completion:</strong> {user.profileCompletion || 0}%
             </p>
           </div>
@@ -551,20 +551,20 @@ const Residents: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
+        background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)'
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
             width: 48,
             height: 48,
             border: '4px solid rgba(255,255,255,0.3)',
-            borderTop: '4px solid #FFFFFF',
+            borderTop: '4px solid #fffdf8',
             borderRadius: '50%',
             margin: '0 auto 16px',
             animation: 'spin 1s linear infinite'
           }} />
           <p style={{
-            color: '#FFFFFF',
+            color: '#fffdf8',
             fontSize: 16,
             fontWeight: 500,
             margin: 0
@@ -581,20 +581,20 @@ const Residents: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
+        background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)'
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
             width: 48,
             height: 48,
             border: '4px solid rgba(255,255,255,0.3)',
-            borderTop: '4px solid #FFFFFF',
+            borderTop: '4px solid #fffdf8',
             borderRadius: '50%',
             margin: '0 auto 16px',
             animation: 'spin 1s linear infinite'
           }} />
           <p style={{
-            color: '#FFFFFF',
+            color: '#fffdf8',
             fontSize: 16,
             fontWeight: 500,
             margin: 0
@@ -609,14 +609,14 @@ const Residents: React.FC = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F8F9FA' }}>
+    <div style={{ minHeight: '100vh', background: '#f6f1e8' }}>
       {/* Modern Header */}
       <div style={{
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E4E6EA',
+        background: '#fffdf8',
+        borderBottom: '1px solid #e2d7bf',
         height: 60
       }}>
         <div style={{
@@ -643,7 +643,7 @@ const Residents: React.FC = () => {
               width: 36,
               height: 36
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = '#F8F9FA'}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#f6f1e8'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
             <span style={{ fontSize: 20 }}>←</span>
@@ -653,7 +653,7 @@ const Residents: React.FC = () => {
             margin: 0,
             fontSize: 18,
             fontWeight: 600,
-            color: '#050505'
+            color: '#1c1915'
           }}>
             People
           </h1>
@@ -674,7 +674,7 @@ const Residents: React.FC = () => {
                 width: 36,
                 height: 36
               }}
-              onMouseEnter={(e) => e.currentTarget.style.background = '#F8F9FA'}
+              onMouseEnter={(e) => e.currentTarget.style.background = '#f6f1e8'}
               onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
             >
               <span style={{ fontSize: 20 }}>👤</span>
@@ -702,7 +702,7 @@ const Residents: React.FC = () => {
 
         {/* Muthalali Section */}
         <div style={{
-          background: '#FFFFFF',
+          background: '#fffdf8',
           borderRadius: 12,
           padding: 16,
           marginBottom: 16,
@@ -712,7 +712,7 @@ const Residents: React.FC = () => {
             fontSize: 18,
             fontWeight: 600,
             marginBottom: 12,
-            color: '#050505',
+            color: '#1c1915',
             textAlign: 'center'
           }}>
             🏠 ആശ്രമ നിവാസികൾ
@@ -731,7 +731,7 @@ const Residents: React.FC = () => {
                 height: 'auto',
                 borderRadius: 12,
                 objectFit: 'contain',
-                border: '2px solid #E4E6EA',
+                border: '2px solid #e2d7bf',
                 transition: 'transform 0.2s ease'
               }}
               onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
@@ -742,7 +742,7 @@ const Residents: React.FC = () => {
 
         {residents.length === 0 ? (
           <div style={{
-            background: '#FFFFFF',
+            background: '#fffdf8',
             borderRadius: 12,
             padding: 32,
             textAlign: 'center',
@@ -750,13 +750,13 @@ const Residents: React.FC = () => {
           }}>
             <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.3 }}>👥</div>
             <h3 style={{
-              color: '#65676B',
+              color: '#7a7264',
               fontSize: 16,
               fontWeight: 600,
               margin: '0 0 8px 0'
             }}>No residents found</h3>
             <p style={{
-              color: '#65676B',
+              color: '#7a7264',
               fontSize: 14,
               margin: 0
             }}>
@@ -775,8 +775,8 @@ const Residents: React.FC = () => {
                 key={resident.uid}
                 onClick={() => setSelectedUser(resident)}
                 style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #E4E6EA',
+                  background: '#fffdf8',
+                  border: '1px solid #e2d7bf',
                   borderRadius: 12,
                   padding: 16,
                   cursor: 'pointer',
@@ -800,7 +800,7 @@ const Residents: React.FC = () => {
                   margin: '0 auto 12px auto',
                   overflow: 'hidden',
                   position: 'relative',
-                  border: '2px solid #E4E6EA'
+                  border: '2px solid #e2d7bf'
                 }}>
                   {getProfilePicture(resident.email, resident.name) ? (
                     <img
@@ -820,7 +820,7 @@ const Residents: React.FC = () => {
                             <div style="
                               width: 100%;
                               height: 100%;
-                              background: linear-gradient(135deg, #1877F2 0%, #166FE5 100%);
+                              background: linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%);
                               display: flex;
                               align-items: center;
                               justify-content: center;
@@ -838,11 +838,11 @@ const Residents: React.FC = () => {
                     <div style={{
                       width: '100%',
                       height: '100%',
-                      background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)',
+                      background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#FFFFFF',
+                      color: '#fffdf8',
                       fontSize: 24,
                       fontWeight: 600
                     }}>
@@ -854,7 +854,7 @@ const Residents: React.FC = () => {
                 <h3 style={{
                   fontSize: 14,
                   fontWeight: 600,
-                  color: '#050505',
+                  color: '#1c1915',
                   margin: 0,
                   marginBottom: 4
                 }}>
@@ -863,7 +863,7 @@ const Residents: React.FC = () => {
 
                 <p style={{
                   fontSize: 12,
-                  color: '#65676B',
+                  color: '#7a7264',
                   margin: 0,
                   marginBottom: 8
                 }}>
@@ -875,9 +875,9 @@ const Residents: React.FC = () => {
 
                 <div style={{
                   fontSize: 11,
-                  color: '#65676B',
+                  color: '#7a7264',
                   padding: '4px 8px',
-                  backgroundColor: '#F8F9FA',
+                  backgroundColor: '#f6f1e8',
                   borderRadius: 12,
                   display: 'inline-block'
                 }}>

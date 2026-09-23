@@ -10,13 +10,13 @@ const RoyalBank: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#ffffff',
+      background: '#fffdf8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
       {/* Back Button */}
       <div style={{
         padding: window.innerWidth <= 768 ? '1rem 0.5rem' : '1.5rem 1rem',
-        background: '#ffffff',
+        background: '#fffdf8',
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -33,7 +33,7 @@ const RoyalBank: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            color: '#4a4a4a'
+            color: '#3a332a'
           }}
         >
           ← Back
@@ -42,7 +42,7 @@ const RoyalBank: React.FC = () => {
 
       {/* Banner Section */}
       <div style={{
-        background: 'linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 50%, #4a4a4a 100%)',
+        background: 'linear-gradient(135deg, #332e26 0%, #3d3d3d 50%, #3a332a 100%)',
         padding: window.innerWidth <= 768 ? '3rem 1rem' : '4rem 2rem',
         textAlign: 'center',
         position: 'relative',
@@ -82,10 +82,11 @@ const RoyalBank: React.FC = () => {
 
           {/* Bank Name */}
           <h1 style={{
-            fontSize: window.innerWidth <= 768 ? '2rem' : '3rem',
-            fontWeight: 800,
+            fontSize: window.innerWidth <= 768 ? '2.4rem' : '3.4rem',
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontWeight: 600,
             margin: '0 0 1rem 0',
-            color: '#ffffff',
+            color: '#fffdf8',
             textShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
           }}>
             Royal Bank of Chaandiyar
@@ -108,7 +109,7 @@ const RoyalBank: React.FC = () => {
           {/* Subtitle */}
           <p style={{
             fontSize: window.innerWidth <= 768 ? '0.9rem' : '1rem',
-            color: '#d0d0d0',
+            color: '#d8c9ae',
             margin: '1rem 0 0 0',
             letterSpacing: '0.5px'
           }}>
@@ -126,7 +127,7 @@ const RoyalBank: React.FC = () => {
         {/* About Bank */}
         <div style={{
           background: '#eeeeee',
-          borderLeft: '5px solid #4a4a4a',
+          borderLeft: '5px solid #3a332a',
           padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
           borderRadius: '8px',
           marginBottom: '2rem'
@@ -134,14 +135,14 @@ const RoyalBank: React.FC = () => {
           <h2 style={{
             fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
             fontWeight: 700,
-            color: '#2a2a2a',
+            color: '#332e26',
             margin: '0 0 1rem 0'
           }}>
             About Us
           </h2>
           <p style={{
             fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-            color: '#374151',
+            color: '#332e26',
             lineHeight: 1.6,
             margin: 0
           }}>
@@ -153,7 +154,7 @@ const RoyalBank: React.FC = () => {
         <h2 style={{
           fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
           fontWeight: 700,
-          color: '#2a2a2a',
+          color: '#332e26',
           margin: '0 0 1.5rem 0'
         }}>
           Our Services
@@ -167,23 +168,23 @@ const RoyalBank: React.FC = () => {
         }}>
           {/* Service Card 1 */}
           <div style={{
-            background: 'linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%)',
+            background: 'linear-gradient(135deg, #e8e8e8 0%, #d8c9ae 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
-            border: '2px solid #4a4a4a'
+            border: '2px solid #3a332a'
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>✈️</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
-              color: '#2a2a2a',
+              color: '#332e26',
               margin: '0 0 0.5rem 0'
             }}>
               യാത്ര വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
-              color: '#4a4a4a',
+              color: '#3a332a',
               margin: 0
             }}>
               ഭാര്യയിൽ നിന്നും ഒരു ഒളിച്ചോട്ടം
@@ -195,20 +196,20 @@ const RoyalBank: React.FC = () => {
             background: 'linear-gradient(135deg, #e0e0e0 0%, #c8c8c8 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
-            border: '2px solid #4a4a4a'
+            border: '2px solid #3a332a'
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🕌</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
-              color: '#2a2a2a',
+              color: '#332e26',
               margin: '0 0 0.5rem 0'
             }}>
               ഉംറ വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
-              color: '#4a4a4a',
+              color: '#3a332a',
               margin: 0
             }}>
               നല്ലവനായ ഉണ്ണിയാവാൻ ആഗ്രഹിക്കുന്നവർക്ക്
@@ -220,20 +221,20 @@ const RoyalBank: React.FC = () => {
             background: 'linear-gradient(135deg, #d8d8d8 0%, #c0c0c0 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
-            border: '2px solid #4a4a4a'
+            border: '2px solid #3a332a'
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🎉</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
-              color: '#2a2a2a',
+              color: '#332e26',
               margin: '0 0 0.5rem 0'
             }}>
               ഉല്ലാസ വായ്പ
             </h3>
             <p style={{
               fontSize: '0.9rem',
-              color: '#4a4a4a',
+              color: '#3a332a',
               margin: 0
             }}>
               നാരങ്ങാ വെള്ളവും പിന്നെ അങ്ങോട്ട് സുഖമാവലും
@@ -242,23 +243,23 @@ const RoyalBank: React.FC = () => {
 
           {/* Service Card 4 */}
           <div style={{
-            background: 'linear-gradient(135deg, #d0d0d0 0%, #b8b8b8 100%)',
+            background: 'linear-gradient(135deg, #d8c9ae 0%, #b8b8b8 100%)',
             padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
             borderRadius: '12px',
-            border: '2px solid #4a4a4a'
+            border: '2px solid #3a332a'
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>⚠️</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
               fontWeight: 700,
-              color: '#2a2a2a',
+              color: '#332e26',
               margin: '0 0 0.5rem 0'
             }}>
               വായ്പ തിരികെ അടക്കാത്തവർ
             </h3>
             <p style={{
               fontSize: '0.9rem',
-              color: '#4a4a4a',
+              color: '#3a332a',
               margin: 0
             }}>
               തിരിച്ചു താടാ
@@ -289,7 +290,7 @@ const RoyalBank: React.FC = () => {
           }}>
             <li style={{
               fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-              color: '#374151',
+              color: '#332e26',
               marginBottom: '0.75rem',
               display: 'flex',
               alignItems: 'center',
@@ -300,7 +301,7 @@ const RoyalBank: React.FC = () => {
             </li>
             <li style={{
               fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-              color: '#374151',
+              color: '#332e26',
               marginBottom: '0.75rem',
               display: 'flex',
               alignItems: 'center',
@@ -311,7 +312,7 @@ const RoyalBank: React.FC = () => {
             </li>
             <li style={{
               fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-              color: '#374151',
+              color: '#332e26',
               marginBottom: '0.75rem',
               display: 'flex',
               alignItems: 'center',
@@ -322,7 +323,7 @@ const RoyalBank: React.FC = () => {
             </li>
             <li style={{
               fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-              color: '#374151',
+              color: '#332e26',
               display: 'flex',
               alignItems: 'center',
               gap: '0.75rem'
@@ -344,7 +345,7 @@ const RoyalBank: React.FC = () => {
           <h3 style={{
             fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
             fontWeight: 700,
-            color: '#ffffff',
+            color: '#fffdf8',
             margin: '0 0 1rem 0'
           }}>
             Ready to Join Us?
@@ -385,7 +386,7 @@ const RoyalBank: React.FC = () => {
 
         {/* Contact Section */}
         <div style={{
-          background: '#f3f4f6',
+          background: '#ece3d0',
           padding: window.innerWidth <= 768 ? '1.5rem' : '2rem',
           borderRadius: '12px',
           marginBottom: '2rem'
@@ -393,7 +394,7 @@ const RoyalBank: React.FC = () => {
           <h3 style={{
             fontSize: window.innerWidth <= 768 ? '1.2rem' : '1.4rem',
             fontWeight: 700,
-            color: '#1f2937',
+            color: '#2a241c',
             margin: '0 0 1rem 0'
           }}>
             Get In Touch
@@ -406,14 +407,14 @@ const RoyalBank: React.FC = () => {
             <div>
               <p style={{
                 fontSize: '0.9rem',
-                color: '#6b7280',
+                color: '#7a7264',
                 margin: '0 0 0.5rem 0'
               }}>
                 📞 Phone
               </p>
               <p style={{
                 fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-                color: '#1f2937',
+                color: '#2a241c',
                 fontWeight: 600,
                 margin: 0
               }}>
@@ -423,14 +424,14 @@ const RoyalBank: React.FC = () => {
             <div>
               <p style={{
                 fontSize: '0.9rem',
-                color: '#6b7280',
+                color: '#7a7264',
                 margin: '0 0 0.5rem 0'
               }}>
                 📧 Email
               </p>
               <p style={{
                 fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-                color: '#1f2937',
+                color: '#2a241c',
                 fontWeight: 600,
                 margin: 0
               }}>
@@ -440,14 +441,14 @@ const RoyalBank: React.FC = () => {
             <div>
               <p style={{
                 fontSize: '0.9rem',
-                color: '#6b7280',
+                color: '#7a7264',
                 margin: '0 0 0.5rem 0'
               }}>
                 🌐 Website
               </p>
               <p style={{
                 fontSize: window.innerWidth <= 768 ? '0.95rem' : '1rem',
-                color: '#1f2937',
+                color: '#2a241c',
                 fontWeight: 600,
                 margin: 0
               }}>

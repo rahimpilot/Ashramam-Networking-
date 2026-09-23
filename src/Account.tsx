@@ -29,9 +29,9 @@ const Account: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '2rem auto 100px auto', padding: '2rem', background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ maxWidth: 400, margin: '2rem auto 100px auto', padding: '2rem', background: '#fffdf8', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <img src="/newlogo.svg" alt="Logo" style={{ height: 48, marginBottom: 24 }} />
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem', color: '#2563eb' }}>Welcome!</h2>
+      <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '0.5rem', color: '#9a6b3f' }}>Welcome!</h2>
       {authLoading ? (
         <p>Loading...</p>
       ) : user ? (
@@ -41,13 +41,13 @@ const Account: React.FC = () => {
             <p style={{ fontSize: '0.9rem', color: '#555', margin: 0 }}><strong>UID:</strong> {user.uid}</p>
           </div>
           <div style={{ marginBottom: 24, width: '100%' }}>
-            <div style={{ background: '#f3f4f6', borderRadius: 8, padding: 12, textAlign: 'center', color: '#333' }}>
+            <div style={{ background: '#ece3d0', borderRadius: 8, padding: 12, textAlign: 'center', color: '#333' }}>
               <strong>Profile Info</strong>
               <p style={{ margin: '8px 0 0 0', fontSize: '0.95rem', color: '#666' }}>More features coming soon!</p>
             </div>
           </div>
-          <button onClick={goToProfile} style={{ marginBottom: 12, padding: '10px 32px', borderRadius: 8, background: '#9333ea', color: '#fff', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Profile</button>
-          <button onClick={handleLogout} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #2563eb, #9333ea)', color: '#fff', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Logout</button>
+          <button onClick={goToProfile} style={{ marginBottom: 12, padding: '10px 32px', borderRadius: 8, background: '#9333ea', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Profile</button>
+          <button onClick={handleLogout} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #9a6b3f, #9333ea)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Logout</button>
         </>
       ) : (
         <p>Not logged in.</p>

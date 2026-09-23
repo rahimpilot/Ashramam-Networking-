@@ -54,20 +54,20 @@ const Stories: React.FC = () => {
   }, []);
 
   const topics: Topic[] = [
-    { id: 'life', name: 'ഞങ്ങളുടെ താർ', description: 'Personal experiences and life lessons', icon: '', color: '#000000' },
-    { id: 'travel', name: 'കുറച്ചു യാത്രകൾ', description: 'Journey tales and travel experiences', icon: '', color: '#000000' },
-    { id: 'food', name: 'കഥാപാത്രങ്ങൾ', description: 'Culinary experiences and cultural stories', icon: '', color: '#000000' },
-    { id: 'career', name: 'തള്ള്', description: 'Professional growth and career stories', icon: '', color: '#000000' },
-    { id: 'family', name: 'ഉംറക്ക് പോയവർ', description: 'Stories about relationships and bonds', icon: '', color: '#000000' },
-    { id: 'kannappan', name: 'കണ്ണപ്പന്റെ സ്റ്റുഡിയോ ഗാരേജ്', description: 'Stories from Kannappan\'s Studio Garage', icon: '', color: '#000000' },
-    { id: 'powergroup', name: 'പവർ ഗ്രൂപ്പ് ഓഫ് ആശ്രമം', description: 'Power Group of Ashramam stories', icon: '', color: '#000000' },
-    { id: 'asifbar', name: 'ആസിഫ് ബാർ', description: 'Stories from Asif Bar', icon: '', color: '#000000' },
-    { id: 'munthiriclub', name: 'മുന്തിരി ക്ലബ്', description: 'Munthiri Club stories and experiences', icon: '', color: '#000000' },
-    { id: 'shajipappan', name: 'ഷാജി പാപ്പൻ', description: 'Stories about Shaji Pappan', icon: '', color: '#000000' },
-    { id: 'teamsensorium', name: 'ടീം സെൻസോറിയം', description: 'Team Sensorium stories and projects', icon: '', color: '#000000' },
-    { id: 'editingsimham', name: 'എഡിറ്റിംഗ് സിംഹം', description: 'Editing Simham stories and experiences', icon: '', color: '#000000' },
-    { id: 'krabi', name: 'ക്രാബി', description: 'Stories from Krabi', icon: '', color: '#000000' },
-    { id: 'hydergoa', name: 'Hyder in Goa', description: 'Tales of Hyder\'s Goan escapades', icon: '', color: '#000000' }
+    { id: 'life', name: 'ഞങ്ങളുടെ താർ', description: 'Personal experiences and life lessons', icon: '', color: '#1c1915' },
+    { id: 'travel', name: 'കുറച്ചു യാത്രകൾ', description: 'Journey tales and travel experiences', icon: '', color: '#1c1915' },
+    { id: 'food', name: 'കഥാപാത്രങ്ങൾ', description: 'Culinary experiences and cultural stories', icon: '', color: '#1c1915' },
+    { id: 'career', name: 'തള്ള്', description: 'Professional growth and career stories', icon: '', color: '#1c1915' },
+    { id: 'family', name: 'ഉംറക്ക് പോയവർ', description: 'Stories about relationships and bonds', icon: '', color: '#1c1915' },
+    { id: 'kannappan', name: 'കണ്ണപ്പന്റെ സ്റ്റുഡിയോ ഗാരേജ്', description: 'Stories from Kannappan\'s Studio Garage', icon: '', color: '#1c1915' },
+    { id: 'powergroup', name: 'പവർ ഗ്രൂപ്പ് ഓഫ് ആശ്രമം', description: 'Power Group of Ashramam stories', icon: '', color: '#1c1915' },
+    { id: 'asifbar', name: 'ആസിഫ് ബാർ', description: 'Stories from Asif Bar', icon: '', color: '#1c1915' },
+    { id: 'munthiriclub', name: 'മുന്തിരി ക്ലബ്', description: 'Munthiri Club stories and experiences', icon: '', color: '#1c1915' },
+    { id: 'shajipappan', name: 'ഷാജി പാപ്പൻ', description: 'Stories about Shaji Pappan', icon: '', color: '#1c1915' },
+    { id: 'teamsensorium', name: 'ടീം സെൻസോറിയം', description: 'Team Sensorium stories and projects', icon: '', color: '#1c1915' },
+    { id: 'editingsimham', name: 'എഡിറ്റിംഗ് സിംഹം', description: 'Editing Simham stories and experiences', icon: '', color: '#1c1915' },
+    { id: 'krabi', name: 'ക്രാബി', description: 'Stories from Krabi', icon: '', color: '#1c1915' },
+    { id: 'hydergoa', name: 'Hyder in Goa', description: 'Tales of Hyder\'s Goan escapades', icon: '', color: '#1c1915' }
   ];
 
   useEffect(() => {
@@ -295,11 +295,11 @@ const Stories: React.FC = () => {
       justifyContent: 'center',
       alignItems: 'center',
       height: '100vh',
-      background: 'linear-gradient(135deg, #1877F2 0%, #166FE5 100%)'
+      background: 'linear-gradient(135deg, #9a6b3f 0%, #8a5f36 100%)'
     }}>
       <div style={{
         textAlign: 'center',
-        color: '#FFFFFF',
+        color: '#fffdf8',
         background: 'rgba(255,255,255,0.15)',
         padding: '32px',
         borderRadius: '16px',
@@ -327,7 +327,7 @@ const Stories: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#F6F7F9',
+      background: '#f6f1e8',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <style>{`
@@ -337,9 +337,9 @@ const Stories: React.FC = () => {
         .topics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         @media (min-width: 600px) { .topics-grid { grid-template-columns: repeat(3, 1fr); } }
         .topic-card { transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; }
-        .topic-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08); border-color: #1877F2; }
+        .topic-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08); border-color: #9a6b3f; }
         .topic-card:active { transform: translateY(0); }
-        .story-input:focus { border-color: #1877F2 !important; }
+        .story-input:focus { border-color: #9a6b3f !important; }
       `}</style>
 
       {currentView === 'topics' ? (
@@ -368,7 +368,7 @@ const Stories: React.FC = () => {
                 fontSize: '11px',
                 fontWeight: 700,
                 letterSpacing: '1.5px',
-                color: '#1877F2',
+                color: '#9a6b3f',
                 background: '#E7F0FE',
                 borderRadius: '999px',
                 padding: '5px 12px',
@@ -377,9 +377,10 @@ const Stories: React.FC = () => {
                 COMMUNITY
               </div>
               <h2 style={{
-                fontSize: '28px',
-                fontWeight: 700,
-                color: '#111318',
+                fontSize: '30px',
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
+                fontWeight: 600,
+                color: '#1e1a14',
                 margin: '0 0 6px 0',
                 letterSpacing: '-0.5px'
               }}>
@@ -387,7 +388,7 @@ const Stories: React.FC = () => {
               </h2>
               <p style={{
                 fontSize: '15px',
-                color: '#6B7280',
+                color: '#7a7264',
                 margin: 0,
                 lineHeight: 1.5
               }}>
@@ -405,8 +406,8 @@ const Stories: React.FC = () => {
                     className="topic-card"
                     onClick={() => handleTopicSelect(topic.id)}
                     style={{
-                      background: '#FFFFFF',
-                      border: '1px solid #ECEEF1',
+                      background: '#fffdf8',
+                      border: '1px solid #e7ddcc',
                       borderRadius: '16px',
                       padding: '20px 12px',
                       cursor: 'pointer',
@@ -424,7 +425,7 @@ const Stories: React.FC = () => {
                       fontSize: '15px',
                       fontWeight: 700,
                       lineHeight: 1.35,
-                      color: '#111318',
+                      color: '#1e1a14',
                       overflowWrap: 'break-word',
                       maxWidth: '100%'
                     }}>
@@ -433,7 +434,7 @@ const Stories: React.FC = () => {
                     <div style={{
                       fontSize: '12px',
                       fontWeight: 600,
-                      color: '#6B7280',
+                      color: '#7a7264',
                       background: '#F1F3F5',
                       borderRadius: '999px',
                       padding: '3px 10px',
@@ -455,7 +456,7 @@ const Stories: React.FC = () => {
                 fontSize: '11px',
                 fontWeight: 700,
                 letterSpacing: '1.5px',
-                color: '#1877F2',
+                color: '#9a6b3f',
                 background: '#E7F0FE',
                 borderRadius: '999px',
                 padding: '5px 12px',
@@ -466,7 +467,7 @@ const Stories: React.FC = () => {
               <h2 style={{
                 fontSize: '26px',
                 fontWeight: 700,
-                color: '#111318',
+                color: '#1e1a14',
                 margin: '0 0 6px 0',
                 letterSpacing: '-0.5px',
                 overflowWrap: 'break-word'
@@ -475,7 +476,7 @@ const Stories: React.FC = () => {
               </h2>
               <p style={{
                 fontSize: '15px',
-                color: '#6B7280',
+                color: '#7a7264',
                 margin: '0 0 14px 0',
                 lineHeight: 1.5
               }}>
@@ -485,9 +486,9 @@ const Stories: React.FC = () => {
                 <span style={{
                   fontSize: '12px',
                   fontWeight: 600,
-                  color: '#6B7280',
-                  background: '#FFFFFF',
-                  border: '1px solid #ECEEF1',
+                  color: '#7a7264',
+                  background: '#fffdf8',
+                  border: '1px solid #e7ddcc',
                   borderRadius: '999px',
                   padding: '6px 12px',
                   whiteSpace: 'nowrap'
@@ -498,14 +499,14 @@ const Stories: React.FC = () => {
                   <button
                     onClick={() => setShowAddForm(!showAddForm)}
                     style={{
-                      background: showAddForm ? '#ECEEF1' : '#1877F2',
+                      background: showAddForm ? '#e7ddcc' : '#9a6b3f',
                       border: 'none',
                       borderRadius: '999px',
                       padding: '8px 16px',
                       cursor: 'pointer',
                       fontSize: '13px',
                       fontWeight: 700,
-                      color: showAddForm ? '#111318' : '#FFFFFF',
+                      color: showAddForm ? '#1e1a14' : '#fffdf8',
                       transition: 'all 0.2s ease',
                       minHeight: '36px',
                       whiteSpace: 'nowrap'
@@ -520,19 +521,19 @@ const Stories: React.FC = () => {
             {/* Add story form */}
             {showAddForm && (
               <div style={{
-                background: '#FFFFFF',
-                border: '1px solid #ECEEF1',
+                background: '#fffdf8',
+                border: '1px solid #e7ddcc',
                 borderRadius: '16px',
                 padding: '20px 16px',
                 marginBottom: '12px',
                 boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
               }}>
-                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px 0', color: '#111318' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px 0', color: '#1e1a14' }}>
                   Share your story
                 </h3>
                 <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div>
-                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#111318' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#1e1a14' }}>
                       Topic
                     </label>
                     <select
@@ -543,10 +544,10 @@ const Stories: React.FC = () => {
                         width: '100%',
                         padding: '12px',
                         borderRadius: '12px',
-                        border: '1px solid #E4E6EA',
+                        border: '1px solid #e2d7bf',
                         fontSize: '16px',
                         outline: 'none',
-                        background: '#FFF'
+                        background: '#fffdf8'
                       }}
                       required
                     >
@@ -557,7 +558,7 @@ const Stories: React.FC = () => {
                     </select>
                   </div>
                   <div>
-                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#111318' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#1e1a14' }}>
                       Title
                     </label>
                     <input
@@ -570,7 +571,7 @@ const Stories: React.FC = () => {
                         width: '100%',
                         padding: '12px',
                         borderRadius: '12px',
-                        border: '1px solid #E4E6EA',
+                        border: '1px solid #e2d7bf',
                         fontSize: '16px',
                         outline: 'none'
                       }}
@@ -578,7 +579,7 @@ const Stories: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#111318' }}>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#1e1a14' }}>
                       Your story
                     </label>
                     <textarea
@@ -591,7 +592,7 @@ const Stories: React.FC = () => {
                         width: '100%',
                         padding: '12px',
                         borderRadius: '12px',
-                        border: '1px solid #E4E6EA',
+                        border: '1px solid #e2d7bf',
                         fontSize: '16px',
                         outline: 'none',
                         resize: 'vertical',
@@ -605,7 +606,7 @@ const Stories: React.FC = () => {
                     type="submit"
                     disabled={submitting || !formValid}
                     style={{
-                      background: (submitting || !formValid) ? '#ECEEF1' : '#1877F2',
+                      background: (submitting || !formValid) ? '#e7ddcc' : '#9a6b3f',
                       border: 'none',
                       borderRadius: '12px',
                       padding: '12px 24px',
@@ -613,7 +614,7 @@ const Stories: React.FC = () => {
                       fontSize: '14px',
                       fontWeight: 700,
                       minHeight: '44px',
-                      color: (submitting || !formValid) ? '#9A9DA1' : '#FFFFFF',
+                      color: (submitting || !formValid) ? '#a89a80' : '#fffdf8',
                       transition: 'all 0.2s ease'
                     }}
                   >
@@ -626,25 +627,25 @@ const Stories: React.FC = () => {
             {/* Stories list */}
             {filteredStories.length === 0 ? (
               <div style={{
-                background: '#FFFFFF',
-                border: '1px solid #ECEEF1',
+                background: '#fffdf8',
+                border: '1px solid #e7ddcc',
                 borderRadius: '16px',
                 padding: '40px 20px',
                 textAlign: 'center',
                 boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
               }}>
                 <div style={{ fontSize: '48px', marginBottom: '16px' }}>📖</div>
-                <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#111318', margin: '0 0 8px 0' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1e1a14', margin: '0 0 8px 0' }}>
                   No stories yet
                 </h3>
-                <p style={{ fontSize: '14px', color: '#6B7280', margin: '0 0 16px 0', lineHeight: 1.5 }}>
+                <p style={{ fontSize: '14px', color: '#7a7264', margin: '0 0 16px 0', lineHeight: 1.5 }}>
                   Be the first to share a story in {currentTopic?.name}!
                 </p>
                 {user && (
                   <button
                     onClick={() => setShowAddForm(true)}
                     style={{
-                      background: '#1877F2',
+                      background: '#9a6b3f',
                       border: 'none',
                       borderRadius: '12px',
                       padding: '10px 20px',
@@ -652,7 +653,7 @@ const Stories: React.FC = () => {
                       fontSize: '14px',
                       fontWeight: 700,
                       minHeight: '44px',
-                      color: '#FFFFFF'
+                      color: '#fffdf8'
                     }}
                   >
                     Write the first story
@@ -677,8 +678,8 @@ const Stories: React.FC = () => {
                       className="story-card"
                       onClick={() => !isEditing && setExpandedStory(isExpanded ? null : story.id)}
                       style={{
-                        background: '#FFFFFF',
-                        border: '1px solid #ECEEF1',
+                        background: '#fffdf8',
+                        border: '1px solid #e7ddcc',
                         borderRadius: '16px',
                         padding: '18px 16px',
                         cursor: isEditing ? 'default' : 'pointer',
@@ -699,7 +700,7 @@ const Stories: React.FC = () => {
                               width: '100%',
                               padding: '12px',
                               marginBottom: '12px',
-                              border: '1px solid #E4E6EA',
+                              border: '1px solid #e2d7bf',
                               borderRadius: '12px',
                               fontSize: '16px',
                               fontWeight: 600,
@@ -716,7 +717,7 @@ const Stories: React.FC = () => {
                               width: '100%',
                               padding: '12px',
                               marginBottom: '12px',
-                              border: '1px solid #E4E6EA',
+                              border: '1px solid #e2d7bf',
                               borderRadius: '12px',
                               fontSize: '15px',
                               resize: 'vertical',
@@ -731,8 +732,8 @@ const Stories: React.FC = () => {
                               disabled={submitting}
                               style={{
                                 background: 'transparent',
-                                border: '1px solid #E4E6EA',
-                                color: '#6B7280',
+                                border: '1px solid #e2d7bf',
+                                color: '#7a7264',
                                 borderRadius: '12px',
                                 padding: '10px 16px',
                                 cursor: 'pointer',
@@ -747,9 +748,9 @@ const Stories: React.FC = () => {
                               onClick={() => handleSaveEdit(story.id)}
                               disabled={submitting}
                               style={{
-                                background: '#1877F2',
+                                background: '#9a6b3f',
                                 border: 'none',
-                                color: '#FFFFFF',
+                                color: '#fffdf8',
                                 borderRadius: '12px',
                                 padding: '10px 16px',
                                 cursor: submitting ? 'not-allowed' : 'pointer',
@@ -774,7 +775,7 @@ const Stories: React.FC = () => {
                               fontWeight: 700,
                               lineHeight: 1.35,
                               margin: 0,
-                              color: '#111318',
+                              color: '#1e1a14',
                               overflowWrap: 'break-word'
                             }}>
                               {story.title}
@@ -787,14 +788,14 @@ const Stories: React.FC = () => {
                                 }}
                                 aria-label={isLiked ? 'Unlike this story' : 'Like this story'}
                                 style={{
-                                  background: isLiked ? '#1877F2' : 'transparent',
-                                  border: '1px solid #1877F2',
+                                  background: isLiked ? '#9a6b3f' : 'transparent',
+                                  border: '1px solid #9a6b3f',
                                   borderRadius: '999px',
                                   padding: '6px 12px',
                                   cursor: 'pointer',
                                   fontSize: '13px',
                                   fontWeight: 700,
-                                  color: isLiked ? '#FFFFFF' : '#1877F2',
+                                  color: isLiked ? '#fffdf8' : '#9a6b3f',
                                   transition: 'all 0.2s ease',
                                   flexShrink: 0,
                                   minHeight: '32px',
@@ -805,12 +806,12 @@ const Stories: React.FC = () => {
                               </button>
                             ) : (
                               <span style={{
-                                border: '1px solid #ECEEF1',
+                                border: '1px solid #e7ddcc',
                                 borderRadius: '999px',
                                 padding: '6px 12px',
                                 fontSize: '13px',
                                 fontWeight: 700,
-                                color: '#6B7280',
+                                color: '#7a7264',
                                 flexShrink: 0,
                                 whiteSpace: 'nowrap'
                               }}>
@@ -822,11 +823,11 @@ const Stories: React.FC = () => {
                           {/* Byline */}
                           <div style={{
                             fontSize: '13px',
-                            color: '#6B7280',
+                            color: '#7a7264',
                             marginBottom: '10px',
                             overflowWrap: 'break-word'
                           }}>
-                            By <span style={{ fontWeight: 700, color: '#111318' }}>
+                            By <span style={{ fontWeight: 700, color: '#1e1a14' }}>
                               {authorNames[story.authorEmail] || story.author || 'Anonymous'}
                             </span>
                             {' '}· {story.createdAt.toDate().toLocaleDateString()}
@@ -856,7 +857,7 @@ const Stories: React.FC = () => {
                           }}>
                             <span style={{
                               fontSize: '13px',
-                              color: '#1877F2',
+                              color: '#9a6b3f',
                               fontWeight: 700
                             }}>
                               {isExpanded ? 'Show less' : 'Read full story ›'}
@@ -870,7 +871,7 @@ const Stories: React.FC = () => {
                                 style={{
                                   background: 'none',
                                   border: 'none',
-                                  color: '#1877F2',
+                                  color: '#9a6b3f',
                                   fontSize: '13px',
                                   fontWeight: 600,
                                   cursor: 'pointer',
@@ -889,8 +890,8 @@ const Stories: React.FC = () => {
                                   }}
                                   style={{
                                     background: 'transparent',
-                                    border: '1px solid #ECEEF1',
-                                    color: '#6B7280',
+                                    border: '1px solid #e7ddcc',
+                                    color: '#7a7264',
                                     borderRadius: '999px',
                                     padding: '6px 12px',
                                     cursor: 'pointer',

@@ -74,13 +74,13 @@ export const InstallPrompt: React.FC = () => {
       zIndex: 9999,
       animation: 'slideIn 0.3s ease-out'
     }}>
-      <div style={{ marginBottom: '12px', fontWeight: 600, color: '#1f2937' }}>
+      <div style={{ marginBottom: '12px', fontWeight: 600, color: '#2a241c' }}>
         Install Ashramam App
       </div>
       <p style={{
         margin: '0 0 16px 0',
         fontSize: '14px',
-        color: '#6b7280'
+        color: '#7a7264'
       }}>
         Add Ashramam to your home screen for quick access!
       </p>
@@ -108,8 +108,8 @@ export const InstallPrompt: React.FC = () => {
           onClick={() => setShowInstallPrompt(false)}
           style={{
             padding: '10px 16px',
-            backgroundColor: '#e5e7eb',
-            color: '#374151',
+            backgroundColor: '#e7ddcc',
+            color: '#332e26',
             border: 'none',
             borderRadius: '6px',
             fontWeight: 600,
@@ -117,8 +117,8 @@ export const InstallPrompt: React.FC = () => {
             fontSize: '14px',
             transition: 'background-color 0.2s'
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d1d5db')}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#e5e7eb')}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d8c9ae')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#e7ddcc')}
         >
           Later
         </button>
