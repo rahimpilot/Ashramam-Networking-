@@ -22,8 +22,8 @@ const MEETINGS: Meeting[] = [
     title: 'November 2nd, 2025',
     weekday: 'Sunday',
     points: 3,
-    accent: '#7C5CBF',
-    accentBg: '#EFE9FA',
+    accent: '#4a86c8',
+    accentBg: '#dbe9f7',
   },
   {
     path: '/meeting-minutes/october-5th-2025',
@@ -76,8 +76,8 @@ const MeetingMinutes: React.FC = () => {
             fontSize: '11px',
             fontWeight: 700,
             letterSpacing: '1.5px',
-            color: '#7C5CBF',
-            background: '#EFE9FA',
+            color: '#4a86c8',
+            background: '#dbe9f7',
             borderRadius: '999px',
             padding: '5px 12px',
             marginBottom: '10px'

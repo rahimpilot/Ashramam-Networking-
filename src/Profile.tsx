@@ -64,8 +64,8 @@ const Profile: React.FC = () => {
             Email
             <input type="email" value={user.email || ''} disabled style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #eee', marginTop: 4, background: '#ece3d0', color: '#888' }} />
           </label>
-          <a href="https://www.ashramamvibes.com/reset-password" style={{ color: '#9333ea', fontWeight: 500, marginBottom: 8 }}>Change Password</a>
-          <button type="submit" disabled={loading} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #5b9bd5, #9333ea)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Save</button>
+          <a href="https://www.ashramamvibes.com/reset-password" style={{ color: '#4a86c8', fontWeight: 500, marginBottom: 8 }}>Change Password</a>
+          <button type="submit" disabled={loading} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #5b9bd5, #4a86c8)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Save</button>
           {message && <div style={{ color: 'green', marginTop: 8 }}>{message}</div>}
         </form>
       ) : (

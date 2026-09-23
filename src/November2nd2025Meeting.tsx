@@ -6,8 +6,8 @@ const November2nd2025Meeting: React.FC = () => {
     <MeetingLayout
       dateTitle="November 2nd, 2025"
       weekday="Sunday"
-      accent="#7C5CBF"
-      accentBg="#EFE9FA"
+      accent="#4a86c8"
+      accentBg="#dbe9f7"
       points={[
         {
           title: 'The Late Meeting Host - Marzooq Mohammed',

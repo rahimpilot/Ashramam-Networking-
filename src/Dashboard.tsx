@@ -190,29 +190,23 @@ const Dashboard: React.FC = () => {
   // Enhanced avatar fetching with fallback options
   const getUserAvatar = (post: any): string | null => {
     const authorEmail = post.authorEmail || post.author;
-    console.log('🎯 Getting avatar for post author:', authorEmail);
-    console.log('📋 Post data:', post);
     
     // Use the same profile picture mapping as Profile.tsx
     const profilePicture = getProfilePicture(authorEmail, post.author || '');
     if (profilePicture) {
-      console.log('✅ Found profile picture for', authorEmail, ':', profilePicture);
       return profilePicture;
     }
     
     // Check if profile data is directly on the post
     if (post.authorProfile?.profilePicture) {
-      console.log('✅ Using post embedded avatar for', authorEmail, ':', post.authorProfile.profilePicture);
       return post.authorProfile.profilePicture;
     }
     
     // Check if the post author is current user and we have user profile
     if (user?.email === authorEmail && userProfile?.profilePicture) {
-      console.log('✅ Using current user avatar for', authorEmail, ':', userProfile.profilePicture);
       return userProfile.profilePicture;
     }
     
-    console.log('❌ No avatar found for', authorEmail, '- using fallback.');
     return null; // Return null so we can show fallback UI
   };
 
@@ -225,7 +219,6 @@ const Dashboard: React.FC = () => {
   // Enhanced profile fetching with multiple strategies
   const fetchAuthorProfile = async (email: string) => {
     try {
-      console.log('🔍 Fetching profile for email:', email);
       
       // Strategy 1: Direct email match
       const usersCollection = collection(db, 'profiles');
@@ -233,11 +226,9 @@ const Dashboard: React.FC = () => {
       
       let foundProfile = null;
       
-      console.log('📄 Total profiles in database:', usersSnapshot.size);
       
       usersSnapshot.forEach((doc) => {
         const profileData = doc.data();
-        console.log('🔍 Checking profile doc ID:', doc.id, 'data:', profileData);
         
         // Multiple matching strategies
         if (
@@ -247,27 +238,22 @@ const Dashboard: React.FC = () => {
           (profileData.name && profileData.email === email) // Name and email match
         ) {
           foundProfile = profileData;
-          console.log('✅ Found matching profile for', email, ':', profileData);
         }
       });
       
       // Strategy 2: If no profile found, try to find by Firebase UID
       if (!foundProfile && user?.email === email) {
         try {
-          console.log('🔄 Trying UID lookup for current user:', user.uid);
           const profileRef = doc(db, 'profiles', user.uid);
           const profileSnap = await getDoc(profileRef);
           if (profileSnap.exists()) {
             foundProfile = profileSnap.data();
-            console.log('✅ Found profile by UID for', email, ':', foundProfile);
           }
         } catch (uidError) {
-          console.log('❌ UID lookup failed:', uidError);
         }
       }
       
       if (!foundProfile) {
-        console.log('❌ No profile found for email:', email);
       }
       
       return foundProfile;
@@ -297,7 +283,6 @@ const Dashboard: React.FC = () => {
         }
       });
       
-      console.log('✅ All users fetched for mentioning:', users);
       setAllUsers(users);
     } catch (error) {
       console.error('❌ Error fetching all users:', error);
@@ -536,7 +521,6 @@ const Dashboard: React.FC = () => {
         commentMentions.push(match[1]);
       }
 
-      console.log('Found comment mentions:', commentMentions);
 
       const postRef = doc(db, 'scrapbook', postId);
       const postSnap = await getDoc(postRef);
@@ -681,7 +665,6 @@ const Dashboard: React.FC = () => {
     e.preventDefault();
     if (!user || (!newMessage.trim() && !selectedImage)) return;
 
-    console.log('Starting post submission...');
     setSubmitting(true);
     try {
       // Extract mentions from the message
@@ -693,19 +676,16 @@ const Dashboard: React.FC = () => {
         mentions.push(match[1]);
       }
       
-      console.log('Found mentions:', mentions);
       
       let imageUrl = null;
       
       // Convert image to base64 as temporary workaround (since Firebase Storage has permission issues)
       if (selectedImage) {
-        console.log('Compressing and converting image to base64...', selectedImage.name, selectedImage.size, 'bytes');
 
         try {
           // Compress image before converting to base64
           const compressedBase64 = await compressImage(selectedImage);
           imageUrl = compressedBase64;
-          console.log('Image compressed and converted to base64 successfully, length:', imageUrl.length);
 
         } catch (uploadError) {
           console.error('Error compressing/converting image:', uploadError);
@@ -720,7 +700,6 @@ const Dashboard: React.FC = () => {
         }
       }
       
-      console.log('Creating post data...');
       const postData = {
         message: newMessage.trim(),
         author: userProfile.name || user.displayName || 'Anonymous User',
@@ -734,24 +713,19 @@ const Dashboard: React.FC = () => {
         image: imageUrl
       };
 
-      console.log('Saving to Firestore...');
       const docRef = doc(collection(db, 'scrapbook'));
       await setDoc(docRef, postData);
-      console.log('Post saved successfully');
       
       setNewMessage('');
       setSelectedImage(null);
       setImagePreview(null);
       setShowMentionDropdown(false); // Hide mention dropdown
-      console.log('Refreshing posts...');
       fetchScrapPosts();
-      console.log('Post submission completed successfully');
 
     } catch (error) {
       console.error('Error posting message:', error);
       alert('Failed to post. Please try again.');
     } finally {
-      console.log('Setting submitting to false');
       setSubmitting(false);
     }
   };
@@ -761,16 +735,13 @@ const Dashboard: React.FC = () => {
     if (!user?.uid) return;
     
     try {
-      console.log('Fetching user profile for UID:', user.uid);
       const profileRef = doc(db, 'profiles', user.uid);
       const profileSnap = await getDoc(profileRef);
       
       if (profileSnap.exists()) {
         const profileData = profileSnap.data();
-        console.log('✅ User profile loaded:', profileData);
         setUserProfile(profileData);
       } else {
-        console.log('❌ No profile found for UID:', user.uid);
       }
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -804,7 +775,6 @@ const Dashboard: React.FC = () => {
         }
       }
       
-      console.log('Fetched profiles:', profilesMap);
       setUserProfiles(profilesMap);
       setScrapPosts(posts);
     } catch (error) {
@@ -912,7 +882,6 @@ const Dashboard: React.FC = () => {
                     objectFit: 'cover'
                   }}
                   onError={(e) => {
-                    console.log('Header profile image failed to load:', getProfilePicture(user.email!, userProfile.name || user.displayName || ''));
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.parentElement!.innerHTML = `
                       <span style="font-size: 1.2rem; color: #7a7264;">👤</span>
@@ -1248,7 +1217,6 @@ const Dashboard: React.FC = () => {
                 >
                   {(() => {
                     const avatarUrl = getUserAvatar(post);
-                    console.log('Rendering avatar for post:', post.id, 'URL:', avatarUrl);
                     
                     if (avatarUrl) {
                       return (
@@ -1261,7 +1229,6 @@ const Dashboard: React.FC = () => {
                             objectFit: 'cover'
                           }}
                           onError={(e) => {
-                            console.log('❌ Avatar image failed to load:', avatarUrl);
                             e.currentTarget.style.display = 'none';
                             const parent = e.currentTarget.parentElement!;
                             parent.innerHTML = `

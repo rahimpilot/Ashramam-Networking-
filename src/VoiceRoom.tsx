@@ -1027,7 +1027,7 @@ const VoiceRoom: React.FC = () => {
               onClick={toggleCamera}
               style={{
                 flex: 1,
-                background: cameraOn ? '#7c3aed' : '#332e26',
+                background: cameraOn ? '#5b9bd5' : '#332e26',
                 color: '#fffdf8', border: 'none', borderRadius: '14px',
                 padding: '1.1rem 0.5rem', fontSize: '1.05rem', fontWeight: 700, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',

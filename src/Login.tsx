@@ -57,7 +57,7 @@ const Login: React.FC = () => {
           if (!data.approved) {
             // Not approved yet: sign out and notify user
             await signOut(auth);
-            setError(`Your account is awaiting admin approval.\nFirestore doc: ${JSON.stringify(data, null, 2)}`);
+            setError('Your account is awaiting admin approval. Please contact the admin.');
             return;
           }
         } else {
@@ -219,7 +219,7 @@ const Login: React.FC = () => {
               disabled={loading}
               style={{
                 width: '100%',
-                background: 'linear-gradient(to right, #5b9bd5, #9333ea)',
+                background: 'linear-gradient(to right, #5b9bd5, #4a86c8)',
                 color: 'white',
                 padding: '0.75rem 1.5rem',
                 borderRadius: '0.75rem',

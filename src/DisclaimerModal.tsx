@@ -109,7 +109,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
               padding: '0.75rem 1.5rem',
               borderRadius: '0.5rem',
               border: 'none',
-              background: 'linear-gradient(to right, #5b9bd5, #9333ea)',
+              background: 'linear-gradient(to right, #5b9bd5, #4a86c8)',
               color: '#fffdf8',
               fontWeight: '600',
               cursor: 'pointer',

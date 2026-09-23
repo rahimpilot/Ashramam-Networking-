@@ -46,8 +46,8 @@ const Account: React.FC = () => {
               <p style={{ margin: '8px 0 0 0', fontSize: '0.95rem', color: '#666' }}>More features coming soon!</p>
             </div>
           </div>
-          <button onClick={goToProfile} style={{ marginBottom: 12, padding: '10px 32px', borderRadius: 8, background: '#9333ea', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Profile</button>
-          <button onClick={handleLogout} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #5b9bd5, #9333ea)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Logout</button>
+          <button onClick={goToProfile} style={{ marginBottom: 12, padding: '10px 32px', borderRadius: 8, background: '#4a86c8', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Profile</button>
+          <button onClick={handleLogout} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #5b9bd5, #4a86c8)', color: '#fffdf8', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Logout</button>
         </>
       ) : (
         <p>Not logged in.</p>
