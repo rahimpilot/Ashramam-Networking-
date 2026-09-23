@@ -15,6 +15,7 @@ import VoiceRoom from './VoiceRoom';
 import UnoGame from './UnoGame';
 import OurTrips from './OurTrips';
 import AshramamExclusive from './AshramamExclusive';
+import BelovedArticles from './BelovedArticles';
 import Krabi from './Krabi';
 import Baku from './Baku';
 import September7th2025Meeting from './September7th2025Meeting';
@@ -46,6 +47,8 @@ function AnimatedRoutes() {
         <Route path="/our-trips" element={<OurTrips />} />
         <Route path="/ashramam-exclusive" element={<AshramamExclusive />} />
         <Route path="/ashramam-exclusive/:storyId" element={<AshramamExclusive />} />
+        <Route path="/beloved-articles" element={<BelovedArticles />} />
+        <Route path="/beloved-articles/:articleId" element={<BelovedArticles />} />
         <Route path="/our-trips/krabi" element={<Krabi />} />
         <Route path="/our-trips/baku" element={<Baku />} />
         <Route path="/krabi" element={<Krabi />} />
