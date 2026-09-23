@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Login from './Login';
 import AdminPanel from './AdminPanel';
 import Account from './Account';
@@ -20,10 +20,12 @@ import September7th2025Meeting from './September7th2025Meeting';
 import October5th2025Meeting from './October5th2025Meeting';
 import November2nd2025Meeting from './November2nd2025Meeting';
 
-function App() {
+/** Replays the soft page-entrance animation on every navigation. */
+function AnimatedRoutes() {
+  const location = useLocation();
   return (
-    <BrowserRouter>
-      <Routes>
+    <div key={location.pathname} className="iv-page-enter">
+      <Routes location={location}>
         <Route path="/" element={<Login />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/account" element={<Account />} />
@@ -45,6 +47,14 @@ function App() {
         <Route path="/our-trips/baku" element={<Baku />} />
         <Route path="/krabi" element={<Krabi />} />
       </Routes>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AnimatedRoutes />
     </BrowserRouter>
   );
 }

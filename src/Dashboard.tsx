@@ -1180,16 +1180,18 @@ const Dashboard: React.FC = () => {
 
         {/* Posts Feed */}
         <div style={{ padding: '0 16px 96px 16px' }}>
-          {scrapPosts.map((post) => (
+          {scrapPosts.map((post, index) => (
             <div
               key={post.id}
+              className="iv-stagger"
               style={{
                 marginBottom: '8px',
                 padding: '16px',
                 background: '#fffdf8',
                 borderRadius: '12px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                transition: 'box-shadow 0.2s ease'
+                transition: 'box-shadow 0.2s ease',
+                animationDelay: `${Math.min(index, 8) * 60}ms`
               }}
               onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'}
               onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'}

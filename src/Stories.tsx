@@ -662,7 +662,7 @@ const Stories: React.FC = () => {
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {filteredStories.map((story) => {
+                {filteredStories.map((story, index) => {
                   const isExpanded = expandedStory === story.id;
                   const isEditing = editingStory === story.id;
                   const isAuthor = !!user && story.authorEmail === user.email;
@@ -675,13 +675,14 @@ const Stories: React.FC = () => {
                     <div
                       key={story.id}
                       id={'story-' + story.id}
-                      className="story-card"
+                      className="story-card iv-stagger"
                       onClick={() => !isEditing && setExpandedStory(isExpanded ? null : story.id)}
                       style={{
                         background: '#fffdf8',
                         border: '1px solid #e7ddcc',
                         borderRadius: '16px',
                         padding: '18px 16px',
+                        animationDelay: `${Math.min(index, 8) * 60}ms`,
                         cursor: isEditing ? 'default' : 'pointer',
                         boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
                         scrollMarginTop: '76px',
