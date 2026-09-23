@@ -61,7 +61,7 @@ const StoryEngagement: React.FC<{
       setComments(list);
     });
     return () => unsub();
-  }, [storyId]);
+  }, [storyId, collectionName]);
 
   const postComment = async () => {
     const text = newComment.trim();
