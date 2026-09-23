@@ -14,10 +14,15 @@ interface StoryComment {
 }
 
 /**
- * Copy-link + comments for an exclusive story.
- * Data: exclusiveStories/{storyId}/comments
+ * Copy-link + comments for an exclusive story or beloved article.
+ * Comments live under {collectionName}/{docId}/comments.
+ * Public can read; only logged-in members can post.
  */
-const StoryEngagement: React.FC<{ storyId: string; user: User }> = ({ storyId, user }) => {
+const StoryEngagement: React.FC<{
+  storyId: string;
+  user: User | null;
+  collectionName?: string;
+}> = ({ storyId, user, collectionName = 'exclusiveStories' }) => {
   const [comments, setComments] = useState<StoryComment[]>([]);
   const [authorName, setAuthorName] = useState('');
   const [newComment, setNewComment] = useState('');
@@ -26,6 +31,7 @@ const StoryEngagement: React.FC<{ storyId: string; user: User }> = ({ storyId, u
 
   // Resolve display name from profiles (same pattern as Stories)
   useEffect(() => {
+    if (!user) return;
     const fetchName = async () => {
       const fallback = user.displayName || user.email?.split('@')[0] || 'Member';
       try {
@@ -46,7 +52,7 @@ const StoryEngagement: React.FC<{ storyId: string; user: User }> = ({ storyId, u
   // Live comments
   useEffect(() => {
     const q = query(
-      collection(db, 'exclusiveStories', storyId, 'comments'),
+      collection(db, collectionName, storyId, 'comments'),
       orderBy('createdAt', 'asc')
     );
     const unsub = onSnapshot(q, (snap) => {
@@ -59,10 +65,10 @@ const StoryEngagement: React.FC<{ storyId: string; user: User }> = ({ storyId, u
 
   const postComment = async () => {
     const text = newComment.trim();
-    if (!text || posting) return;
+    if (!text || posting || !user) return;
     setPosting(true);
     try {
-      await addDoc(collection(db, 'exclusiveStories', storyId, 'comments'), {
+      await addDoc(collection(db, collectionName, storyId, 'comments'), {
         uid: user.uid,
         email: user.email,
         authorName,
@@ -149,33 +155,39 @@ const StoryEngagement: React.FC<{ storyId: string; user: User }> = ({ storyId, u
           </div>
         )}
 
-        {/* Comment input */}
-        <div style={{ display: 'flex', gap: 8 }}>
-          <input
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') postComment(); }}
-            placeholder={`Comment as ${authorName || '…'}`}
-            maxLength={500}
-            style={{
-              flex: 1, minWidth: 0, border: '1px solid #d5e0ec', borderRadius: 24,
-              padding: '10px 16px', fontSize: 14, outline: 'none', background: '#ffffff'
-            }}
-          />
-          <button
-            onClick={postComment}
-            disabled={posting || !newComment.trim()}
-            className="iv-press"
-            style={{
-              background: '#1c2733', color: '#ffffff', border: 'none',
-              borderRadius: 24, padding: '10px 20px', fontSize: 14,
-              fontWeight: 600, cursor: 'pointer',
-              opacity: posting || !newComment.trim() ? 0.5 : 1
-            }}
-          >
-            {posting ? '…' : 'Post'}
-          </button>
-        </div>
+        {/* Comment input — members only */}
+        {user ? (
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') postComment(); }}
+              placeholder={`Comment as ${authorName || '…'}`}
+              maxLength={500}
+              style={{
+                flex: 1, minWidth: 0, border: '1px solid #d5e0ec', borderRadius: 24,
+                padding: '10px 16px', fontSize: 14, outline: 'none', background: '#ffffff'
+              }}
+            />
+            <button
+              onClick={postComment}
+              disabled={posting || !newComment.trim()}
+              className="iv-press"
+              style={{
+                background: '#1c2733', color: '#ffffff', border: 'none',
+                borderRadius: 24, padding: '10px 20px', fontSize: 14,
+                fontWeight: 600, cursor: 'pointer',
+                opacity: posting || !newComment.trim() ? 0.5 : 1
+              }}
+            >
+              {posting ? '…' : 'Post'}
+            </button>
+          </div>
+        ) : (
+          <p style={{ fontSize: 13, color: '#8a9aab', margin: 0 }}>
+            <a href="/" style={{ color: '#d97706', fontWeight: 700 }}>Log in</a> to join the conversation.
+          </p>
+        )}
       </div>
     </div>
   );
