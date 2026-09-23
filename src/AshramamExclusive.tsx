@@ -65,9 +65,6 @@ const AshramamExclusive: React.FC = () => {
           <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 700 }}>
             Inside stories, before anyone else.
           </h2>
-          <p style={{ margin: 0, fontSize: 14, opacity: 0.75, lineHeight: 1.5 }}>
-            The hot news desk of the group — members only.
-          </p>
         </div>
 
         {/* Stories */}
