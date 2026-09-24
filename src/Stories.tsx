@@ -38,7 +38,7 @@ const Stories: React.FC = () => {
   const [newStory, setNewStory] = useState({ title: '', content: '', topic: 'hydergoa' });
   const [submitting, setSubmitting] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
-  const [currentView, setCurrentView] = useState<'topics' | 'stories'>('topics');
+  const [currentView, setCurrentView] = useState<'topics' | 'stories' | 'story'>('topics');
   const [expandedStory, setExpandedStory] = useState<string | null>(null);
   const [editingStory, setEditingStory] = useState<string | null>(null);
   const [editStoryData, setEditStoryData] = useState({ title: '', content: '' });
@@ -190,6 +190,17 @@ const Stories: React.FC = () => {
     setExpandedStory(null);
   };
 
+  const openStory = (storyId: string) => {
+    setExpandedStory(storyId);
+    setCurrentView('story');
+    window.scrollTo(0, 0);
+  };
+
+  const goBackToStoryList = () => {
+    setCurrentView('stories');
+    window.scrollTo(0, 0);
+  };
+
   const handleTopicSelect = (topicId: string) => {
     setSelectedTopic(topicId);
     setCurrentView('stories');
@@ -210,7 +221,6 @@ const Stories: React.FC = () => {
   const handleEditStory = (story: Story) => {
     setEditingStory(story.id);
     setEditStoryData({ title: story.title, content: story.content });
-    setExpandedStory(null); // Close expansion if open
   };
 
   const handleSaveEdit = async (storyId: string) => {
@@ -261,6 +271,168 @@ const Stories: React.FC = () => {
     setTimeout(() => setCopiedStoryId(null), 2000);
   };
 
+  // Inline edit form, shared by the story cards and the full-page story view
+  const renderEditForm = (story: Story) => (
+    <div style={{ minWidth: 0 }}>
+      <input
+        type="text"
+        value={editStoryData.title}
+        onChange={(e) => setEditStoryData({ ...editStoryData, title: e.target.value })}
+        placeholder="Story title"
+        className="story-input"
+        style={{
+          width: '100%',
+          padding: '12px',
+          marginBottom: '12px',
+          border: '1px solid #c9d9e8',
+          borderRadius: '12px',
+          fontSize: '16px',
+          fontWeight: 600,
+          outline: 'none'
+        }}
+      />
+      <textarea
+        value={editStoryData.content}
+        onChange={(e) => setEditStoryData({ ...editStoryData, content: e.target.value })}
+        placeholder="Write your story here..."
+        rows={10}
+        className="story-input"
+        style={{
+          width: '100%',
+          padding: '12px',
+          marginBottom: '12px',
+          border: '1px solid #c9d9e8',
+          borderRadius: '12px',
+          fontSize: '15px',
+          resize: 'vertical',
+          fontFamily: 'inherit',
+          lineHeight: 1.5,
+          outline: 'none'
+        }}
+      />
+      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+        <button
+          onClick={handleCancelEdit}
+          disabled={submitting}
+          style={{
+            background: 'transparent',
+            border: '1px solid #c9d9e8',
+            color: '#6b7f92',
+            borderRadius: '12px',
+            padding: '10px 16px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: 600,
+            minHeight: '44px'
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => handleSaveEdit(story.id)}
+          disabled={submitting}
+          style={{
+            background: '#5b9bd5',
+            border: 'none',
+            color: '#ffffff',
+            borderRadius: '12px',
+            padding: '10px 16px',
+            cursor: submitting ? 'not-allowed' : 'pointer',
+            fontSize: '14px',
+            fontWeight: 700,
+            minHeight: '44px',
+            opacity: submitting ? 0.7 : 1
+          }}
+        >
+          {submitting ? 'Saving...' : 'Save changes'}
+        </button>
+      </div>
+    </div>
+  );
+
+  // Like / copy-link / edit controls, shared by the story cards and the full-page story view
+  const renderStoryControls = (story: Story) => {
+    const liked = !!user && story.likedBy.includes(user.uid);
+    const author = !!user && story.authorEmail === user.email;
+    return (
+      <span style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap', flexShrink: 0 }}>
+        {user ? (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleLikeStory(story.id);
+            }}
+            aria-label={liked ? 'Unlike this story' : 'Like this story'}
+            style={{
+              background: liked ? '#5b9bd5' : '#F1F6FC',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '6px 12px',
+              cursor: 'pointer',
+              fontSize: '13px',
+              fontWeight: 700,
+              color: liked ? '#ffffff' : '#2f7fc4',
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            ♥ {story.likes}
+          </button>
+        ) : (
+          <span style={{
+            background: '#F1F6FC',
+            borderRadius: '999px',
+            padding: '6px 12px',
+            fontSize: '13px',
+            fontWeight: 700,
+            color: '#2f7fc4',
+            whiteSpace: 'nowrap'
+          }}>
+            ♥ {story.likes}
+          </span>
+        )}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleCopyPermalink(story);
+          }}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#8fa3b8',
+            fontSize: '13px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            padding: '6px 4px',
+            textDecoration: 'underline'
+          }}
+        >
+          {copiedStoryId === story.id ? '✓ Copied!' : 'Copy link'}
+        </button>
+        {author && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditStory(story);
+            }}
+            style={{
+              background: 'transparent',
+              border: '1px solid #d3dfee',
+              color: '#6b7f92',
+              borderRadius: '999px',
+              padding: '5px 12px',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: 600
+            }}
+          >
+            Edit
+          </button>
+        )}
+      </span>
+    );
+  };
+
   // Honor permalink query params: /stories?topic=<id>&story=<id>
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -271,18 +443,12 @@ const Stories: React.FC = () => {
       setCurrentView('stories');
       if (storyParam) {
         setExpandedStory(storyParam);
+        setCurrentView('story');
+        window.scrollTo(0, 0);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Scroll the deep-linked (or expanded) story into view once loaded
-  useEffect(() => {
-    if (expandedStory && stories.some(s => s.id === expandedStory)) {
-      const el = document.getElementById('story-' + expandedStory);
-      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [expandedStory, stories]);
 
   const renderLoading = () => (
     <div style={{
@@ -306,6 +472,7 @@ const Stories: React.FC = () => {
   // logged-in users see add/edit/like controls.
 
   const currentTopic = getCurrentTopic();
+  const activeStory = expandedStory ? stories.find(s => s.id === expandedStory) ?? null : null;
   const latestByTopic: Record<string, Date | null> = {};
   stories.forEach((s) => {
     const d = s.createdAt.toDate();
@@ -344,12 +511,19 @@ const Stories: React.FC = () => {
 
       {currentView === 'topics' ? (
         <PageHeader title="Our Stories" backTo={user ? '/dashboard' : '/'} backLabel="Back" />
-      ) : (
+      ) : currentView === 'stories' ? (
         <PageHeader
           title={currentTopic?.name || 'Stories'}
           backTo="/stories"
           backLabel="Back to topics"
           onBack={goBackToTopics}
+        />
+      ) : (
+        <PageHeader
+          title={activeStory?.title || 'Story'}
+          backTo="/stories"
+          backLabel="Back to stories"
+          onBack={goBackToStoryList}
         />
       )}
 
@@ -582,7 +756,7 @@ const Stories: React.FC = () => {
               </div>
             )}
           </>
-        ) : (
+        ) : currentView === 'stories' ? (
           <>
             {/* Stories view — search + controls */}
             <div style={{ marginBottom: '14px', padding: '0 4px' }}>
@@ -677,17 +851,14 @@ const Stories: React.FC = () => {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {filteredStories.map((story, index) => {
-                  const isExpanded = expandedStory === story.id;
                   const isEditing = editingStory === story.id;
-                  const isAuthor = !!user && story.authorEmail === user.email;
-                  const isLiked = !!user && story.likedBy.includes(user.uid);
 
                   return (
                     <div
                       key={story.id}
                       id={'story-' + story.id}
                       className="story-card iv-stagger"
-                      onClick={() => !isEditing && setExpandedStory(isExpanded ? null : story.id)}
+                      onClick={() => !isEditing && openStory(story.id)}
                       style={{
                         background: '#ffffff',
                         border: '1px solid #dce8f5',
@@ -702,79 +873,7 @@ const Stories: React.FC = () => {
                     >
                       {isEditing ? (
                         <div onClick={(e) => e.stopPropagation()} style={{ minWidth: 0 }}>
-                          <input
-                            type="text"
-                            value={editStoryData.title}
-                            onChange={(e) => setEditStoryData({ ...editStoryData, title: e.target.value })}
-                            placeholder="Story title"
-                            className="story-input"
-                            style={{
-                              width: '100%',
-                              padding: '12px',
-                              marginBottom: '12px',
-                              border: '1px solid #c9d9e8',
-                              borderRadius: '12px',
-                              fontSize: '16px',
-                              fontWeight: 600,
-                              outline: 'none'
-                            }}
-                          />
-                          <textarea
-                            value={editStoryData.content}
-                            onChange={(e) => setEditStoryData({ ...editStoryData, content: e.target.value })}
-                            placeholder="Write your story here..."
-                            rows={10}
-                            className="story-input"
-                            style={{
-                              width: '100%',
-                              padding: '12px',
-                              marginBottom: '12px',
-                              border: '1px solid #c9d9e8',
-                              borderRadius: '12px',
-                              fontSize: '15px',
-                              resize: 'vertical',
-                              fontFamily: 'inherit',
-                              lineHeight: 1.5,
-                              outline: 'none'
-                            }}
-                          />
-                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
-                            <button
-                              onClick={handleCancelEdit}
-                              disabled={submitting}
-                              style={{
-                                background: 'transparent',
-                                border: '1px solid #c9d9e8',
-                                color: '#6b7f92',
-                                borderRadius: '12px',
-                                padding: '10px 16px',
-                                cursor: 'pointer',
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                minHeight: '44px'
-                              }}
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              onClick={() => handleSaveEdit(story.id)}
-                              disabled={submitting}
-                              style={{
-                                background: '#5b9bd5',
-                                border: 'none',
-                                color: '#ffffff',
-                                borderRadius: '12px',
-                                padding: '10px 16px',
-                                cursor: submitting ? 'not-allowed' : 'pointer',
-                                fontSize: '14px',
-                                fontWeight: 700,
-                                minHeight: '44px',
-                                opacity: submitting ? 0.7 : 1
-                              }}
-                            >
-                              {submitting ? 'Saving...' : 'Save changes'}
-                            </button>
-                          </div>
+                          {renderEditForm(story)}
                         </div>
                       ) : (
                         <>
@@ -810,7 +909,7 @@ const Stories: React.FC = () => {
                             {story.title}
                           </h3>
 
-                          {/* Excerpt / content */}
+                          {/* Excerpt */}
                           <div style={{
                             fontSize: '14px',
                             lineHeight: 1.55,
@@ -819,14 +918,10 @@ const Stories: React.FC = () => {
                             minWidth: 0,
                             overflowWrap: 'break-word',
                             wordBreak: 'break-word',
-                            ...(isExpanded
-                              ? { whiteSpace: 'pre-wrap' }
-                              : {
-                                  display: '-webkit-box',
-                                  WebkitLineClamp: 2,
-                                  WebkitBoxOrient: 'vertical',
-                                  overflow: 'hidden'
-                                })
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden'
                           }}>
                             {story.content}
                           </div>
@@ -849,90 +944,91 @@ const Stories: React.FC = () => {
                                 {authorNames[story.authorEmail] || story.author || 'Anonymous'}
                               </span>
                               {' '}· <span style={{ color: '#2f7fc4', fontWeight: 700 }}>
-                                {isExpanded ? 'Show less' : 'Read ›'}
+                                Read ›
                               </span>
                             </span>
-                            <span style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap', flexShrink: 0 }}>
-                              {user ? (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleLikeStory(story.id);
-                                  }}
-                                  aria-label={isLiked ? 'Unlike this story' : 'Like this story'}
-                                  style={{
-                                    background: isLiked ? '#5b9bd5' : '#F1F6FC',
-                                    border: 'none',
-                                    borderRadius: '999px',
-                                    padding: '6px 12px',
-                                    cursor: 'pointer',
-                                    fontSize: '13px',
-                                    fontWeight: 700,
-                                    color: isLiked ? '#ffffff' : '#2f7fc4',
-                                    transition: 'all 0.2s ease',
-                                    whiteSpace: 'nowrap'
-                                  }}
-                                >
-                                  ♥ {story.likes}
-                                </button>
-                              ) : (
-                                <span style={{
-                                  background: '#F1F6FC',
-                                  borderRadius: '999px',
-                                  padding: '6px 12px',
-                                  fontSize: '13px',
-                                  fontWeight: 700,
-                                  color: '#2f7fc4',
-                                  whiteSpace: 'nowrap'
-                                }}>
-                                  ♥ {story.likes}
-                                </span>
-                              )}
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCopyPermalink(story);
-                                }}
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  color: '#8fa3b8',
-                                  fontSize: '13px',
-                                  fontWeight: 600,
-                                  cursor: 'pointer',
-                                  padding: '6px 4px',
-                                  textDecoration: 'underline'
-                                }}
-                              >
-                                {copiedStoryId === story.id ? '✓ Copied!' : 'Copy link'}
-                              </button>
-                              {isAuthor && (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleEditStory(story);
-                                  }}
-                                  style={{
-                                    background: 'transparent',
-                                    border: '1px solid #d3dfee',
-                                    color: '#6b7f92',
-                                    borderRadius: '999px',
-                                    padding: '5px 12px',
-                                    cursor: 'pointer',
-                                    fontSize: '12px',
-                                    fontWeight: 600
-                                  }}
-                                >
-                                  Edit
-                                </button>
-                              )}
-                            </span>
+                            {renderStoryControls(story)}
                           </div>
                         </>
                       )}
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {/* Story detail — full page reading view */}
+            {activeStory ? (
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #dce8f5',
+                borderRadius: '20px',
+                padding: '20px 18px',
+                boxShadow: '0 6px 24px rgba(91,155,213,0.10)'
+              }}>
+                {editingStory === activeStory.id ? (
+                  renderEditForm(activeStory)
+                ) : (
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: 600, color: '#6b7f92', whiteSpace: 'nowrap' }}>
+                        📅 {activeStory.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <h2 style={{
+                      fontSize: '26px',
+                      fontWeight: 700,
+                      fontFamily: "'Cormorant Garamond', Georgia, serif",
+                      lineHeight: 1.25,
+                      margin: '0 0 12px 0',
+                      color: '#1c2733',
+                      overflowWrap: 'break-word'
+                    }}>
+                      {activeStory.title}
+                    </h2>
+                    <div style={{
+                      fontSize: '16px',
+                      lineHeight: 1.7,
+                      color: '#33414f',
+                      whiteSpace: 'pre-wrap',
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-word',
+                      marginBottom: '18px'
+                    }}>
+                      {activeStory.content}
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '8px',
+                      flexWrap: 'wrap',
+                      borderTop: '1px solid #edf2f7',
+                      paddingTop: '14px'
+                    }}>
+                      <span style={{ fontSize: '13px', color: '#6b7f92' }}>
+                        ✍️ <span style={{ fontWeight: 700, color: '#1c2733' }}>
+                          {authorNames[activeStory.authorEmail] || activeStory.author || 'Anonymous'}
+                        </span>
+                      </span>
+                      {renderStoryControls(activeStory)}
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #dce8f5',
+                borderRadius: '20px',
+                padding: '36px 20px',
+                textAlign: 'center',
+                color: '#6b7f92',
+                fontSize: '14px'
+              }}>
+                Story not found.
               </div>
             )}
           </>
