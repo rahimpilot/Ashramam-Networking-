@@ -55,7 +55,7 @@ const TILES: Tile[] = [
     icon: '📖',
     title: 'Articles',
     subtitle: 'Words worth keeping',
-    path: '/beloved-articles',
+    path: '/articles',
     iconBg: '#FFF7ED',
   },
 ];

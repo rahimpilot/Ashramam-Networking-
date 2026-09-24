@@ -9,7 +9,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 /**
  * Articles — timeless pieces from Abdu's old WordPress site,
  * proofread and republished. PUBLIC — no login required.
- * Topic list at /beloved-articles, full article at /beloved-articles/:articleId.
+ * Topic list at /articles, full article at /articles/:articleId.
  */
 
 interface BelovedArticle {
@@ -278,7 +278,7 @@ const BelovedArticles: React.FC = () => {
         title="Articles"
         backTo="/hangout"
         backLabel={selected ? 'Back to articles' : 'Back to hangout'}
-        onBack={selected ? () => navigate('/beloved-articles') : undefined}
+        onBack={selected ? () => navigate('/articles') : undefined}
       />
 
       <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px 110px 16px' }}>
@@ -314,7 +314,7 @@ const BelovedArticles: React.FC = () => {
                   <article
                     key={article.id}
                     className="iv-card iv-press"
-                    onClick={() => navigate(`/beloved-articles/${article.id}`)}
+                    onClick={() => navigate(`/articles/${article.id}`)}
                     style={{ marginBottom: 12, overflow: 'hidden', cursor: 'pointer' }}
                   >
                     <div style={{ display: 'flex', gap: 14, padding: 14, alignItems: 'center' }}>

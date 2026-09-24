@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { useEffect, useState, ReactNode } from 'react';
 import { auth } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -44,6 +44,12 @@ function RequireAuth({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+/** Redirects old /beloved-articles/* links (shared before the rename) to /articles/*. */
+function LegacyArticleRedirect() {
+  const { articleId } = useParams<{ articleId: string }>();
+  return <Navigate to={`/articles/${articleId}`} replace />;
+}
+
 /** Replays the soft page-entrance animation on every navigation. */
 function AnimatedRoutes() {
   const location = useLocation();
@@ -51,9 +57,12 @@ function AnimatedRoutes() {
     <div key={location.pathname} className="iv-page-enter">
       <Routes location={location}>
         <Route path="/" element={<Login />} />
-        {/* Public: beloved article links (Abdu shares these outside the app) */}
-        <Route path="/beloved-articles" element={<BelovedArticles />} />
-        <Route path="/beloved-articles/:articleId" element={<BelovedArticles />} />
+        {/* Public: article links (Abdu shares these outside the app) */}
+        <Route path="/articles" element={<BelovedArticles />} />
+        <Route path="/articles/:articleId" element={<BelovedArticles />} />
+        {/* Legacy /beloved-articles URLs redirect so old shared links keep working */}
+        <Route path="/beloved-articles" element={<Navigate to="/articles" replace />} />
+        <Route path="/beloved-articles/:articleId" element={<LegacyArticleRedirect />} />
         {/* Everything else requires login */}
         <Route path="/admin" element={<RequireAuth><AdminPanel /></RequireAuth>} />
         <Route path="/account" element={<RequireAuth><Account /></RequireAuth>} />
