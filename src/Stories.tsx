@@ -63,19 +63,6 @@ const Stories: React.FC = () => {
   }, [navigate]);
 
   const topics: Topic[] = [
-    { id: 'life', name: 'ഞങ്ങളുടെ താർ', description: 'Personal experiences and life lessons', icon: '', color: '#1c1915' },
-    { id: 'travel', name: 'കുറച്ചു യാത്രകൾ', description: 'Journey tales and travel experiences', icon: '', color: '#1c1915' },
-    { id: 'food', name: 'കഥാപാത്രങ്ങൾ', description: 'Culinary experiences and cultural stories', icon: '', color: '#1c1915' },
-    { id: 'career', name: 'തള്ള്', description: 'Professional growth and career stories', icon: '', color: '#1c1915' },
-    { id: 'family', name: 'ഉംറക്ക് പോയവർ', description: 'Stories about relationships and bonds', icon: '', color: '#1c1915' },
-    { id: 'kannappan', name: 'കണ്ണപ്പന്റെ സ്റ്റുഡിയോ ഗാരേജ്', description: 'Stories from Kannappan\'s Studio Garage', icon: '', color: '#1c1915' },
-    { id: 'powergroup', name: 'പവർ ഗ്രൂപ്പ് ഓഫ് ആശ്രമം', description: 'Power Group of Ashramam stories', icon: '', color: '#1c1915' },
-    { id: 'asifbar', name: 'ആസിഫ് ബാർ', description: 'Stories from Asif Bar', icon: '', color: '#1c1915' },
-    { id: 'munthiriclub', name: 'മുന്തിരി ക്ലബ്', description: 'Munthiri Club stories and experiences', icon: '', color: '#1c1915' },
-    { id: 'shajipappan', name: 'ഷാജി പാപ്പൻ', description: 'Stories about Shaji Pappan', icon: '', color: '#1c1915' },
-    { id: 'teamsensorium', name: 'ടീം സെൻസോറിയം', description: 'Team Sensorium stories and projects', icon: '', color: '#1c1915' },
-    { id: 'editingsimham', name: 'എഡിറ്റിംഗ് സിംഹം', description: 'Editing Simham stories and experiences', icon: '', color: '#1c1915' },
-    { id: 'krabi', name: 'ക്രാബി', description: 'Stories from Krabi', icon: '', color: '#1c1915' },
     { id: 'hydergoa', name: 'Hyder in Goa', description: 'Tales of Hyder\'s Goan escapades', icon: '', color: '#1c1915' }
   ];
 
@@ -441,7 +428,7 @@ const Stories: React.FC = () => {
                         background: '#ffffff',
                         border: '1px solid #dce8f5',
                         borderRadius: '20px',
-                        padding: '16px',
+                        padding: '12px 16px',
                         animationDelay: `${Math.min(index, 8) * 60}ms`,
                         cursor: 'pointer',
                         boxShadow: '0 6px 24px rgba(91,155,213,0.10)',
@@ -454,7 +441,7 @@ const Stories: React.FC = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         gap: '8px',
-                        marginBottom: '8px'
+                        marginBottom: '6px'
                       }}>
                         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
                           <span style={{
@@ -501,27 +488,12 @@ const Stories: React.FC = () => {
                         fontWeight: 700,
                         fontFamily: "'Cormorant Garamond', Georgia, serif",
                         lineHeight: 1.25,
-                        margin: '0 0 6px 0',
+                        margin: '0 0 8px 0',
                         color: '#1c2733',
                         overflowWrap: 'break-word'
                       }}>
                         {topic.name}
                       </h3>
-
-                      {/* Description */}
-                      <div style={{
-                        fontSize: '14px',
-                        lineHeight: 1.55,
-                        color: '#5b6b7c',
-                        marginBottom: '10px',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                        overflowWrap: 'break-word'
-                      }}>
-                        {topic.description}
-                      </div>
 
                       {/* Footer */}
                       <div style={{
