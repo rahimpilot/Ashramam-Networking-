@@ -46,6 +46,7 @@ const Stories: React.FC = () => {
   const [authorNames, setAuthorNames] = useState<Record<string, string>>({});
   const [copiedStoryId, setCopiedStoryId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [topicSearch, setTopicSearch] = useState('');
 
   // Auth state listener
   useEffect(() => {
@@ -320,6 +321,16 @@ const Stories: React.FC = () => {
 
   const currentTopic = getCurrentTopic();
   const topicById: Record<string, string> = Object.fromEntries(topics.map(t => [t.id, t.name]));
+  const latestByTopic: Record<string, Date | null> = {};
+  stories.forEach((s) => {
+    const d = s.createdAt.toDate();
+    if (!latestByTopic[s.topic] || d > (latestByTopic[s.topic] as Date)) latestByTopic[s.topic] = d;
+  });
+  const visibleTopics = topics.filter((t) => {
+    const q = topicSearch.trim().toLowerCase();
+    if (!q) return true;
+    return (t.name + ' ' + t.description).toLowerCase().includes(q);
+  });
   const filteredStories = getFilteredStories().filter((s) => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return true;
@@ -365,91 +376,174 @@ const Stories: React.FC = () => {
 
         {currentView === 'topics' ? (
           <>
-            {/* Hero */}
-            <div style={{ marginBottom: '20px', padding: '0 4px' }}>
-              <div style={{
-                display: 'inline-block',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '1.5px',
-                color: '#5b9bd5',
-                background: '#E7F0FE',
-                borderRadius: '999px',
-                padding: '5px 12px',
-                marginBottom: '10px'
-              }}>
-                COMMUNITY
-              </div>
-              <h2 style={{
-                fontSize: '30px',
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontWeight: 600,
-                color: '#1e1a14',
-                margin: '0 0 6px 0',
-                letterSpacing: '-0.5px'
-              }}>
-                Our Stories
-              </h2>
-              <p style={{
-                fontSize: '15px',
-                color: '#6b7f92',
-                margin: 0,
-                lineHeight: 1.5
-              }}>
-                Pick a corner of Ashramam life and read what members shared — newest first.
-              </p>
+            {/* Search topics */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: '#ffffff',
+              border: '1px solid #d3dfee',
+              borderRadius: '999px',
+              padding: '11px 16px',
+              marginBottom: '12px',
+              boxShadow: '0 2px 10px rgba(91,155,213,0.08)'
+            }}>
+              <span style={{ fontSize: '16px', color: '#8fa3b8' }}>🔍</span>
+              <input
+                value={topicSearch}
+                onChange={(e) => setTopicSearch(e.target.value)}
+                placeholder="Search topics…"
+                style={{
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  fontSize: '15px',
+                  flex: 1,
+                  minWidth: 0,
+                  color: '#1c2733'
+                }}
+              />
+              {topicSearch && (
+                <button
+                  onClick={() => setTopicSearch('')}
+                  style={{ background: 'none', border: 'none', color: '#8fa3b8', fontSize: '16px', cursor: 'pointer', padding: '0 2px' }}
+                  aria-label="Clear search"
+                >
+                  ✕
+                </button>
+              )}
             </div>
 
-            {/* Topics grid */}
-            <div className="topics-grid">
-              {topics.map((topic) => {
-                const count = getStoryCount(topic.id);
-                return (
-                  <div
-                    key={topic.id}
-                    className="topic-card"
-                    onClick={() => handleTopicSelect(topic.id)}
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid #d3dfee',
-                      borderRadius: '16px',
-                      padding: '20px 12px',
-                      cursor: 'pointer',
-                      textAlign: 'center',
-                      minHeight: '112px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      gap: '8px',
-                      boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
-                    }}
-                  >
-                    <div style={{
-                      fontSize: '15px',
-                      fontWeight: 700,
-                      lineHeight: 1.35,
-                      color: '#1e1a14',
-                      overflowWrap: 'break-word',
-                      maxWidth: '100%'
-                    }}>
-                      {topic.name}
+            {/* Topics feed */}
+            {visibleTopics.length === 0 ? (
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #dce8f5',
+                borderRadius: '20px',
+                padding: '36px 20px',
+                textAlign: 'center',
+                color: '#6b7f92',
+                fontSize: '14px'
+              }}>
+                No topics match your search.
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {visibleTopics.map((topic, index) => {
+                  const count = getStoryCount(topic.id);
+                  const latest = latestByTopic[topic.id];
+                  return (
+                    <div
+                      key={topic.id}
+                      className="topic-card iv-stagger"
+                      onClick={() => handleTopicSelect(topic.id)}
+                      style={{
+                        background: '#ffffff',
+                        border: '1px solid #dce8f5',
+                        borderRadius: '20px',
+                        padding: '16px',
+                        animationDelay: `${Math.min(index, 8) * 60}ms`,
+                        cursor: 'pointer',
+                        boxShadow: '0 6px 24px rgba(91,155,213,0.10)',
+                        minWidth: 0
+                      }}
+                    >
+                      {/* Pills + date row */}
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '8px',
+                        marginBottom: '8px'
+                      }}>
+                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
+                          <span style={{
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            letterSpacing: '0.3px',
+                            color: '#2f7fc4',
+                            background: '#E7F0FE',
+                            borderRadius: '999px',
+                            padding: '4px 10px',
+                            whiteSpace: 'nowrap'
+                          }}>
+                            Topic
+                          </span>
+                          <span style={{
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            letterSpacing: '0.3px',
+                            color: '#5b8a6f',
+                            background: '#e6f4ec',
+                            borderRadius: '999px',
+                            padding: '4px 10px',
+                            whiteSpace: 'nowrap'
+                          }}>
+                            Community
+                          </span>
+                        </div>
+                        {latest && (
+                          <span style={{
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            color: '#6b7f92',
+                            whiteSpace: 'nowrap',
+                            flexShrink: 0
+                          }}>
+                            📅 {latest.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <h3 style={{
+                        fontSize: '19px',
+                        fontWeight: 700,
+                        fontFamily: "'Cormorant Garamond', Georgia, serif",
+                        lineHeight: 1.25,
+                        margin: '0 0 6px 0',
+                        color: '#1c2733',
+                        overflowWrap: 'break-word'
+                      }}>
+                        {topic.name}
+                      </h3>
+
+                      {/* Description */}
+                      <div style={{
+                        fontSize: '14px',
+                        lineHeight: 1.55,
+                        color: '#5b6b7c',
+                        marginBottom: '10px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        overflowWrap: 'break-word'
+                      }}>
+                        {topic.description}
+                      </div>
+
+                      {/* Footer */}
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '8px'
+                      }}>
+                        <span style={{ fontSize: '13px', color: '#6b7f92' }}>
+                          📚 <span style={{ fontWeight: 700, color: '#1c2733' }}>
+                            {count} {count === 1 ? 'story' : 'stories'}
+                          </span>
+                        </span>
+                        <span style={{ fontSize: '13px', color: '#2f7fc4', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                          Open ›
+                        </span>
+                      </div>
                     </div>
-                    <div style={{
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      color: '#6b7f92',
-                      background: '#F1F3F5',
-                      borderRadius: '999px',
-                      padding: '3px 10px',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      {count} {count === 1 ? 'story' : 'stories'}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </>
         ) : (
           <>
