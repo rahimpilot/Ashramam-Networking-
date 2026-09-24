@@ -265,7 +265,7 @@ export default function CinemaReviews() {
               color: '#ffffff', fontSize: 16, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-            {copied ? '✓' : '⧉'}
+            {copied ? '✓' : '🔗'}
           </button>
         </div>
 
