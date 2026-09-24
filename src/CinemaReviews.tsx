@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import PageHeader from './PageHeader';
 import { db, storage } from './firebase';
 import {
   collection, addDoc, query, orderBy, onSnapshot,
-  serverTimestamp, Timestamp,
+  serverTimestamp, Timestamp, doc, getDoc,
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -18,11 +18,6 @@ interface CinemaReview {
   images: string[];
   createdAt: Timestamp | null;
 }
-
-const LANGUAGES = [
-  'Malayalam', 'Tamil', 'Hindi', 'English', 'Telugu', 'Kannada',
-  'Bengali', 'Marathi', 'Punjabi', 'Urdu', 'Other',
-];
 
 const MAX_IMAGES = 4;
 
@@ -105,10 +100,14 @@ const labelStyle: React.CSSProperties = {
  *  no login needed. Lives in Hangout as the "Cinema and Reviews" tile. */
 export default function CinemaReviews() {
   const navigate = useNavigate();
+  const { reviewId } = useParams<{ reviewId: string }>();
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [reviews, setReviews] = useState<CinemaReview[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<CinemaReview | null>(null);
+  const [selectedLoading, setSelectedLoading] = useState(false);
+  const [search, setSearch] = useState('');
 
   const [name, setName] = useState('');
   const [cinema, setCinema] = useState('');
@@ -132,6 +131,22 @@ export default function CinemaReviews() {
 
   // Revoke preview object URLs on unmount / change
   useEffect(() => () => previews.forEach((u) => URL.revokeObjectURL(u)), [previews]);
+
+  // Load a single review when the URL carries a review id
+  useEffect(() => {
+    if (!reviewId) { setSelected(null); return; }
+    const found = reviews.find((r) => r.id === reviewId);
+    if (found) { setSelected(found); return; }
+    setSelectedLoading(true);
+    getDoc(doc(db, 'cinemaReviews', reviewId))
+      .then((snap) => {
+        setSelected(snap.exists()
+          ? { id: snap.id, ...(snap.data() as Omit<CinemaReview, 'id'>) }
+          : null);
+      })
+      .catch(() => setSelected(null))
+      .finally(() => setSelectedLoading(false));
+  }, [reviewId, reviews]);
 
   const onFilesPicked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const picked = Array.from(e.target.files || []).filter((f) => f.type.startsWith('image/'));
@@ -242,11 +257,8 @@ export default function CinemaReviews() {
             </div>
             <div style={{ flex: 1 }}>
               <label style={labelStyle}>Language</label>
-              <input style={inputStyle} list="cinema-languages" value={language}
+              <input style={inputStyle} value={language}
                 onChange={(e) => setLanguage(e.target.value)} placeholder="e.g. Malayalam" maxLength={30} />
-              <datalist id="cinema-languages">
-                {LANGUAGES.map((l) => <option key={l} value={l} />)}
-              </datalist>
             </div>
           </div>
 
@@ -321,58 +333,144 @@ export default function CinemaReviews() {
           </button>
         </form>
 
-        {/* Reviews feed */}
-        <h3 style={{ margin: '0 0 12px 2px', fontSize: 16, fontWeight: 800, color: '#1c2733' }}>
-          Latest reviews
-        </h3>
-        {loading ? (
-          <div style={{ color: '#8a9aab', fontSize: 14, padding: '12px 2px' }}>Loading reviews…</div>
-        ) : reviews.length === 0 ? (
-          <div className="iv-card" style={{ padding: '28px 20px', textAlign: 'center', color: '#8a9aab' }}>
-            <div style={{ fontSize: 34, marginBottom: 8 }}>🎬</div>
-            <div style={{ fontSize: 15, fontWeight: 600, color: '#4a5f75' }}>No reviews yet.</div>
-            <div style={{ fontSize: 13, marginTop: 4 }}>Be the first to rate a film above.</div>
-          </div>
-        ) : (
-          reviews.map((r) => (
-            <article key={r.id} className="iv-card" style={{ padding: 18, marginBottom: 14 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
-                <div>
-                  <div style={{ fontSize: 17, fontWeight: 800, color: '#1c2733' }}>{r.cinema}</div>
-                  {r.language && (
-                    <span style={{
-                      display: 'inline-block', marginTop: 6, fontSize: 12, fontWeight: 700,
-                      color: '#2f7fc4', background: '#e3eefb', borderRadius: 999, padding: '3px 10px',
-                    }}>{r.language}</span>
+        {/* Review detail (opened from a list link) or the review list */}
+        {reviewId ? (
+          selectedLoading ? (
+            <div style={{ color: '#8a9aab', fontSize: 14, padding: '12px 2px' }}>Loading review…</div>
+          ) : selected ? (
+            <>
+              <button onClick={() => navigate('/cinema-reviews')} className="iv-press" style={{
+                marginBottom: 14, padding: '10px 18px', borderRadius: 999,
+                border: '1px solid rgba(91,155,213,.45)', background: '#ffffff',
+                color: '#2f7fc4', fontWeight: 700, fontSize: 14, cursor: 'pointer',
+              }}>
+                ← All reviews
+              </button>
+              <article className="iv-card" style={{ padding: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+                  <div>
+                    <h2 style={{ margin: 0, fontSize: 21, fontWeight: 800, color: '#1c2733' }}>{selected.cinema}</h2>
+                    {selected.language && (
+                      <span style={{
+                        display: 'inline-block', marginTop: 8, fontSize: 12, fontWeight: 700,
+                        color: '#2f7fc4', background: '#e3eefb', borderRadius: 999, padding: '3px 10px',
+                      }}>{selected.language}</span>
+                    )}
+                  </div>
+                  <Stars value={selected.rating} size={20} />
+                </div>
+                {selected.review && (
+                  <p style={{ margin: '14px 0 0 0', fontSize: 15, color: '#3d4b5c', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
+                    {selected.review}
+                  </p>
+                )}
+                {selected.images && selected.images.length > 0 && (
+                  <div style={{ display: 'flex', gap: 8, marginTop: 14, overflowX: 'auto' }}>
+                    {selected.images.map((src, i) => (
+                      <a key={i} href={src} target="_blank" rel="noreferrer">
+                        <img src={src} alt="" loading="lazy" style={{
+                          width: 110, height: 110, objectFit: 'cover', borderRadius: 10,
+                          border: '1px solid #d7e3ef', flexShrink: 0,
+                        }} />
+                      </a>
+                    ))}
+                  </div>
+                )}
+                <div style={{ marginTop: 14, fontSize: 13, color: '#8a9aab' }}>
+                  Reviewed by <span style={{ fontWeight: 700, color: '#4a5f75' }}>{selected.name}</span>
+                  {selected.createdAt && (
+                    <> · {selected.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</>
                   )}
                 </div>
-                <Stars value={r.rating} size={18} />
+              </article>
+            </>
+          ) : (
+            <div className="iv-card" style={{ padding: '28px 20px', textAlign: 'center' }}>
+              <div style={{ fontSize: 15, fontWeight: 600, color: '#4a5f75' }}>This review could not be found.</div>
+              <Link to="/cinema-reviews" style={{ color: '#2f7fc4', fontSize: 14, fontWeight: 700 }}>
+                Back to all reviews
+              </Link>
+            </div>
+          )
+        ) : (
+          <>
+            {/* Search */}
+            <div style={{ position: 'relative', marginBottom: 10 }}>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search reviews… (film, reviewer, language)"
+                style={{ ...inputStyle, paddingLeft: 38, borderRadius: 999, background: '#ffffff' }}
+              />
+              <span style={{
+                position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
+                fontSize: 16, color: '#8a9aab',
+              }}>🔍</span>
+            </div>
+
+            {/* One-line review list — old-school forum style */}
+            <h3 style={{ margin: '6px 0 10px 2px', fontSize: 16, fontWeight: 800, color: '#1c2733' }}>
+              All reviews
+            </h3>
+            {loading ? (
+              <div style={{ color: '#8a9aab', fontSize: 14, padding: '12px 2px' }}>Loading reviews…</div>
+            ) : reviews.length === 0 ? (
+              <div className="iv-card" style={{ padding: '28px 20px', textAlign: 'center', color: '#8a9aab' }}>
+                <div style={{ fontSize: 34, marginBottom: 8 }}>🎬</div>
+                <div style={{ fontSize: 15, fontWeight: 600, color: '#4a5f75' }}>No reviews yet.</div>
+                <div style={{ fontSize: 13, marginTop: 4 }}>Be the first to rate a film above.</div>
               </div>
-              {r.review && (
-                <p style={{ margin: '10px 0 0 0', fontSize: 14.5, color: '#3d4b5c', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
-                  {r.review}
-                </p>
-              )}
-              {r.images && r.images.length > 0 && (
-                <div style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto' }}>
-                  {r.images.map((src, i) => (
-                    <a key={i} href={src} target="_blank" rel="noreferrer">
-                      <img src={src} alt="" loading="lazy" style={{
-                        width: 96, height: 96, objectFit: 'cover', borderRadius: 10,
-                        border: '1px solid #d7e3ef', flexShrink: 0,
-                      }} />
-                    </a>
-                  ))}
-                </div>
-              )}
-              <div style={{ marginTop: 12, fontSize: 12.5, color: '#8a9aab' }}>
-                <span style={{ fontWeight: 700, color: '#4a5f75' }}>{r.name}</span>
-                {r.createdAt && (
-                  <> · {r.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</>
-                )}
-              </div>
-            </article>
-          ))
+            ) : (
+              (() => {
+                const q = search.trim().toLowerCase();
+                const shown = q
+                  ? reviews.filter((r) =>
+                      [r.cinema, r.name, r.language, r.review].some((f) =>
+                        (f || '').toLowerCase().includes(q)))
+                  : reviews;
+                if (shown.length === 0) {
+                  return (
+                    <div className="iv-card" style={{ padding: '24px 20px', textAlign: 'center', color: '#8a9aab', fontSize: 14 }}>
+                      No reviews match “{search.trim()}”.
+                    </div>
+                  );
+                }
+                return (
+                  <div className="iv-card" style={{ padding: 0, overflow: 'hidden' }}>
+                    {shown.map((r, i) => (
+                      <Link
+                        key={r.id}
+                        to={`/cinema-reviews/${r.id}`}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 10,
+                          padding: '13px 16px', textDecoration: 'none',
+                          borderBottom: i === shown.length - 1 ? 'none' : '1px solid #e6eef6',
+                          background: '#ffffff',
+                        }}
+                      >
+                        <span style={{ fontSize: 18, flexShrink: 0 }}>🎬</span>
+                        <span style={{
+                          flex: 1, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden',
+                          textOverflow: 'ellipsis', fontSize: 14.5, color: '#1c2733',
+                        }}>
+                          <span style={{ fontWeight: 700 }}>{r.cinema}</span>
+                          <span style={{ color: '#f5a623', letterSpacing: 1, marginLeft: 8 }}>
+                            {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
+                          </span>
+                          <span style={{ color: '#8a9aab' }}> · by {r.name}</span>
+                        </span>
+                        {r.createdAt && (
+                          <span style={{ fontSize: 12, color: '#a5b6c8', flexShrink: 0 }}>
+                            {r.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          </span>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                );
+              })()
+            )}
+          </>
         )}
 
         <div style={{ textAlign: 'center', marginTop: 8 }}>
