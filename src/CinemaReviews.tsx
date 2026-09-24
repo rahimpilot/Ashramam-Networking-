@@ -238,6 +238,7 @@ export default function CinemaReviews() {
           background: 'linear-gradient(135deg, #0f2a4a 0%, #1f5d9e 60%, #2f7fc4 100%)',
           border: 'none',
           color: '#ffffff',
+          position: 'relative',
         }}>
           <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 800 }}>
             Watched something? Rate it.
@@ -255,34 +256,17 @@ export default function CinemaReviews() {
             </div>
           )}
 
-          {/* Share strip */}
-          <div style={{
-            marginTop: 14, paddingTop: 12,
-            borderTop: '1px solid rgba(255,255,255,0.25)',
-            display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
-          }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: '#ffffff' }}>
-              Watched something else?
-            </span>
-            <a href={SHARE_URL}
-              style={{
-                fontSize: 12, fontWeight: 700, color: '#ffffff',
-                background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(255,255,255,0.4)',
-                borderRadius: 999, padding: '5px 12px', textDecoration: 'none',
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-              }}>
-              🔗 Share this page
-            </a>
-            <button type="button" onClick={copyShareLink} title="Copy link"
-              style={{
-                fontSize: 13, fontWeight: 700, color: '#ffffff',
-                background: 'transparent', border: '1px solid rgba(255,255,255,0.4)',
-                borderRadius: 999, padding: '5px 12px', cursor: 'pointer',
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-              }}>
-              {copied ? '✓ Copied!' : '⧉ Copy link'}
-            </button>
-          </div>
+          {/* Copy link — bottom-right corner of the banner */}
+          <button type="button" onClick={copyShareLink} title="Copy page link"
+            style={{
+              position: 'absolute', right: 12, bottom: 12,
+              width: 34, height: 34, borderRadius: '50%',
+              background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(255,255,255,0.45)',
+              color: '#ffffff', fontSize: 16, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+            {copied ? '✓' : '⧉'}
+          </button>
         </div>
 
         {/* Review form */}
