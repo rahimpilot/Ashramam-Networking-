@@ -35,7 +35,7 @@ const Stories: React.FC = () => {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newStory, setNewStory] = useState({ title: '', content: '', topic: '' });
+  const [newStory, setNewStory] = useState({ title: '', content: '', topic: 'hydergoa' });
   const [submitting, setSubmitting] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
   const [currentView, setCurrentView] = useState<'topics' | 'stories'>('topics');
@@ -150,7 +150,7 @@ const Stories: React.FC = () => {
       };
 
       await setDoc(doc(collection(db, 'stories')), storyData);
-      setNewStory({ title: '', content: '', topic: '' });
+      setNewStory({ title: '', content: '', topic: 'hydergoa' });
       setShowAddForm(false);
       fetchStories();
     } catch (error) {
@@ -363,6 +363,112 @@ const Stories: React.FC = () => {
 
         {currentView === 'topics' ? (
           <>
+            {/* Add story — top of landing */}
+            {user && (
+              <div style={{ marginBottom: '12px' }}>
+                <button
+                  onClick={() => setShowAddForm(!showAddForm)}
+                  style={{
+                    width: '100%',
+                    background: showAddForm ? '#d3dfee' : '#5b9bd5',
+                    border: 'none',
+                    borderRadius: '999px',
+                    padding: '13px 24px',
+                    cursor: 'pointer',
+                    fontSize: '15px',
+                    fontWeight: 700,
+                    color: showAddForm ? '#1e1a14' : '#ffffff',
+                    transition: 'all 0.2s ease',
+                    minHeight: '48px',
+                    boxShadow: '0 4px 14px rgba(91,155,213,0.25)'
+                  }}
+                >
+                  {showAddForm ? 'Cancel' : '+ Add story'}
+                </button>
+              </div>
+            )}
+
+            {/* Add story form */}
+            {showAddForm && (
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #d3dfee',
+                borderRadius: '20px',
+                padding: '20px 16px',
+                marginBottom: '12px',
+                boxShadow: '0 6px 24px rgba(91,155,213,0.10)'
+              }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px 0', color: '#1e1a14' }}>
+                  Share your story
+                </h3>
+                <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#1e1a14' }}>
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      value={newStory.title}
+                      onChange={(e) => setNewStory({ ...newStory, title: e.target.value })}
+                      placeholder="Give your story a catchy title..."
+                      className="story-input"
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        borderRadius: '12px',
+                        border: '1px solid #c9d9e8',
+                        fontSize: '16px',
+                        outline: 'none'
+                      }}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#1e1a14' }}>
+                      Your story
+                    </label>
+                    <textarea
+                      value={newStory.content}
+                      onChange={(e) => setNewStory({ ...newStory, content: e.target.value })}
+                      placeholder="Tell us your story..."
+                      rows={6}
+                      className="story-input"
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        borderRadius: '12px',
+                        border: '1px solid #c9d9e8',
+                        fontSize: '16px',
+                        outline: 'none',
+                        resize: 'vertical',
+                        fontFamily: 'inherit',
+                        lineHeight: 1.5
+                      }}
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={submitting || !formValid}
+                    style={{
+                      background: (submitting || !formValid) ? '#d3dfee' : '#5b9bd5',
+                      border: 'none',
+                      borderRadius: '12px',
+                      padding: '12px 24px',
+                      cursor: (submitting || !formValid) ? 'not-allowed' : 'pointer',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      minHeight: '44px',
+                      color: (submitting || !formValid) ? '#9dafbe' : '#ffffff',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    {submitting ? 'Publishing...' : 'Publish story'}
+                  </button>
+                </form>
+              </div>
+            )}
+
             {/* Search topics */}
             <div style={{
               display: 'flex',
@@ -570,134 +676,8 @@ const Stories: React.FC = () => {
                 }}>
                   {filteredStories.length} {filteredStories.length === 1 ? 'story' : 'stories'}
                 </span>
-                {user && (
-                  <button
-                    onClick={() => setShowAddForm(!showAddForm)}
-                    style={{
-                      background: showAddForm ? '#d3dfee' : '#5b9bd5',
-                      border: 'none',
-                      borderRadius: '999px',
-                      padding: '8px 16px',
-                      cursor: 'pointer',
-                      fontSize: '13px',
-                      fontWeight: 700,
-                      color: showAddForm ? '#1e1a14' : '#ffffff',
-                      transition: 'all 0.2s ease',
-                      minHeight: '36px',
-                      whiteSpace: 'nowrap'
-                    }}
-                  >
-                    {showAddForm ? 'Cancel' : '+ Add story'}
-                  </button>
-                )}
               </div>
             </div>
-
-            {/* Add story form */}
-            {showAddForm && (
-              <div style={{
-                background: '#ffffff',
-                border: '1px solid #d3dfee',
-                borderRadius: '16px',
-                padding: '20px 16px',
-                marginBottom: '12px',
-                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
-              }}>
-                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px 0', color: '#1e1a14' }}>
-                  Share your story
-                </h3>
-                <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#1e1a14' }}>
-                      Topic
-                    </label>
-                    <select
-                      value={newStory.topic}
-                      onChange={(e) => setNewStory({ ...newStory, topic: e.target.value })}
-                      className="story-input"
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        borderRadius: '12px',
-                        border: '1px solid #c9d9e8',
-                        fontSize: '16px',
-                        outline: 'none',
-                        background: '#ffffff'
-                      }}
-                      required
-                    >
-                      <option value="">Select a topic...</option>
-                      {topics.map(topic => (
-                        <option key={topic.id} value={topic.id}>{topic.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#1e1a14' }}>
-                      Title
-                    </label>
-                    <input
-                      type="text"
-                      value={newStory.title}
-                      onChange={(e) => setNewStory({ ...newStory, title: e.target.value })}
-                      placeholder="Give your story a catchy title..."
-                      className="story-input"
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        borderRadius: '12px',
-                        border: '1px solid #c9d9e8',
-                        fontSize: '16px',
-                        outline: 'none'
-                      }}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '13px', color: '#1e1a14' }}>
-                      Your story
-                    </label>
-                    <textarea
-                      value={newStory.content}
-                      onChange={(e) => setNewStory({ ...newStory, content: e.target.value })}
-                      placeholder="Tell us your story..."
-                      rows={6}
-                      className="story-input"
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        borderRadius: '12px',
-                        border: '1px solid #c9d9e8',
-                        fontSize: '16px',
-                        outline: 'none',
-                        resize: 'vertical',
-                        fontFamily: 'inherit',
-                        lineHeight: 1.5
-                      }}
-                      required
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={submitting || !formValid}
-                    style={{
-                      background: (submitting || !formValid) ? '#d3dfee' : '#5b9bd5',
-                      border: 'none',
-                      borderRadius: '12px',
-                      padding: '12px 24px',
-                      cursor: (submitting || !formValid) ? 'not-allowed' : 'pointer',
-                      fontSize: '14px',
-                      fontWeight: 700,
-                      minHeight: '44px',
-                      color: (submitting || !formValid) ? '#9dafbe' : '#ffffff',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    {submitting ? 'Publishing...' : 'Publish story'}
-                  </button>
-                </form>
-              </div>
-            )}
 
             {/* Stories list */}
             {filteredStories.length === 0 ? (
@@ -718,7 +698,7 @@ const Stories: React.FC = () => {
                 </p>
                 {user && (
                   <button
-                    onClick={() => setShowAddForm(true)}
+                    onClick={() => { goBackToTopics(); setShowAddForm(true); }}
                     style={{
                       background: '#5b9bd5',
                       border: 'none',
