@@ -353,6 +353,32 @@ const BelovedArticles: React.FC = () => {
                 ))}
               </div>
             )}
+            {/* Master share button — right below all the articles */}
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 8px 0' }}>
+              <button
+                onClick={copyCategoryLink}
+                aria-label="Copy link to all articles"
+                className="iv-press"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '11px 22px',
+                  borderRadius: 999,
+                  border: '1px solid rgba(91,155,213,.45)',
+                  background: '#ffffff',
+                  color: '#2f7fc4',
+                  fontWeight: 700,
+                  fontSize: 14,
+                  fontFamily: 'inherit',
+                  boxShadow: '0 2px 10px rgba(47,127,196,.12)',
+                  cursor: 'pointer',
+                }}
+              >
+                <span style={{ fontSize: 16 }}>{linkCopied ? '✓' : '🔗'}</span>
+                {linkCopied ? 'Link copied!' : 'Copy link to all articles'}
+              </button>
+            </div>
           </>
         ) : (
           /* Article detail */
@@ -392,37 +418,6 @@ const BelovedArticles: React.FC = () => {
           </>
         )}
       </div>
-
-      {/* Master share button — floating bottom-right of the article category list only */}
-      {!selected && (
-        <button
-          onClick={copyCategoryLink}
-          aria-label="Copy link to all articles"
-          className="iv-press"
-          style={{
-            position: 'fixed',
-            right: 16,
-            bottom: 88,
-            zIndex: 40,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '12px 18px',
-            borderRadius: 999,
-            border: '1px solid rgba(91,155,213,.4)',
-            background: 'linear-gradient(135deg,#2f7fc4,#5b9bd5)',
-            color: '#fff',
-            fontWeight: 700,
-            fontSize: 14,
-            fontFamily: 'inherit',
-            boxShadow: '0 8px 24px rgba(47,127,196,.38)',
-            cursor: 'pointer',
-          }}
-        >
-          <span style={{ fontSize: 16 }}>{linkCopied ? '✓' : '🔗'}</span>
-          {linkCopied ? 'Link copied!' : 'Copy link'}
-        </button>
-      )}
 
       <BottomNavigation />
     </div>
