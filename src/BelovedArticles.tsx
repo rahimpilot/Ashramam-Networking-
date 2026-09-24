@@ -241,7 +241,9 @@ const BelovedArticles: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
 
-  const copyArticleLink = async () => {
+  // Master share link for the article category — copies the list-page URL
+  // so one tap leads the public to ALL articles.
+  const copyCategoryLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
     } catch {
@@ -387,37 +389,40 @@ const BelovedArticles: React.FC = () => {
               collectionName="belovedArticles"
               emptyText="No comments yet — be the first to share your thoughts."
             />
-            {/* Floating share button — bottom right corner */}
-            <button
-              onClick={copyArticleLink}
-              aria-label="Copy article link"
-              className="iv-press"
-              style={{
-                position: 'fixed',
-                right: 16,
-                bottom: 88,
-                zIndex: 40,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '12px 18px',
-                borderRadius: 999,
-                border: '1px solid rgba(91,155,213,.4)',
-                background: 'linear-gradient(135deg,#2f7fc4,#5b9bd5)',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 14,
-                fontFamily: 'inherit',
-                boxShadow: '0 8px 24px rgba(47,127,196,.38)',
-                cursor: 'pointer',
-              }}
-            >
-              <span style={{ fontSize: 16 }}>{linkCopied ? '✓' : '🔗'}</span>
-              {linkCopied ? 'Link copied!' : 'Copy link'}
-            </button>
           </>
         )}
       </div>
+
+      {/* Master share button — floating bottom-right of the article category list only */}
+      {!selected && (
+        <button
+          onClick={copyCategoryLink}
+          aria-label="Copy link to all articles"
+          className="iv-press"
+          style={{
+            position: 'fixed',
+            right: 16,
+            bottom: 88,
+            zIndex: 40,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '12px 18px',
+            borderRadius: 999,
+            border: '1px solid rgba(91,155,213,.4)',
+            background: 'linear-gradient(135deg,#2f7fc4,#5b9bd5)',
+            color: '#fff',
+            fontWeight: 700,
+            fontSize: 14,
+            fontFamily: 'inherit',
+            boxShadow: '0 8px 24px rgba(47,127,196,.38)',
+            cursor: 'pointer',
+          }}
+        >
+          <span style={{ fontSize: 16 }}>{linkCopied ? '✓' : '🔗'}</span>
+          {linkCopied ? 'Link copied!' : 'Copy link'}
+        </button>
+      )}
 
       <BottomNavigation />
     </div>
