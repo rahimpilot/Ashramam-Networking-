@@ -39,7 +39,7 @@ const TILES: Tile[] = [
   },
   {
     icon: '✈️',
-    title: 'Our Trips',
+    title: 'Travel Diaries',
     subtitle: 'Share travel experiences',
     path: '/our-trips',
     iconBg: 'rgba(237, 233, 254, 0.85)',
