@@ -242,13 +242,16 @@ const BelovedArticles: React.FC = () => {
   const [linkCopied, setLinkCopied] = useState(false);
 
   // Master share link for the article category — copies the list-page URL
-  // so one tap leads the public to ALL articles.
+  // so one tap leads the public to ALL articles. The ?v=2 query makes
+  // WhatsApp/Facebook build the rich link preview (banner + titles)
+  // instead of showing their saved copy of the old plain preview.
   const copyCategoryLink = async () => {
+    const shareUrl = `${window.location.origin}/articles?v=2`;
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(shareUrl);
     } catch {
       const ta = document.createElement('textarea');
-      ta.value = window.location.href;
+      ta.value = shareUrl;
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
