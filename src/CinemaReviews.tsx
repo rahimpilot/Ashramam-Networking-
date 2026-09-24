@@ -117,7 +117,7 @@ export default function CinemaReviews() {
   const [posted, setPosted] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const SHARE_URL = 'https://www.ashramamvibes.com/cinema-reviews';
+  const SHARE_URL = 'https://www.ashramamvibes.com/cinema-reviews?v=2';
 
   const copyShareLink = async () => {
     try {
