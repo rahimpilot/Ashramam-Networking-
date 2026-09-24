@@ -45,6 +45,7 @@ const Stories: React.FC = () => {
   const [userProfile, setUserProfile] = useState<any>({});
   const [authorNames, setAuthorNames] = useState<Record<string, string>>({});
   const [copiedStoryId, setCopiedStoryId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Auth state listener
   useEffect(() => {
@@ -318,7 +319,13 @@ const Stories: React.FC = () => {
   // logged-in users see add/edit/like controls.
 
   const currentTopic = getCurrentTopic();
-  const filteredStories = getFilteredStories();
+  const topicById: Record<string, string> = Object.fromEntries(topics.map(t => [t.id, t.name]));
+  const filteredStories = getFilteredStories().filter((s) => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return true;
+    const hay = (s.title + ' ' + s.content + ' ' + (authorNames[s.authorEmail] || s.author || '')).toLowerCase();
+    return hay.includes(q);
+  });
   const formValid = newStory.title.trim() && newStory.content.trim() && newStory.topic;
 
   return (
@@ -446,39 +453,44 @@ const Stories: React.FC = () => {
           </>
         ) : (
           <>
-            {/* Stories view hero */}
-            <div style={{ marginBottom: '16px', padding: '0 4px' }}>
+            {/* Stories view — search + controls */}
+            <div style={{ marginBottom: '14px', padding: '0 4px' }}>
               <div style={{
-                display: 'inline-block',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '1.5px',
-                color: '#5b9bd5',
-                background: '#E7F0FE',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: '#ffffff',
+                border: '1px solid #d3dfee',
                 borderRadius: '999px',
-                padding: '5px 12px',
-                marginBottom: '10px'
+                padding: '11px 16px',
+                marginBottom: '12px',
+                boxShadow: '0 2px 10px rgba(91,155,213,0.08)'
               }}>
-                STORIES
+                <span style={{ fontSize: '16px', color: '#8fa3b8' }}>🔍</span>
+                <input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search stories…"
+                  style={{
+                    border: 'none',
+                    outline: 'none',
+                    background: 'transparent',
+                    fontSize: '15px',
+                    flex: 1,
+                    minWidth: 0,
+                    color: '#1c2733'
+                  }}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    style={{ background: 'none', border: 'none', color: '#8fa3b8', fontSize: '16px', cursor: 'pointer', padding: '0 2px' }}
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
-              <h2 style={{
-                fontSize: '26px',
-                fontWeight: 700,
-                color: '#1e1a14',
-                margin: '0 0 6px 0',
-                letterSpacing: '-0.5px',
-                overflowWrap: 'break-word'
-              }}>
-                {currentTopic?.name}
-              </h2>
-              <p style={{
-                fontSize: '15px',
-                color: '#6b7f92',
-                margin: '0 0 14px 0',
-                lineHeight: 1.5
-              }}>
-                {currentTopic?.description}
-              </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                 <span style={{
                   fontSize: '12px',
@@ -664,9 +676,6 @@ const Stories: React.FC = () => {
                   const isEditing = editingStory === story.id;
                   const isAuthor = !!user && story.authorEmail === user.email;
                   const isLiked = !!user && story.likedBy.includes(user.uid);
-                  const preview = story.content.length > 180
-                    ? story.content.substring(0, 180).trimEnd() + '…'
-                    : story.content;
 
                   return (
                     <div
@@ -676,12 +685,12 @@ const Stories: React.FC = () => {
                       onClick={() => !isEditing && setExpandedStory(isExpanded ? null : story.id)}
                       style={{
                         background: '#ffffff',
-                        border: '1px solid #d3dfee',
-                        borderRadius: '16px',
-                        padding: '18px 16px',
+                        border: '1px solid #dce8f5',
+                        borderRadius: '20px',
+                        padding: '16px',
                         animationDelay: `${Math.min(index, 8) * 60}ms`,
                         cursor: isEditing ? 'default' : 'pointer',
-                        boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
+                        boxShadow: '0 6px 24px rgba(91,155,213,0.10)',
                         scrollMarginTop: '76px',
                         minWidth: 0
                       }}
@@ -764,88 +773,89 @@ const Stories: React.FC = () => {
                         </div>
                       ) : (
                         <>
-                          {/* Title row */}
-                          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '6px' }}>
-                            <h3 style={{
-                              flex: 1,
-                              minWidth: 0,
-                              fontSize: '17px',
-                              fontWeight: 700,
-                              lineHeight: 1.35,
-                              margin: 0,
-                              color: '#1e1a14',
-                              overflowWrap: 'break-word'
-                            }}>
-                              {story.title}
-                            </h3>
-                            {user ? (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleLikeStory(story.id);
-                                }}
-                                aria-label={isLiked ? 'Unlike this story' : 'Like this story'}
-                                style={{
-                                  background: isLiked ? '#5b9bd5' : 'transparent',
-                                  border: '1px solid #5b9bd5',
-                                  borderRadius: '999px',
-                                  padding: '6px 12px',
-                                  cursor: 'pointer',
-                                  fontSize: '13px',
-                                  fontWeight: 700,
-                                  color: isLiked ? '#ffffff' : '#5b9bd5',
-                                  transition: 'all 0.2s ease',
-                                  flexShrink: 0,
-                                  minHeight: '32px',
-                                  whiteSpace: 'nowrap'
-                                }}
-                              >
-                                ♥ {story.likes}
-                              </button>
-                            ) : (
+                          {/* Pills + date row */}
+                          <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '8px',
+                            marginBottom: '8px'
+                          }}>
+                            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
                               <span style={{
-                                border: '1px solid #d3dfee',
-                                borderRadius: '999px',
-                                padding: '6px 12px',
-                                fontSize: '13px',
+                                fontSize: '11px',
                                 fontWeight: 700,
-                                color: '#6b7f92',
-                                flexShrink: 0,
+                                letterSpacing: '0.3px',
+                                color: '#2f7fc4',
+                                background: '#E7F0FE',
+                                borderRadius: '999px',
+                                padding: '4px 10px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: '180px'
+                              }}>
+                                {topicById[story.topic] || 'Story'}
+                              </span>
+                              <span style={{
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                letterSpacing: '0.3px',
+                                color: '#5b8a6f',
+                                background: '#e6f4ec',
+                                borderRadius: '999px',
+                                padding: '4px 10px',
                                 whiteSpace: 'nowrap'
                               }}>
-                                ♥ {story.likes}
+                                Community
                               </span>
-                            )}
+                            </div>
+                            <span style={{
+                              fontSize: '12px',
+                              fontWeight: 600,
+                              color: '#6b7f92',
+                              whiteSpace: 'nowrap',
+                              flexShrink: 0
+                            }}>
+                              📅 {story.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </span>
                           </div>
 
-                          {/* Byline */}
-                          <div style={{
-                            fontSize: '13px',
-                            color: '#6b7f92',
-                            marginBottom: '10px',
+                          {/* Title */}
+                          <h3 style={{
+                            fontSize: '19px',
+                            fontWeight: 700,
+                            fontFamily: "'Cormorant Garamond', Georgia, serif",
+                            lineHeight: 1.25,
+                            margin: '0 0 6px 0',
+                            color: '#1c2733',
                             overflowWrap: 'break-word'
                           }}>
-                            By <span style={{ fontWeight: 700, color: '#1e1a14' }}>
-                              {authorNames[story.authorEmail] || story.author || 'Anonymous'}
-                            </span>
-                            {' '}· {story.createdAt.toDate().toLocaleDateString()}
-                          </div>
+                            {story.title}
+                          </h3>
 
-                          {/* Content */}
+                          {/* Excerpt / content */}
                           <div style={{
-                            fontSize: '15px',
-                            lineHeight: 1.6,
-                            color: '#1F2329',
+                            fontSize: '14px',
+                            lineHeight: 1.55,
+                            color: '#5b6b7c',
                             marginBottom: '10px',
                             minWidth: 0,
                             overflowWrap: 'break-word',
                             wordBreak: 'break-word',
-                            whiteSpace: isExpanded ? 'pre-wrap' : 'normal'
+                            ...(isExpanded
+                              ? { whiteSpace: 'pre-wrap' }
+                              : {
+                                  display: '-webkit-box',
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: 'vertical',
+                                  overflow: 'hidden'
+                                })
                           }}>
-                            {isExpanded ? story.content : preview}
+                            {story.content}
                           </div>
 
-                          {/* Footer actions */}
+                          {/* Footer */}
                           <div style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -855,12 +865,53 @@ const Stories: React.FC = () => {
                           }}>
                             <span style={{
                               fontSize: '13px',
-                              color: '#5b9bd5',
-                              fontWeight: 700
+                              color: '#6b7f92',
+                              overflowWrap: 'break-word',
+                              minWidth: 0
                             }}>
-                              {isExpanded ? 'Show less' : 'Read full story ›'}
+                              ✍️ <span style={{ fontWeight: 700, color: '#1c2733' }}>
+                                {authorNames[story.authorEmail] || story.author || 'Anonymous'}
+                              </span>
+                              {' '}· <span style={{ color: '#2f7fc4', fontWeight: 700 }}>
+                                {isExpanded ? 'Show less' : 'Read ›'}
+                              </span>
                             </span>
-                            <span style={{ display: 'flex', gap: '4px', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <span style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap', flexShrink: 0 }}>
+                              {user ? (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeStory(story.id);
+                                  }}
+                                  aria-label={isLiked ? 'Unlike this story' : 'Like this story'}
+                                  style={{
+                                    background: isLiked ? '#5b9bd5' : '#F1F6FC',
+                                    border: 'none',
+                                    borderRadius: '999px',
+                                    padding: '6px 12px',
+                                    cursor: 'pointer',
+                                    fontSize: '13px',
+                                    fontWeight: 700,
+                                    color: isLiked ? '#ffffff' : '#2f7fc4',
+                                    transition: 'all 0.2s ease',
+                                    whiteSpace: 'nowrap'
+                                  }}
+                                >
+                                  ♥ {story.likes}
+                                </button>
+                              ) : (
+                                <span style={{
+                                  background: '#F1F6FC',
+                                  borderRadius: '999px',
+                                  padding: '6px 12px',
+                                  fontSize: '13px',
+                                  fontWeight: 700,
+                                  color: '#2f7fc4',
+                                  whiteSpace: 'nowrap'
+                                }}>
+                                  ♥ {story.likes}
+                                </span>
+                              )}
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -869,12 +920,11 @@ const Stories: React.FC = () => {
                                 style={{
                                   background: 'none',
                                   border: 'none',
-                                  color: '#5b9bd5',
+                                  color: '#8fa3b8',
                                   fontSize: '13px',
                                   fontWeight: 600,
                                   cursor: 'pointer',
-                                  padding: '8px 6px',
-                                  minHeight: '36px',
+                                  padding: '6px 4px',
                                   textDecoration: 'underline'
                                 }}
                               >
@@ -891,11 +941,10 @@ const Stories: React.FC = () => {
                                     border: '1px solid #d3dfee',
                                     color: '#6b7f92',
                                     borderRadius: '999px',
-                                    padding: '6px 12px',
+                                    padding: '5px 12px',
                                     cursor: 'pointer',
-                                    fontSize: '13px',
-                                    fontWeight: 600,
-                                    minHeight: '36px'
+                                    fontSize: '12px',
+                                    fontWeight: 600
                                   }}
                                 >
                                   Edit
