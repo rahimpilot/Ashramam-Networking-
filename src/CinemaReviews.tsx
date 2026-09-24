@@ -244,7 +244,7 @@ export default function CinemaReviews() {
             Watched something? Rate it.
           </h2>
           <p style={{ margin: 0, fontSize: 14, opacity: 0.9, lineHeight: 1.55, paddingRight: 36 }}>
-            No account needed — drop your name, rate the film, and tell the world what you thought.
+            Drop your name, rate the film, and tell the world what you thought.
           </p>
           {avg && (
             <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
