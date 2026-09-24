@@ -58,6 +58,13 @@ const TILES: Tile[] = [
     path: '/articles',
     iconBg: 'rgba(255, 247, 237, 0.85)',
   },
+  {
+    icon: '🎬',
+    title: 'Cinema and Reviews',
+    subtitle: 'Rate the movies you watched',
+    path: '/cinema-reviews',
+    iconBg: 'rgba(224, 234, 244, 0.85)',
+  },
 ];
 
 const GLASS_CARD = {

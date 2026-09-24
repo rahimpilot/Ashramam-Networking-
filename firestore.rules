@@ -111,6 +111,14 @@ service cloud.firestore {
       }
     }
 
+    // Cinema Reviews — fully public: anyone can read and post a review
+    // (no login needed). No edits; admin can delete spam from the console.
+    match /cinemaReviews/{reviewId} {
+      allow read: if true;
+      allow create: if true;
+      allow delete: if isAdmin();
+    }
+
     // Fallback rule for any other collections - authenticated users can access
     match /{document=**} {
       allow read, write: if request.auth != null;

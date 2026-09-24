@@ -19,6 +19,7 @@ import UnoGame from './UnoGame';
 import OurTrips from './OurTrips';
 import AshramamExclusive from './AshramamExclusive';
 import BelovedArticles from './BelovedArticles';
+import CinemaReviews from './CinemaReviews';
 import Krabi from './Krabi';
 import Baku from './Baku';
 import September7th2025Meeting from './September7th2025Meeting';
@@ -60,6 +61,8 @@ function AnimatedRoutes() {
         {/* Public: article links (Abdu shares these outside the app) */}
         <Route path="/articles" element={<BelovedArticles />} />
         <Route path="/articles/:articleId" element={<BelovedArticles />} />
+        {/* Public: cinema reviews — anyone with the link can read and post */}
+        <Route path="/cinema-reviews" element={<CinemaReviews />} />
         {/* Legacy /beloved-articles URLs redirect so old shared links keep working */}
         <Route path="/beloved-articles" element={<Navigate to="/articles" replace />} />
         <Route path="/beloved-articles/:articleId" element={<LegacyArticleRedirect />} />
