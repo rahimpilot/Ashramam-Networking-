@@ -115,6 +115,24 @@ export default function CinemaReviews() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [posted, setPosted] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const SHARE_URL = 'https://www.ashramamvibes.com/cinema-reviews';
+
+  const copyShareLink = async () => {
+    try {
+      await navigator.clipboard.writeText(SHARE_URL);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = SHARE_URL;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* clipboard unavailable */ }
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
 
   useEffect(() => {
     const q = query(collection(db, 'cinemaReviews'), orderBy('createdAt', 'desc'));
@@ -236,6 +254,35 @@ export default function CinemaReviews() {
               </span>
             </div>
           )}
+
+          {/* Share strip */}
+          <div style={{
+            marginTop: 14, paddingTop: 12,
+            borderTop: '1px solid rgba(255,255,255,0.25)',
+            display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#ffffff' }}>
+              Watched something else?
+            </span>
+            <a href={SHARE_URL}
+              style={{
+                fontSize: 12, fontWeight: 700, color: '#ffffff',
+                background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(255,255,255,0.4)',
+                borderRadius: 999, padding: '5px 12px', textDecoration: 'none',
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+              }}>
+              🔗 Share this page
+            </a>
+            <button type="button" onClick={copyShareLink} title="Copy link"
+              style={{
+                fontSize: 13, fontWeight: 700, color: '#ffffff',
+                background: 'transparent', border: '1px solid rgba(255,255,255,0.4)',
+                borderRadius: 999, padding: '5px 12px', cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+              }}>
+              {copied ? '✓ Copied!' : '⧉ Copy link'}
+            </button>
+          </div>
         </div>
 
         {/* Review form */}
