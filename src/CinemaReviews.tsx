@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import PageHeader from './PageHeader';
-import { db, storage } from './firebase';
+import { db } from './firebase';
 import {
   collection, addDoc, query, orderBy, onSnapshot,
   serverTimestamp, Timestamp, doc, getDoc,
 } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface CinemaReview {
   id: string;
@@ -21,14 +20,15 @@ interface CinemaReview {
 
 const MAX_IMAGES = 4;
 
-/** Shrink an image client-side so uploads stay small and fast. */
-function compressImage(file: File): Promise<Blob> {
+/** Shrink an image and return it as a data URL, so review photos can be
+ *  stored directly in Firestore (no paid Storage plan needed). */
+function compressToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const url = URL.createObjectURL(file);
     img.onload = () => {
       URL.revokeObjectURL(url);
-      const MAX = 1200;
+      const MAX = 800;
       const scale = Math.min(1, MAX / Math.max(img.width, img.height));
       const canvas = document.createElement('canvas');
       canvas.width = Math.round(img.width * scale);
@@ -36,11 +36,7 @@ function compressImage(file: File): Promise<Blob> {
       const ctx = canvas.getContext('2d');
       if (!ctx) { reject(new Error('Canvas not supported')); return; }
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      canvas.toBlob(
-        (blob) => (blob ? resolve(blob) : reject(new Error('Could not compress image'))),
-        'image/jpeg',
-        0.82
-      );
+      resolve(canvas.toDataURL('image/jpeg', 0.7));
     };
     img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read image')); };
     img.src = url;
@@ -171,12 +167,17 @@ export default function CinemaReviews() {
     if (rating < 1) { setError('Please tap the stars to give a rating.'); return; }
     setSubmitting(true);
     try {
-      const urls: string[] = [];
+      // Photos are stored as data URLs inside the review document
+      // (Firestore limit is 1MB per document — guard well below it).
+      const dataUrls: string[] = [];
       for (const f of files) {
-        const blob = await compressImage(f);
-        const path = `cinema-reviews/${Date.now()}-${Math.random().toString(36).slice(2, 9)}.jpg`;
-        const snap = await uploadBytes(ref(storage, path), blob, { contentType: 'image/jpeg' });
-        urls.push(await getDownloadURL(snap.ref));
+        dataUrls.push(await compressToDataUrl(f));
+      }
+      const approxBytes = dataUrls.reduce((s, u) => s + u.length * 0.75, 0);
+      if (approxBytes > 900_000) {
+        setError('Those pictures are too large together — please remove one and try again.');
+        setSubmitting(false);
+        return;
       }
       await addDoc(collection(db, 'cinemaReviews'), {
         name: name.trim(),
@@ -184,7 +185,7 @@ export default function CinemaReviews() {
         language: language.trim(),
         rating,
         review: review.trim(),
-        images: urls,
+        images: dataUrls,
         createdAt: serverTimestamp(),
       });
       setName(''); setCinema(''); setLanguage(''); setRating(0);
