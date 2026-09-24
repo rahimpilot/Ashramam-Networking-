@@ -206,7 +206,6 @@ const Stories: React.FC = () => {
     return topics.find(topic => topic.id === selectedTopic);
   };
 
-  const getStoryCount = (topicId: string) => stories.filter(s => s.topic === topicId).length;
 
   const handleEditStory = (story: Story) => {
     setEditingStory(story.id);
@@ -307,7 +306,6 @@ const Stories: React.FC = () => {
   // logged-in users see add/edit/like controls.
 
   const currentTopic = getCurrentTopic();
-  const topicById: Record<string, string> = Object.fromEntries(topics.map(t => [t.id, t.name]));
   const latestByTopic: Record<string, Date | null> = {};
   stories.forEach((s) => {
     const d = s.createdAt.toDate();
@@ -523,7 +521,6 @@ const Stories: React.FC = () => {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {visibleTopics.map((topic, index) => {
-                  const count = getStoryCount(topic.id);
                   const latest = latestByTopic[topic.id];
                   return (
                     <div
@@ -541,52 +538,19 @@ const Stories: React.FC = () => {
                         minWidth: 0
                       }}
                     >
-                      {/* Pills + date row */}
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '8px',
-                        marginBottom: '6px'
-                      }}>
-                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
-                          <span style={{
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.3px',
-                            color: '#2f7fc4',
-                            background: '#E7F0FE',
-                            borderRadius: '999px',
-                            padding: '4px 10px',
-                            whiteSpace: 'nowrap'
-                          }}>
-                            Topic
-                          </span>
-                          <span style={{
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.3px',
-                            color: '#5b8a6f',
-                            background: '#e6f4ec',
-                            borderRadius: '999px',
-                            padding: '4px 10px',
-                            whiteSpace: 'nowrap'
-                          }}>
-                            Community
-                          </span>
-                        </div>
-                        {latest && (
+                      {/* Date row */}
+                      {latest && (
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '6px' }}>
                           <span style={{
                             fontSize: '12px',
                             fontWeight: 600,
                             color: '#6b7f92',
-                            whiteSpace: 'nowrap',
-                            flexShrink: 0
+                            whiteSpace: 'nowrap'
                           }}>
                             📅 {latest.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
 
                       {/* Title */}
                       <h3 style={{
@@ -605,14 +569,9 @@ const Stories: React.FC = () => {
                       <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
+                        justifyContent: 'flex-end',
                         gap: '8px'
                       }}>
-                        <span style={{ fontSize: '13px', color: '#6b7f92' }}>
-                          📚 <span style={{ fontWeight: 700, color: '#1c2733' }}>
-                            {count} {count === 1 ? 'story' : 'stories'}
-                          </span>
-                        </span>
                         <span style={{ fontSize: '13px', color: '#2f7fc4', fontWeight: 700, whiteSpace: 'nowrap' }}>
                           Open ›
                         </span>
@@ -819,43 +778,14 @@ const Stories: React.FC = () => {
                         </div>
                       ) : (
                         <>
-                          {/* Pills + date row */}
+                          {/* Date row */}
                           <div style={{
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'space-between',
+                            justifyContent: 'flex-end',
                             gap: '8px',
                             marginBottom: '8px'
                           }}>
-                            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
-                              <span style={{
-                                fontSize: '11px',
-                                fontWeight: 700,
-                                letterSpacing: '0.3px',
-                                color: '#2f7fc4',
-                                background: '#E7F0FE',
-                                borderRadius: '999px',
-                                padding: '4px 10px',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                maxWidth: '180px'
-                              }}>
-                                {topicById[story.topic] || 'Story'}
-                              </span>
-                              <span style={{
-                                fontSize: '11px',
-                                fontWeight: 700,
-                                letterSpacing: '0.3px',
-                                color: '#5b8a6f',
-                                background: '#e6f4ec',
-                                borderRadius: '999px',
-                                padding: '4px 10px',
-                                whiteSpace: 'nowrap'
-                              }}>
-                                Community
-                              </span>
-                            </div>
                             <span style={{
                               fontSize: '12px',
                               fontWeight: 600,
