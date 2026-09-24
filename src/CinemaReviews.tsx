@@ -277,19 +277,19 @@ export default function CinemaReviews() {
           <div style={{ marginBottom: 12 }}>
             <label style={labelStyle}>Your name *</label>
             <input style={inputStyle} value={name} onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Abdu" maxLength={60} />
+              placeholder="Abdu" maxLength={60} />
           </div>
 
           <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
             <div style={{ flex: 2 }}>
               <label style={labelStyle}>Cinema name *</label>
               <input style={inputStyle} value={cinema} onChange={(e) => setCinema(e.target.value)}
-                placeholder="e.g. Dhoomakethu" maxLength={80} />
+                placeholder="Dhoomakethu" maxLength={80} />
             </div>
             <div style={{ flex: 1 }}>
               <label style={labelStyle}>Language</label>
               <input style={inputStyle} value={language}
-                onChange={(e) => setLanguage(e.target.value)} placeholder="e.g. Malayalam" maxLength={30} />
+                onChange={(e) => setLanguage(e.target.value)} placeholder="Malayalam" maxLength={30} />
             </div>
           </div>
 
