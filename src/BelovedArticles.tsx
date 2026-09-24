@@ -26,22 +26,6 @@ interface BelovedArticle {
 // Abdu will feed articles one by one — they land here.
 const ARTICLES: BelovedArticle[] = [
   {
-    id: 'sahir-momey',
-    badge: 'BELOVED',
-    badgeColor: '#d97706',
-    title: 'Sahir Momey: The Artist Behind the Lens',
-    excerpt: 'A born artist from Fort Kochi — 32 years of craft, from hand-drawn design to photography.',
-    image: '/sahir-momey.jpg',
-    body: `Sahir Momey is a born artist who went on to become a photographer, with 32 years of experience in the field. He is widely regarded as a legend in hand-drawn design, and later moved into computer design — spanning product design, wall advertisements, theatre slides, portraits, logo design, screen printing, and spray painting. Gradually, he stepped back and moved partially into photography, to support his livelihood.
-
-Sahir was born and brought up in Fort Kochi, a historic port city in Kerala, India, where the community enjoys a vibrant cultural exposure unlike anywhere else in the state. He was raised in a middle-class Muslim family grounded in faith and spirituality. His father was a portrait artist and hand-drawn designer — a college dropout from Feroke, Kozhikode. Sahir's childhood was deeply creative; he accompanied his father to art workshops and grew up immersed in art.
-
-Changing direction was a bold move — never an easy one — yet he succeeded in turning his passion toward photography, focusing on weddings, videography, and local events. He has covered countless weddings with distinction, serving two generations of families. Deeply career-driven, he embraced the rise of new technology, constantly expanding his knowledge and refining his craft.
-
-Through his long journey, he set aside time each day to keep his painter's soul alive, and today he holds a rich collection of his own paintings. His passion is boundless — a driving force that keeps him painting, rather than settling for photography as merely his bread and butter.`,
-    date: 'From the archives',
-  },
-  {
     id: 'retro-life',
     badge: 'BELOVED',
     badgeColor: '#d97706',
@@ -233,6 +217,22 @@ Education is both a human right in itself and an indispensable means of realisin
     date: 'From the archives',
   },
 
+  {
+    id: 'sahir-momey',
+    badge: 'BELOVED',
+    badgeColor: '#d97706',
+    title: 'Sahir Momey: The Artist Behind the Lens',
+    excerpt: 'A born artist from Fort Kochi — 32 years of craft, from hand-drawn design to photography.',
+    image: '/sahir-momey.jpg',
+    body: `Sahir Momey is a born artist who went on to become a photographer, with 32 years of experience in the field. He is widely regarded as a legend in hand-drawn design, and later moved into computer design — spanning product design, wall advertisements, theatre slides, portraits, logo design, screen printing, and spray painting. Gradually, he stepped back and moved partially into photography, to support his livelihood.
+
+Sahir was born and brought up in Fort Kochi, a historic port city in Kerala, India, where the community enjoys a vibrant cultural exposure unlike anywhere else in the state. He was raised in a middle-class Muslim family grounded in faith and spirituality. His father was a portrait artist and hand-drawn designer — a college dropout from Feroke, Kozhikode. Sahir's childhood was deeply creative; he accompanied his father to art workshops and grew up immersed in art.
+
+Changing direction was a bold move — never an easy one — yet he succeeded in turning his passion toward photography, focusing on weddings, videography, and local events. He has covered countless weddings with distinction, serving two generations of families. Deeply career-driven, he embraced the rise of new technology, constantly expanding his knowledge and refining his craft.
+
+Through his long journey, he set aside time each day to keep his painter's soul alive, and today he holds a rich collection of his own paintings. His passion is boundless — a driving force that keeps him painting, rather than settling for photography as merely his bread and butter.`,
+    date: 'From the archives',
+  },
 ];
 
 const BelovedArticles: React.FC = () => {
