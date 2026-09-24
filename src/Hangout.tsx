@@ -201,14 +201,6 @@ const Hangout: React.FC = () => {
             }}>
               {greeting}
             </h2>
-            <p style={{
-              fontSize: '14.5px',
-              color: '#5b6b7c',
-              margin: 0,
-              lineHeight: 1.6
-            }}>
-              Everything your crew is up to — live chats, plans and memories, all in one place.
-            </p>
           </div>
 
           {/* Happening Now — frosted voice card (compact) */}
