@@ -204,7 +204,7 @@ const Hangout: React.FC = () => {
             </p>
           </div>
 
-          {/* Happening Now — frosted voice card */}
+          {/* Happening Now — frosted voice card (compact) */}
           <div
             className="hangout-voice"
             onClick={() => navigate('/voice-room')}
@@ -213,8 +213,8 @@ const Hangout: React.FC = () => {
               backdropFilter: 'blur(24px) saturate(160%)',
               WebkitBackdropFilter: 'blur(24px) saturate(160%)',
               border: '1px solid rgba(255, 255, 255, 0.5)',
-              borderRadius: '26px',
-              padding: '24px 22px',
+              borderRadius: '22px',
+              padding: '14px 18px',
               cursor: 'pointer',
               marginBottom: '24px',
               boxShadow: '0 14px 38px rgba(47, 127, 196, 0.35)',
@@ -233,17 +233,17 @@ const Hangout: React.FC = () => {
               background: 'radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%)',
               pointerEvents: 'none'
             }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '9px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <span style={{
-                width: '9px',
-                height: '9px',
+                width: '8px',
+                height: '8px',
                 borderRadius: '50%',
                 background: '#34D399',
                 boxShadow: '0 0 10px #34D399',
                 animation: 'hangout-pulse 1.8s infinite'
               }} />
               <span style={{
-                fontSize: '10.5px',
+                fontSize: '10px',
                 fontWeight: 800,
                 letterSpacing: '2.5px',
                 color: 'rgba(255,255,255,0.92)'
@@ -251,42 +251,48 @@ const Hangout: React.FC = () => {
                 HAPPENING NOW
               </span>
             </div>
-            <h3 style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontSize: '30px',
-              fontWeight: 600,
-              color: '#ffffff',
-              margin: '0 0 8px 0',
-              letterSpacing: '-0.3px'
-            }}>
-              Voice Room
-            </h3>
-            <p style={{
-              fontSize: '14px',
-              color: 'rgba(255, 255, 255, 0.85)',
-              margin: '0 0 18px 0',
-              lineHeight: 1.6
-            }}>
-              {liveCount !== null && liveCount > 0
-                ? `${liveCount} ${liveCount === 1 ? 'person is' : 'people are'} talking right now — jump in.`
-                : 'Talk with your circle in real time, just like a phone call.'}
-            </p>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              background: 'rgba(255, 255, 255, 0.92)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              color: '#1f5f9e',
-              fontSize: '14px',
-              fontWeight: 800,
-              borderRadius: '999px',
-              padding: '12px 22px',
-              boxShadow: '0 8px 20px rgba(47, 127, 196, 0.28)'
-            }}>
-              🎙️ Join voice chat
-              <span style={{ fontSize: '16px' }}>→</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{
+                  fontFamily: "'Cormorant Garamond', Georgia, serif",
+                  fontSize: '22px',
+                  fontWeight: 600,
+                  color: '#ffffff',
+                  margin: '0 0 2px 0',
+                  letterSpacing: '-0.3px'
+                }}>
+                  Voice Room
+                </h3>
+                <p style={{
+                  fontSize: '12.5px',
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  margin: 0,
+                  lineHeight: 1.5
+                }}>
+                  {liveCount !== null && liveCount > 0
+                    ? `${liveCount} ${liveCount === 1 ? 'person is' : 'people are'} talking now — jump in.`
+                    : 'Talk with your circle in real time.'}
+                </p>
+              </div>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(255, 255, 255, 0.92)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                color: '#1f5f9e',
+                fontSize: '13px',
+                fontWeight: 800,
+                borderRadius: '999px',
+                padding: '10px 16px',
+                boxShadow: '0 8px 20px rgba(47, 127, 196, 0.28)',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
+              }}>
+                🎙️ Join
+                <span style={{ fontSize: '15px' }}>→</span>
+              </div>
             </div>
           </div>
 
