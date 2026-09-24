@@ -65,7 +65,7 @@ const GLASS_CARD = {
   backdropFilter: 'blur(20px) saturate(160%)',
   WebkitBackdropFilter: 'blur(20px) saturate(160%)',
   border: '1px solid rgba(255, 255, 255, 0.65)',
-  boxShadow: '0 8px 28px rgba(80, 90, 180, 0.16)',
+  boxShadow: '0 8px 28px rgba(47, 127, 196, 0.16)',
 };
 
 /** Hangout — Frosted Glass edition. */
@@ -124,7 +124,7 @@ const Hangout: React.FC = () => {
         position: 'fixed',
         inset: 0,
         zIndex: 0,
-        background: 'linear-gradient(165deg, #9dbdf0 0%, #b7a9f6 36%, #f0bcd9 68%, #b9dcf6 100%)',
+        background: 'linear-gradient(165deg, #c3d9f2 0%, #d9e8f9 38%, #e9f1f8 68%, #c9def4 100%)',
         pointerEvents: 'none',
       }} />
       {/* Soft blurred color blobs for depth */}
@@ -137,7 +137,7 @@ const Hangout: React.FC = () => {
       <div style={{
         position: 'fixed', zIndex: 0, pointerEvents: 'none',
         bottom: '10%', right: '-100px', width: '340px', height: '340px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(129,140,248,0.45) 0%, rgba(129,140,248,0) 70%)',
+        background: 'radial-gradient(circle, rgba(91,155,213,0.40) 0%, rgba(129,140,248,0) 70%)',
         filter: 'blur(12px)',
       }} />
 
@@ -148,10 +148,10 @@ const Hangout: React.FC = () => {
           100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
         }
         .hangout-tile { transition: transform 0.18s ease, box-shadow 0.18s ease; }
-        .hangout-tile:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(80, 90, 180, 0.22); }
+        .hangout-tile:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(47, 127, 196, 0.22); }
         .hangout-tile:active { transform: translateY(0); }
         .hangout-voice { transition: transform 0.18s ease, box-shadow 0.18s ease; }
-        .hangout-voice:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(99, 102, 241, 0.42); }
+        .hangout-voice:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(47, 127, 196, 0.42); }
         .hangout-voice:active { transform: translateY(0); }
       `}</style>
 
@@ -171,7 +171,7 @@ const Hangout: React.FC = () => {
               fontSize: '10.5px',
               fontWeight: 800,
               letterSpacing: '2.5px',
-              color: '#4338ca',
+              color: '#2f7fc4',
               background: 'rgba(255, 255, 255, 0.55)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
@@ -186,7 +186,7 @@ const Hangout: React.FC = () => {
               fontFamily: "'Cormorant Garamond', Georgia, serif",
               fontSize: '38px',
               fontWeight: 600,
-              color: '#232946',
+              color: '#1c2733',
               margin: '0 0 8px 0',
               letterSpacing: '-0.5px',
               lineHeight: 1.05,
@@ -196,7 +196,7 @@ const Hangout: React.FC = () => {
             </h2>
             <p style={{
               fontSize: '14.5px',
-              color: '#4a5578',
+              color: '#5b6b7c',
               margin: 0,
               lineHeight: 1.6
             }}>
@@ -209,7 +209,7 @@ const Hangout: React.FC = () => {
             className="hangout-voice"
             onClick={() => navigate('/voice-room')}
             style={{
-              background: 'linear-gradient(135deg, rgba(99,102,241,0.78) 0%, rgba(168,85,247,0.78) 100%)',
+              background: 'linear-gradient(135deg, rgba(47,127,196,0.88) 0%, rgba(91,155,213,0.88) 100%)',
               backdropFilter: 'blur(24px) saturate(160%)',
               WebkitBackdropFilter: 'blur(24px) saturate(160%)',
               border: '1px solid rgba(255, 255, 255, 0.5)',
@@ -217,7 +217,7 @@ const Hangout: React.FC = () => {
               padding: '24px 22px',
               cursor: 'pointer',
               marginBottom: '24px',
-              boxShadow: '0 14px 38px rgba(99, 102, 241, 0.35)',
+              boxShadow: '0 14px 38px rgba(47, 127, 196, 0.35)',
               position: 'relative',
               overflow: 'hidden'
             }}
@@ -278,12 +278,12 @@ const Hangout: React.FC = () => {
               background: 'rgba(255, 255, 255, 0.92)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
-              color: '#4c1d95',
+              color: '#1f5f9e',
               fontSize: '14px',
               fontWeight: 800,
               borderRadius: '999px',
               padding: '12px 22px',
-              boxShadow: '0 8px 20px rgba(76, 29, 149, 0.28)'
+              boxShadow: '0 8px 20px rgba(47, 127, 196, 0.28)'
             }}>
               🎙️ Join voice chat
               <span style={{ fontSize: '16px' }}>→</span>
@@ -295,15 +295,15 @@ const Hangout: React.FC = () => {
             fontSize: '11px',
             fontWeight: 800,
             letterSpacing: '2.5px',
-            color: 'rgba(255,255,255,0.95)',
-            textShadow: '0 1px 8px rgba(80, 90, 180, 0.35)',
+            color: '#7d8fa3',
+            textShadow: '0 1px 8px rgba(255,255,255,0.6)',
             margin: '0 0 14px 4px',
             display: 'flex',
             alignItems: 'center',
             gap: '12px'
           }}>
             EXPLORE
-            <span style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.55)' }} />
+            <span style={{ flex: 1, height: '1px', background: 'rgba(91,155,213,0.30)' }} />
           </div>
           <div style={{
             display: 'grid',
@@ -337,7 +337,7 @@ const Hangout: React.FC = () => {
               <div style={{
                 fontSize: '15px',
                 fontWeight: 700,
-                color: '#232946',
+                color: '#1c2733',
                 marginBottom: '4px',
                 lineHeight: 1.3
               }}>
@@ -345,7 +345,7 @@ const Hangout: React.FC = () => {
               </div>
               <div style={{
                 fontSize: '12.5px',
-                color: '#5a6488',
+                color: '#5b6b7c',
                 lineHeight: 1.45
               }}>
                 {openTables !== null && openTables > 0
@@ -382,7 +382,7 @@ const Hangout: React.FC = () => {
                 <div style={{
                   fontSize: '15px',
                   fontWeight: 700,
-                  color: '#232946',
+                  color: '#1c2733',
                   marginBottom: '4px',
                   lineHeight: 1.3
                 }}>
@@ -390,7 +390,7 @@ const Hangout: React.FC = () => {
                 </div>
                 <div style={{
                   fontSize: '12.5px',
-                  color: '#5a6488',
+                  color: '#5b6b7c',
                   lineHeight: 1.45
                 }}>
                   {tile.subtitle}
