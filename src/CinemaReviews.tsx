@@ -243,7 +243,7 @@ export default function CinemaReviews() {
           <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 800 }}>
             Watched something? Rate it.
           </h2>
-          <p style={{ margin: 0, fontSize: 14, opacity: 0.9, lineHeight: 1.55 }}>
+          <p style={{ margin: 0, fontSize: 14, opacity: 0.9, lineHeight: 1.55, paddingRight: 36 }}>
             No account needed — drop your name, rate the film, and tell the world what you thought.
           </p>
           {avg && (
@@ -256,14 +256,13 @@ export default function CinemaReviews() {
             </div>
           )}
 
-          {/* Copy link — bottom-right corner of the banner */}
+          {/* Copy link — bare white chain symbol, bottom-right corner of the banner */}
           <button type="button" onClick={copyShareLink} title="Copy page link"
             style={{
-              position: 'absolute', right: 12, bottom: 12,
-              width: 34, height: 34, borderRadius: '50%',
-              background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(255,255,255,0.45)',
-              color: '#ffffff', fontSize: 16, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              position: 'absolute', right: 10, bottom: 8,
+              background: 'transparent', border: 'none', padding: 4,
+              color: '#ffffff', fontSize: 20, cursor: 'pointer', lineHeight: 1,
+              textShadow: '0 0 2px rgba(255,255,255,0.9)',
             }}>
             {copied ? '✓' : '🔗'}
           </button>
