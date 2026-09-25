@@ -91,20 +91,8 @@
       .loading-logo {
         width: 80px;
         height: 80px;
-        margin-bottom: 20px;
+        margin-bottom: 4px;
         animation: pulse 2s infinite;
-      }
-      
-      .loading-text {
-        color: #333;
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 10px;
-      }
-      
-      .loading-subtext {
-        color: #666;
-        font-size: 14px;
       }
       
       @keyframes pulse {
@@ -132,11 +120,9 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     
-    <!-- PWA Loading Screen -->
+    <!-- PWA Loading Screen: logo only, no text -->
     <div id="loading-screen">
       <img src="%PUBLIC_URL%/newlogo.svg" alt="Ashramam" class="loading-logo" />
-      <div class="loading-text">Ashramam</div>
-      <div class="loading-subtext">Loading your community...</div>
       <div class="spinner"></div>
     </div>
     
