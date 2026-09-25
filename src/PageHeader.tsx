@@ -37,25 +37,28 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
         <button
           onClick={() => (onBack ? onBack() : navigate(backTo))}
           style={{
-            background: 'transparent',
-            border: '1px solid rgba(91, 155, 213, 0.35)',
-            color: '#5b9bd5',
-            fontSize: '19px',
+            background: 'linear-gradient(135deg, #6fb1e8, #4a8fd0)',
+            border: 'none',
             cursor: 'pointer',
             padding: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '40px',
-            height: '40px',
+            width: '42px',
+            height: '42px',
             borderRadius: '50%',
-            transition: 'background-color 0.2s ease'
+            boxShadow: '0 4px 12px rgba(91, 155, 213, 0.45)',
+            transition: 'filter 0.2s ease, transform 0.15s ease'
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+          onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(0.93)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; e.currentTarget.style.transform = 'scale(1)'; }}
+          onMouseDown={(e) => { e.currentTarget.style.transform = 'scale(0.94)'; }}
+          onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
           aria-label={backLabel || 'Back'}
         >
-          ←
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
         </button>
         <h1 style={{
           fontFamily: "'Cormorant Garamond', Georgia, serif",
