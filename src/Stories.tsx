@@ -719,9 +719,10 @@ const Stories: React.FC = () => {
 
                       {/* Title */}
                       <h3 style={{
-                        fontSize: '19px',
-                        fontWeight: 700,
-                        fontFamily: "'Cormorant Garamond', Georgia, serif",
+                        fontSize: '21px',
+                        fontWeight: 400,
+                        fontFamily: "'Marcellus', Georgia, serif",
+                        letterSpacing: '0.5px',
                         lineHeight: 1.25,
                         margin: '0 0 8px 0',
                         color: '#1c2733',
