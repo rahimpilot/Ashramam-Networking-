@@ -55,12 +55,14 @@ const OurTrips: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       {/* Modern Mobile Header - 60px height */}
       <div style={{
-        background: '#ffffff',
+        background: 'rgba(255, 255, 255, 0.78)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
         height: '60px',
         position: 'sticky',
         top: 0,

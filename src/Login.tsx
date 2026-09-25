@@ -77,7 +77,7 @@ const Login: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(to bottom right, #e0eaf4, #ffffff, #faf6ec)',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -86,12 +86,13 @@ const Login: React.FC = () => {
       <div style={{ maxWidth: '28rem', width: '100%' }}>
         {/* Login Form */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.9)',
-          backdropFilter: 'blur(8px)',
-          borderRadius: '1rem',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          background: 'rgba(255, 255, 255, 0.72)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderRadius: '1.25rem',
+          boxShadow: '0 20px 50px rgba(91, 155, 213, 0.28)',
           padding: '2rem',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid rgba(255, 255, 255, 0.9)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'

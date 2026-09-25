@@ -74,7 +74,7 @@ const AshramamExclusive: React.FC = () => {
 
   if (authLoading || !user) {
     return (
-      <div style={{ minHeight: '100vh', background: '#e9f1f8' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)' }}>
         <PageHeader title="Ashramam Exclusive" backTo="/hangout" backLabel="Back to hangout" />
         <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px' }}>
           <SkeletonPost />
@@ -89,7 +89,7 @@ const AshramamExclusive: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <PageHeader

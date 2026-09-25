@@ -884,7 +884,7 @@ const VoiceRoom: React.FC = () => {
   // ---------- UI ----------
   if (!authReady) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#d8e6f2' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)' }}>
         <p style={{ fontSize: '1.1rem', color: '#6b7f92' }}>Loading…</p>
       </div>
     );
@@ -896,13 +896,13 @@ const VoiceRoom: React.FC = () => {
     return (
       <div style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
+        background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         padding: '2rem',
       }}>
         <div style={{
-          background: '#ffffff', borderRadius: '20px', padding: '2.5rem 2rem',
+          background: 'rgba(255, 255, 255, 0.72)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.9)', borderRadius: '20px', padding: '2.5rem 2rem',
           boxShadow: '0 8px 24px rgba(0,0,0,0.1)', maxWidth: '420px', width: '100%', textAlign: 'center',
         }}>
           <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔥</div>
@@ -1089,7 +1089,7 @@ const VoiceRoom: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       padding: '1.25rem',
       paddingBottom: '96px',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -1133,7 +1133,7 @@ const VoiceRoom: React.FC = () => {
         )}
 
         {/* Participants */}
-        <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', marginBottom: '1.25rem' }}>
+        <div style={{ background: 'rgba(255, 255, 255, 0.72)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.9)', borderRadius: '20px', padding: '1.25rem', boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)', marginBottom: '1.25rem' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0', color: '#2a241c' }}>
             👥 In the room ({participants.length})
           </h2>

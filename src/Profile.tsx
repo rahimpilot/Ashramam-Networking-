@@ -108,9 +108,12 @@ const Profile: React.FC = () => {
     maxWidth: 400,
     margin: '2rem auto',
     padding: '2rem',
-    background: '#ffffff',
-    borderRadius: 16,
-    boxShadow: '0 2px 16px rgba(0,0,0,0.10)'
+    background: 'rgba(255, 255, 255, 0.72)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    border: '1px solid rgba(255, 255, 255, 0.9)',
+    borderRadius: 20,
+    boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
   };
 
   if (isOtherUser) {

@@ -609,14 +609,16 @@ const Residents: React.FC = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#e9f1f8' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)' }}>
       {/* Modern Header */}
       <div style={{
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        background: '#ffffff',
-        borderBottom: '1px solid #c9d9e8',
+        background: 'rgba(255, 255, 255, 0.78)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        borderBottom: '1px solid rgba(91, 155, 213, 0.18)',
         height: 60
       }}>
         <div style={{
@@ -631,7 +633,7 @@ const Residents: React.FC = () => {
           <button
             onClick={goToDashboard}
             style={{
-              background: 'transparent',
+              background: 'linear-gradient(135deg, #6fb1e8, #4a8fd0)',
               border: 'none',
               cursor: 'pointer',
               padding: 8,
@@ -639,14 +641,18 @@ const Residents: React.FC = () => {
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: '50%',
-              transition: 'background-color 0.2s',
-              width: 36,
-              height: 36
+              transition: 'filter 0.2s ease, transform 0.15s ease',
+              width: 38,
+              height: 38,
+              boxShadow: '0 4px 12px rgba(91, 155, 213, 0.45)'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = '#e9f1f8'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(0.93)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; }}
+            aria-label="Back"
           >
-            <span style={{ fontSize: 20 }}>←</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
           </button>
 
           <h1 style={{
@@ -702,11 +708,14 @@ const Residents: React.FC = () => {
 
         {/* Muthalali Section */}
         <div style={{
-          background: '#ffffff',
-          borderRadius: 12,
+          background: 'rgba(255, 255, 255, 0.72)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.9)',
+          borderRadius: 20,
           padding: 16,
           marginBottom: 16,
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+          boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
         }}>
           <h2 style={{
             fontSize: 18,
@@ -742,11 +751,14 @@ const Residents: React.FC = () => {
 
         {residents.length === 0 ? (
           <div style={{
-            background: '#ffffff',
-            borderRadius: 12,
+            background: 'rgba(255, 255, 255, 0.72)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.9)',
+            borderRadius: 20,
             padding: 32,
             textAlign: 'center',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+            boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
           }}>
             <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.3 }}>👥</div>
             <h3 style={{
@@ -775,13 +787,15 @@ const Residents: React.FC = () => {
                 key={resident.uid}
                 onClick={() => setSelectedUser(resident)}
                 style={{
-                  background: '#ffffff',
-                  border: '1px solid #c9d9e8',
-                  borderRadius: 12,
+                  background: 'rgba(255, 255, 255, 0.72)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.9)',
+                  borderRadius: 20,
                   padding: 16,
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                  boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)',
                   textAlign: 'center'
                 }}
                 onMouseOver={e => {

@@ -54,7 +54,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
         justifyContent: 'space-around',
         alignItems: 'center',
         zIndex: 1000,
-        boxShadow: '0 -4px 20px rgba(90, 70, 45, 0.08)'
+        boxShadow: '0 -4px 20px rgba(91, 155, 213, 0.14)'
       }}
     >
       {TABS.map((tab) => {

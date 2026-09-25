@@ -30,7 +30,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <PageHeader title="Meeting Minutes" backTo="/meeting-minutes" backLabel="Back to all meetings" />
@@ -76,12 +76,14 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
         {/* Participants */}
         {participants && participants.length > 0 && (
           <div style={{
-            background: '#ffffff',
-            border: '1px solid #d3dfee',
+            background: 'rgba(255, 255, 255, 0.72)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.9)',
             borderRadius: '16px',
             padding: '18px',
             marginBottom: '12px',
-            boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+            boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
           }}>
             <div style={{
               fontSize: '13px',
@@ -118,11 +120,13 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
             <div
               key={i}
               style={{
-                background: '#ffffff',
-                border: '1px solid #d3dfee',
+                background: 'rgba(255, 255, 255, 0.72)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.9)',
                 borderRadius: '16px',
                 padding: '18px',
-                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+                boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>

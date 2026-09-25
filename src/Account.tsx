@@ -29,7 +29,7 @@ const Account: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '2rem auto 100px auto', padding: '2rem', background: '#ffffff', borderRadius: 16, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ maxWidth: 400, margin: '2rem auto 100px auto', padding: '2rem', background: 'rgba(255, 255, 255, 0.72)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.9)', borderRadius: 20, boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <img src="/newlogo.svg" alt="Logo" style={{ height: 48, marginBottom: 24 }} />
       <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '0.5rem', color: '#5b9bd5' }}>Welcome!</h2>
       {authLoading ? (

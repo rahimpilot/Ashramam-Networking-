@@ -448,7 +448,7 @@ const Stories: React.FC = () => {
   const renderLoading = () => (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
       padding: '16px',
       paddingTop: '76px',
@@ -488,7 +488,7 @@ const Stories: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <style>{`
@@ -550,12 +550,14 @@ const Stories: React.FC = () => {
             {/* Add story form */}
             {showAddForm && (
               <div style={{
-                background: '#ffffff',
-                border: '1px solid #d3dfee',
+                background: 'rgba(255, 255, 255, 0.72)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.9)',
                 borderRadius: '20px',
                 padding: '20px 16px',
                 marginBottom: '12px',
-                boxShadow: '0 6px 24px rgba(91,155,213,0.10)'
+                boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
               }}>
                 <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px 0', color: '#1e1a14' }}>
                   Share your story
@@ -633,8 +635,10 @@ const Stories: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: '#ffffff',
-              border: '1px solid #d3dfee',
+              background: 'rgba(255, 255, 255, 0.72)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.9)',
               borderRadius: '999px',
               padding: '11px 16px',
               marginBottom: '12px',
@@ -751,12 +755,14 @@ const Stories: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                background: '#ffffff',
-                border: '1px solid #d3dfee',
+                background: 'rgba(255, 255, 255, 0.72)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.9)',
                 borderRadius: '999px',
                 padding: '11px 16px',
                 marginBottom: '12px',
-                boxShadow: '0 2px 10px rgba(91,155,213,0.08)'
+                boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
               }}>
                 <span style={{ fontSize: '16px', color: '#8fa3b8' }}>🔍</span>
                 <input
@@ -788,8 +794,10 @@ const Stories: React.FC = () => {
                   fontSize: '12px',
                   fontWeight: 600,
                   color: '#6b7f92',
-                  background: '#ffffff',
-                  border: '1px solid #d3dfee',
+                  background: 'rgba(255, 255, 255, 0.72)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.9)',
                   borderRadius: '999px',
                   padding: '6px 12px',
                   whiteSpace: 'nowrap'
@@ -802,12 +810,14 @@ const Stories: React.FC = () => {
             {/* Stories list */}
             {filteredStories.length === 0 ? (
               <div style={{
-                background: '#ffffff',
-                border: '1px solid #d3dfee',
+                background: 'rgba(255, 255, 255, 0.72)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.9)',
                 borderRadius: '16px',
                 padding: '40px 20px',
                 textAlign: 'center',
-                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+                boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
               }}>
                 <div style={{ fontSize: '48px', marginBottom: '16px' }}>📖</div>
                 <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1e1a14', margin: '0 0 8px 0' }}>
@@ -846,12 +856,14 @@ const Stories: React.FC = () => {
                       id={'story-' + story.id}
                       className="story-card iv-stagger"
                       style={{
-                        background: '#ffffff',
-                        border: '1px solid #dce8f5',
+                        background: 'rgba(255, 255, 255, 0.72)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255, 255, 255, 0.9)',
                         borderRadius: '20px',
                         padding: '20px 18px',
                         animationDelay: `${Math.min(index, 8) * 60}ms`,
-                        boxShadow: '0 6px 24px rgba(91,155,213,0.10)',
+                        boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)',
                         scrollMarginTop: '76px',
                         minWidth: 0
                       }}

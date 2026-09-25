@@ -225,7 +225,7 @@ export default function CinemaReviews() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
     }}>
       <PageHeader title="Cinema & Reviews" backTo="/hangout" backLabel="Back to hangout" />

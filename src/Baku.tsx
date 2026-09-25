@@ -73,12 +73,14 @@ const Baku: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       {/* Modern Mobile Header - 60px height */}
       <div style={{
-        background: '#ffffff',
+        background: 'rgba(255, 255, 255, 0.78)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
         height: '60px',
         position: 'sticky',
         top: 0,
@@ -180,11 +182,14 @@ const Baku: React.FC = () => {
 
         {/* Add Story Section */}
         <div style={{
-          background: '#ffffff',
-          borderRadius: '12px',
+          background: 'rgba(255, 255, 255, 0.72)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderRadius: '20px',
           padding: '16px',
           marginBottom: '20px',
-          border: '1px solid #c9d9e8'
+          border: '1px solid rgba(255, 255, 255, 0.9)',
+          boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
         }}>
           {!showStoryInput ? (
             <button

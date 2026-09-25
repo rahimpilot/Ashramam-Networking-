@@ -115,8 +115,9 @@ const btnPrimary: React.CSSProperties = {
 };
 
 const card: React.CSSProperties = {
-  background: '#ffffff', borderRadius: 18, padding: 20,
-  boxShadow: '0 1px 4px rgba(15,23,42,0.06)', border: '1px solid #d3dfee',
+  background: 'rgba(255, 255, 255, 0.72)', borderRadius: 20, padding: 20,
+  backdropFilter: 'blur(12px)',
+  boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)', border: '1px solid rgba(255, 255, 255, 0.9)',
 };
 
 // ---------- Main component ----------
@@ -457,7 +458,7 @@ const UnoGame: React.FC = () => {
   };
 
   const pageStyle: React.CSSProperties = {
-    minHeight: '100vh', background: '#e9f1f8',
+    minHeight: '100vh', background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
   };
   const wrapStyle: React.CSSProperties = { maxWidth: 520, margin: '0 auto', padding: '20px 16px 110px 16px' };

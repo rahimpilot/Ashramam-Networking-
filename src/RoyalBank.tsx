@@ -10,17 +10,19 @@ const RoyalBank: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#ffffff',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
       {/* Back Button */}
       <div style={{
         padding: window.innerWidth <= 768 ? '1rem 0.5rem' : '1.5rem 1rem',
-        background: '#ffffff',
+        background: 'rgba(255, 255, 255, 0.78)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+        boxShadow: '0 2px 12px rgba(91, 155, 213, 0.15)'
       }}>
         <button
           onClick={() => navigate('/hangout')}

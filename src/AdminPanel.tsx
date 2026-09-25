@@ -82,7 +82,7 @@ const AdminPanel: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: '2rem auto', padding: '2rem', background: '#ffffff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+    <div style={{ maxWidth: 500, margin: '2rem auto', padding: '2rem', background: 'rgba(255, 255, 255, 0.72)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.9)', borderRadius: 20, boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)' }}>
       <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>Admin Panel</h2>
       {loading ? <p>Loading...</p> : (
         <>

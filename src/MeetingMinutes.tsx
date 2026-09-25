@@ -53,7 +53,7 @@ const MeetingMinutes: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       <style>{`
@@ -112,15 +112,17 @@ const MeetingMinutes: React.FC = () => {
               className="minutes-card"
               onClick={() => navigate(m.path)}
               style={{
-                background: '#ffffff',
-                border: '1px solid #d3dfee',
-                borderRadius: '16px',
+                background: 'rgba(255, 255, 255, 0.72)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.9)',
+                borderRadius: '18px',
                 padding: '16px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '16px',
-                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)'
+                boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
               }}
             >
               {/* Calendar badge */}
