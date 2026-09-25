@@ -806,7 +806,7 @@ const Dashboard: React.FC = () => {
     return (
       <div style={{
         minHeight: '100vh',
-        background: '#e9f1f8',
+        background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
         padding: '16px',
         paddingTop: '76px',
@@ -824,12 +824,14 @@ const Dashboard: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#e9f1f8',
+      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
     }}>
       {/* Modern Mobile Header - 60px height */}
       <div style={{
-        background: '#ffffff',
+        background: 'rgba(255, 255, 255, 0.78)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
         height: '60px',
         position: 'sticky',
         top: 0,
@@ -937,8 +939,10 @@ const Dashboard: React.FC = () => {
 
       {/* Tab Navigation - Cleaner Design */}
       <div style={{
-        background: '#ffffff',
-        borderBottom: '1px solid #c9d9e8',
+        background: 'rgba(255, 255, 255, 0.7)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        borderBottom: '1px solid rgba(91, 155, 213, 0.18)',
         position: 'sticky',
         top: '60px',
         zIndex: 50
@@ -972,16 +976,19 @@ const Dashboard: React.FC = () => {
       <div style={{
         maxWidth: 480,
         margin: '0 auto',
-        background: '#e9f1f8',
+        background: 'transparent',
         minHeight: '100vh'
       }}>
         {/* Story/Post Composer - Card Style */}
         <div style={{
           margin: '16px 16px 8px 16px',
           padding: '16px',
-          background: '#ffffff',
-          borderRadius: '12px',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          background: 'rgba(255, 255, 255, 0.72)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.9)',
+          borderRadius: '18px',
+          boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)',
           position: 'relative'
         }}>
           <form onSubmit={handleSubmitPost}>
@@ -1183,16 +1190,19 @@ const Dashboard: React.FC = () => {
               key={post.id}
               className="iv-stagger"
               style={{
-                marginBottom: '8px',
+                marginBottom: '12px',
                 padding: '16px',
-                background: '#ffffff',
-                borderRadius: '12px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                transition: 'box-shadow 0.2s ease',
+                background: 'rgba(255, 255, 255, 0.72)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.9)',
+                borderRadius: '20px',
+                boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)',
+                transition: 'box-shadow 0.2s ease, transform 0.2s ease',
                 animationDelay: `${Math.min(index, 8) * 60}ms`
               }}
-              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)'}
-              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 10px 28px rgba(91, 155, 213, 0.28)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(91, 155, 213, 0.18)'; e.currentTarget.style.transform = 'translateY(0)'; }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <div
@@ -1333,68 +1343,57 @@ const Dashboard: React.FC = () => {
                     </div>
                   )}
                   
-                  <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <button 
-                        onClick={() => handleLike(post.id)}
-                        className={likePop === post.id ? 'iv-pop' : ''}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: post.likes?.includes(user?.email || '') ? '#EF4444' : '#6b7f92',
-                          fontSize: '20px',
-                          cursor: 'pointer',
-                          padding: '8px',
-                          borderRadius: '50%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: '44px',
-                          height: '44px',
-                          transition: 'background-color 0.2s ease, transform 0.2s ease'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#e9f1f8';
-                          e.currentTarget.style.transform = 'scale(1.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                          e.currentTarget.style.transform = 'scale(1)';
-                        }}
-                      >
-                        ❤️
-                      </button>
-                      <span 
-                        onClick={() => setShowLikes(prev => ({ ...prev, [post.id]: !prev[post.id] }))}
-                        style={{
-                          color: '#6b7f92',
-                          fontSize: '14px',
-                          fontWeight: 400,
-                          cursor: 'pointer',
-                          userSelect: 'none'
-                        }}
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={() => handleLike(post.id)}
+                      className={likePop === post.id ? 'iv-pop' : ''}
+                      aria-label="Like this post"
+                      style={{
+                        background: post.likes?.includes(user?.email || '') ? '#5b9bd5' : '#e3eefb',
+                        border: 'none',
+                        color: post.likes?.includes(user?.email || '') ? '#ffffff' : '#2f7fc4',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        padding: '8px 16px',
+                        borderRadius: '999px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        transition: 'all 0.2s ease',
+                        boxShadow: post.likes?.includes(user?.email || '') ? '0 4px 12px rgba(91,155,213,0.4)' : 'none'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
+                    >
+                      ♥&nbsp;
+                      <span
+                        onClick={(e) => { e.stopPropagation(); setShowLikes(prev => ({ ...prev, [post.id]: !prev[post.id] })); }}
+                        title="See who liked"
+                        style={{ textDecoration: 'underline dotted', textUnderlineOffset: '3px', cursor: 'pointer' }}
                       >
                         {post.likeCount || 0}
                       </span>
-                    </div>
-                    <button 
+                    </button>
+                    <button
                       onClick={() => toggleComments(post.id)}
+                      aria-label="Comments"
                       style={{
-                        background: 'none',
+                        background: '#eef3f9',
                         border: 'none',
-                        color: '#6b7f92',
-                        fontSize: '14px',
-                        fontWeight: 400,
+                        color: '#5b6b7c',
+                        fontSize: '13px',
+                        fontWeight: 700,
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
-                        padding: '8px 12px',
-                        borderRadius: '8px',
-                        transition: 'background-color 0.2s ease'
+                        padding: '8px 16px',
+                        borderRadius: '999px',
+                        transition: 'all 0.2s ease'
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#e3eefb'; e.currentTarget.style.color = '#2f7fc4'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#eef3f9'; e.currentTarget.style.color = '#5b6b7c'; }}
                     >
                       💬 {post.replyCount || 0}
                     </button>
