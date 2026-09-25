@@ -894,8 +894,9 @@ const Stories: React.FC = () => {
                           {/* Title */}
                           <h3 style={{
                             fontSize: '22px',
-                            fontWeight: 700,
-                            fontFamily: "'Cormorant Garamond', Georgia, serif",
+                            fontWeight: 400,
+                            fontFamily: "'Marcellus', Georgia, serif",
+                            letterSpacing: '0.5px',
                             lineHeight: 1.25,
                             margin: '0 0 10px 0',
                             color: '#1c2733',
@@ -907,6 +908,7 @@ const Stories: React.FC = () => {
                           {/* Full story content */}
                           <div style={{
                             fontSize: '15px',
+                            fontFamily: "'Marcellus', Georgia, serif",
                             lineHeight: 1.7,
                             color: '#33414f',
                             whiteSpace: 'pre-wrap',
