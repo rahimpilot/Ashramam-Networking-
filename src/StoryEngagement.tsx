@@ -9,9 +9,15 @@ import {
 interface StoryComment {
   id: string;
   authorName: string;
+  email?: string;
   text: string;
   createdAt: Timestamp | null;
 }
+
+// Display name for a comment — never blank, even for comments that were
+// saved before the poster's name had resolved.
+const commentDisplayName = (c: StoryComment): string =>
+  c.authorName || c.email?.split('@')[0] || 'Member';
 
 /**
  * Copy-link + comments for an exclusive story or beloved article.
@@ -67,12 +73,15 @@ const StoryEngagement: React.FC<{
   const postComment = async () => {
     const text = newComment.trim();
     if (!text || posting || !user) return;
+    // Never store a blank name — if the profile lookup hasn't resolved yet,
+    // fall back the same way the placeholder does.
+    const name = authorName || user.displayName || user.email?.split('@')[0] || 'Member';
     setPosting(true);
     try {
       await addDoc(collection(db, collectionName, storyId, 'comments'), {
         uid: user.uid,
         email: user.email,
-        authorName,
+        authorName: name,
         text,
         createdAt: Timestamp.now(),
       });
@@ -145,7 +154,7 @@ const StoryEngagement: React.FC<{
                 borderRadius: 12, marginBottom: 8
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1c2733' }}>{c.authorName}</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1c2733' }}>{commentDisplayName(c)}</span>
                   <span style={{ fontSize: 11, color: '#8a9aab' }}>{fmtTime(c.createdAt)}</span>
                 </div>
                 <p style={{ margin: 0, fontSize: 14, color: '#3d4b5c', lineHeight: 1.55, whiteSpace: 'pre-line' }}>
@@ -172,13 +181,13 @@ const StoryEngagement: React.FC<{
             />
             <button
               onClick={postComment}
-              disabled={posting || !newComment.trim()}
+              disabled={posting || !newComment.trim() || !authorName}
               className="iv-press"
               style={{
                 background: '#1c2733', color: '#ffffff', border: 'none',
                 borderRadius: 24, padding: '10px 20px', fontSize: 14,
                 fontWeight: 600, cursor: 'pointer',
-                opacity: posting || !newComment.trim() ? 0.5 : 1
+                opacity: posting || !newComment.trim() || !authorName ? 0.5 : 1
               }}
             >
               {posting ? '…' : 'Post'}
