@@ -692,19 +692,19 @@ const Residents: React.FC = () => {
       >
 
         {/* Muthalali Section */}
-        <div className="iv-card" style={{
+        <div className="iv-card res-hero-card" style={{
           padding: 16,
           marginBottom: 16,
           textAlign: 'center'
         }}>
-          <h2 style={{
+          <h2 className="res-hero-title" style={{
             fontSize: 18,
             fontWeight: 600,
             marginBottom: 12,
             color: '#1c1915',
             textAlign: 'center'
           }}>
-            🏠 ആശ്രമ നിവാസികൾ
+            🏠 Residents of Ashramam
           </h2>
 
           <div style={{

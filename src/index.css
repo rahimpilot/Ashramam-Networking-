@@ -487,6 +487,13 @@ a {
 /* Muthalali hero image: mobile sizing stays 350px; desktop scales up (file is 1600px, stays crisp). */
 .muthalali-img { max-width: 350px; }
 
+/* Residents hero (mobile only): heading sits a little higher, picture fits mobile width. */
+@media (max-width: 767px) {
+  .res-hero-card { padding-top: 8px; }
+  .res-hero-title { margin-top: 0; }
+  .muthalali-img { max-width: 100%; }
+}
+
 /* Residents: Orkut friends grid — always 3 in a row; capped on desktop so tiles stay compact. */
 .res-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 /* Critical: lets long names ellipsis instead of blowing the columns out. */
