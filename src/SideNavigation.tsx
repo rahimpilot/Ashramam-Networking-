@@ -53,16 +53,12 @@ const SideNavigation: React.FC = () => {
         onClick={() => navigate('/dashboard')}
         style={{
           background: 'none', border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', gap: '12px',
-          padding: '4px 8px', marginBottom: '28px', textAlign: 'left'
+          display: 'flex', justifyContent: 'center',
+          padding: '4px 8px', marginBottom: '28px', width: '100%'
         }}
         aria-label="Ashramam home"
       >
-        <img src="/newlogo.svg" alt="Ashramam" style={{ width: '44px', height: '44px', borderRadius: '12px' }} />
-        <span style={{ fontSize: '19px', letterSpacing: '0.5px', color: '#1c2733', lineHeight: 1.2 }}>
-          Ashramam<br />
-          <span style={{ fontSize: '12px', color: '#8ba0b4', letterSpacing: '2px' }}>VIBES</span>
-        </span>
+        <img src="/newlogo.svg" alt="Ashramam" style={{ width: '150px', height: 'auto', display: 'block' }} />
       </button>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -101,10 +97,6 @@ const SideNavigation: React.FC = () => {
             </button>
           );
         })}
-      </div>
-
-      <div style={{ marginTop: 'auto', padding: '12px 8px 0', fontSize: '11px', color: '#a9bccd', letterSpacing: '1px' }}>
-        ASHRAMAM VIBES
       </div>
     </nav>
   );

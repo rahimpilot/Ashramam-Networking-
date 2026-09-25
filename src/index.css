@@ -277,15 +277,6 @@ select:focus {
   display: block;
   animation: splashPop 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
 }
-.splash-title {
-  margin-top: 24px;
-  font-family: 'Marcellus', Georgia, serif;
-  font-size: 30px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  color: #1c2733;
-  animation: splashFadeUp 0.8s ease 0.15s both;
-}
 .splash-bar {
   margin-top: 28px;
   width: 132px;
