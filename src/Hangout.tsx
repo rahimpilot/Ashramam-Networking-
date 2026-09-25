@@ -157,6 +157,17 @@ const Hangout: React.FC = () => {
         .hangout-tile { transition: transform 0.18s ease, box-shadow 0.18s ease; }
         .hangout-tile:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(47, 127, 196, 0.22); }
         .hangout-tile:active { transform: translateY(0); }
+        .ht-go { display: none; }
+        /* Mobile: every Explore tile becomes a compact horizontal banner,
+           same size/format as the voice room banner. */
+        @media (max-width: 767px) {
+          .hangout-tile { display: flex; align-items: center; gap: 12px; padding: 12px 14px !important; border-radius: 18px !important; }
+          .hangout-tile .ht-icon { width: 40px !important; height: 40px !important; margin-bottom: 0 !important; border-radius: 12px !important; font-size: 20px !important; }
+          .hangout-tile .ht-text { flex: 1; min-width: 0; }
+          .hangout-tile .ht-title { font-size: 14px !important; margin-bottom: 2px !important; }
+          .hangout-tile .ht-sub { font-size: 12px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+          .hangout-tile .ht-go { display: flex !important; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(91,155,213,0.14); color: #2f7fc4; font-size: 18px; font-weight: 700; flex-shrink: 0; }
+        }
         .hangout-voice { transition: transform 0.18s ease, box-shadow 0.18s ease; }
         .hangout-voice:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(47, 127, 196, 0.42); }
         .hangout-voice:active { transform: translateY(0); }
@@ -323,7 +334,7 @@ const Hangout: React.FC = () => {
                 cursor: 'pointer'
               }}
             >
-              <div style={{
+              <div className="ht-icon" style={{
                 width: '48px',
                 height: '48px',
                 borderRadius: '15px',
@@ -333,28 +344,32 @@ const Hangout: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '24px',
-                marginBottom: '13px'
+                marginBottom: '13px',
+                flexShrink: 0
               }}>
                 🃏
               </div>
-              <div style={{
-                fontSize: '15px',
-                fontWeight: 700,
-                color: '#1c2733',
-                marginBottom: '4px',
-                lineHeight: 1.3
-              }}>
-                UNO
+              <div className="ht-text" style={{ flex: 1, minWidth: 0 }}>
+                <div className="ht-title" style={{
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  color: '#1c2733',
+                  marginBottom: '4px',
+                  lineHeight: 1.3
+                }}>
+                  UNO
+                </div>
+                <div className="ht-sub" style={{
+                  fontSize: '12.5px',
+                  color: '#5b6b7c',
+                  lineHeight: 1.45
+                }}>
+                  {openTables !== null && openTables > 0
+                    ? `${openTables} open table${openTables === 1 ? '' : 's'} — jump in`
+                    : 'Game night with the crew'}
+                </div>
               </div>
-              <div style={{
-                fontSize: '12.5px',
-                color: '#5b6b7c',
-                lineHeight: 1.45
-              }}>
-                {openTables !== null && openTables > 0
-                  ? `${openTables} open table${openTables === 1 ? '' : 's'} — jump in`
-                  : 'Game night with the crew'}
-              </div>
+              <div className="ht-go" aria-hidden="true">›</div>
             </div>
             {TILES.map((tile) => (
               <div
@@ -368,7 +383,7 @@ const Hangout: React.FC = () => {
                   cursor: 'pointer'
                 }}
               >
-                <div style={{
+                <div className="ht-icon" style={{
                   width: '48px',
                   height: '48px',
                   borderRadius: '15px',
@@ -378,26 +393,30 @@ const Hangout: React.FC = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '24px',
-                  marginBottom: '13px'
+                  marginBottom: '13px',
+                  flexShrink: 0
                 }}>
                   {tile.icon}
                 </div>
-                <div style={{
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  color: '#1c2733',
-                  marginBottom: '4px',
-                  lineHeight: 1.3
-                }}>
-                  {tile.title}
+                <div className="ht-text" style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ht-title" style={{
+                    fontSize: '15px',
+                    fontWeight: 700,
+                    color: '#1c2733',
+                    marginBottom: '4px',
+                    lineHeight: 1.3
+                  }}>
+                    {tile.title}
+                  </div>
+                  <div className="ht-sub" style={{
+                    fontSize: '12.5px',
+                    color: '#5b6b7c',
+                    lineHeight: 1.45
+                  }}>
+                    {tile.subtitle}
+                  </div>
                 </div>
-                <div style={{
-                  fontSize: '12.5px',
-                  color: '#5b6b7c',
-                  lineHeight: 1.45
-                }}>
-                  {tile.subtitle}
-                </div>
+                <div className="ht-go" aria-hidden="true">›</div>
               </div>
             ))}
           </div>
