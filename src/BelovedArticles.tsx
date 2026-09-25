@@ -37,7 +37,7 @@ const ARTICLES: BelovedArticle[] = [
 I have always been passionate, though quietly so. I carried ambitions I wanted to pursue, even as doubt and confusion haunted me like an unwelcome spoiler. But I decided not to hold back, and not to give up for just any reason.
 
 Learning an instrument demands patience — the kind that never stops you from dreaming. So chase your dreams, and discover what you are truly good at.`,
-    date: 'From the archives',
+    date: '',
   },
   {
     id: 'educating-the-poor',
@@ -65,7 +65,7 @@ Another crisis weighs on the nation: health and nutrition. Five hundred million 
 International organisations have stepped in to rescue children trapped by poverty and lack of schooling, working to give every deserving child what they need to build on their skills. These organisations stand beside the poor every single day — and through such campaigns, countless children have been educated, built careers, supported their families, and served their nation.
 
 Our agenda must be clear: support the education of the poor, and help fulfil their dreams.`,
-    date: 'From the archives',
+    date: '',
   },
   {
     id: 'the-task',
@@ -79,7 +79,7 @@ Our agenda must be clear: support the education of the poor, and help fulfil the
 There are many reasons humans became the dominant form of life — not least our ability to cooperate. Yet that same dominance has led us to neglect a simple fact: we are not alone on this planet. Our selfishness can wipe other species aside without a thought for humanity. We underestimate the other creatures of this Earth, fail to treat them right, and rarely grasp the scale of the damage we cause — consequences that can be deadly.
 
 Stray animals are part of our everyday life. They survive on garbage, restaurant leftovers, and scraps — yet no proper system exists to feed them. Project Animalia took up this task: an initiative for the welfare of stray animals, feeding them, sheltering them through extreme conditions, and caring for everything they deserve.`,
-    date: 'From the archives',
+    date: '',
   },
   {
     id: 'volunteering-change-your-life',
@@ -109,7 +109,7 @@ Doing good for others creates a natural sense of accomplishment. Volunteering al
 Interestingly, volunteering benefits the body as well as the mind. A growing body of evidence suggests that those who give their time to others enjoy lower blood pressure and even longer lives. A 1999 study found that committed volunteers — those helping at two or more organisations — had a 63% lower mortality rate than non-volunteers. More recent research from Carnegie Mellon University (2013) found that adults over 50 who volunteered regularly were less likely to develop high blood pressure than those who didn't. Hypertension matters: it contributes to stroke, heart disease, and premature death.
 
 I have been part of several volunteering teams during my career, and I can say these benefits are real. Volunteering has cheered me up more than once, and in a short time I developed skills I never expected. Today, volunteering organisations work hand in hand with social workers and NGOs to run their programmes reliably. Most of us want to do good in the world — and volunteering is good not only for the community but for your own health too. And of course, the greatest benefit of volunteering is the reason we do it at all: it makes a difference. Wherever you volunteer, you are changing lives — your own, your fellow volunteers', and those who benefit from your efforts.`,
-    date: 'From the archives',
+    date: '',
   },
   {
     id: 'sustainable-energy-future',
@@ -129,17 +129,17 @@ Sustainable energy, in essence, meets the needs of the present without compromis
 Using sustainable energy without harming nature is always the better path — it can transform our daily production, even if the initial investment is a little high.
 
 Sustainable energy management is central to managing natural resources and sustainable development itself. Sustainable development is an integrated system — economic, environmental, social, and institutional — where a change in one part ripples through the rest. Nothing should be viewed in isolation. The modern concept questions economic development at any cost, introducing new measures of progress: environmental quality and quality of life now stand beside economic growth as equals. Economic development, historically built on exploiting natural resources and polluting the environment, becomes a subject of deeper study. Modern business reveals a tight link between energy consumption and development. The world consumes vast amounts of energy, unevenly across regions — and while energy production and consumption affect environmental quality, they remain essential to economic progress. Balancing the consequences of energy use against the welfare that development brings is one of our most sensitive challenges, tangled in global disagreements at every level.`,
-    date: 'From the archives',
+    date: '',
   },
   {
     id: 'ashramam-nivasikal',
     badge: 'BELOVED',
     badgeColor: '#d97706',
-    title: 'ആശ്രമ നിവാസികളുടെ',
+    title: 'പ്രിയപ്പെട്ട ഇടം',
     excerpt: 'അവിവാഹിത കാലഘട്ടം പൂർണമായും അസ്തമിച്ചു തുടങ്ങുമ്പോൾ നിവാസികൾക്ക്\u200cഉമ്മുൽഖുയിനിലെ കുറച്ചു…',
     image: '/ashramam-nivasikal.jpg',
     body: 'അവിവാഹിത കാലഘട്ടം പൂർണമായും അസ്തമിച്ചു തുടങ്ങുമ്പോൾ നിവാസികൾക്ക്\u200cഉമ്മുൽഖുയിനിലെ കുറച്ചു\nവൃക്ഷങ്ങളും വരണ്ടു കിടക്കുന്ന മണൽ തരികളാൽ പ്രത്യക്ഷപെട്ട ചെറു കുന്നുകൾ കൊണ്ട് വിജനമായ മരുഭൂമിയും\nഉല്ലാസ ആശ്രയമാവുകയായിരുന്നു. കഴിഞ്ഞ ചുട്ടുപൊള്ളുന്ന ചൂടുകാലത്തു ഒരു വരുംകാല തണുത്ത രാത്രികളിലെ\nആവേശകരമായ പരിഹാസവും , വഴക്കും , കോഴി ചുടലും ,തമ്പടിക്കലും, കൈകൊട്ടി പാട്ടുകളും , അസാധാരണമായ\nകാൽ ചുവടുകളെയും കുറിച്ച് ഓർത്തപ്പോൾ ഒരു വേഴാമ്പലിനെ പോലെ കാത്തിരിപ്പിന്റെ ഉത്കണ്ഠ വർദ്ധിപ്പിച്ചു\nഎന്നതിലുപരി ഫയർ ബിൽഡിംഗ് 111 എന്ന ആശ്രമ തട്ടകം ഈ ഉല്ലാസ കേന്ദ്രത്തിൽ ഒതുങ്ങി കൂടിയെന്ന്\nനമ്മൾ മനസിലാക്കിയിരുന്നു. ഒരു മുടക്കവും വരുത്താതെ ഇത്തവണ തണുപ്പ് കാലം നമ്മൾ തമ്പടിച്ചു\nവിനയോഗിച്ചിരിക്കും എന്ന ഉറച്ച തീരുമാനത്തിനെതിരെ ഇന്ന് ഇതാ വിധിയുടെ കാവൽ പക്ഷിയെ റാഞ്ചിയെടുത്തു\nകൊണ്ട് നമ്മുടെ മുന്നിൽ സ്വാതന്ത്രത്തെ അടക്കി ഭരിച്ചു അപ്രതീക്ഷിതമായ ഒരു കാലം. നിവാസികൾക്ക്\u200cഒരുപാട്\nപ്രിയപ്പെട്ടതായി കഴിഞ്ഞ ഈ ഇടം ഒരിക്കലും പ്രവചിക്കാൻ കഴിയാത്ത ഇപ്പോഴത്തെ അവസ്ഥയെ മറികടന്നു\nനമ്മളിലേക് തന്നെ ആനന്ദത്തിന്റെ നാളുകളുമായി തിരിച്ചുവരും എന്ന് നമുക്ക് കരുതാം\n... ശുഭം',
-    date: 'From the archives',
+    date: '',
   },
 
   {
@@ -162,7 +162,7 @@ So the question arises: are we the reason the Earth was corrupted from its origi
 The pandemic shut down industrial activity, slashing greenhouse gas emissions and air pollution worldwide. If there is anything positive to take from this crisis, it is a glimpse of the air we might breathe in a low-carbon future. We live in an age of intersecting global crises — inequality, environmental degradation, climate destabilisation, populism, conflict, economic uncertainty, and mounting public-health threats — and health organisations are witnessing the devastating cost of underprepared systems.
 
 Yet nature has been healing long before COVID-19 forced most of us indoors, and it will continue to do so with the help of good policies. Most countries took firm precautions to keep the lockdown serving its purpose and stop the virus spreading as it had elsewhere. If such stillness lasted for years, we might even see wildlife drift toward the cities in the absence of human bustle. The lockdown proved one thing beyond doubt: if humans can be disciplined enough, the impact on the environment will be profound.`,
-    date: 'From the archives',
+    date: '',
   },
   {
     id: 'mental-health',
@@ -186,7 +186,7 @@ Mental health problems can arise from stress, loneliness, depression, anxiety, r
 ## A balanced mind
 
 Good mental health is essential to living a full life: it helps prevent mental disorders and protects our human dignity. It can be described as a satisfactory level of emotional and behavioural adjustment — the ability to enjoy life and keep a healthy balance between its many activities. Caring for the mind is not a luxury; it is as vital as caring for the body.`,
-    date: 'From the archives',
+    date: '',
   },
   {
     id: 'education-equality',
@@ -214,7 +214,7 @@ To participate, we must know our rights — otherwise we risk losing them. In th
 ## A right enshrined in law
 
 Education is both a human right in itself and an indispensable means of realising other human rights. Article 26 of the Universal Declaration of Human Rights proclaims the right to education as an inalienable right of every child — boys and girls alike. UNESCO's Convention against Discrimination in Education (1960) was the first instrument to provide for this right comprehensively, establishing universal access and equality of educational opportunity, and reflecting UNESCO's mission to advance "equality of educational opportunities without regard to race, sex, or any distinctions, economic or social." Its constitution affirms the founders' belief in "full and equal opportunities for education for all," and under Article 4, States Parties undertake to pursue national policies promoting equality of opportunity and treatment in education. Other human rights treaties reinforce the same duty: Article 10 of the Convention on the Elimination of All Forms of Discrimination against Women (CEDAW) sets out detailed provisions on equality of opportunity in education and the equal rights of women and men. These are the strong backbones carrying equality forward and improving educational systems across the planet — and as honest individuals, we can each take the initiative to support such causes and help our nations grow.`,
-    date: 'From the archives',
+    date: '',
   },
 
   {
@@ -231,7 +231,7 @@ Sahir was born and brought up in Fort Kochi, a historic port city in Kerala, Ind
 Changing direction was a bold move — never an easy one — yet he succeeded in turning his passion toward photography, focusing on weddings, videography, and local events. He has covered countless weddings with distinction, serving two generations of families. Deeply career-driven, he embraced the rise of new technology, constantly expanding his knowledge and refining his craft.
 
 Through his long journey, he set aside time each day to keep his painter's soul alive, and today he holds a rich collection of his own paintings. His passion is boundless — a driving force that keeps him painting, rather than settling for photography as merely his bread and butter.`,
-    date: 'From the archives',
+    date: '',
   },
 ];
 
