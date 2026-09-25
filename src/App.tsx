@@ -20,6 +20,7 @@ import OurTrips from './OurTrips';
 import AshramamExclusive from './AshramamExclusive';
 import BelovedArticles from './BelovedArticles';
 import CinemaReviews from './CinemaReviews';
+import SplashScreen from './SplashScreen';
 import Krabi from './Krabi';
 import Baku from './Baku';
 import September7th2025Meeting from './September7th2025Meeting';
@@ -51,11 +52,37 @@ function LegacyArticleRedirect() {
   return <Navigate to={`/articles/${articleId}`} replace />;
 }
 
+/** Routes where a fresh visitor sees the brand splash before the page loads. */
+const SPLASH_PATHS = ['/', '/articles', '/cinema-reviews', '/beloved-articles'];
+function isSplashEntryPath(pathname: string) {
+  return SPLASH_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
+}
+
 /** Replays the soft page-entrance animation on every navigation. */
 function AnimatedRoutes() {
   const location = useLocation();
+  // Brand splash: once per tab session, visitors landing on a public link
+  // see the logo loading screen first, then land on the page.
+  const [showSplash, setShowSplash] = useState(
+    () => !sessionStorage.getItem('ashramam-splash-shown') && isSplashEntryPath(window.location.pathname)
+  );
+  const [splashFading, setSplashFading] = useState(false);
+
+  useEffect(() => {
+    if (!showSplash) return;
+    sessionStorage.setItem('ashramam-splash-shown', '1');
+    const fadeTimer = window.setTimeout(() => setSplashFading(true), 1900);
+    const hideTimer = window.setTimeout(() => setShowSplash(false), 2450);
+    return () => {
+      window.clearTimeout(fadeTimer);
+      window.clearTimeout(hideTimer);
+    };
+  }, [showSplash]);
+
   return (
-    <div key={location.pathname} className="iv-page-enter">
+    <>
+      {showSplash && <SplashScreen fading={splashFading} />}
+      <div key={location.pathname} className="iv-page-enter">
       <Routes location={location}>
         <Route path="/" element={<Login />} />
         {/* Public: article links (Abdu shares these outside the app) */}
@@ -92,7 +119,8 @@ function AnimatedRoutes() {
         {/* Unknown URLs go to the login screen instead of a blank page */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </div>
+      </div>
+    </>
   );
 }
 
