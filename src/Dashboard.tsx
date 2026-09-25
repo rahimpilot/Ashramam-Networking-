@@ -828,7 +828,9 @@ const Dashboard: React.FC = () => {
       fontFamily: "'Marcellus', Georgia, serif"
     }}>
       {/* Modern Mobile Header - 60px height */}
-      <div style={{
+      <div
+        className="iv-dash-header"
+        style={{
         background: 'rgba(255, 255, 255, 0.78)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',

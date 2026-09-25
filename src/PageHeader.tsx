@@ -14,7 +14,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
   const navigate = useNavigate();
 
   return (
-    <div style={{
+    <div
+      className="iv-page-header"
+      style={{
       background: 'rgba(255, 255, 255, 0.88)',
       backdropFilter: 'blur(14px)',
       WebkitBackdropFilter: 'blur(14px)',

@@ -61,12 +61,13 @@ const SideNavigation: React.FC = () => {
         <img src="/newlogo.svg" alt="Ashramam" style={{ width: '150px', height: 'auto', display: 'block' }} />
       </button>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div className="iv-side-tabs" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {TABS.map((tab) => {
           const active = activeTab === tab.id;
           return (
             <button
               key={tab.id}
+              className={active ? 'iv-side-tab iv-side-tab-active' : 'iv-side-tab'}
               onClick={() => tab.go(navigate)}
               style={{
                 background: active ? 'rgba(91, 155, 213, 0.14)' : 'transparent',
