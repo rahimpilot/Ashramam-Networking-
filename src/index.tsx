@@ -8,6 +8,9 @@ import './pwaService';
 
 // Hide loading screen when React is ready
 const hideLoadingScreen = () => {
+  // A page (e.g. Residents) may keep the boot screen up until its own
+  // data is ready, so pull-to-refresh shows a single logo.
+  if ((window as any).__keepBootScreen) return;
   const loadingScreen = document.getElementById('loading-screen');
   if (loadingScreen) {
     loadingScreen.style.display = 'none';

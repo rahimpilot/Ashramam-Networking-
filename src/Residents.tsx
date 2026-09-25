@@ -434,6 +434,13 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
 };
 
 const Residents: React.FC = () => {
+  // Dismiss the static boot loading screen (kept visible while this page loads
+  // so pull-to-refresh shows ONE logo, not a second one from this page).
+  const dismissBootScreen = () => {
+    (window as any).__keepBootScreen = false;
+    const el = document.getElementById('loading-screen');
+    if (el) el.style.display = 'none';
+  };
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -442,6 +449,25 @@ const Residents: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<ResidentUser | null>(null);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
+
+  // Keep the boot loading screen visible while People loads (single logo);
+  // dismiss it once content is ready. Safety fallback: never trap the user
+  // on the boot screen longer than 15s.
+  useEffect(() => {
+    (window as any).__keepBootScreen = true;
+    const fallback = setTimeout(dismissBootScreen, 15000);
+    return () => {
+      clearTimeout(fallback);
+      dismissBootScreen();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Dismiss the boot screen as soon as auth + data are done.
+  useEffect(() => {
+    if (!authLoading && !loading) dismissBootScreen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authLoading, loading]);
 
   // Auth state listener
   useEffect(() => {
@@ -544,44 +570,13 @@ const Residents: React.FC = () => {
     navigate('/dashboard');
   };
 
+  // Boot loading screen stays up during load (single logo) — render nothing here.
   if (loading) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: '#ffffff'
-      }}>
-        <div className="iv-logo-pulse" style={{ textAlign: 'center' }}>
-          <img
-            src="/newlogo.svg"
-            alt="Ashramam"
-            style={{ width: 128, height: 'auto', display: 'block' }}
-          />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   if (authLoading) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: '#ffffff'
-      }}>
-        <div className="iv-logo-pulse" style={{ textAlign: 'center' }}>
-          <img
-            src="/newlogo.svg"
-            alt="Ashramam"
-            style={{ width: 128, height: 'auto', display: 'block' }}
-          />
-        </div>
-      </div>
-    );
+    return null;
   }
 
   if (!user) {

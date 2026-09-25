@@ -132,6 +132,9 @@
       // Hide loading screen when React app loads
       window.addEventListener('load', function() {
         setTimeout(function() {
+          // A page (e.g. Residents) may keep the boot screen up until its own
+          // data is ready, so pull-to-refresh shows a single logo.
+          if (window.__keepBootScreen) return;
           const loadingScreen = document.getElementById('loading-screen');
           if (loadingScreen) {
             loadingScreen.classList.add('hidden');
