@@ -38,7 +38,7 @@ const Stories: React.FC = () => {
   const [newStory, setNewStory] = useState({ title: '', content: '', topic: 'hydergoa' });
   const [submitting, setSubmitting] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
-  const [currentView, setCurrentView] = useState<'topics' | 'stories' | 'story'>('topics');
+  const [currentView, setCurrentView] = useState<'topics' | 'stories'>('topics');
   const [expandedStory, setExpandedStory] = useState<string | null>(null);
   const [editingStory, setEditingStory] = useState<string | null>(null);
   const [editStoryData, setEditStoryData] = useState({ title: '', content: '' });
@@ -188,17 +188,6 @@ const Stories: React.FC = () => {
     setCurrentView('topics');
     setSelectedTopic('all');
     setExpandedStory(null);
-  };
-
-  const openStory = (storyId: string) => {
-    setExpandedStory(storyId);
-    setCurrentView('story');
-    window.scrollTo(0, 0);
-  };
-
-  const goBackToStoryList = () => {
-    setCurrentView('stories');
-    window.scrollTo(0, 0);
   };
 
   const handleTopicSelect = (topicId: string) => {
@@ -443,12 +432,18 @@ const Stories: React.FC = () => {
       setCurrentView('stories');
       if (storyParam) {
         setExpandedStory(storyParam);
-        setCurrentView('story');
-        window.scrollTo(0, 0);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Scroll a deep-linked story into view once loaded
+  useEffect(() => {
+    if (expandedStory && stories.some(s => s.id === expandedStory)) {
+      const el = document.getElementById('story-' + expandedStory);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [expandedStory, stories]);
 
   const renderLoading = () => (
     <div style={{
@@ -472,7 +467,6 @@ const Stories: React.FC = () => {
   // logged-in users see add/edit/like controls.
 
   const currentTopic = getCurrentTopic();
-  const activeStory = expandedStory ? stories.find(s => s.id === expandedStory) ?? null : null;
   const latestByTopic: Record<string, Date | null> = {};
   stories.forEach((s) => {
     const d = s.createdAt.toDate();
@@ -511,19 +505,12 @@ const Stories: React.FC = () => {
 
       {currentView === 'topics' ? (
         <PageHeader title="Our Stories" backTo={user ? '/dashboard' : '/'} backLabel="Back" />
-      ) : currentView === 'stories' ? (
+      ) : (
         <PageHeader
           title={currentTopic?.name || 'Stories'}
           backTo="/stories"
           backLabel="Back to topics"
           onBack={goBackToTopics}
-        />
-      ) : (
-        <PageHeader
-          title={activeStory?.title || 'Story'}
-          backTo="/stories"
-          backLabel="Back to stories"
-          onBack={goBackToStoryList}
         />
       )}
 
@@ -756,7 +743,7 @@ const Stories: React.FC = () => {
               </div>
             )}
           </>
-        ) : currentView === 'stories' ? (
+        ) : (
           <>
             {/* Stories view — search + controls */}
             <div style={{ marginBottom: '14px', padding: '0 4px' }}>
@@ -858,21 +845,19 @@ const Stories: React.FC = () => {
                       key={story.id}
                       id={'story-' + story.id}
                       className="story-card iv-stagger"
-                      onClick={() => !isEditing && openStory(story.id)}
                       style={{
                         background: '#ffffff',
                         border: '1px solid #dce8f5',
                         borderRadius: '20px',
-                        padding: '16px',
+                        padding: '20px 18px',
                         animationDelay: `${Math.min(index, 8) * 60}ms`,
-                        cursor: isEditing ? 'default' : 'pointer',
                         boxShadow: '0 6px 24px rgba(91,155,213,0.10)',
                         scrollMarginTop: '76px',
                         minWidth: 0
                       }}
                     >
                       {isEditing ? (
-                        <div onClick={(e) => e.stopPropagation()} style={{ minWidth: 0 }}>
+                        <div style={{ minWidth: 0 }}>
                           {renderEditForm(story)}
                         </div>
                       ) : (
@@ -880,17 +865,14 @@ const Stories: React.FC = () => {
                           {/* Date row */}
                           <div style={{
                             display: 'flex',
-                            alignItems: 'center',
                             justifyContent: 'flex-end',
-                            gap: '8px',
                             marginBottom: '8px'
                           }}>
                             <span style={{
                               fontSize: '12px',
                               fontWeight: 600,
                               color: '#6b7f92',
-                              whiteSpace: 'nowrap',
-                              flexShrink: 0
+                              whiteSpace: 'nowrap'
                             }}>
                               📅 {story.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </span>
@@ -898,30 +880,26 @@ const Stories: React.FC = () => {
 
                           {/* Title */}
                           <h3 style={{
-                            fontSize: '19px',
+                            fontSize: '22px',
                             fontWeight: 700,
                             fontFamily: "'Cormorant Garamond', Georgia, serif",
                             lineHeight: 1.25,
-                            margin: '0 0 6px 0',
+                            margin: '0 0 10px 0',
                             color: '#1c2733',
                             overflowWrap: 'break-word'
                           }}>
                             {story.title}
                           </h3>
 
-                          {/* Excerpt */}
+                          {/* Full story content */}
                           <div style={{
-                            fontSize: '14px',
-                            lineHeight: 1.55,
-                            color: '#5b6b7c',
-                            marginBottom: '10px',
-                            minWidth: 0,
+                            fontSize: '15px',
+                            lineHeight: 1.7,
+                            color: '#33414f',
+                            whiteSpace: 'pre-wrap',
                             overflowWrap: 'break-word',
                             wordBreak: 'break-word',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
+                            marginBottom: '16px'
                           }}>
                             {story.content}
                           </div>
@@ -932,7 +910,9 @@ const Stories: React.FC = () => {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             gap: '8px',
-                            flexWrap: 'wrap'
+                            flexWrap: 'wrap',
+                            borderTop: '1px solid #edf2f7',
+                            paddingTop: '12px'
                           }}>
                             <span style={{
                               fontSize: '13px',
@@ -943,9 +923,6 @@ const Stories: React.FC = () => {
                               ✍️ <span style={{ fontWeight: 700, color: '#1c2733' }}>
                                 {authorNames[story.authorEmail] || story.author || 'Anonymous'}
                               </span>
-                              {' '}· <span style={{ color: '#2f7fc4', fontWeight: 700 }}>
-                                Read ›
-                              </span>
                             </span>
                             {renderStoryControls(story)}
                           </div>
@@ -954,81 +931,6 @@ const Stories: React.FC = () => {
                     </div>
                   );
                 })}
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            {/* Story detail — full page reading view */}
-            {activeStory ? (
-              <div style={{
-                background: '#ffffff',
-                border: '1px solid #dce8f5',
-                borderRadius: '20px',
-                padding: '20px 18px',
-                boxShadow: '0 6px 24px rgba(91,155,213,0.10)'
-              }}>
-                {editingStory === activeStory.id ? (
-                  renderEditForm(activeStory)
-                ) : (
-                  <>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-                      <span style={{ fontSize: '12px', fontWeight: 600, color: '#6b7f92', whiteSpace: 'nowrap' }}>
-                        📅 {activeStory.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </span>
-                    </div>
-                    <h2 style={{
-                      fontSize: '26px',
-                      fontWeight: 700,
-                      fontFamily: "'Cormorant Garamond', Georgia, serif",
-                      lineHeight: 1.25,
-                      margin: '0 0 12px 0',
-                      color: '#1c2733',
-                      overflowWrap: 'break-word'
-                    }}>
-                      {activeStory.title}
-                    </h2>
-                    <div style={{
-                      fontSize: '16px',
-                      lineHeight: 1.7,
-                      color: '#33414f',
-                      whiteSpace: 'pre-wrap',
-                      overflowWrap: 'break-word',
-                      wordBreak: 'break-word',
-                      marginBottom: '18px'
-                    }}>
-                      {activeStory.content}
-                    </div>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: '8px',
-                      flexWrap: 'wrap',
-                      borderTop: '1px solid #edf2f7',
-                      paddingTop: '14px'
-                    }}>
-                      <span style={{ fontSize: '13px', color: '#6b7f92' }}>
-                        ✍️ <span style={{ fontWeight: 700, color: '#1c2733' }}>
-                          {authorNames[activeStory.authorEmail] || activeStory.author || 'Anonymous'}
-                        </span>
-                      </span>
-                      {renderStoryControls(activeStory)}
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div style={{
-                background: '#ffffff',
-                border: '1px solid #dce8f5',
-                borderRadius: '20px',
-                padding: '36px 20px',
-                textAlign: 'center',
-                color: '#6b7f92',
-                fontSize: '14px'
-              }}>
-                Story not found.
               </div>
             )}
           </>
