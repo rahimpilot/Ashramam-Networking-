@@ -10,9 +10,7 @@ interface SplashScreenProps {
 const SplashScreen: React.FC<SplashScreenProps> = ({ fading }) => {
   return (
     <div className="splash-overlay" style={{ opacity: fading ? 0 : 1 }}>
-      <div className="splash-card">
-        <img src="/newlogo.svg" alt="Ashramam Vibes" className="splash-logo" />
-      </div>
+      <img src="/newlogo.svg" alt="Ashramam" className="splash-logo" />
       <div className="splash-title">Ashramam Vibes</div>
       <div className="splash-bar">
         <div className="splash-bar-fill" />

@@ -267,22 +267,12 @@ select:focus {
   background: radial-gradient(120% 100% at 50% 0%, #ffffff 0%, #eef4fb 45%, #e0eaf7 100%);
   transition: opacity 0.5s ease;
 }
-.splash-card {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 28px;
-  padding: 28px 40px;
-  box-shadow: 0 20px 60px rgba(91, 155, 213, 0.35), 0 0 0 10px rgba(255, 255, 255, 0.35);
-  animation: splashPop 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
-}
 .splash-logo {
-  width: 220px;
-  max-width: 64vw;
+  width: 240px;
+  max-width: 68vw;
   height: auto;
   display: block;
-  animation: splashGlow 2.2s ease-in-out infinite;
+  animation: splashPop 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
 }
 .splash-title {
   margin-top: 24px;
@@ -315,10 +305,6 @@ select:focus {
 @keyframes splashFadeUp {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
-}
-@keyframes splashGlow {
-  0%, 100% { filter: drop-shadow(0 0 0 rgba(91, 155, 213, 0)); }
-  50% { filter: drop-shadow(0 0 16px rgba(91, 155, 213, 0.55)); }
 }
 @keyframes splashSlide {
   0% { transform: translateX(-110%); }
