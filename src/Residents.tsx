@@ -433,6 +433,15 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
   );
 };
 
+/** Profile completion %: uses the saved value when present, otherwise
+ * derives it from the filled profile fields (name, bio, location). */
+const computeProfileCompletion = (profileData: any): number => {
+  if (typeof profileData.profileCompletion === 'number') return profileData.profileCompletion;
+  const fields = [profileData.name, profileData.bio, profileData.location || profileData.city];
+  const filled = fields.filter(v => typeof v === 'string' && v.trim() !== '').length;
+  return Math.round((filled / fields.length) * 100);
+};
+
 const Residents: React.FC = () => {
   // Dismiss the static boot loading screen (kept visible while this page loads
   // so pull-to-refresh shows ONE logo, not a second one from this page).
@@ -524,7 +533,7 @@ const Residents: React.FC = () => {
               bio: profileData.bio || '',
               city: profileData.city || '',
               country: profileData.country || '',
-              profileCompletion: profileData.profileCompletion || 0,
+              profileCompletion: computeProfileCompletion(profileData),
               intellectual: profileData.intellectual || '',
               umrah: profileData.umrah || '',
               funLover: profileData.funLover || ''

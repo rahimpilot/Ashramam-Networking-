@@ -93,11 +93,15 @@ const Profile: React.FC = () => {
     setLoading(true);
     setMessage('');
     if (user) {
+      // Completion %: every field on this form filled = 100%.
+      const filledFields = [name, location, bio].filter(v => v.trim() !== '').length;
+      const profileCompletion = Math.round((filledFields / 3) * 100);
       await setDoc(doc(db, 'profiles', user.uid), {
         name,
         location,
         bio,
-        email: user.email
+        email: user.email,
+        profileCompletion
       });
       setMessage('Profile saved!');
     }
