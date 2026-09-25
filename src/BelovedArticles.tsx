@@ -240,6 +240,7 @@ const BelovedArticles: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
   const [user, setUser] = useState<User | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [query, setQuery] = useState('');
 
   // Master share link for the article category — copies the list-page URL
   // so one tap leads the public to ALL articles. The ?v=2 query makes
@@ -271,6 +272,13 @@ const BelovedArticles: React.FC = () => {
 
   const selected = articleId ? ARTICLES.find((a) => a.id === articleId) || null : null;
 
+  const q = query.trim().toLowerCase();
+  const filtered = q
+    ? ARTICLES.filter((a) =>
+        `${a.title} ${a.excerpt} ${a.body || ''}`.toLowerCase().includes(q)
+      )
+    : ARTICLES;
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -287,17 +295,54 @@ const BelovedArticles: React.FC = () => {
       <div className={(selected ? 'iv-page' : 'iv-page-wide') + ' iv-tab-clearance'} style={{ paddingTop: '20px', paddingBottom: '110px' }}>
         {!selected ? (
           <>
-            {/* Hero */}
-            <div className="iv-card" style={{
-              padding: '22px 20px',
+            {/* Search */}
+            <div className="iv-card art-search" style={{
+              padding: '10px 14px',
               marginBottom: 16,
-              background: 'linear-gradient(135deg, #2b2118 0%, #4a3423 100%)',
-              border: 'none',
-              color: '#ffffff'
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10
             }}>
-              <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 700 }}>
-                Words worth keeping.
-              </h2>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5b9bd5" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+                <circle cx="11" cy="11" r="7" />
+                <line x1="16.5" y1="16.5" x2="21" y2="21" />
+              </svg>
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search articles…"
+                aria-label="Search articles"
+                style={{
+                  flex: 1,
+                  minWidth: 0,
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  fontSize: 15,
+                  fontFamily: 'inherit',
+                  color: '#1c2733'
+                }}
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery('')}
+                  aria-label="Clear search"
+                  style={{
+                    border: 'none',
+                    background: '#e8e4f2',
+                    color: '#5b6b7c',
+                    width: 24,
+                    height: 24,
+                    borderRadius: '50%',
+                    fontSize: 14,
+                    lineHeight: 1,
+                    cursor: 'pointer',
+                    flexShrink: 0
+                  }}
+                >
+                  ×
+                </button>
+              )}
             </div>
 
             {/* Article list */}
@@ -311,9 +356,19 @@ const BelovedArticles: React.FC = () => {
                   Articles from the old site, polished and republished here.
                 </p>
               </div>
+            ) : filtered.length === 0 ? (
+              <div className="iv-card" style={{ padding: '32px 20px', textAlign: 'center' }}>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
+                <h3 style={{ margin: '0 0 8px 0', fontSize: 17, fontWeight: 700, color: '#1c2733' }}>
+                  No articles found
+                </h3>
+                <p style={{ margin: 0, fontSize: 14, color: '#5b6b7c', lineHeight: 1.6 }}>
+                  Nothing matches “{query.trim()}”. Try a different word.
+                </p>
+              </div>
             ) : (
               <div className="iv-stagger iv-cards-2">
-                {ARTICLES.map((article) => (
+                {filtered.map((article) => (
                   <article
                     key={article.id}
                     className="iv-card iv-press"

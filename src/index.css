@@ -497,6 +497,12 @@ a {
   .muthalali-img { max-width: 720px; }
 }
 
+/* Articles search — full width on mobile/tablet, comfortably capped on web. */
+.art-search { width: 100%; }
+@media (min-width: 1024px) {
+  .art-search { max-width: 560px; }
+}
+
 /* Mobile: true old-Orkut friends box — one white box, 3 plain photo+name cells per row. */
 @media (max-width: 767px) {
   .res-friendsbox {
