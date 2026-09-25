@@ -484,12 +484,17 @@ a {
   margin: 0;
 }
 
+/* Muthalali hero image: mobile sizing stays 350px; desktop scales up (file is 1600px, stays crisp). */
+.muthalali-img { max-width: 350px; }
+
 /* Residents: Orkut friends grid — always 3 in a row; capped on desktop so tiles stay compact. */
 .res-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 /* Critical: lets long names ellipsis instead of blowing the columns out. */
 .res-grid > * { min-width: 0; }
 @media (min-width: 1024px) {
-  .res-wrap { max-width: 800px; margin-left: auto; margin-right: auto; }
+  .res-wrap { max-width: 1020px; margin-left: auto; margin-right: auto; }
+  .res-grid { grid-template-columns: repeat(4, 1fr); }
+  .muthalali-img { max-width: 720px; }
 }
 
 /* Mobile: true old-Orkut friends box — one white box, 3 plain photo+name cells per row. */

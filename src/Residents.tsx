@@ -726,13 +726,13 @@ const Residents: React.FC = () => {
             <img
               src={`${process.env.PUBLIC_URL}/muthalali.jpeg`}
               alt="Muthalali"
+              className="muthalali-img"
               style={{
                 width: '100%',
-                maxWidth: 350,
                 height: 'auto',
                 borderRadius: 12,
                 objectFit: 'contain',
-                border: '2px solid #c9d9e8',
+                border: '2px solid #c3bcd9',
                 transition: 'transform 0.2s ease'
               }}
               onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
