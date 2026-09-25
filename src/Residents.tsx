@@ -554,21 +554,19 @@ const Residents: React.FC = () => {
         background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{
-            width: 48,
-            height: 48,
-            border: '4px solid rgba(255,255,255,0.3)',
-            borderTop: '4px solid #ffffff',
-            borderRadius: '50%',
-            margin: '0 auto 16px',
-            animation: 'spin 1s linear infinite'
-          }} />
-          <p style={{
-            color: '#ffffff',
-            fontSize: 16,
-            fontWeight: 500,
-            margin: 0
-          }}>Loading residents...</p>
+          <div className="iv-logo-pulse" style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            padding: '26px 34px',
+            display: 'inline-block',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.20)'
+          }}>
+            <img
+              src="/newlogo.svg"
+              alt="Ashramam Vibes"
+              style={{ height: 60, width: 'auto', display: 'block' }}
+            />
+          </div>
         </div>
       </div>
     );
@@ -584,21 +582,19 @@ const Residents: React.FC = () => {
         background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{
-            width: 48,
-            height: 48,
-            border: '4px solid rgba(255,255,255,0.3)',
-            borderTop: '4px solid #ffffff',
-            borderRadius: '50%',
-            margin: '0 auto 16px',
-            animation: 'spin 1s linear infinite'
-          }} />
-          <p style={{
-            color: '#ffffff',
-            fontSize: 16,
-            fontWeight: 500,
-            margin: 0
-          }}>Checking authentication...</p>
+          <div className="iv-logo-pulse" style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            padding: '26px 34px',
+            display: 'inline-block',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.20)'
+          }}>
+            <img
+              src="/newlogo.svg"
+              alt="Ashramam Vibes"
+              style={{ height: 60, width: 'auto', display: 'block' }}
+            />
+          </div>
         </div>
       </div>
     );
