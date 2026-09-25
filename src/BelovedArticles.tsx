@@ -271,6 +271,30 @@ const BelovedArticles: React.FC = () => {
   }, []);
 
   const selected = articleId ? ARTICLES.find((a) => a.id === articleId) || null : null;
+  const others = selected ? ARTICLES.filter((a) => a.id !== selected.id) : [];
+
+  // Mobile scroll-reveal: .art-reveal blocks fade/slide in as they enter view.
+  // The hidden initial state lives in mobile-only CSS, so desktop is unaffected.
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll('.art-reveal:not(.art-inview)'));
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('art-inview'));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            en.target.classList.add('art-inview');
+            io.unobserve(en.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -30px 0px' }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [selected, query]);
 
   const q = query.trim().toLowerCase();
   const filtered = q
@@ -285,6 +309,76 @@ const BelovedArticles: React.FC = () => {
       background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
       fontFamily: "'Marcellus', Georgia, serif"
     }}>
+      <style>{`
+        /* "More articles" strip exists only on mobile */
+        .art-more { display: none; }
+        @media (max-width: 767px) {
+          @keyframes artInRight { from { opacity: 0; transform: translateX(64px); } to { opacity: 1; transform: translateX(0); } }
+          @keyframes artFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+          @keyframes artFadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
+          @keyframes artInLeft { from { opacity: 0; transform: translateX(-44px); } to { opacity: 1; transform: translateX(0); } }
+          @keyframes artHeroZoom { from { transform: scale(1.14); } to { transform: scale(1); } }
+
+          /* List: search bar drops in */
+          .art-search { animation: artFadeDown .5s ease-out backwards; }
+
+          /* List: article cards become a horizontal snap-scroll carousel */
+          .art-carousel {
+            display: flex !important;
+            overflow-x: auto !important;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            align-items: stretch;
+            gap: 12px;
+            padding: 6px 20px 18px !important;
+            margin: 0 -16px !important;
+            scrollbar-width: none;
+          }
+          .art-carousel::-webkit-scrollbar { display: none; }
+          .art-carousel > .art-card {
+            flex: 0 0 84% !important;
+            max-width: 340px;
+            scroll-snap-align: center;
+            margin: 0 !important;
+            animation: artInRight .55s cubic-bezier(.22,.9,.3,1) backwards;
+            animation-delay: calc(var(--art-i, 0) * 80ms);
+          }
+          /* Carousel card: image on top, text below */
+          .art-carousel .art-card-row { flex-direction: column !important; align-items: stretch !important; padding: 0 !important; gap: 0 !important; }
+          .art-carousel .art-card-img { width: 100% !important; height: 168px !important; border-radius: 18px 18px 0 0 !important; }
+          .art-carousel .art-card-body { padding: 14px 16px 16px !important; }
+          .art-carousel .art-card-go { display: none !important; }
+
+          /* List: share button rises in */
+          .art-share { animation: artFadeUp .5s ease-out .35s backwards; }
+
+          /* Detail: hero settles from a slow zoom, title slides in from the left */
+          .art-hero { animation: artHeroZoom 1.4s ease-out backwards; }
+          .art-detail-title { animation: artInLeft .55s cubic-bezier(.22,.9,.3,1) .1s backwards; }
+          .art-detail-meta { animation: artFadeUp .5s ease-out .2s backwards; }
+
+          /* Detail: paragraphs and comments reveal as you scroll */
+          .art-reveal { opacity: 0; transform: translateY(22px); transition: opacity .55s ease-out, transform .55s cubic-bezier(.22,.9,.3,1); }
+          .art-reveal.art-inview { opacity: 1; transform: none; }
+
+          /* Detail: "More articles" horizontal strip */
+          .art-more { display: block; margin-top: 20px; }
+          .art-more h3 { margin: 0 0 10px 0; font-size: 16px; font-weight: 800; color: #1c2733; }
+          .art-more-row {
+            display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 4px 16px 14px; scrollbar-width: none;
+          }
+          .art-more-row::-webkit-scrollbar { display: none; }
+          .art-more-card { flex: 0 0 62%; max-width: 240px; scroll-snap-align: start; overflow: hidden; cursor: pointer; margin: 0 !important; }
+          .art-more-card img { width: 100%; height: 110px; object-fit: cover; display: block; }
+          .art-more-t { padding: 10px 12px 12px; font-size: 14px; font-weight: 700; color: #1c2733; line-height: 1.35; }
+
+          @media (prefers-reduced-motion: reduce) {
+            .art-search, .art-carousel > .art-card, .art-share, .art-hero, .art-detail-title, .art-detail-meta { animation: none !important; }
+            .art-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+          }
+        }
+      `}</style>
       <PageHeader
         title="Articles"
         backTo="/hangout"
@@ -367,19 +461,20 @@ const BelovedArticles: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="iv-stagger iv-cards-2">
-                {filtered.map((article) => (
+              <div className="iv-stagger iv-cards-2 art-carousel">
+                {filtered.map((article, idx) => (
                   <article
                     key={article.id}
-                    className="iv-card iv-press"
+                    className="iv-card iv-press art-card"
                     onClick={() => navigate(`/articles/${article.id}`)}
-                    style={{ marginBottom: 12, overflow: 'hidden', cursor: 'pointer' }}
+                    style={{ marginBottom: 12, overflow: 'hidden', cursor: 'pointer', '--art-i': idx } as React.CSSProperties}
                   >
-                    <div style={{ display: 'flex', gap: 14, padding: 14, alignItems: 'center' }}>
+                    <div className="art-card-row" style={{ display: 'flex', gap: 14, padding: 14, alignItems: 'center' }}>
                       {article.image ? (
                         <img
                           src={article.image}
                           alt={article.title}
+                          className="art-card-img"
                           style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 12, flexShrink: 0 }}
                         />
                       ) : (
@@ -391,7 +486,7 @@ const BelovedArticles: React.FC = () => {
                           📖
                         </div>
                       )}
-                      <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="art-card-body" style={{ flex: 1, minWidth: 0 }}>
                         <h3 style={{ margin: '0 0 4px 0', fontSize: 17, fontWeight: 700, color: '#1c2733' }}>
                           {article.title}
                         </h3>
@@ -405,14 +500,14 @@ const BelovedArticles: React.FC = () => {
                           <div style={{ marginTop: 6, fontSize: 12, color: '#8a9aab' }}>{article.date}</div>
                         )}
                       </div>
-                      <div style={{ fontSize: 20, color: '#9db2c6', flexShrink: 0 }}>›</div>
+                      <div className="art-card-go" style={{ fontSize: 20, color: '#9db2c6', flexShrink: 0 }}>›</div>
                     </div>
                   </article>
                 ))}
               </div>
             )}
             {/* Master share button — right below all the articles */}
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 8px 0' }}>
+            <div className="art-share" style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 8px 0' }}>
               <button
                 onClick={copyCategoryLink}
                 aria-label="Copy link to all articles"
@@ -443,36 +538,55 @@ const BelovedArticles: React.FC = () => {
           <>
             <article className="iv-card" style={{ overflow: 'hidden' }}>
               {selected.image && (
-                <img src={selected.image} alt={selected.title} style={{ width: '100%', display: 'block' }} />
+                <img src={selected.image} alt={selected.title} className="art-hero" style={{ width: '100%', display: 'block' }} />
               )}
               <div style={{ padding: 20 }}>
-                <h2 style={{ margin: '0 0 4px 0', fontSize: 22, fontWeight: 800, color: '#1c2733' }}>
+                <h2 className="art-detail-title" style={{ margin: '0 0 4px 0', fontSize: 22, fontWeight: 800, color: '#1c2733' }}>
                   {selected.title}
                 </h2>
                 {selected.date && (
-                  <div style={{ fontSize: 13, color: '#8a9aab', marginBottom: 14 }}>{selected.date}</div>
+                  <div className="art-detail-meta" style={{ fontSize: 13, color: '#8a9aab', marginBottom: 14 }}>{selected.date}</div>
                 )}
                 <div style={{ fontSize: 15, color: '#3d4b5c', lineHeight: 1.75 }}>
                   {(selected.body || selected.excerpt).split('\n').map((line, i) =>
                     line.startsWith('## ') ? (
-                      <h4 key={i} style={{ margin: '20px 0 6px 0', fontSize: 16, fontWeight: 800, color: '#1c2733' }}>
+                      <h4 key={i} className="art-reveal" style={{ margin: '20px 0 6px 0', fontSize: 16, fontWeight: 800, color: '#1c2733' }}>
                         {line.slice(3)}
                       </h4>
                     ) : line.trim() === '' ? (
                       <div key={i} style={{ height: 8 }} />
                     ) : (
-                      <p key={i} style={{ margin: '0 0 10px 0' }}>{line}</p>
+                      <p key={i} className="art-reveal" style={{ margin: '0 0 10px 0' }}>{line}</p>
                     )
                   )}
                 </div>
               </div>
             </article>
-            <StoryEngagement
-              storyId={selected.id}
-              user={user}
-              collectionName="belovedArticles"
-              emptyText="No comments yet — be the first to share your thoughts."
-            />
+            <div className="art-reveal">
+              <StoryEngagement
+                storyId={selected.id}
+                user={user}
+                collectionName="belovedArticles"
+                emptyText="No comments yet — be the first to share your thoughts."
+              />
+            </div>
+            {others.length > 0 && (
+              <div className="art-more art-reveal">
+                <h3>More articles</h3>
+                <div className="art-more-row">
+                  {others.map((o) => (
+                    <div
+                      key={o.id}
+                      className="iv-card iv-press art-more-card"
+                      onClick={() => { navigate(`/articles/${o.id}`); window.scrollTo(0, 0); }}
+                    >
+                      {o.image && <img src={o.image} alt={o.title} />}
+                      <div className="art-more-t">{o.title}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
