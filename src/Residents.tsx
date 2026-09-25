@@ -551,22 +551,14 @@ const Residents: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
+        background: '#ffffff'
       }}>
-        <div style={{ textAlign: 'center' }}>
-          <div className="iv-logo-pulse" style={{
-            background: '#ffffff',
-            borderRadius: '24px',
-            padding: '26px 34px',
-            display: 'inline-block',
-            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.20)'
-          }}>
-            <img
-              src="/newlogo.svg"
-              alt="Ashramam Vibes"
-              style={{ height: 60, width: 'auto', display: 'block' }}
-            />
-          </div>
+        <div className="iv-logo-pulse" style={{ textAlign: 'center' }}>
+          <img
+            src="/newlogo.svg"
+            alt="Ashramam"
+            style={{ width: 128, height: 'auto', display: 'block' }}
+          />
         </div>
       </div>
     );
@@ -579,22 +571,14 @@ const Residents: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)'
+        background: '#ffffff'
       }}>
-        <div style={{ textAlign: 'center' }}>
-          <div className="iv-logo-pulse" style={{
-            background: '#ffffff',
-            borderRadius: '24px',
-            padding: '26px 34px',
-            display: 'inline-block',
-            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.20)'
-          }}>
-            <img
-              src="/newlogo.svg"
-              alt="Ashramam Vibes"
-              style={{ height: 60, width: 'auto', display: 'block' }}
-            />
-          </div>
+        <div className="iv-logo-pulse" style={{ textAlign: 'center' }}>
+          <img
+            src="/newlogo.svg"
+            alt="Ashramam"
+            style={{ width: 128, height: 'auto', display: 'block' }}
+          />
         </div>
       </div>
     );
