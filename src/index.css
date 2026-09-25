@@ -483,3 +483,9 @@ a {
   font-size: 15px;
   margin: 0;
 }
+
+/* Residents: Orkut friends grid — always 3 in a row; capped on desktop so tiles stay compact. */
+.res-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (min-width: 1024px) {
+  .res-wrap { max-width: 800px; margin-left: auto; margin-right: auto; }
+}

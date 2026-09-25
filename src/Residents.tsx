@@ -704,15 +704,10 @@ const Residents: React.FC = () => {
       >
 
         {/* Muthalali Section */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.72)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255, 255, 255, 0.9)',
-          borderRadius: 20,
+        <div className="iv-card" style={{
           padding: 16,
           marginBottom: 16,
-          boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
+          textAlign: 'center'
         }}>
           <h2 style={{
             fontSize: 18,
@@ -747,15 +742,9 @@ const Residents: React.FC = () => {
         </div>
 
         {residents.length === 0 ? (
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.72)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.9)',
-            borderRadius: 20,
+          <div className="iv-card" style={{
             padding: 32,
-            textAlign: 'center',
-            boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
+            textAlign: 'center'
           }}>
             <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.3 }}>👥</div>
             <h3 style={{
@@ -773,45 +762,35 @@ const Residents: React.FC = () => {
             </p>
           </div>
         ) : (
+          <div className="res-wrap">
+          <h2 className="ok-boxtitle" style={{ margin: '4px 2px 12px' }}>
+            Residents ({residents.length})
+          </h2>
+          {/* Orkut-style friends grid: always 3 in a row */}
           <div
-            className="iv-cards-3 iv-tab-clearance"
-            style={{
-              paddingBottom: 80
-            }}
+            className="res-grid iv-tab-clearance"
+            style={{ paddingBottom: 80 }}
           >
             {residents.map((resident) => (
               <div
                 key={resident.uid}
                 onClick={() => setSelectedUser(resident)}
+                className="iv-card iv-card-hover"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.72)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255, 255, 255, 0.9)',
-                  borderRadius: 20,
-                  padding: 16,
+                  padding: 10,
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)',
                   textAlign: 'center'
-                }}
-                onMouseOver={e => {
-                  e.currentTarget.style.transform = 'scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-                }}
-                onMouseOut={e => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
                 }}
               >
                 <div style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: '50%',
-                  margin: '0 auto 12px auto',
+                  width: '100%',
+                  aspectRatio: '1',
+                  borderRadius: 4,
+                  margin: '0 auto 8px auto',
                   overflow: 'hidden',
                   position: 'relative',
-                  border: '2px solid #c9d9e8'
+                  border: '1px solid #c3bcd9',
+                  background: '#e9e4f5'
                 }}>
                   {getProfilePicture(resident.email, resident.name) ? (
                     <img
@@ -831,12 +810,12 @@ const Residents: React.FC = () => {
                             <div style="
                               width: 100%;
                               height: 100%;
-                              background: linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%);
+                              background: linear-gradient(135deg, #6f829e 0%, #4c5f85 100%);
                               display: flex;
                               align-items: center;
                               justify-content: center;
                               color: white;
-                              font-size: 24px;
+                              font-size: 32px;
                               font-weight: 600;
                             ">
                               ${resident.name.charAt(0).toUpperCase()}
@@ -849,12 +828,12 @@ const Residents: React.FC = () => {
                     <div style={{
                       width: '100%',
                       height: '100%',
-                      background: 'linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%)',
+                      background: 'linear-gradient(135deg, #6f829e 0%, #4c5f85 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: '#ffffff',
-                      fontSize: 24,
+                      fontSize: 32,
                       fontWeight: 600
                     }}>
                       {resident.name.charAt(0).toUpperCase()}
@@ -863,20 +842,24 @@ const Residents: React.FC = () => {
                 </div>
 
                 <h3 style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: '#1c1915',
-                  margin: 0,
-                  marginBottom: 4
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: '#1b3fc1',
+                  margin: '0 0 2px 0',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
                 }}>
                   {resident.name}
                 </h3>
 
                 <p style={{
-                  fontSize: 12,
+                  fontSize: 11,
                   color: '#6b7f92',
-                  margin: 0,
-                  marginBottom: 8
+                  margin: '0 0 6px 0',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
                 }}>
                   {resident.city && resident.country ?
                     `${resident.city}, ${resident.country}` :
@@ -885,17 +868,18 @@ const Residents: React.FC = () => {
                 </p>
 
                 <div style={{
-                  fontSize: 11,
+                  fontSize: 10,
                   color: '#6b7f92',
-                  padding: '4px 8px',
-                  backgroundColor: '#e9f1f8',
-                  borderRadius: 12,
+                  padding: '2px 8px',
+                  backgroundColor: '#e9e4f5',
+                  borderRadius: 10,
                   display: 'inline-block'
                 }}>
                   {resident.profileCompletion}% complete
                 </div>
               </div>
             ))}
+          </div>
           </div>
         )}
       </div>
