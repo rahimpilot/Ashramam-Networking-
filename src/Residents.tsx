@@ -762,7 +762,7 @@ const Residents: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div className="res-wrap">
+          <div className="res-wrap res-friendsbox">
           <h2 className="ok-boxtitle" style={{ margin: '4px 2px 12px' }}>
             Residents ({residents.length})
           </h2>
@@ -775,14 +775,14 @@ const Residents: React.FC = () => {
               <div
                 key={resident.uid}
                 onClick={() => setSelectedUser(resident)}
-                className="iv-card iv-card-hover"
+                className="iv-card iv-card-hover res-tile"
                 style={{
                   padding: 10,
                   cursor: 'pointer',
                   textAlign: 'center'
                 }}
               >
-                <div style={{
+                <div className="res-photo" style={{
                   width: '100%',
                   aspectRatio: '1',
                   borderRadius: 4,
@@ -841,7 +841,7 @@ const Residents: React.FC = () => {
                   )}
                 </div>
 
-                <h3 style={{
+                <h3 className="res-name" style={{
                   fontSize: 13,
                   fontWeight: 700,
                   color: '#1b3fc1',
@@ -853,7 +853,7 @@ const Residents: React.FC = () => {
                   {resident.name}
                 </h3>
 
-                <p style={{
+                <p className="res-city" style={{
                   fontSize: 11,
                   color: '#6b7f92',
                   margin: '0 0 6px 0',
@@ -867,7 +867,7 @@ const Residents: React.FC = () => {
                   }
                 </p>
 
-                <div style={{
+                <div className="res-pct" style={{
                   fontSize: 10,
                   color: '#6b7f92',
                   padding: '2px 8px',

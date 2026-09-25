@@ -486,6 +486,31 @@ a {
 
 /* Residents: Orkut friends grid — always 3 in a row; capped on desktop so tiles stay compact. */
 .res-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+/* Critical: lets long names ellipsis instead of blowing the columns out. */
+.res-grid > * { min-width: 0; }
 @media (min-width: 1024px) {
   .res-wrap { max-width: 800px; margin-left: auto; margin-right: auto; }
+}
+
+/* Mobile: true old-Orkut friends box — one white box, 3 plain photo+name cells per row. */
+@media (max-width: 767px) {
+  .res-friendsbox {
+    background: #ffffff;
+    border: 1px solid var(--ok-border);
+    border-radius: 6px;
+    padding: 10px 10px 12px;
+  }
+  .res-friendsbox .ok-boxtitle { margin: 0 0 8px 2px !important; }
+  .res-grid { gap: 10px; }
+  .res-tile {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  .res-tile:hover { transform: none !important; box-shadow: none !important; }
+  .res-photo { margin-bottom: 4px !important; border-radius: 2px !important; }
+  .res-name { font-size: 12px !important; font-weight: 400 !important; }
+  .res-city, .res-pct { display: none !important; }
 }
