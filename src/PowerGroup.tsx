@@ -18,7 +18,7 @@ const PowerGroup: React.FC = () => {
         minHeight: '100vh',
         background:
           'radial-gradient(120% 55% at 50% 0%, #2b2113 0%, #0b0b0d 58%) #0b0b0d',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        fontFamily: "'Marcellus', Georgia, serif",
         color: '#f5eeda',
       }}
     >

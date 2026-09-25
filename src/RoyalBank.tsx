@@ -11,7 +11,7 @@ const RoyalBank: React.FC = () => {
     <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      fontFamily: "'Marcellus', Georgia, serif"
     }}>
       {/* Back Button */}
       <div style={{
@@ -85,7 +85,7 @@ const RoyalBank: React.FC = () => {
           {/* Bank Name */}
           <h1 style={{
             fontSize: window.innerWidth <= 768 ? '2.4rem' : '3.4rem',
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontFamily: "'Marcellus', Georgia, serif",
             fontWeight: 600,
             margin: '0 0 1rem 0',
             color: '#ffffff',

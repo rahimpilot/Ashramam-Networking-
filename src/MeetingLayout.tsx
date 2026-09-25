@@ -31,7 +31,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
     <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
+      fontFamily: "'Marcellus', Georgia, serif"
     }}>
       <PageHeader title="Meeting Minutes" backTo="/meeting-minutes" backLabel="Back to all meetings" />
 

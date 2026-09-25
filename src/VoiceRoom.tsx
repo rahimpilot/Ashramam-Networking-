@@ -897,7 +897,7 @@ const VoiceRoom: React.FC = () => {
       <div style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        fontFamily: "'Marcellus', Georgia, serif",
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         padding: '2rem',
       }}>
@@ -1092,7 +1092,7 @@ const VoiceRoom: React.FC = () => {
       background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
       padding: '1.25rem',
       paddingBottom: '96px',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      fontFamily: "'Marcellus', Georgia, serif",
     }}>
       <div style={{ maxWidth: 560, margin: '0 auto' }}>
         {/* Header */}

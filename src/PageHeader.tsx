@@ -61,7 +61,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
           </svg>
         </button>
         <h1 style={{
-          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          fontFamily: "'Marcellus', Georgia, serif",
           fontSize: '23px',
           fontWeight: 600,
           letterSpacing: '0.3px',

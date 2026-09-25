@@ -123,7 +123,7 @@ const Hangout: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      fontFamily: "'Marcellus', Georgia, serif",
       position: 'relative',
     }}>
       {/* Fixed pastel gradient backdrop */}
@@ -190,7 +190,7 @@ const Hangout: React.FC = () => {
               YOUR CIRCLE
             </div>
             <h2 style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontFamily: "'Marcellus', Georgia, serif",
               fontSize: '38px',
               fontWeight: 600,
               color: '#1c2733',
@@ -253,7 +253,7 @@ const Hangout: React.FC = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h3 style={{
-                  fontFamily: "'Cormorant Garamond', Georgia, serif",
+                  fontFamily: "'Marcellus', Georgia, serif",
                   fontSize: '22px',
                   fontWeight: 600,
                   color: '#ffffff',

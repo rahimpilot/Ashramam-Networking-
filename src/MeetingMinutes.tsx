@@ -54,7 +54,7 @@ const MeetingMinutes: React.FC = () => {
     <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif'
+      fontFamily: "'Marcellus', Georgia, serif"
     }}>
       <style>{`
         .minutes-card { transition: transform 0.18s ease, box-shadow 0.18s ease; }
@@ -86,7 +86,7 @@ const MeetingMinutes: React.FC = () => {
           </div>
           <h2 style={{
             fontSize: '30px',
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontFamily: "'Marcellus', Georgia, serif",
             fontWeight: 600,
             color: '#1e1a14',
             margin: '0 0 6px 0',
