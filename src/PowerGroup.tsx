@@ -45,13 +45,13 @@ const PowerGroup: React.FC = () => {
         }}
       >
         <div
+          className="iv-page"
           style={{
             display: 'flex',
             alignItems: 'center',
-            maxWidth: 640,
-            margin: '0 auto',
             height: '60px',
-            padding: '0 8px 0 4px',
+            paddingTop: 0,
+            paddingBottom: 0,
           }}
         >
           <button
@@ -92,7 +92,7 @@ const PowerGroup: React.FC = () => {
         </div>
       </div>
 
-      <div style={{ maxWidth: 640, margin: '0 auto', padding: '22px 18px 0 18px' }}>
+      <div className="iv-page-wide" style={{ paddingTop: '22px' }}>
         <p
           style={{
             textAlign: 'center',
@@ -133,10 +133,8 @@ const PowerGroup: React.FC = () => {
         </div>
 
         <div
-          className="pg-card-grid"
+          className="pg-card-grid iv-cards-2"
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr',
             gap: '16px',
           }}
         >

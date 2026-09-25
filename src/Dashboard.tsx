@@ -810,9 +810,9 @@ const Dashboard: React.FC = () => {
         fontFamily: "'Marcellus', Georgia, serif",
         padding: '16px',
         paddingTop: '76px',
-        maxWidth: '640px',
         margin: '0 auto'
-      }}>
+      }}
+        className="iv-page">
         <div className="iv-skeleton" style={{ height: 60, borderRadius: 16, marginBottom: 16 }} />
         <SkeletonPost />
         <SkeletonPost />
@@ -839,15 +839,15 @@ const Dashboard: React.FC = () => {
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
         borderBottom: '1px solid #c9d9e8'
       }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          maxWidth: 480,
-          margin: '0 auto',
-          height: '100%',
-          padding: '0 16px'
-        }}>
+        <div
+          className="iv-page"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '100%'
+          }}
+        >
           {/* Left: Profile Picture + Name */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
             <div style={{
@@ -947,12 +947,13 @@ const Dashboard: React.FC = () => {
         top: '60px',
         zIndex: 50
       }}>
-        <div style={{
-          maxWidth: 480,
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
+        <div
+          className="iv-page"
+          style={{
+            display: 'flex',
+            justifyContent: 'center'
+          }}
+        >
           <button
             style={{
               flex: 1,
@@ -973,12 +974,13 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div style={{
-        maxWidth: 480,
-        margin: '0 auto',
-        background: 'transparent',
-        minHeight: '100vh'
-      }}>
+      <div
+        className="iv-page-wide"
+        style={{
+          background: 'transparent',
+          minHeight: '100vh'
+        }}
+      >
         {/* Story/Post Composer - Card Style */}
         <div style={{
           margin: '16px 16px 8px 16px',
@@ -1184,7 +1186,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Posts Feed */}
-        <div style={{ padding: '0 16px 96px 16px' }}>
+        <div className="iv-cards-2 iv-tab-clearance" style={{ paddingBottom: '96px' }}>
           {scrapPosts.map((post, index) => (
             <div
               key={post.id}

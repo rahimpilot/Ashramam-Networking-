@@ -21,6 +21,7 @@ import AshramamExclusive from './AshramamExclusive';
 import BelovedArticles from './BelovedArticles';
 import CinemaReviews from './CinemaReviews';
 import SplashScreen from './SplashScreen';
+import SideNavigation from './SideNavigation';
 import Krabi from './Krabi';
 import Baku from './Baku';
 import September7th2025Meeting from './September7th2025Meeting';
@@ -58,6 +59,13 @@ function isSplashEntryPath(pathname: string) {
   return SPLASH_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
 }
 
+/** Routes where the desktop sidebar is shown (the logged-in app shell).
+ *  Public pages (login, articles, cinema reviews) get the full width. */
+function useSidebarVisible() {
+  const location = useLocation();
+  const p = location.pathname;
+  return !(p === '/' || p.startsWith('/articles') || p.startsWith('/cinema-reviews') || p.startsWith('/beloved-articles'));
+}
 /** Replays the soft page-entrance animation on every navigation. */
 function AnimatedRoutes() {
   const location = useLocation();
@@ -79,10 +87,13 @@ function AnimatedRoutes() {
     };
   }, [showSplash]);
 
+  const sidebarVisible = useSidebarVisible();
+
   return (
     <>
       {showSplash && <SplashScreen fading={splashFading} />}
-      <div key={location.pathname} className="iv-page-enter">
+      {sidebarVisible && <SideNavigation />}
+      <div key={location.pathname} className={`iv-page-enter${sidebarVisible ? ' iv-shell-main' : ''}`}>
       <Routes location={location}>
         <Route path="/" element={<Login />} />
         {/* Public: article links (Abdu shares these outside the app) */}

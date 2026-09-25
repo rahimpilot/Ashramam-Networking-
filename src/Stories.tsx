@@ -452,10 +452,9 @@ const Stories: React.FC = () => {
       fontFamily: "'Marcellus', Georgia, serif",
       padding: '16px',
       paddingTop: '76px',
-      maxWidth: '640px',
       margin: '0 auto'
-    }}>
-      <SkeletonStory />
+    }}
+      className="iv-page">
       <SkeletonStory />
       <SkeletonStory />
     </div>
@@ -514,11 +513,13 @@ const Stories: React.FC = () => {
         />
       )}
 
-      <div style={{
-        maxWidth: 640,
-        margin: '0 auto',
-        padding: '24px 16px 110px 16px'
-      }}>
+      <div
+        className={(currentView === 'topics' ? 'iv-page-wide' : 'iv-page') + ' iv-tab-clearance'}
+        style={{
+          paddingTop: '24px',
+          paddingBottom: '110px'
+        }}
+      >
 
         {currentView === 'topics' ? (
           <>
@@ -684,7 +685,7 @@ const Stories: React.FC = () => {
                 No topics match your search.
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div className="iv-cards-2">
                 {visibleTopics.map((topic, index) => {
                   const latest = latestByTopic[topic.id];
                   return (

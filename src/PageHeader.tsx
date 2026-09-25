@@ -25,15 +25,15 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
       boxShadow: '0 1px 12px rgba(90, 70, 45, 0.07)',
       borderBottom: '1px solid rgba(91, 155, 213, 0.18)'
     }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        maxWidth: 640,
-        margin: '0 auto',
-        height: '100%',
-        padding: '0 16px'
-      }}>
+      <div
+        className="iv-page"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: '100%'
+        }}
+      >
         <button
           onClick={() => (onBack ? onBack() : navigate(backTo))}
           style={{

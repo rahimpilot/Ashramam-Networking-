@@ -64,11 +64,13 @@ const MeetingMinutes: React.FC = () => {
 
       <PageHeader title="Meeting Minutes" backTo="/hangout" backLabel="Back to Hangout" />
 
-      <div style={{
-        maxWidth: 640,
-        margin: '0 auto',
-        padding: '24px 16px 110px 16px'
-      }}>
+      <div
+        className="iv-page iv-tab-clearance"
+        style={{
+          paddingTop: '24px',
+          paddingBottom: '110px'
+        }}
+      >
         {/* Hero */}
         <div style={{ marginBottom: '20px', padding: '0 4px' }}>
           <div style={{
@@ -105,7 +107,7 @@ const MeetingMinutes: React.FC = () => {
         </div>
 
         {/* Meeting list */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="iv-cards-2">
           {MEETINGS.map((m) => (
             <div
               key={m.path}

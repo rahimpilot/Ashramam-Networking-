@@ -76,7 +76,7 @@ const AshramamExclusive: React.FC = () => {
     return (
       <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)' }}>
         <PageHeader title="Ashramam Exclusive" backTo="/hangout" backLabel="Back to hangout" />
-        <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px' }}>
+        <div className="iv-page" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
           <SkeletonPost />
         </div>
         <BottomNavigation />
@@ -99,7 +99,7 @@ const AshramamExclusive: React.FC = () => {
         onBack={selected ? () => navigate('/ashramam-exclusive') : undefined}
       />
 
-      <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px 110px 16px' }}>
+      <div className={(selected ? 'iv-page' : 'iv-page-wide') + ' iv-tab-clearance'} style={{ paddingTop: '20px', paddingBottom: '110px' }}>
         {!selected ? (
           <>
             {/* News-desk hero */}
@@ -132,7 +132,7 @@ const AshramamExclusive: React.FC = () => {
             </div>
 
             {/* Topic list */}
-            <div className="iv-stagger">
+            <div className="iv-stagger iv-cards-2">
               {STORIES.map((story) => (
                 <article
                   key={story.id}

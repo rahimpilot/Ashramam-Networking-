@@ -39,7 +39,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
 
   return (
     <div
-      className={className}
+      className={`iv-bottom-nav${className ? ' ' + className : ''}`}
       style={{
         position: 'fixed',
         bottom: 0,

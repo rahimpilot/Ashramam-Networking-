@@ -1094,7 +1094,7 @@ const VoiceRoom: React.FC = () => {
       paddingBottom: '96px',
       fontFamily: "'Marcellus', Georgia, serif",
     }}>
-      <div style={{ maxWidth: 560, margin: '0 auto' }}>
+      <div className="iv-page">
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <h1 style={{ fontSize: '1.4rem', fontWeight: 700, margin: 0, color: '#991b1b' }}>

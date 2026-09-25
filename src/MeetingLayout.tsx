@@ -35,11 +35,13 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
     }}>
       <PageHeader title="Meeting Minutes" backTo="/meeting-minutes" backLabel="Back to all meetings" />
 
-      <div style={{
-        maxWidth: 640,
-        margin: '0 auto',
-        padding: '24px 16px 110px 16px'
-      }}>
+      <div
+        className="iv-page iv-tab-clearance"
+        style={{
+          paddingTop: '24px',
+          paddingBottom: '110px'
+        }}
+      >
         {/* Hero */}
         <div style={{ marginBottom: '20px', padding: '0 4px' }}>
           <div style={{

@@ -230,7 +230,7 @@ export default function CinemaReviews() {
     }}>
       <PageHeader title="Cinema & Reviews" backTo="/hangout" backLabel="Back to hangout" />
 
-      <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px 110px 16px' }}>
+      <div className="iv-page-wide iv-tab-clearance" style={{ paddingTop: '20px', paddingBottom: '110px' }}>
         {/* Hero */}
         <div className="iv-card" style={{
           padding: '22px 20px',

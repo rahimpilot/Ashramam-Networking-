@@ -617,12 +617,12 @@ const Residents: React.FC = () => {
         borderBottom: '1px solid rgba(91, 155, 213, 0.18)',
         height: 60
       }}>
-        <div style={{
-          maxWidth: 480,
-          margin: '0 auto',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
+        <div
+          className="iv-page"
+          style={{
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0 16px'
         }}>
@@ -696,11 +696,12 @@ const Residents: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div style={{
-        maxWidth: 480,
-        margin: '0 auto',
-        paddingTop: 16
-      }}>
+      <div
+        className="iv-page-wide"
+        style={{
+          paddingTop: 16
+        }}
+      >
 
         {/* Muthalali Section */}
         <div style={{
@@ -772,12 +773,12 @@ const Residents: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: 12,
-            paddingBottom: 80
-          }}>
+          <div
+            className="iv-cards-3 iv-tab-clearance"
+            style={{
+              paddingBottom: 80
+            }}
+          >
             {residents.map((resident) => (
               <div
                 key={resident.uid}

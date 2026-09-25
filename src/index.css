@@ -313,3 +313,70 @@ select:focus {
   0% { transform: translateX(-110%); }
   100% { transform: translateX(350%); }
 }
+
+/* ================= Responsive layout system =================
+   Mobile-first: phones get the classic single-column app.
+   Tablets (>=768px): wider reading column, 2-up card grids.
+   Desktop (>=1024px): sidebar navigation, wide content, 3-up grids. */
+
+.iv-page, .iv-page-narrow, .iv-page-wide {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+/* Standard reading column */
+.iv-page { max-width: 640px; }
+/* Tight column for forms / focused flows */
+.iv-page-narrow { max-width: 480px; }
+/* Wide canvas for card grids and dashboards */
+.iv-page-wide { max-width: 680px; }
+
+/* Card grids: 1 column on phones... */
+.iv-cards, .iv-cards-2, .iv-cards-3 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+/* ...2 columns on tablets... */
+@media (min-width: 768px) {
+  .iv-page { max-width: 880px; }
+  .iv-page-narrow { max-width: 620px; }
+  .iv-page-wide { max-width: 1040px; }
+  .iv-cards, .iv-cards-2, .iv-cards-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+/* ...3 columns on desktop. */
+@media (min-width: 1200px) {
+  .iv-page { max-width: 1080px; }
+  .iv-page-narrow { max-width: 720px; }
+  .iv-page-wide { max-width: 1360px; }
+  .iv-cards, .iv-cards-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .iv-cards-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+/* Desktop sidebar navigation (replaces the bottom tab bar). */
+.iv-side-nav { display: none; }
+@media (min-width: 1024px) {
+  .iv-side-nav { display: flex !important; }
+  .iv-bottom-nav { display: none !important; }
+  .iv-shell-main { padding-left: 232px; }
+}
+
+/* On desktop, extra bottom clearance for the (now hidden) tab bar is unnecessary. */
+@media (min-width: 1024px) {
+  .iv-tab-clearance { padding-bottom: 32px !important; }
+}

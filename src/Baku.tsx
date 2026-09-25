@@ -88,15 +88,15 @@ const Baku: React.FC = () => {
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
         borderBottom: '1px solid #c9d9e8'
       }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          maxWidth: 480,
-          margin: '0 auto',
-          height: '100%',
-          padding: '0 16px'
-        }}>
+        <div
+          className="iv-page"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '100%'
+          }}
+        >
           <button
             onClick={() => navigate('/our-trips')}
             style={{
@@ -141,11 +141,13 @@ const Baku: React.FC = () => {
         </div>
       </div>
 
-      <div style={{
-        maxWidth: 480,
-        margin: '0 auto',
-        padding: '16px'
-      }}>
+      <div
+        className="iv-page-wide"
+        style={{
+          paddingTop: '16px',
+          paddingBottom: '16px'
+        }}
+      >
         
         {/* Trip Hero Section */}
         <div style={{

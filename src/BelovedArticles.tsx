@@ -284,7 +284,7 @@ const BelovedArticles: React.FC = () => {
         onBack={selected ? () => navigate('/articles') : undefined}
       />
 
-      <div style={{ maxWidth: 640, margin: '0 auto', padding: '20px 16px 110px 16px' }}>
+      <div className={(selected ? 'iv-page' : 'iv-page-wide') + ' iv-tab-clearance'} style={{ paddingTop: '20px', paddingBottom: '110px' }}>
         {!selected ? (
           <>
             {/* Hero */}
@@ -312,7 +312,7 @@ const BelovedArticles: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="iv-stagger">
+              <div className="iv-stagger iv-cards-2">
                 {ARTICLES.map((article) => (
                   <article
                     key={article.id}

@@ -165,11 +165,13 @@ const Hangout: React.FC = () => {
       <div style={{ position: 'relative', zIndex: 1 }}>
         <PageHeader title="Hangout" backTo="/dashboard" backLabel="Back to dashboard" />
 
-        <div style={{
-          maxWidth: 520,
-          margin: '0 auto',
-          padding: '28px 16px 110px 16px'
-        }}>
+        <div
+          className="iv-page-wide iv-tab-clearance"
+          style={{
+            paddingTop: '28px',
+            paddingBottom: '110px'
+          }}
+        >
 
           {/* Hero */}
           <div style={{ marginBottom: '22px', padding: '0 4px' }}>
@@ -310,11 +312,7 @@ const Hangout: React.FC = () => {
             EXPLORE
             <span style={{ flex: 1, height: '1px', background: 'rgba(91,155,213,0.30)' }} />
           </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '12px'
-          }}>
+          <div className="iv-cards-3">
             <div
               className="hangout-tile"
               onClick={() => navigate('/hangout/games/uno')}
