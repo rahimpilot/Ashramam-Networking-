@@ -10,7 +10,7 @@ const RoyalBank: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
+      background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
       fontFamily: "'Marcellus', Georgia, serif"
     }}>
       {/* Back Button */}

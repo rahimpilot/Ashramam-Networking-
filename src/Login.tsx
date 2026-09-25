@@ -77,22 +77,16 @@ const Login: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
+      background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '1rem'
     }}>
       <div style={{ maxWidth: '28rem', width: '100%' }}>
-        {/* Login Form */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.72)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderRadius: '1.25rem',
-          boxShadow: '0 20px 50px rgba(91, 155, 213, 0.28)',
+        {/* Login Form — orkut box */}
+        <div className="iv-card" style={{
           padding: '2rem',
-          border: '1px solid rgba(255, 255, 255, 0.9)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'

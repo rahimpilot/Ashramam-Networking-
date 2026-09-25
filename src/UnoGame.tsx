@@ -458,7 +458,7 @@ const UnoGame: React.FC = () => {
   };
 
   const pageStyle: React.CSSProperties = {
-    minHeight: '100vh', background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
+    minHeight: '100vh', background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
     fontFamily: "'Marcellus', Georgia, serif",
   };
   const wrapStyle: React.CSSProperties = { maxWidth: 680, margin: '0 auto', padding: '20px 16px 110px 16px' };

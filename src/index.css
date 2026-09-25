@@ -1,6 +1,6 @@
 /* ---------- Ivory Atelier theme tokens ---------- */
 :root {
-  --iv-bg: #e9f1f8;
+  --iv-bg: #dcd7e6; /* orkut lavender */
   --iv-surface: #ffffff;
   --iv-card: #ffffff;
   --iv-sand: #d8e6f2;
@@ -372,94 +372,114 @@ select:focus {
   .iv-tab-clearance { padding-bottom: 32px !important; }
 }
 
-/* ---------- Orkut-inspired desktop theme (Abdu's pick, 2026-09-25) ----------
-   Desktop only (>=1024px): pale-blue canvas, white panels with thin blue
-   borders, and the classic blue header bar. Mobile/tablet keep the
-   frosted-glass look. Marcellus typography is intentionally untouched —
-   this theme only recolors and re-borders. */
-@media (min-width: 1024px) {
-  :root {
-    --ok-bg: #d3e2f5;
-    --ok-border: #a3bede;
-    --ok-bar: #e2ebf9;
-    --ok-link: #0d5aa7;
-    --ok-header-from: #6ea3d8;
-    --ok-header-to: #4a7ebb;
-  }
+/* ---------- Orkut theme (Abdu's pick, 2026-09-25) ----------
+   Faithful to the real orkut.com reference screenshots: pale lavender
+   canvas, white boxes with thin lavender-gray borders, white header bar,
+   dark-navy titles, classic blue links, blue-gray nav pills. Applies to
+   every device — mobile, tablet, desktop, and the installed app.
+   Marcellus typography is intentionally untouched. */
+:root {
+  --ok-bg: #dcd7e6;
+  --ok-border: #c3bcd9;
+  --ok-border-deep: #a89fc7;
+  --ok-link: #1b3fc1;
+  --ok-navy: #232a68;
+  --ok-pill: #6f829e;
+  --ok-pill-active: #4c5f85;
+  --ok-highlight: #e9e4f5;
+}
 
-  body {
-    background: var(--ok-bg) !important;
-  }
+body {
+  background: var(--ok-bg);
+}
 
-  /* Left menu -> classic orkut panel */
-  .iv-side-nav {
-    background: #ffffff !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-right: 1px solid var(--ok-border) !important;
-    box-shadow: none !important;
-  }
-  .iv-side-tab {
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    border-radius: 6px !important;
-  }
-  .iv-side-tab span:last-child {
-    color: var(--ok-link) !important;
-    font-weight: 500 !important;
-  }
-  .iv-side-tab:hover {
-    background: var(--ok-bar) !important;
-  }
-  .iv-side-tab-active {
-    background: var(--ok-bar) !important;
-    border-color: var(--ok-border) !important;
-  }
-  .iv-side-tab-active span:last-child {
-    font-weight: 700 !important;
-  }
+/* Plain anchors go classic orkut blue (inline-styled links keep theirs). */
+a {
+  color: var(--ok-link);
+}
 
-  /* Shared page headers -> orkut blue bar with white title */
-  .iv-page-header,
-  .iv-dash-header {
-    background: linear-gradient(180deg, var(--ok-header-from) 0%, var(--ok-header-to) 100%) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-bottom: 1px solid #3a6ea5 !important;
-    box-shadow: none !important;
-  }
-  .iv-page-header h1 {
-    color: #ffffff !important;
-  }
-  .iv-dash-header div,
-  .iv-dash-header span {
-    color: #ffffff !important;
-  }
-  .iv-page-header img {
-    display: none !important; /* logo already lives in the sidebar */
-  }
-  .iv-page-header button {
-    background: rgba(255, 255, 255, 0.94) !important;
-    box-shadow: none !important;
-  }
-  .iv-page-header button svg {
-    stroke: #2e6da4 !important;
-  }
+/* Left menu -> orkut profile menu: white panel, plain blue links. */
+.iv-side-nav {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-right: 1px solid var(--ok-border) !important;
+  box-shadow: none !important;
+}
+.iv-side-tab {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 6px !important;
+}
+.iv-side-tab span:last-child {
+  color: var(--ok-link) !important;
+  font-weight: 500 !important;
+}
+.iv-side-tab:hover {
+  background: var(--ok-highlight) !important;
+}
+.iv-side-tab-active {
+  background: var(--ok-highlight) !important;
+  border-color: var(--ok-border) !important;
+}
+.iv-side-tab-active span:last-child {
+  font-weight: 700 !important;
+}
 
-  /* Frosted cards -> flat orkut boxes.
-     No !important here: cards with deliberate inline designs (e.g. the dark
-     Articles hero banner) keep their own backgrounds; this only replaces the
-     base frosted-glass look via source order. */
-  .iv-card {
-    background: #ffffff;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border: 1px solid var(--ok-border);
-    border-radius: 8px;
-    box-shadow: none;
-  }
-  .iv-card-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 0 1px var(--ok-border);
-  }
+/* Page headers -> orkut white bar with navy title. */
+.iv-page-header,
+.iv-dash-header {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid var(--ok-border) !important;
+  box-shadow: none !important;
+}
+.iv-page-header h1 {
+  color: var(--ok-navy) !important;
+}
+.iv-dash-header div,
+.iv-dash-header span {
+  color: var(--ok-navy) !important;
+}
+.iv-page-header button {
+  background: var(--ok-pill) !important;
+  box-shadow: none !important;
+}
+.iv-page-header button svg {
+  stroke: #ffffff !important;
+}
+
+/* Frosted cards -> flat orkut boxes.
+   No !important here: cards with deliberate inline designs (dark article
+   hero, black/gold Power Group, destination colors) keep their own look;
+   this only replaces the base frosted-glass style via source order. */
+.iv-card {
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid var(--ok-border);
+  border-radius: 6px;
+  box-shadow: none;
+}
+.iv-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px var(--ok-border-deep);
+}
+
+/* Bottom tab bar -> clean white orkut bar. */
+.iv-bottom-nav {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-top: 1px solid var(--ok-border) !important;
+  box-shadow: none !important;
+}
+
+/* Orkut-style box section title (dark navy, bold). */
+.ok-boxtitle {
+  color: var(--ok-navy);
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0;
 }

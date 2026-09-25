@@ -884,7 +884,7 @@ const VoiceRoom: React.FC = () => {
   // ---------- UI ----------
   if (!authReady) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)' }}>
         <p style={{ fontSize: '1.1rem', color: '#6b7f92' }}>Loading…</p>
       </div>
     );
@@ -896,7 +896,7 @@ const VoiceRoom: React.FC = () => {
     return (
       <div style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
+        background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
         fontFamily: "'Marcellus', Georgia, serif",
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         padding: '2rem',
@@ -1089,7 +1089,7 @@ const VoiceRoom: React.FC = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #d7e6f7 0%, #f2f7fd 55%, #e2edf9 100%)',
+      background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
       padding: '1.25rem',
       paddingBottom: '96px',
       fontFamily: "'Marcellus', Georgia, serif",
