@@ -13,6 +13,7 @@ interface CinemaReview {
   cinema: string;
   language: string;
   rating: number;
+  title?: string;
   review: string;
   images: string[];
   createdAt: Timestamp | null;
@@ -109,6 +110,7 @@ export default function CinemaReviews() {
   const [cinema, setCinema] = useState('');
   const [language, setLanguage] = useState('');
   const [rating, setRating] = useState(0);
+  const [title, setTitle] = useState('');
   const [review, setReview] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -204,12 +206,13 @@ export default function CinemaReviews() {
         cinema: cinema.trim(),
         language: language.trim(),
         rating,
+        title: title.trim(),
         review: review.trim(),
         images: dataUrls,
         createdAt: serverTimestamp(),
       });
       setName(''); setCinema(''); setLanguage(''); setRating(0);
-      setReview(''); setFiles([]); setPreviews([]);
+      setTitle(''); setReview(''); setFiles([]); setPreviews([]);
       setPosted(true);
       setTimeout(() => setPosted(false), 3000);
     } catch (err) {
@@ -306,6 +309,12 @@ export default function CinemaReviews() {
           </div>
 
           <div style={{ marginBottom: 12 }}>
+            <label style={labelStyle}>Review title</label>
+            <input style={inputStyle} value={title} onChange={(e) => setTitle(e.target.value)}
+              maxLength={100} />
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
             <label style={labelStyle}>Review</label>
             <textarea style={{ ...inputStyle, minHeight: 96, resize: 'vertical' }}
               value={review} onChange={(e) => setReview(e.target.value)}
@@ -392,6 +401,11 @@ export default function CinemaReviews() {
                   </div>
                   <Stars value={selected.rating} size={20} />
                 </div>
+                {selected.title && (
+                  <div style={{ marginTop: 10, fontSize: 16, fontWeight: 700, color: '#1c2733' }}>
+                    {selected.title}
+                  </div>
+                )}
                 {selected.review && (
                   <p style={{ margin: '14px 0 0 0', fontSize: 15, color: '#3d4b5c', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
                     {selected.review}
@@ -458,7 +472,7 @@ export default function CinemaReviews() {
                 const q = search.trim().toLowerCase();
                 const shown = q
                   ? reviews.filter((r) =>
-                      [r.cinema, r.name, r.language, r.review].some((f) =>
+                      [r.cinema, r.name, r.language, r.title || '', r.review].some((f) =>
                         (f || '').toLowerCase().includes(q)))
                   : reviews;
                 if (shown.length === 0) {
