@@ -256,10 +256,6 @@ export default function CinemaReviews() {
     }
   };
 
-  const avg = reviews.length
-    ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
-    : null;
-
   return (
     <div style={{
       minHeight: '100vh',
@@ -284,15 +280,6 @@ export default function CinemaReviews() {
           <p style={{ margin: 0, fontSize: 14, opacity: 0.9, lineHeight: 1.55, paddingRight: 36 }}>
             Drop your name, rate the film, and tell the world what you thought.
           </p>
-          {avg && (
-            <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 26 }}>★</span>
-              <span style={{ fontSize: 20, fontWeight: 800 }}>{avg}</span>
-              <span style={{ fontSize: 13, opacity: 0.85 }}>
-                average from {reviews.length} review{reviews.length === 1 ? '' : 's'}
-              </span>
-            </div>
-          )}
 
           {/* Copy link — bare white chain symbol, bottom-right corner of the banner */}
           <button type="button" onClick={copyShareLink} title="Copy page link"
