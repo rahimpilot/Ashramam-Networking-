@@ -860,7 +860,7 @@ const Dashboard: React.FC = () => {
         .sb-greet { display: none; }
         /* Mobile only: halve the Scrapbook composer height */
         @media (max-width: 767px) {
-          .sb-composer-card { padding: 8px 12px !important; }
+          .sb-composer-card { padding: 8px 12px !important; margin: 16px 0 8px 0 !important; }
           .sb-composer-actions { margin-top: 8px !important; }
           .sb-mention-dropdown { top: 89px !important; left: 12px !important; right: 12px !important; }
           /* Mobile only: Facebook-style photo rendering — natural ratio when the
