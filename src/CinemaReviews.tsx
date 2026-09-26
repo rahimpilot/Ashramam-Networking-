@@ -306,107 +306,7 @@ export default function CinemaReviews() {
           </button>
         </div>
 
-        {/* Review form */}
-        <form onSubmit={submit} className="iv-card" style={{ padding: 20, marginBottom: 20 }}>
-          <h3 style={{ margin: '0 0 14px 0', fontSize: 17, fontWeight: 800, color: '#1c2733' }}>
-            Write a review
-          </h3>
-
-          <div style={{ marginBottom: 12 }}>
-            <label style={labelStyle}>Your name *</label>
-            <input style={inputStyle} value={name} onChange={(e) => setName(e.target.value)}
-              maxLength={60} />
-          </div>
-
-          <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
-            <div style={{ flex: 2 }}>
-              <label style={labelStyle}>Cinema name *</label>
-              <input style={inputStyle} value={cinema} onChange={(e) => setCinema(e.target.value)}
-                maxLength={80} />
-            </div>
-            <div style={{ flex: 1 }}>
-              <label style={labelStyle}>Language</label>
-              <input style={inputStyle} value={language}
-                onChange={(e) => setLanguage(e.target.value)} maxLength={30} />
-            </div>
-          </div>
-
-          <div style={{ marginBottom: 12 }}>
-            <label style={labelStyle}>Your rating *</label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Stars value={rating} onPick={setRating} />
-              {rating > 0 && (
-                <span style={{ fontSize: 14, fontWeight: 700, color: '#8a6d1c' }}>{rating}/5</span>
-              )}
-            </div>
-          </div>
-
-          <div style={{ marginBottom: 12 }}>
-            <label style={labelStyle}>Review title</label>
-            <input style={inputStyle} value={title} onChange={(e) => setTitle(e.target.value)}
-              maxLength={100} />
-          </div>
-
-          <div style={{ marginBottom: 12 }}>
-            <label style={labelStyle}>Review</label>
-            <textarea style={{ ...inputStyle, minHeight: 96, resize: 'vertical' }}
-              value={review} onChange={(e) => setReview(e.target.value)}
-              
-              maxLength={2000} />
-          </div>
-
-          <div style={{ marginBottom: 16 }}>
-            <label style={labelStyle}>Pictures <span style={{ fontWeight: 400, color: '#8a9aab' }}>(up to {MAX_IMAGES})</span></label>
-            <input ref={fileRef} type="file" accept="image/*" multiple
-              onChange={onFilesPicked} style={{ display: 'none' }} />
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {previews.map((u, i) => (
-                <div key={i} style={{ position: 'relative', width: 72, height: 72 }}>
-                  <img src={u} alt="" style={{
-                    width: 72, height: 72, objectFit: 'cover', borderRadius: 10,
-                    border: '1px solid #d7e3ef',
-                  }} />
-                  <button type="button" onClick={() => removeFile(i)}
-                    aria-label="Remove picture"
-                    style={{
-                      position: 'absolute', top: -8, right: -8, width: 22, height: 22,
-                      borderRadius: '50%', border: 'none', background: '#d33', color: '#fff',
-                      fontSize: 13, cursor: 'pointer', lineHeight: 1,
-                    }}>×</button>
-                </div>
-              ))}
-              {files.length < MAX_IMAGES && (
-                <button type="button" onClick={() => fileRef.current?.click()}
-                  style={{
-                    width: 72, height: 72, borderRadius: 10, border: '1.5px dashed #9db8d2',
-                    background: '#f7fbfe', color: '#2f7fc4', fontSize: 26, cursor: 'pointer',
-                  }}>+</button>
-              )}
-            </div>
-          </div>
-
-          {error && (
-            <div style={{
-              marginBottom: 12, padding: '10px 14px', borderRadius: 10,
-              background: '#fdecec', color: '#b3261e', fontSize: 14, fontWeight: 600,
-            }}>{error}</div>
-          )}
-          {posted && (
-            <div style={{
-              marginBottom: 12, padding: '10px 14px', borderRadius: 10,
-              background: '#e6f6ec', color: '#1c7a3d', fontSize: 14, fontWeight: 600,
-            }}>Review posted. Thanks!</div>
-          )}
-
-          <button type="submit" disabled={submitting} className="iv-press" style={{
-            width: '100%', padding: '13px', borderRadius: 999, border: 'none',
-            background: submitting ? '#9db8d2' : 'linear-gradient(135deg, #2f7fc4, #1f5d9e)',
-            color: '#fff', fontSize: 16, fontWeight: 800, cursor: submitting ? 'default' : 'pointer',
-            boxShadow: '0 4px 14px rgba(47,127,196,.35)',
-          }}>
-            {submitting ? 'Posting…' : 'Post review'}
-          </button>
-        </form>
+        
 
         {/* Review detail (opened from a list link) or the review list */}
         {reviewId ? (
@@ -507,7 +407,7 @@ export default function CinemaReviews() {
               <div className="iv-card" style={{ padding: '28px 20px', textAlign: 'center', color: '#8a9aab' }}>
                 <div style={{ fontSize: 34, marginBottom: 8 }}>🎬</div>
                 <div style={{ fontSize: 15, fontWeight: 600, color: '#4a5f75' }}>No reviews yet.</div>
-                <div style={{ fontSize: 13, marginTop: 4 }}>Be the first to rate a film above.</div>
+                <div style={{ fontSize: 13, marginTop: 4 }}>Be the first to rate a film below.</div>
               </div>
             ) : (
               (() => {
@@ -569,7 +469,109 @@ export default function CinemaReviews() {
           </>
         )}
 
-        <div style={{ textAlign: 'center', marginTop: 8 }}>
+        {/* Review form */}
+        <form onSubmit={submit} className="iv-card" style={{ padding: 20, marginTop: 20 }}>
+          <h3 style={{ margin: '0 0 14px 0', fontSize: 17, fontWeight: 800, color: '#1c2733' }}>
+            Write a review
+          </h3>
+
+          <div style={{ marginBottom: 12 }}>
+            <label style={labelStyle}>Your name *</label>
+            <input style={inputStyle} value={name} onChange={(e) => setName(e.target.value)}
+              maxLength={60} />
+          </div>
+
+          <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+            <div style={{ flex: 2 }}>
+              <label style={labelStyle}>Cinema name *</label>
+              <input style={inputStyle} value={cinema} onChange={(e) => setCinema(e.target.value)}
+                maxLength={80} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={labelStyle}>Language</label>
+              <input style={inputStyle} value={language}
+                onChange={(e) => setLanguage(e.target.value)} maxLength={30} />
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <label style={labelStyle}>Your rating *</label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Stars value={rating} onPick={setRating} />
+              {rating > 0 && (
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#8a6d1c' }}>{rating}/5</span>
+              )}
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <label style={labelStyle}>Review title</label>
+            <input style={inputStyle} value={title} onChange={(e) => setTitle(e.target.value)}
+              maxLength={100} />
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <label style={labelStyle}>Review</label>
+            <textarea style={{ ...inputStyle, minHeight: 96, resize: 'vertical' }}
+              value={review} onChange={(e) => setReview(e.target.value)}
+              
+              maxLength={2000} />
+          </div>
+
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Pictures <span style={{ fontWeight: 400, color: '#8a9aab' }}>(up to {MAX_IMAGES})</span></label>
+            <input ref={fileRef} type="file" accept="image/*" multiple
+              onChange={onFilesPicked} style={{ display: 'none' }} />
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {previews.map((u, i) => (
+                <div key={i} style={{ position: 'relative', width: 72, height: 72 }}>
+                  <img src={u} alt="" style={{
+                    width: 72, height: 72, objectFit: 'cover', borderRadius: 10,
+                    border: '1px solid #d7e3ef',
+                  }} />
+                  <button type="button" onClick={() => removeFile(i)}
+                    aria-label="Remove picture"
+                    style={{
+                      position: 'absolute', top: -8, right: -8, width: 22, height: 22,
+                      borderRadius: '50%', border: 'none', background: '#d33', color: '#fff',
+                      fontSize: 13, cursor: 'pointer', lineHeight: 1,
+                    }}>×</button>
+                </div>
+              ))}
+              {files.length < MAX_IMAGES && (
+                <button type="button" onClick={() => fileRef.current?.click()}
+                  style={{
+                    width: 72, height: 72, borderRadius: 10, border: '1.5px dashed #9db8d2',
+                    background: '#f7fbfe', color: '#2f7fc4', fontSize: 26, cursor: 'pointer',
+                  }}>+</button>
+              )}
+            </div>
+          </div>
+
+          {error && (
+            <div style={{
+              marginBottom: 12, padding: '10px 14px', borderRadius: 10,
+              background: '#fdecec', color: '#b3261e', fontSize: 14, fontWeight: 600,
+            }}>{error}</div>
+          )}
+          {posted && (
+            <div style={{
+              marginBottom: 12, padding: '10px 14px', borderRadius: 10,
+              background: '#e6f6ec', color: '#1c7a3d', fontSize: 14, fontWeight: 600,
+            }}>Review posted. Thanks!</div>
+          )}
+
+          <button type="submit" disabled={submitting} className="iv-press" style={{
+            width: '100%', padding: '13px', borderRadius: 999, border: 'none',
+            background: submitting ? '#9db8d2' : 'linear-gradient(135deg, #2f7fc4, #1f5d9e)',
+            color: '#fff', fontSize: 16, fontWeight: 800, cursor: submitting ? 'default' : 'pointer',
+            boxShadow: '0 4px 14px rgba(47,127,196,.35)',
+          }}>
+            {submitting ? 'Posting…' : 'Post review'}
+          </button>
+        </form>
+
+        <div style={{ textAlign: 'center', marginTop: 20 }}>
           <button onClick={() => navigate('/hangout')} className="iv-press" style={{
             padding: '11px 22px', borderRadius: 999, border: '1px solid rgba(91,155,213,.45)',
             background: '#ffffff', color: '#2f7fc4', fontWeight: 700, fontSize: 14, cursor: 'pointer',
