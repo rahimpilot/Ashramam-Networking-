@@ -17,7 +17,7 @@
 const PROJECT_ID = 'ashramam-network';
 // Public Firebase web API key: identifies the project only, already shipped in
 // the client bundle by design. cinemaReviews has a public read rule.
-const API_KEY = '<redacted>';
+const API_KEY = 'AIzaSyAto1Q5Bq2nHNNecCdsXLkLmpdNR2X_RdI';
 const SITE = 'https://www.ashramamvibes.com';
 const FALLBACK_IMAGE = `${SITE}/og/cinema-reviews-preview.jpg`;
 const FALLBACK_TITLE = 'Cinema & Reviews | Ashramam';
