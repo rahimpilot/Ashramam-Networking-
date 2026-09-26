@@ -501,7 +501,7 @@ a {
 @media (min-width: 1024px) {
   .res-wrap { max-width: 1020px; margin-left: auto; margin-right: auto; }
   .res-grid { grid-template-columns: repeat(4, 1fr); }
-  .muthalali-img { max-width: 720px; }
+  .muthalali-img { max-width: 100%; }
 }
 
 /* Articles search — full width on mobile/tablet, comfortably capped on web. */
