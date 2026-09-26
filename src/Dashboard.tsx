@@ -802,6 +802,30 @@ const Dashboard: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, navigate, authLoading]);
 
+  // Mobile scroll-reveal: feed cards glide in as they enter the viewport
+  // (mirrors Articles). The hidden initial state lives in mobile-only CSS,
+  // so tablet/desktop/web are unaffected.
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll('.sb-reveal:not(.sb-inview)'));
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('sb-inview'));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            en.target.classList.add('sb-inview');
+            io.unobserve(en.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [scrapPosts]);
+
   if (authLoading || loading) {
     return (
       <div style={{
@@ -838,6 +862,25 @@ const Dashboard: React.FC = () => {
              photo fits, clean center-crop when taller (never squished) */
           .sb-post-img-wrap { margin-bottom: 12px !important; }
           .sb-post-img { display: block !important; max-height: 480px !important; }
+
+          /* Mobile only: feed cards glide in as you scroll (mirrors Articles).
+             The load-time iv-stagger animation is switched off on mobile so the
+             scroll reveal owns the entrance. */
+          @keyframes sbFadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+          .sb-composer-card { animation: sbFadeDown .5s ease-out backwards; }
+          .sb-reveal.iv-stagger { animation: none !important; }
+          .sb-reveal {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity .55s ease-out, transform .55s cubic-bezier(.22,.9,.3,1) !important;
+            transition-delay: calc(var(--sb-i, 0) * 70ms);
+          }
+          .sb-reveal.sb-inview { opacity: 1; transform: none; }
+
+          @media (prefers-reduced-motion: reduce) {
+            .sb-composer-card { animation: none !important; }
+            .sb-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+          }
         }
       `}</style>
       {/* Modern Mobile Header - 60px height */}
@@ -1206,7 +1249,7 @@ const Dashboard: React.FC = () => {
           {scrapPosts.map((post, index) => (
             <div
               key={post.id}
-              className="iv-stagger"
+              className="iv-stagger sb-reveal"
               style={{
                 marginBottom: '12px',
                 padding: '16px',
@@ -1217,8 +1260,9 @@ const Dashboard: React.FC = () => {
                 borderRadius: '20px',
                 boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)',
                 transition: 'box-shadow 0.2s ease, transform 0.2s ease',
-                animationDelay: `${Math.min(index, 8) * 60}ms`
-              }}
+                animationDelay: `${Math.min(index, 8) * 60}ms`,
+                '--sb-i': Math.min(index, 4),
+              } as React.CSSProperties}
               onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 10px 28px rgba(91, 155, 213, 0.28)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(91, 155, 213, 0.18)'; e.currentTarget.style.transform = 'translateY(0)'; }}
             >
