@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { auth, db, storage } from './firebase';
 import { doc, getDoc, collection, getDocs, setDoc, updateDoc, query, orderBy, Timestamp } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -169,6 +169,16 @@ const Dashboard: React.FC = () => {
   const [likePop, setLikePop] = useState<string | null>(null);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState<string | null>(null);
+
+  // Pull-to-refresh + double-tap-to-like states
+  const [ptrDist, setPtrDist] = useState(0);
+  const [ptrRefreshing, setPtrRefreshing] = useState(false);
+  const [heartBurst, setHeartBurst] = useState<string | null>(null);
+  const feedRef = useRef<HTMLDivElement>(null);
+  const ptrDistRef = useRef(0);
+  const ptrRefreshingRef = useRef(false);
+  const lastTapRef = useRef<{[postId: string]: number}>({});
+  const tapTimerRef = useRef<{[postId: string]: ReturnType<typeof setTimeout>}>({});
   
   // Mention/Tagging states
   const [showMentionDropdown, setShowMentionDropdown] = useState(false);
@@ -661,6 +671,24 @@ const Dashboard: React.FC = () => {
     setImageModalOpen(true);
   };
 
+  // Single tap opens the viewer; a second tap within 300ms likes instead —
+  // the viewer open is deferred so the double tap can cancel it.
+  const handleImageTap = (post: ScrapPost, imageSrc: string) => {
+    const now = Date.now();
+    const last = lastTapRef.current[post.id] || 0;
+    if (now - last < 300) {
+      const timer = tapTimerRef.current[post.id];
+      if (timer) clearTimeout(timer);
+      lastTapRef.current[post.id] = 0;
+      handleLike(post.id);
+      setHeartBurst(post.id);
+      setTimeout(() => setHeartBurst((cur) => (cur === post.id ? null : cur)), 750);
+    } else {
+      lastTapRef.current[post.id] = now;
+      tapTimerRef.current[post.id] = setTimeout(() => handleImageClick(imageSrc), 280);
+    }
+  };
+
   const closeImageModal = () => {
     setImageModalOpen(false);
     setModalImageSrc(null);
@@ -802,6 +830,63 @@ const Dashboard: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, navigate, authLoading]);
 
+  // Pull-to-refresh on the feed (touch devices): drag down from the very top
+  // of the feed to reload posts. Native listeners with passive:false so the
+  // page doesn't bounce while pulling. Desktop (mouse) is unaffected.
+  useEffect(() => {
+    const el = feedRef.current;
+    if (!el) return;
+    let startY = 0;
+    let pulling = false;
+    const onStart = (e: TouchEvent) => {
+      if (window.scrollY <= 0 && !ptrRefreshingRef.current) {
+        startY = e.touches[0].clientY;
+        pulling = true;
+      }
+    };
+    const onMove = (e: TouchEvent) => {
+      if (!pulling) return;
+      const dy = e.touches[0].clientY - startY;
+      if (dy > 8) {
+        e.preventDefault();
+        const d = Math.min(dy * 0.45, 90);
+        ptrDistRef.current = d;
+        setPtrDist(d);
+      } else if (dy <= 0) {
+        pulling = false;
+        ptrDistRef.current = 0;
+        setPtrDist(0);
+      }
+    };
+    const onEnd = () => {
+      if (!pulling) return;
+      pulling = false;
+      if (ptrDistRef.current > 55) {
+        ptrRefreshingRef.current = true;
+        setPtrRefreshing(true);
+        setPtrDist(56);
+        fetchScrapPosts().finally(() => {
+          ptrRefreshingRef.current = false;
+          ptrDistRef.current = 0;
+          setPtrRefreshing(false);
+          setPtrDist(0);
+        });
+      } else {
+        ptrDistRef.current = 0;
+        setPtrDist(0);
+      }
+    };
+    el.addEventListener('touchstart', onStart, { passive: true });
+    el.addEventListener('touchmove', onMove, { passive: false });
+    el.addEventListener('touchend', onEnd);
+    return () => {
+      el.removeEventListener('touchstart', onStart);
+      el.removeEventListener('touchmove', onMove);
+      el.removeEventListener('touchend', onEnd);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Mobile scroll-reveal: feed cards glide in as they enter the viewport
   // (mirrors Articles). The hidden initial state lives in mobile-only CSS,
   // so tablet/desktop/web are unaffected.
@@ -856,6 +941,30 @@ const Dashboard: React.FC = () => {
       fontFamily: "'Marcellus', Georgia, serif"
     }}>
       <style>{`
+        /* Double-tap-to-like heart burst + pull-to-refresh spinner */
+        .sb-heart-burst {
+          position: absolute; inset: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 76px; pointer-events: none; z-index: 2;
+          text-shadow: 0 2px 14px rgba(0,0,0,0.35);
+          animation: sbHeartPop 0.75s ease-out forwards;
+        }
+        @keyframes sbHeartPop {
+          0% { transform: scale(0); opacity: 0; }
+          35% { transform: scale(1.25); opacity: 0.95; }
+          60% { transform: scale(1); opacity: 0.95; }
+          100% { transform: scale(1.5); opacity: 0; }
+        }
+        .sb-ptr-spin {
+          border: 3px solid #e3def0 !important;
+          border-top-color: #5b6ee1 !important;
+          font-size: 0 !important;
+          animation: sbPtrSpin 0.8s linear infinite;
+        }
+        @keyframes sbPtrSpin { to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) {
+          .sb-heart-burst, .sb-ptr-spin { animation: none; }
+        }
         /* Spacious-card composer greeting: hidden on desktop, shown on mobile */
         .sb-greet { display: none; }
         /* Mobile only: halve the Scrapbook composer height */
@@ -1272,7 +1381,29 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Posts Feed */}
-        <div className="iv-cards-2 iv-tab-clearance" style={{ paddingBottom: '96px' }}>
+        <div ref={feedRef} className="iv-cards-2 iv-tab-clearance" style={{ paddingBottom: '96px' }}>
+          {/* Pull-to-refresh indicator (touch devices) */}
+          <div style={{
+            height: ptrRefreshing ? 56 : ptrDist,
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: ptrRefreshing || ptrDist === 0 ? 'height 0.22s ease' : 'none'
+          }}>
+            {(ptrDist > 0 || ptrRefreshing) && (
+              <div className={ptrRefreshing ? 'sb-ptr-spin' : ''} style={{
+                width: 34, height: 34, borderRadius: '50%',
+                background: '#fff', border: '1px solid #d8d3e8',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 17, color: '#5b6ee1',
+                transform: ptrRefreshing ? 'none' : `rotate(${Math.min(ptrDist * 2, 180)}deg)`,
+                opacity: Math.min(0.4 + ptrDist / 70, 1)
+              }}>
+                {ptrRefreshing ? '' : '↓'}
+              </div>
+            )}
+          </div>
           {scrapPosts.map((post, index) => (
             <div
               key={post.id}
@@ -1405,12 +1536,12 @@ const Dashboard: React.FC = () => {
                   
                   {/* Post Image */}
                   {post.image && (
-                    <div className="sb-post-img-wrap" style={{ marginBottom: '16px' }}>
+                    <div className="sb-post-img-wrap" style={{ marginBottom: '16px', position: 'relative' }}>
                       <img
                         src={post.image}
                         alt="Post content"
                         className="sb-post-img"
-                        onClick={() => handleImageClick(post.image!)}
+                        onClick={() => handleImageTap(post, post.image!)}
                         style={{
                           width: '100%',
                           maxWidth: '100%',
@@ -1419,6 +1550,7 @@ const Dashboard: React.FC = () => {
                           objectFit: 'cover',
                           borderRadius: '12px',
                           cursor: 'pointer',
+                          touchAction: 'manipulation',
                           transition: 'transform 0.2s ease, box-shadow 0.2s ease'
                         }}
                         onMouseEnter={(e) => {
@@ -1430,6 +1562,9 @@ const Dashboard: React.FC = () => {
                           e.currentTarget.style.boxShadow = 'none';
                         }}
                       />
+                      {heartBurst === post.id && (
+                        <div className="sb-heart-burst">❤️</div>
+                      )}
                     </div>
                   )}
                   
