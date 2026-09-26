@@ -872,8 +872,7 @@ const Dashboard: React.FC = () => {
           .sb-reveal {
             opacity: 0;
             transform: translateY(26px);
-            transition: opacity .55s ease-out, transform .55s cubic-bezier(.22,.9,.3,1) !important;
-            transition-delay: calc(var(--sb-i, 0) * 70ms);
+            transition: opacity .55s ease-out calc(var(--sb-i, 0) * 70ms), transform .55s cubic-bezier(.22,.9,.3,1) calc(var(--sb-i, 0) * 70ms) !important;
           }
           .sb-reveal.sb-inview { opacity: 1; transform: none; }
 
