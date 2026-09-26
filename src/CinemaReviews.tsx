@@ -118,8 +118,32 @@ export default function CinemaReviews() {
   const [error, setError] = useState('');
   const [posted, setPosted] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const SHARE_URL = 'https://www.ashramamvibes.com/cinema-reviews?v=2';
+
+  const copyReviewLink = async (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = `https://www.ashramamvibes.com/cinema-reviews/${id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* clipboard unavailable */ }
+      document.body.removeChild(ta);
+    }
+    setCopiedId(id);
+    setTimeout(() => setCopiedId((cur) => (cur === id ? null : cur)), 1800);
+  };
+
+  const linkBtnStyle: React.CSSProperties = {
+    background: 'transparent', border: 'none', padding: '4px 2px',
+    fontSize: 16, cursor: 'pointer', lineHeight: 1, flexShrink: 0,
+  };
 
   const copyShareLink = async () => {
     try {
@@ -408,7 +432,16 @@ export default function CinemaReviews() {
                       }}>{selected.language}</span>
                     )}
                   </div>
-                  <Stars value={selected.rating} size={20} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                    <Stars value={selected.rating} size={20} />
+                    <button type="button" title="Copy review link"
+                      onClick={(e) => copyReviewLink(e, selected.id)}
+                      style={{ ...linkBtnStyle, fontSize: 18 }}>
+                      {copiedId === selected.id
+                        ? <span style={{ color: '#1c9c4c' }}>✓</span>
+                        : '🔗'}
+                    </button>
+                  </div>
                 </div>
                 {selected.title && (
                   <div style={{ marginTop: 10, fontSize: 16, fontWeight: 700, color: '#1c2733' }}>
@@ -515,6 +548,13 @@ export default function CinemaReviews() {
                           </span>
                           <span style={{ color: '#8a9aab' }}> · by {r.name}</span>
                         </span>
+                        <button type="button" title="Copy review link"
+                          onClick={(e) => copyReviewLink(e, r.id)}
+                          style={linkBtnStyle}>
+                          {copiedId === r.id
+                            ? <span style={{ color: '#1c9c4c' }}>✓</span>
+                            : '🔗'}
+                        </button>
                         {r.createdAt && (
                           <span style={{ fontSize: 12, color: '#a5b6c8', flexShrink: 0 }}>
                             {r.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
