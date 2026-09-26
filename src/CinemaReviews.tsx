@@ -217,7 +217,16 @@ export default function CinemaReviews() {
       setTimeout(() => setPosted(false), 3000);
     } catch (err) {
       console.error(err);
-      setError('Could not post your review just now. Please try again in a moment.');
+      const code = (err as { code?: string } | null)?.code || '';
+      if (code === 'permission-denied') {
+        setError('Posting was blocked by the database rules (permission-denied). Please publish the latest Firestore rules in the Firebase console, then try again.');
+      } else if (code === 'unavailable' || code === 'deadline-exceeded') {
+        setError('Could not reach the database just now (network). Please check your connection and try again.');
+      } else if (code === 'invalid-argument' || code === 'resource-exhausted') {
+        setError('Your review is too large to save (invalid-argument). Please remove a picture and try again.');
+      } else {
+        setError(`Could not post your review just now (${code || 'unknown error'}). Please try again in a moment.`);
+      }
     } finally {
       setSubmitting(false);
     }
