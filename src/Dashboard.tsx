@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { auth, db, storage } from './firebase';
 import { doc, getDoc, collection, getDocs, setDoc, updateDoc, query, orderBy, Timestamp } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -339,6 +339,21 @@ const Dashboard: React.FC = () => {
     setNewMessage(newText);
     setShowMentionDropdown(false);
     setMentionQuery('');
+  };
+
+  const composerInputRef = useRef<HTMLTextAreaElement>(null);
+
+  // "Tag" tile shortcut: drops a "@" into the composer and opens the existing
+  // mention picker (same flow as typing @ by hand).
+  const handleTagShortcut = () => {
+    const prefix = newMessage && !newMessage.endsWith(' ') && !newMessage.endsWith('\n') ? ' ' : '';
+    const updated = `${newMessage}${prefix}@`;
+    setNewMessage(updated);
+    setCursorPosition(updated.length);
+    setMentionQuery('');
+    setMentionUsers(allUsers.slice(0, 5));
+    setShowMentionDropdown(true);
+    composerInputRef.current?.focus();
   };
 
   // Comment mention handlers
@@ -826,6 +841,11 @@ const Dashboard: React.FC = () => {
     return () => io.disconnect();
   }, [scrapPosts]);
 
+  const composerFirstName = (userProfile.name || user?.displayName || '').split(' ')[0];
+  const composerPlaceholder = composerFirstName
+    ? `What's on your mind, ${composerFirstName}?`
+    : "What's on your mind?";
+
   if (authLoading || loading) {
     return (
       <div style={{
@@ -852,16 +872,53 @@ const Dashboard: React.FC = () => {
       fontFamily: "'Marcellus', Georgia, serif"
     }}>
       <style>{`
+        /* Facebook-pill composer pieces: neutral/hidden on desktop, the pill
+           look is applied in the mobile media query below. */
+        .sb-pill-row { display: block; }
+        .sb-pill-avatar { display: none; }
+        .sb-tile-bar { display: none; }
         /* Mobile only: halve the Scrapbook composer height */
         @media (max-width: 767px) {
           .sb-composer-card { padding: 8px 12px !important; }
-          .sb-composer-input { min-height: 40px !important; }
           .sb-composer-actions { margin-top: 8px !important; }
           .sb-mention-dropdown { top: 54px !important; left: 12px !important; right: 12px !important; }
           /* Mobile only: Facebook-style photo rendering — natural ratio when the
              photo fits, clean center-crop when taller (never squished) */
           .sb-post-img-wrap { margin-bottom: 12px !important; }
           .sb-post-img { display: block !important; max-height: 480px !important; }
+
+          /* Mobile only: Facebook-pill composer */
+          .sb-pill-row { display: flex !important; align-items: center; gap: 12px; }
+          .sb-pill-avatar {
+            display: flex !important; align-items: center; justify-content: center;
+            width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0; overflow: hidden;
+            background: linear-gradient(135deg, #5b9bd5 0%, #4a86c8 100%);
+            color: #ffffff; font-size: 22px;
+          }
+          .sb-composer-input {
+            flex: 1 !important; width: auto !important;
+            background: rgba(255,255,255,.9) !important;
+            border: 1px solid rgba(255,255,255,.9) !important;
+            border-radius: 28px !important; padding: 14px 20px !important;
+            min-height: 54px !important;
+            box-shadow: 0 6px 20px rgba(91,155,213,.18);
+          }
+          .sb-composer-input:focus { min-height: 110px !important; border-radius: 18px !important; }
+          .sb-tile-bar {
+            display: flex !important; margin-top: 10px; overflow: hidden;
+            background: rgba(255,255,255,.72); border: 1px solid rgba(255,255,255,.9);
+            border-radius: 16px; box-shadow: 0 6px 20px rgba(91,155,213,.18);
+          }
+          .sb-tile {
+            flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+            padding: 11px 0 9px; font-size: 22px; background: none; border: none;
+            font-family: inherit; color: inherit; cursor: pointer;
+          }
+          .sb-tile span { font-size: 12px; color: #4a86c8; }
+          .sb-tile + .sb-tile { border-left: 1px solid rgba(120,110,150,.15); }
+          /* The tile bar covers photo upload on mobile; Share stays in the actions row */
+          .sb-composer-actions .sb-cam-label { display: none !important; }
+          .sb-composer-actions { justify-content: flex-end !important; }
 
           /* Mobile only: feed cards glide in as you scroll (mirrors Articles).
              The load-time iv-stagger animation is switched off on mobile so the
@@ -1051,25 +1108,40 @@ const Dashboard: React.FC = () => {
           position: 'relative'
         }}>
           <form onSubmit={handleSubmitPost}>
-            <textarea
-              value={newMessage}
-              onChange={handleMessageChange}
-              placeholder="What's on your mind? Type @ to mention someone"
-              className="sb-composer-input"
-              style={{
-                width: '100%',
-                minHeight: '80px',
-                border: 'none',
-                outline: 'none',
-                fontSize: '16px',
-                fontWeight: 400,
-                lineHeight: '1.4',
-                resize: 'none',
-                fontFamily: 'inherit',
-                color: '#1c1915',
-                background: 'transparent'
-              }}
-            />
+            {/* Pill row: avatar + input (the Facebook-pill look is mobile-only) */}
+            <div className="sb-pill-row">
+              <div className="sb-pill-avatar">
+                {user?.email && getProfilePicture(user.email, userProfile.name || user.displayName || '') ? (
+                  <img
+                    src={getProfilePicture(user.email, userProfile.name || user.displayName || '')!}
+                    alt="Profile"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <span>{(userProfile.name || user?.displayName || 'U').charAt(0).toUpperCase()}</span>
+                )}
+              </div>
+              <textarea
+                ref={composerInputRef}
+                value={newMessage}
+                onChange={handleMessageChange}
+                placeholder={composerPlaceholder}
+                className="sb-composer-input"
+                style={{
+                  width: '100%',
+                  minHeight: '80px',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '16px',
+                  fontWeight: 400,
+                  lineHeight: '1.4',
+                  resize: 'none',
+                  fontFamily: 'inherit',
+                  color: '#1c1915',
+                  background: 'transparent'
+                }}
+              />
+            </div>
             
             {/* Mention Dropdown */}
             {showMentionDropdown && mentionUsers.length > 0 && (
@@ -1177,6 +1249,24 @@ const Dashboard: React.FC = () => {
               </div>
             )}
             
+            {/* Mobile-only quick-action tiles (Facebook pill) */}
+            <div className="sb-tile-bar">
+              <label className="sb-tile">
+                📷
+                <span>Photo</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  style={{ display: 'none' }}
+                />
+              </label>
+              <button type="button" className="sb-tile" onClick={handleTagShortcut}>
+                🏷️
+                <span>Tag</span>
+              </button>
+            </div>
+
             <div className="sb-composer-actions" style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -1185,7 +1275,7 @@ const Dashboard: React.FC = () => {
             }}>
               <div style={{ display: 'flex', gap: '16px' }}>
                 {/* Camera Button */}
-                <label style={{ 
+                <label className="sb-cam-label" style={{ 
                   fontSize: '24px', 
                   cursor: 'pointer',
                   display: 'flex',
