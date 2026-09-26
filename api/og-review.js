@@ -143,7 +143,11 @@ module.exports = async (req, res) => {
   let pageUrl = `${SITE}/cinema-reviews`;
   let redirectTo = '/cinema-reviews';
   if (reviewId) {
-    pageUrl = `${SITE}/cinema-reviews/${encodeURIComponent(reviewId)}`;
+    // Preserve our own ?v= cache-buster in og:url/canonical so each shared
+    // link is its own preview object in WhatsApp/Facebook caches.
+    const vParam = String(req.query.v || '').replace(/[^a-zA-Z0-9._-]/g, '').slice(0, 12);
+    const vSuffix = vParam ? `?v=${vParam}` : '';
+    pageUrl = `${SITE}/cinema-reviews/${encodeURIComponent(reviewId)}${vSuffix}`;
     redirectTo = `/cinema-reviews/${encodeURIComponent(reviewId)}`;
     try {
       const review = await fetchReview(reviewId);

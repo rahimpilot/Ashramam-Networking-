@@ -125,7 +125,7 @@ export default function CinemaReviews() {
   const copyReviewLink = async (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     e.stopPropagation();
-    const url = `https://www.ashramamvibes.com/cinema-reviews/${id}`;
+    const url = `https://www.ashramamvibes.com/cinema-reviews/${id}?v=1`;
     try {
       await navigator.clipboard.writeText(url);
     } catch {
