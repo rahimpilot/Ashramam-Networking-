@@ -827,6 +827,15 @@ const Dashboard: React.FC = () => {
       background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
       fontFamily: "'Marcellus', Georgia, serif"
     }}>
+      <style>{`
+        /* Mobile only: halve the Scrapbook composer height */
+        @media (max-width: 767px) {
+          .sb-composer-card { padding: 8px 12px !important; }
+          .sb-composer-input { min-height: 40px !important; }
+          .sb-composer-actions { margin-top: 8px !important; }
+          .sb-mention-dropdown { top: 54px !important; left: 12px !important; right: 12px !important; }
+        }
+      `}</style>
       {/* Modern Mobile Header - 60px height */}
       <div
         className="iv-dash-header"
@@ -984,7 +993,7 @@ const Dashboard: React.FC = () => {
         }}
       >
         {/* Story/Post Composer - Card Style */}
-        <div style={{
+        <div className="sb-composer-card" style={{
           margin: '16px 16px 8px 16px',
           padding: '16px',
           background: 'rgba(255, 255, 255, 0.72)',
@@ -1000,6 +1009,7 @@ const Dashboard: React.FC = () => {
               value={newMessage}
               onChange={handleMessageChange}
               placeholder="What's on your mind? Type @ to mention someone"
+              className="sb-composer-input"
               style={{
                 width: '100%',
                 minHeight: '80px',
@@ -1017,7 +1027,7 @@ const Dashboard: React.FC = () => {
             
             {/* Mention Dropdown */}
             {showMentionDropdown && mentionUsers.length > 0 && (
-              <div style={{
+              <div className="sb-mention-dropdown" style={{
                 position: 'absolute',
                 top: '100px',
                 left: '16px',
@@ -1121,7 +1131,7 @@ const Dashboard: React.FC = () => {
               </div>
             )}
             
-            <div style={{
+            <div className="sb-composer-actions" style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
