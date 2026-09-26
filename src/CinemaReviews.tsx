@@ -185,14 +185,16 @@ export default function CinemaReviews() {
     if (rating < 1) { setError('Please tap the stars to give a rating.'); return; }
     setSubmitting(true);
     try {
-      // Photos are stored as data URLs inside the review document
-      // (Firestore limit is 1MB per document — guard well below it).
+      // Photos are stored as data URLs inside the review document.
+      // Firestore counts the base64 STRING toward its 1MB document limit,
+      // so measure the encoded length (not the decoded estimate) and stay
+      // well below it.
       const dataUrls: string[] = [];
       for (const f of files) {
         dataUrls.push(await compressToDataUrl(f));
       }
-      const approxBytes = dataUrls.reduce((s, u) => s + u.length * 0.75, 0);
-      if (approxBytes > 900_000) {
+      const encodedBytes = dataUrls.reduce((s, u) => s + u.length, 0);
+      if (encodedBytes > 700_000) {
         setError('Those pictures are too large together — please remove one and try again.');
         setSubmitting(false);
         return;
