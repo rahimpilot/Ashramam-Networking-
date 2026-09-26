@@ -834,6 +834,10 @@ const Dashboard: React.FC = () => {
           .sb-composer-input { min-height: 40px !important; }
           .sb-composer-actions { margin-top: 8px !important; }
           .sb-mention-dropdown { top: 54px !important; left: 12px !important; right: 12px !important; }
+          /* Mobile only: Facebook-style photo rendering — natural ratio when the
+             photo fits, clean center-crop when taller (never squished) */
+          .sb-post-img-wrap { margin-bottom: 12px !important; }
+          .sb-post-img { display: block !important; max-height: 480px !important; }
         }
       `}</style>
       {/* Modern Mobile Header - 60px height */}
@@ -1330,10 +1334,11 @@ const Dashboard: React.FC = () => {
                   
                   {/* Post Image */}
                   {post.image && (
-                    <div style={{ marginBottom: '16px' }}>
+                    <div className="sb-post-img-wrap" style={{ marginBottom: '16px' }}>
                       <img
                         src={post.image}
                         alt="Post content"
+                        className="sb-post-img"
                         onClick={() => handleImageClick(post.image!)}
                         style={{
                           width: '100%',
