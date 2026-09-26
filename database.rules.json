@@ -1,26 +1,16 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null",
+    "games": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
     "voiceRooms": {
-      ".indexOn": ["participants"],
       "$roomId": {
-        "participants": {
-          "$userId": {
-            ".validate": "newData.hasChildren(['id', 'name', 'email', 'isMuted', 'isActive', 'joinedAt'])"
-          }
-        },
-        "offers": {
-          "$userId": {
-            "$targetId": {
-              ".validate": "newData.hasChildren(['sdp', 'type', 'timestamp'])"
-            }
-          }
-        },
         "answers": {
           "$userId": {
             "$targetId": {
-              ".validate": "newData.hasChildren(['sdp', 'type', 'timestamp'])"
+              ".validate": "newData.hasChildren(['sdp', 'type', 'timestamp'])",
+              ".write": "auth != null && (auth.uid == $userId || auth.uid == $targetId)"
             }
           }
         },
@@ -28,12 +18,31 @@
           "$userId": {
             "$targetId": {
               "$candidateId": {
-                ".validate": "newData.hasChildren(['candidate', 'sdpMLineIndex', 'sdpMid', 'timestamp'])"
+                ".validate": "newData.hasChildren(['candidate', 'sdpMLineIndex', 'sdpMid', 'timestamp'])",
+                ".write": "auth != null && (auth.uid == $userId || auth.uid == $targetId)"
               }
             }
           }
+        },
+        "offers": {
+          "$userId": {
+            "$targetId": {
+              ".validate": "newData.hasChildren(['sdp', 'type', 'timestamp'])",
+              ".write": "auth != null && (auth.uid == $userId || auth.uid == $targetId)"
+            }
+          }
+        },
+        "participants": {
+          "$userId": {
+            ".validate": "newData.hasChildren(['id', 'name', 'email', 'isMuted', 'isActive', 'joinedAt'])",
+            ".write": "auth != null && auth.uid == $userId"
+          }
         }
-      }
+      },
+      ".indexOn": [
+        "participants"
+      ],
+      ".read": "auth != null"
     }
   }
 }
