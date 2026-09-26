@@ -862,7 +862,7 @@ const Dashboard: React.FC = () => {
         @media (max-width: 767px) {
           .sb-composer-card { padding: 8px 12px !important; }
           .sb-composer-actions { margin-top: 8px !important; }
-          .sb-mention-dropdown { top: 132px !important; left: 12px !important; right: 12px !important; }
+          .sb-mention-dropdown { top: 89px !important; left: 12px !important; right: 12px !important; }
           /* Mobile only: Facebook-style photo rendering — natural ratio when the
              photo fits, clean center-crop when taller (never squished) */
           .sb-post-img-wrap { margin-bottom: 12px !important; }
@@ -874,7 +874,7 @@ const Dashboard: React.FC = () => {
             width: 100% !important;
             background: #f4f1fa !important; border: none !important;
             border-radius: 14px !important; padding: 14px 16px !important;
-            min-height: 86px !important; box-shadow: none !important;
+            min-height: 43px !important; box-shadow: none !important;
           }
           .sb-composer-actions { justify-content: flex-start !important; gap: 10px; }
           .sb-composer-actions .sb-cam-label {
