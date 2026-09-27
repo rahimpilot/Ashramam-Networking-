@@ -19,34 +19,7 @@ interface Trip {
 const OurTrips: React.FC = () => {
   const navigate = useNavigate();
 
-  const trips: Trip[] = [
-    {
-      id: 'krabi',
-      name: 'Krabi',
-      emoji: '🏖️',
-      description: 'Memories from our Krabi adventure',
-      color: {
-        gradient: 'linear-gradient(135deg, #FEF3E2 0%, #FED7AA 100%)',
-        border: '#FB923C',
-        shadow: 'rgba(251, 146, 60, 0.2)',
-        textDark: '#92400E',
-        textLight: '#B45309'
-      }
-    },
-    {
-      id: 'baku',
-      name: 'Baku',
-      emoji: '🌃',
-      description: 'Memories from our Baku adventure',
-      color: {
-        gradient: 'linear-gradient(135deg, #DDD6FE 0%, #C7D2FE 100%)',
-        border: '#A78BFA',
-        shadow: 'rgba(167, 139, 250, 0.2)',
-        textDark: '#4C1D95',
-        textLight: '#6D28D9'
-      }
-    }
-  ];
+  const trips: Trip[] = [];
 
   const handleTripClick = (tripId: string) => {
     navigate(`/our-trips/${tripId}`);
