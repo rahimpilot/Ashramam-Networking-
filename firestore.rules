@@ -95,15 +95,6 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    // Travel Diaries — private memory book. Only signed-in residents can
-    // read; any resident can add a diary; only the author can edit/delete.
-    match /travelDiaries/{diaryId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
-      allow update, delete: if request.auth != null &&
-        request.auth.token.email == resource.data.authorEmail;
-    }
-
     // Unused legacy collections — no code in the app reads or writes these,
     // so they are denied outright (previously any signed-in user could read
     // and write them, e.g. everyone's messages).

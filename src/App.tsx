@@ -9,7 +9,6 @@ import Account from './Account';
 import Profile from './Profile';
 import Dashboard from './Dashboard';
 import Stories from './Stories';
-import { TravelDiaryDetail, NewTravelDiary } from './TravelDiaries';
 import Residents from './Residents';
 import Hangout from './Hangout';
 import PowerGroup from './PowerGroup';
@@ -116,8 +115,6 @@ function AnimatedRoutes() {
         <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
         <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
         <Route path="/stories" element={<RequireAuth><Stories /></RequireAuth>} />
-        <Route path="/travel-diaries/new" element={<RequireAuth><NewTravelDiary /></RequireAuth>} />
-        <Route path="/travel-diaries/:diaryId" element={<RequireAuth><TravelDiaryDetail /></RequireAuth>} />
         <Route path="/residents" element={<RequireAuth><Residents /></RequireAuth>} />
         <Route path="/hangout" element={<RequireAuth><Hangout /></RequireAuth>} />
         <Route path="/hangout/games/uno" element={<RequireAuth><UnoGame /></RequireAuth>} />
