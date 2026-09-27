@@ -121,7 +121,7 @@ const Baku: React.FC = () => {
           </button>
           <h1 style={{
             fontSize: '18px',
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#1c1915',
             lineHeight: '1.3',
             margin: 0
@@ -167,7 +167,7 @@ const Baku: React.FC = () => {
           </div>
           <h2 style={{
             fontSize: '28px',
-            fontWeight: 700,
+            fontWeight: 400,
             color: '#4C1D95',
             margin: '0 0 8px 0'
           }}>
@@ -335,7 +335,7 @@ const Baku: React.FC = () => {
         }}>
           <h3 style={{
             fontSize: '16px',
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#1c1915',
             marginBottom: '12px',
             margin: '0 0 12px 0'
@@ -401,7 +401,7 @@ const Baku: React.FC = () => {
         }}>
           <h3 style={{
             fontSize: '16px',
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#1c1915',
             margin: '0 0 12px 0'
           }}>

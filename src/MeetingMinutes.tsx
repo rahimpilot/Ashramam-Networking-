@@ -89,7 +89,7 @@ const MeetingMinutes: React.FC = () => {
           <h2 style={{
             fontSize: '30px',
             fontFamily: "'Marcellus', Georgia, serif",
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#1e1a14',
             margin: '0 0 6px 0',
             letterSpacing: '-0.5px'

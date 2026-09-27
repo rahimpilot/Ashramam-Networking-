@@ -135,7 +135,7 @@ const Profile: React.FC = () => {
           <p style={{ color: '#7a8ba0' }}>Loading profile…</p>
         ) : otherMissing ? (
           <div>
-            <h2 className="iv-display" style={{ fontSize: '1.6rem', fontWeight: 600, color: '#5b9bd5', marginBottom: '0.5rem' }}>{displayName}</h2>
+            <h2 className="iv-display" style={{ fontSize: '1.6rem', fontWeight: 400, color: '#5b9bd5', marginBottom: '0.5rem' }}>{displayName}</h2>
             <p style={{ color: '#7a8ba0' }}>This member hasn't set up a profile yet.</p>
           </div>
         ) : (
@@ -148,7 +148,7 @@ const Profile: React.FC = () => {
             }}>
               {initial}
             </div>
-            <h2 className="iv-display" style={{ fontSize: '1.8rem', fontWeight: 600, color: '#1c2733', margin: '0.5rem 0 0 0' }}>{displayName}</h2>
+            <h2 className="iv-display" style={{ fontSize: '1.8rem', fontWeight: 400, color: '#1c2733', margin: '0.5rem 0 0 0' }}>{displayName}</h2>
             {otherProfile?.location ? (
               <p style={{ margin: 0, color: '#7a8ba0', fontSize: 14 }}>📍 {otherProfile.location}</p>
             ) : null}
@@ -166,7 +166,7 @@ const Profile: React.FC = () => {
 
   return (
     <div style={cardStyle}>
-      <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '1rem', color: '#5b9bd5' }}>Edit Profile</h2>
+      <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 400, marginBottom: '1rem', color: '#5b9bd5' }}>Edit Profile</h2>
       {user ? (
         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <label>

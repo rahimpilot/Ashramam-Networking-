@@ -43,7 +43,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ isOpen, onAgree, onCa
           <img src="/newlogo.svg" alt="Logo" style={{ height: 48, marginRight: '1rem' }} />
           <h2 style={{
             fontSize: '1.5rem',
-            fontWeight: '700',
+            fontWeight: '400',
             color: '#1c1915',
             margin: 0
           }}>Terms and Disclaimer</h2>

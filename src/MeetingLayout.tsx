@@ -59,7 +59,7 @@ const MeetingLayout: React.FC<MeetingLayoutProps> = ({
           </div>
           <h2 style={{
             fontSize: '28px',
-            fontWeight: 700,
+            fontWeight: 400,
             color: '#1e1a14',
             margin: '0 0 6px 0',
             letterSpacing: '-0.5px'

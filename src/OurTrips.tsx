@@ -102,7 +102,7 @@ const OurTrips: React.FC = () => {
           </button>
           <h1 style={{
             fontSize: '18px',
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#1c1915',
             lineHeight: '1.3',
             margin: 0
@@ -166,7 +166,7 @@ const OurTrips: React.FC = () => {
               <div>
                 <h3 style={{
                   fontSize: '18px',
-                  fontWeight: 600,
+                  fontWeight: 400,
                   lineHeight: '1.3',
                   margin: '0 0 4px 0',
                   color: trip.color.textDark

@@ -150,7 +150,7 @@ const Krabi: React.FC = () => {
           </button>
           <h1 style={{
             fontSize: '18px',
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#1c1915',
             lineHeight: '1.3',
             margin: 0
@@ -184,7 +184,7 @@ const Krabi: React.FC = () => {
         }}>
           <h2 style={{
             fontSize: '24px',
-            fontWeight: 700,
+            fontWeight: 400,
             color: '#1c1915',
             margin: '0 0 8px 0'
           }}>

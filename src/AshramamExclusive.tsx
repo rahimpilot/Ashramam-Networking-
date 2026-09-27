@@ -126,7 +126,7 @@ const AshramamExclusive: React.FC = () => {
                 <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff', display: 'inline-block' }} />
                 EXCLUSIVE
               </div>
-              <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 700 }}>
+              <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 400 }}>
                 Inside stories, before anyone else.
               </h2>
             </div>
@@ -168,7 +168,7 @@ const AshramamExclusive: React.FC = () => {
                       }}>
                         {story.badge}
                       </div>
-                      <h3 style={{ margin: '0 0 4px 0', fontSize: 17, fontWeight: 700, color: '#1c2733' }}>
+                      <h3 style={{ margin: '0 0 4px 0', fontSize: 17, fontWeight: 400, color: '#1c2733' }}>
                         {story.title}
                       </h3>
                       <p style={{
@@ -211,7 +211,7 @@ const AshramamExclusive: React.FC = () => {
               }}>
                 {selected.badge}
               </div>
-              <h2 style={{ margin: '0 0 4px 0', fontSize: 22, fontWeight: 800, color: '#1c2733' }}>
+              <h2 style={{ margin: '0 0 4px 0', fontSize: 22, fontWeight: 400, color: '#1c2733' }}>
                 {selected.title}
               </h2>
               {selected.date && (

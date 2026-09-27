@@ -162,7 +162,7 @@ const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({ isOpen, onClo
         }}>
           <h2 style={{
             fontSize: '1.5rem',
-            fontWeight: 700,
+            fontWeight: 400,
             margin: 0,
             color: '#16a34a'
           }}>

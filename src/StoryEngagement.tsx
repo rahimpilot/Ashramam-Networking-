@@ -138,7 +138,7 @@ const StoryEngagement: React.FC<{
 
       {/* Comments */}
       <div className="iv-card" style={{ marginTop: 14, padding: 16 }}>
-        <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 700, color: '#1c2733' }}>
+        <h3 style={{ margin: '0 0 12px 0', fontSize: 16, fontWeight: 400, color: '#1c2733' }}>
           Comments {comments.length > 0 && <span style={{ color: '#8a9aab', fontWeight: 600 }}>({comments.length})</span>}
         </h3>
 

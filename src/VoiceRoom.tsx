@@ -906,7 +906,7 @@ const VoiceRoom: React.FC = () => {
           boxShadow: '0 8px 24px rgba(0,0,0,0.1)', maxWidth: '420px', width: '100%', textAlign: 'center',
         }}>
           <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔥</div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#991b1b', margin: '0 0 0.5rem 0' }}>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 400, color: '#991b1b', margin: '0 0 0.5rem 0' }}>
             Happening Now
           </h1>
           <p style={{ fontSize: '1rem', color: '#6b7f92', margin: '0 0 1rem 0' }}>
@@ -1097,7 +1097,7 @@ const VoiceRoom: React.FC = () => {
       <div className="iv-page">
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-          <h1 style={{ fontSize: '1.4rem', fontWeight: 700, margin: 0, color: '#991b1b' }}>
+          <h1 style={{ fontSize: '1.4rem', fontWeight: 400, margin: 0, color: '#991b1b' }}>
             🔥 Happening Now
           </h1>
           <div style={{
@@ -1134,7 +1134,7 @@ const VoiceRoom: React.FC = () => {
 
         {/* Participants */}
         <div style={{ background: 'rgba(255, 255, 255, 0.72)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.9)', borderRadius: '20px', padding: '1.25rem', boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)', marginBottom: '1.25rem' }}>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1rem 0', color: '#2a241c' }}>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 400, margin: '0 0 1rem 0', color: '#2a241c' }}>
             👥 In the room ({participants.length})
           </h2>
 

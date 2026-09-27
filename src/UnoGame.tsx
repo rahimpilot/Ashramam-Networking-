@@ -497,7 +497,7 @@ const UnoGame: React.FC = () => {
         <div style={wrapStyle}>
           <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <div style={{ fontSize: 44, marginBottom: 4 }}>🃏</div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 4px 0', color: '#1e1a14' }}>Game Night</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 400, margin: '0 0 4px 0', color: '#1e1a14' }}>Game Night</h2>
             <p style={{ fontSize: 14, color: '#6b7f92', margin: 0 }}>Start a table and invite your circle.</p>
           </div>
 

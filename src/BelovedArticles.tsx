@@ -443,7 +443,7 @@ const BelovedArticles: React.FC = () => {
             {ARTICLES.length === 0 ? (
               <div className="iv-card" style={{ padding: '32px 20px', textAlign: 'center' }}>
                 <div style={{ fontSize: 40, marginBottom: 12 }}>📖</div>
-                <h3 style={{ margin: '0 0 8px 0', fontSize: 17, fontWeight: 700, color: '#1c2733' }}>
+                <h3 style={{ margin: '0 0 8px 0', fontSize: 17, fontWeight: 400, color: '#1c2733' }}>
                   The first article is on its way…
                 </h3>
                 <p style={{ margin: 0, fontSize: 14, color: '#5b6b7c', lineHeight: 1.6 }}>
@@ -453,7 +453,7 @@ const BelovedArticles: React.FC = () => {
             ) : filtered.length === 0 ? (
               <div className="iv-card" style={{ padding: '32px 20px', textAlign: 'center' }}>
                 <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
-                <h3 style={{ margin: '0 0 8px 0', fontSize: 17, fontWeight: 700, color: '#1c2733' }}>
+                <h3 style={{ margin: '0 0 8px 0', fontSize: 17, fontWeight: 400, color: '#1c2733' }}>
                   No articles found
                 </h3>
                 <p style={{ margin: 0, fontSize: 14, color: '#5b6b7c', lineHeight: 1.6 }}>
@@ -487,7 +487,7 @@ const BelovedArticles: React.FC = () => {
                         </div>
                       )}
                       <div className="art-card-body" style={{ flex: 1, minWidth: 0 }}>
-                        <h3 style={{ margin: '0 0 4px 0', fontSize: 17, fontWeight: 700, color: '#1c2733' }}>
+                        <h3 style={{ margin: '0 0 4px 0', fontSize: 17, fontWeight: 400, color: '#1c2733' }}>
                           {article.title}
                         </h3>
                         <p style={{
@@ -541,7 +541,7 @@ const BelovedArticles: React.FC = () => {
                 <img src={selected.image} alt={selected.title} className="art-hero" style={{ width: '100%', display: 'block' }} />
               )}
               <div style={{ padding: 20 }}>
-                <h2 className="art-detail-title" style={{ margin: '0 0 4px 0', fontSize: 22, fontWeight: 800, color: '#1c2733' }}>
+                <h2 className="art-detail-title" style={{ margin: '0 0 4px 0', fontSize: 22, fontWeight: 400, color: '#1c2733' }}>
                   {selected.title}
                 </h2>
                 {selected.date && (

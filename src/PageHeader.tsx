@@ -65,7 +65,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, backTo, backLabel, onBac
         <h1 style={{
           fontFamily: "'Marcellus', Georgia, serif",
           fontSize: '23px',
-          fontWeight: 600,
+          fontWeight: 400,
           letterSpacing: '0.3px',
           color: '#1c1915',
           lineHeight: '1.3',

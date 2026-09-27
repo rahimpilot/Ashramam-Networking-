@@ -86,7 +86,7 @@ const RoyalBank: React.FC = () => {
           <h1 style={{
             fontSize: window.innerWidth <= 768 ? '2.4rem' : '3.4rem',
             fontFamily: "'Marcellus', Georgia, serif",
-            fontWeight: 600,
+            fontWeight: 400,
             margin: '0 0 1rem 0',
             color: '#ffffff',
             textShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
@@ -136,7 +136,7 @@ const RoyalBank: React.FC = () => {
         }}>
           <h2 style={{
             fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
-            fontWeight: 700,
+            fontWeight: 400,
             color: '#332e26',
             margin: '0 0 1rem 0'
           }}>
@@ -155,7 +155,7 @@ const RoyalBank: React.FC = () => {
         {/* Services Grid */}
         <h2 style={{
           fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
-          fontWeight: 700,
+          fontWeight: 400,
           color: '#332e26',
           margin: '0 0 1.5rem 0'
         }}>
@@ -178,7 +178,7 @@ const RoyalBank: React.FC = () => {
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>✈️</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
-              fontWeight: 700,
+              fontWeight: 400,
               color: '#332e26',
               margin: '0 0 0.5rem 0'
             }}>
@@ -203,7 +203,7 @@ const RoyalBank: React.FC = () => {
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🕌</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
-              fontWeight: 700,
+              fontWeight: 400,
               color: '#332e26',
               margin: '0 0 0.5rem 0'
             }}>
@@ -228,7 +228,7 @@ const RoyalBank: React.FC = () => {
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🎉</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
-              fontWeight: 700,
+              fontWeight: 400,
               color: '#332e26',
               margin: '0 0 0.5rem 0'
             }}>
@@ -253,7 +253,7 @@ const RoyalBank: React.FC = () => {
             <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>⚠️</div>
             <h3 style={{
               fontSize: window.innerWidth <= 768 ? '1.1rem' : '1.3rem',
-              fontWeight: 700,
+              fontWeight: 400,
               color: '#332e26',
               margin: '0 0 0.5rem 0'
             }}>
@@ -279,7 +279,7 @@ const RoyalBank: React.FC = () => {
         }}>
           <h3 style={{
             fontSize: window.innerWidth <= 768 ? '1.2rem' : '1.4rem',
-            fontWeight: 700,
+            fontWeight: 400,
             color: '#713f12',
             margin: '0 0 1rem 0'
           }}>
@@ -346,7 +346,7 @@ const RoyalBank: React.FC = () => {
         }}>
           <h3 style={{
             fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.6rem',
-            fontWeight: 700,
+            fontWeight: 400,
             color: '#ffffff',
             margin: '0 0 1rem 0'
           }}>
@@ -395,7 +395,7 @@ const RoyalBank: React.FC = () => {
         }}>
           <h3 style={{
             fontSize: window.innerWidth <= 768 ? '1.2rem' : '1.4rem',
-            fontWeight: 700,
+            fontWeight: 400,
             color: '#2a241c',
             margin: '0 0 1rem 0'
           }}>

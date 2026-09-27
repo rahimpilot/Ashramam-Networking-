@@ -113,7 +113,7 @@ const Login: React.FC = () => {
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <h2 style={{
               fontSize: '1.5rem',
-              fontWeight: 'bold',
+              fontWeight: 400,
               color: '#2a241c',
               marginBottom: '0.5rem'
             }}>

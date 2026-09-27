@@ -1120,7 +1120,7 @@ const Dashboard: React.FC = () => {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{
                 fontSize: '18px',
-                fontWeight: 600,
+                fontWeight: 400,
                 color: '#1c1915',
                 lineHeight: '1.3',
                 overflow: 'hidden',
@@ -1978,7 +1978,7 @@ const Dashboard: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 12px 20px' }}>
-                <h3 className="iv-display" style={{ margin: 0, fontSize: '1.35rem', fontWeight: 600, color: '#1c2733' }}>Edit Post</h3>
+                <h3 className="iv-display" style={{ margin: 0, fontSize: '1.35rem', fontWeight: 400, color: '#1c2733' }}>Edit Post</h3>
                 <button
                   onClick={cancelEditingPost}
                   aria-label="Close"

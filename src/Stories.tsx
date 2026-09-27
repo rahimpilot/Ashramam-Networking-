@@ -560,7 +560,7 @@ const Stories: React.FC = () => {
                 marginBottom: '12px',
                 boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
               }}>
-                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 16px 0', color: '#1e1a14' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 400, margin: '0 0 16px 0', color: '#1e1a14' }}>
                   Share your story
                 </h3>
                 <form onSubmit={handleSubmitStory} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -822,7 +822,7 @@ const Stories: React.FC = () => {
                 boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
               }}>
                 <div style={{ fontSize: '48px', marginBottom: '16px' }}>📖</div>
-                <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1e1a14', margin: '0 0 8px 0' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 400, color: '#1e1a14', margin: '0 0 8px 0' }}>
                   No stories yet
                 </h3>
                 <p style={{ fontSize: '14px', color: '#6b7f92', margin: '0 0 16px 0', lineHeight: 1.5 }}>

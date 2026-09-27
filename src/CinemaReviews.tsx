@@ -283,7 +283,7 @@ export default function CinemaReviews({ writeMode = false }: { writeMode?: boole
           color: '#ffffff',
           position: 'relative',
         }}>
-          <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 800 }}>
+          <h2 style={{ margin: '0 0 6px 0', fontSize: 22, fontWeight: 400 }}>
             Watched something? Rate it.
           </h2>
           <p style={{ margin: 0, fontSize: 14, opacity: 0.9, lineHeight: 1.55, paddingRight: 36 }}>
@@ -328,7 +328,7 @@ export default function CinemaReviews({ writeMode = false }: { writeMode?: boole
               <article className="iv-card" style={{ padding: 20 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
                   <div>
-                    <h2 style={{ margin: 0, fontSize: 21, fontWeight: 800, color: '#1c2733' }}>{selected.cinema}</h2>
+                    <h2 style={{ margin: 0, fontSize: 21, fontWeight: 400, color: '#1c2733' }}>{selected.cinema}</h2>
                     {selected.language && (
                       <span style={{
                         display: 'inline-block', marginTop: 8, fontSize: 12, fontWeight: 700,
@@ -418,7 +418,7 @@ export default function CinemaReviews({ writeMode = false }: { writeMode?: boole
             </div>
 
             {/* One-line review list — old-school forum style */}
-            <h3 style={{ margin: '6px 0 10px 2px', fontSize: 16, fontWeight: 800, color: '#1c2733' }}>
+            <h3 style={{ margin: '6px 0 10px 2px', fontSize: 16, fontWeight: 400, color: '#1c2733' }}>
               All reviews
             </h3>
             {loading ? (
@@ -492,7 +492,7 @@ export default function CinemaReviews({ writeMode = false }: { writeMode?: boole
         {/* Review form — lives on the /cinema-reviews/new page now */}
         {writeMode && (
         <form onSubmit={submit} className="iv-card" style={{ padding: 20, marginTop: 20 }}>
-          <h3 style={{ margin: '0 0 14px 0', fontSize: 17, fontWeight: 800, color: '#1c2733' }}>
+          <h3 style={{ margin: '0 0 14px 0', fontSize: 17, fontWeight: 400, color: '#1c2733' }}>
             Write a review
           </h3>
 
@@ -579,7 +579,7 @@ export default function CinemaReviews({ writeMode = false }: { writeMode?: boole
           <button type="submit" disabled={submitting} className="iv-press" style={{
             width: '100%', padding: '13px', borderRadius: 999, border: 'none',
             background: submitting ? '#9db8d2' : 'linear-gradient(135deg, #2f7fc4, #1f5d9e)',
-            color: '#fff', fontSize: 16, fontWeight: 800, cursor: submitting ? 'default' : 'pointer',
+            color: '#fff', fontSize: 16, fontWeight: 400, cursor: submitting ? 'default' : 'pointer',
             boxShadow: '0 4px 14px rgba(47,127,196,.35)',
           }}>
             {submitting ? 'Posting…' : 'Post review'}

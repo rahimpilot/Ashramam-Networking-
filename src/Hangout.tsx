@@ -205,7 +205,7 @@ const Hangout: React.FC = () => {
             <h2 style={{
               fontFamily: "'Marcellus', Georgia, serif",
               fontSize: '38px',
-              fontWeight: 600,
+              fontWeight: 400,
               color: '#1c2733',
               margin: '0 0 8px 0',
               letterSpacing: '-0.5px',
@@ -268,7 +268,7 @@ const Hangout: React.FC = () => {
                 <h3 style={{
                   fontFamily: "'Marcellus', Georgia, serif",
                   fontSize: '22px',
-                  fontWeight: 600,
+                  fontWeight: 400,
                   color: '#ffffff',
                   margin: '0 0 2px 0',
                   letterSpacing: '-0.3px'

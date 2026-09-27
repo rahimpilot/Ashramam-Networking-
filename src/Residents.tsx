@@ -180,7 +180,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
         }}>
           <h2 style={{
             fontSize: 18,
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#1c1915',
             margin: 0
           }}>Profile Information</h2>
@@ -326,7 +326,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose, onIm
           <div>
             <h3 style={{
               fontSize: 18,
-              fontWeight: 600,
+              fontWeight: 400,
               color: '#1c1915',
               margin: 0,
               marginBottom: 4
@@ -642,7 +642,7 @@ const Residents: React.FC = () => {
           <h1 style={{
             margin: 0,
             fontSize: 18,
-            fontWeight: 600,
+            fontWeight: 400,
             color: '#1c1915'
           }}>
             People
@@ -699,7 +699,7 @@ const Residents: React.FC = () => {
         }}>
           <h2 className="res-hero-title" style={{
             fontSize: 18,
-            fontWeight: 600,
+            fontWeight: 400,
             marginBottom: 12,
             color: '#1c1915',
             textAlign: 'center'
@@ -738,7 +738,7 @@ const Residents: React.FC = () => {
             <h3 style={{
               color: '#6b7f92',
               fontSize: 16,
-              fontWeight: 600,
+              fontWeight: 400,
               margin: '0 0 8px 0'
             }}>No residents found</h3>
             <p style={{
@@ -831,7 +831,7 @@ const Residents: React.FC = () => {
 
                 <h3 className="res-name" style={{
                   fontSize: 13,
-                  fontWeight: 700,
+                  fontWeight: 400,
                   color: '#1b3fc1',
                   margin: '0 0 2px 0',
                   whiteSpace: 'nowrap',
