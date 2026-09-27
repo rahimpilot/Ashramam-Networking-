@@ -879,7 +879,7 @@ const Dashboard: React.FC = () => {
     const onEnd = () => {
       if (!pulling) return;
       pulling = false;
-      if (ptrDistRef.current > 55) {
+      if (ptrDistRef.current > 38) {
         // Release: the logo takes over the whole screen, zooming in while
         // the feed reloads underneath, then fades away.
         ptrFetchDoneRef.current = false;
@@ -1420,7 +1420,7 @@ const Dashboard: React.FC = () => {
           }}>
             {ptrPhase === 'pulling' && (
               <img
-                src="/ptr-logo.png"
+                src="/ptr-logo-v2.png"
                 alt=""
                 draggable={false}
                 style={{
@@ -1428,7 +1428,8 @@ const Dashboard: React.FC = () => {
                   width: 'auto',
                   pointerEvents: 'none',
                   opacity: Math.min(0.35 + ptrDist / 90, 1),
-                  transform: `scale(${(0.4 + (ptrDist / 90) * 0.75).toFixed(3)})`,
+                  transform: `scale(${((0.4 + (ptrDist / 90) * 0.75) * (ptrDist > 38 ? 1.15 : 1)).toFixed(3)})`,
+                  transition: 'transform 0.12s ease-out',
                 }}
               />
             )}
@@ -1446,7 +1447,7 @@ const Dashboard: React.FC = () => {
               pointerEvents: 'none',
             }}>
               <img
-                src="/ptr-logo.png"
+                src="/ptr-logo-v2.png"
                 alt=""
                 draggable={false}
                 className={ptrPhase === 'zooming' ? 'sb-ptr-takeover' : 'sb-ptr-takeover-out'}
