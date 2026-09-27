@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 
@@ -6,6 +6,23 @@ import BottomNavigation from './BottomNavigation';
  *  Not a posting page: content is published by Abdu through Muse. */
 const Albania: React.FC = () => {
   const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+
+  const copyDiaryLink = async () => {
+    const url = 'https://www.ashramamvibes.com/our-trips/albania?v=1';
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* clipboard unavailable */ }
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
 
   return (
     <div style={{
@@ -143,6 +160,25 @@ const Albania: React.FC = () => {
             surprising. The boys threw an amazing party every single night of the trip.
           </p>
         </div>
+      </div>
+
+      {/* Copy link — at the bottom of the diary */}
+      <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '8px' }}>
+        <button
+          onClick={copyDiaryLink}
+          aria-label="Copy link to this diary"
+          title="Copy link"
+          style={{
+            background: 'transparent',
+            border: 'none',
+            padding: '10px',
+            fontSize: '22px',
+            cursor: 'pointer',
+            lineHeight: 1,
+          }}
+        >
+          {copied ? <span style={{ color: '#1c9c4c' }}>✓</span> : '🔗'}
+        </button>
       </div>
 
       {/* Spacer so content isn't hidden behind the bottom nav */}
