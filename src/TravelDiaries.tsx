@@ -83,9 +83,11 @@ function CopyLink({ url }: { url: string }) {
   );
 }
 
-/* ------------------------------ List view ------------------------------ */
+/* ------------------------- Diary list section -------------------------- */
+/** Embedded in /our-trips (the Hangout "Travel Diaries" tile): the
+ *  resident's dynamic diary entries above the Krabi/Baku trip cards. */
 
-export default function TravelDiaries() {
+export function DiaryListSection() {
   const navigate = useNavigate();
   const [diaries, setDiaries] = useState<TravelDiary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,69 +102,64 @@ export default function TravelDiaries() {
   }, []);
 
   return (
-    <div className="iv-page" style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
-      fontFamily: "'Marcellus', Georgia, serif",
-      paddingBottom: '96px',
-    }}>
-      <PageHeader title="Travel Diaries" backTo="/dashboard" backLabel="Back" />
-      <div style={{ padding: '16px', maxWidth: '720px', margin: '0 auto' }}>
-        <button
-          onClick={() => navigate('/travel-diaries/new')}
-          className="iv-press"
-          style={{
-            width: '100%', padding: '13px', borderRadius: 999, border: 'none',
-            background: 'linear-gradient(135deg, #2f7fc4, #1f5d9e)',
-            color: '#fff', fontSize: 16, fontWeight: 800, cursor: 'pointer',
-            marginBottom: '16px',
-          }}
-        >
-          ✈️ New diary
-        </button>
+    <div style={{ marginBottom: '28px' }}>
+      <h2 style={{ margin: '0 0 12px 0', fontSize: 18, fontWeight: 400, color: '#1c2733' }}>
+        My Diaries
+      </h2>
+      <button
+        onClick={() => navigate('/travel-diaries/new')}
+        className="iv-press"
+        style={{
+          width: '100%', padding: '13px', borderRadius: 999, border: 'none',
+          background: 'linear-gradient(135deg, #2f7fc4, #1f5d9e)',
+          color: '#fff', fontSize: 16, fontWeight: 800, cursor: 'pointer',
+          marginBottom: '16px', fontFamily: "'Marcellus', Georgia, serif",
+        }}
+      >
+        ✈️ New diary
+      </button>
 
-        {loading ? (
-          <div style={{ textAlign: 'center', color: '#6b7f92', padding: '32px' }}>Loading memories…</div>
-        ) : diaries.length === 0 ? (
-          <div className="iv-card" style={{ textAlign: 'center', padding: '40px 20px', color: '#6b7f92' }}>
-            <div style={{ fontSize: '40px', marginBottom: '12px' }}>🧳</div>
-            No travel diaries yet. Tap “New diary” to cherish your first memory.
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {diaries.map((d) => (
-              <article key={d.id} style={cardStyle} onClick={() => navigate(`/travel-diaries/${d.id}`)}>
-                {d.images.length > 0 && (
-                  <img
-                    src={d.images[0]}
-                    alt=""
-                    style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block' }}
-                  />
-                )}
-                <div style={{ padding: '14px 16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-                    <h2 style={{ margin: 0, fontSize: 20, fontWeight: 400, color: '#1c2733', lineHeight: 1.3 }}>
-                      {d.title}
-                    </h2>
-                    <CopyLink url={`${window.location.origin}/travel-diaries/${d.id}`} />
-                  </div>
-                  <div style={{ fontSize: 13, color: '#6b7f92', marginTop: '6px' }}>
-                    📅 {fmtDate(d.createdAt)}{d.images.length > 1 && ` · 📷 ${d.images.length} photos`}
-                  </div>
-                  {d.story && (
-                    <p style={{
-                      margin: '8px 0 0 0', fontSize: 14, color: '#33414f', lineHeight: 1.6,
-                      display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
-                    }}>
-                      {d.story}
-                    </p>
-                  )}
+      {loading ? (
+        <div style={{ textAlign: 'center', color: '#6b7f92', padding: '24px' }}>Loading memories…</div>
+      ) : diaries.length === 0 ? (
+        <div className="iv-card" style={{ textAlign: 'center', padding: '32px 20px', color: '#6b7f92' }}>
+          <div style={{ fontSize: '36px', marginBottom: '10px' }}>🧳</div>
+          No travel diaries yet. Tap “New diary” to cherish your first memory.
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {diaries.map((d) => (
+            <article key={d.id} style={cardStyle} onClick={() => navigate(`/travel-diaries/${d.id}`)}>
+              {d.images.length > 0 && (
+                <img
+                  src={d.images[0]}
+                  alt=""
+                  style={{ width: '100%', height: '200px', objectFit: 'cover', display: 'block' }}
+                />
+              )}
+              <div style={{ padding: '14px 16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+                  <h2 style={{ margin: 0, fontSize: 20, fontWeight: 400, color: '#1c2733', lineHeight: 1.3 }}>
+                    {d.title}
+                  </h2>
+                  <CopyLink url={`${window.location.origin}/travel-diaries/${d.id}`} />
                 </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </div>
+                <div style={{ fontSize: 13, color: '#6b7f92', marginTop: '6px' }}>
+                  📅 {fmtDate(d.createdAt)}{d.images.length > 1 && ` · 📷 ${d.images.length} photos`}
+                </div>
+                {d.story && (
+                  <p style={{
+                    margin: '8px 0 0 0', fontSize: 14, color: '#33414f', lineHeight: 1.6,
+                    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                  }}>
+                    {d.story}
+                  </p>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -188,7 +185,7 @@ export function TravelDiaryDetail() {
   const handleDelete = async () => {
     if (!diary || !window.confirm('Delete this diary?')) return;
     await deleteDoc(doc(db, 'travelDiaries', diary.id));
-    navigate('/travel-diaries');
+    navigate('/our-trips');
   };
 
   if (loading) {
@@ -209,7 +206,7 @@ export function TravelDiaryDetail() {
         fontFamily: "'Marcellus', Georgia, serif", padding: '32px', textAlign: 'center',
       }}>
         <p style={{ color: '#6b7f92' }}>This diary could not be found.</p>
-        <Link to="/travel-diaries" style={{ color: '#2f7fc4' }}>← All diaries</Link>
+        <Link to="/our-trips" style={{ color: '#2f7fc4' }}>← All diaries</Link>
       </div>
     );
   }
@@ -225,7 +222,7 @@ export function TravelDiaryDetail() {
     }}>
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <Link to="/travel-diaries" style={{ color: '#2f7fc4', textDecoration: 'none', fontSize: 15 }}>
+          <Link to="/our-trips" style={{ color: '#2f7fc4', textDecoration: 'none', fontSize: 15 }}>
             ← All diaries
           </Link>
           <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
@@ -369,7 +366,7 @@ export function NewTravelDiary() {
       fontFamily: "'Marcellus', Georgia, serif",
       paddingBottom: '96px',
     }}>
-      <PageHeader title="New diary" backTo="/travel-diaries" backLabel="Back" />
+      <PageHeader title="New diary" backTo="/our-trips" backLabel="Back" />
       <div style={{ padding: '16px', maxWidth: '720px', margin: '0 auto' }}>
         <form onSubmit={handleSubmit} className="iv-card" style={{ padding: '20px' }}>
           <div style={{ marginBottom: '14px' }}>

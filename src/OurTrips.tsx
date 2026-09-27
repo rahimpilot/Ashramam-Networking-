@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
+import { DiaryListSection } from './TravelDiaries';
 
 interface Trip {
   id: string;
@@ -107,7 +108,7 @@ const OurTrips: React.FC = () => {
             lineHeight: '1.3',
             margin: 0
           }}>
-            Our Trips
+            Travel Diaries
           </h1>
           <img 
             src="/newlogo.svg" 
@@ -129,7 +130,16 @@ const OurTrips: React.FC = () => {
           paddingBottom: '16px'
         }}
       >
+        <DiaryListSection />
         {/* Trips Grid */}
+        <h2 style={{
+          fontSize: '18px',
+          fontWeight: 400,
+          color: '#1c2733',
+          margin: '0 0 12px 0'
+        }}>
+          Our Trips
+        </h2>
         <div className="iv-cards-2">
           {trips.map((trip) => (
             <div

@@ -4,7 +4,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 const TABS = [
   { id: 'scrapbook', icon: '🏠', label: 'Scrap Book', go: (n: (p: string) => void) => n('/dashboard') },
   { id: 'stories', icon: '📚', label: 'Stories', go: (n: (p: string) => void) => n('/stories') },
-  { id: 'travel', icon: '✈️', label: 'Travel Diaries', go: (n: (p: string) => void) => n('/travel-diaries') },
   { id: 'hangout', icon: '🍸', label: 'Hangout', go: (n: (p: string) => void) => n('/hangout') },
   { id: 'people', icon: '👥', label: 'People', go: (n: (p: string) => void) => n('/residents') },
   { id: 'settings', icon: '⚙️', label: 'Settings', go: (n: (p: string) => void) => n('/account') },
@@ -21,7 +20,6 @@ const SideNavigation: React.FC = () => {
     const path = location.pathname;
     if (path === '/dashboard' || path === '/') return 'scrapbook';
     if (path.startsWith('/stories')) return 'stories';
-    if (path.startsWith('/travel-diaries')) return 'travel';
     if (path.startsWith('/hangout')) return 'hangout';
     if (path.startsWith('/residents')) return 'people';
     if (path === '/account' || path === '/profile' || path === '/admin') return 'settings';
