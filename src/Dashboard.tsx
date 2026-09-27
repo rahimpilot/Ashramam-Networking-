@@ -172,12 +172,14 @@ const Dashboard: React.FC = () => {
 
   // Pull-to-refresh + double-tap-to-like states
   const [ptrDist, setPtrDist] = useState(0);
-  const [ptrPhase, setPtrPhase] = useState<'idle' | 'pulling' | 'refreshing' | 'done'>('idle');
+  const [ptrPhase, setPtrPhase] = useState<'idle' | 'pulling' | 'zooming' | 'done'>('idle');
   const [heartBurst, setHeartBurst] = useState<string | null>(null);
   const feedRef = useRef<HTMLDivElement>(null);
   const ptrDistRef = useRef(0);
-  const ptrPhaseRef = useRef<'idle' | 'pulling' | 'refreshing' | 'done'>('idle');
-  const setPhase = (p: 'idle' | 'pulling' | 'refreshing' | 'done') => {
+  const ptrPhaseRef = useRef<'idle' | 'pulling' | 'zooming' | 'done'>('idle');
+  const ptrFetchDoneRef = useRef(false);
+  const ptrZoomDoneRef = useRef(false);
+  const setPhase = (p: 'idle' | 'pulling' | 'zooming' | 'done') => {
     ptrPhaseRef.current = p;
     setPtrPhase(p);
   };
@@ -864,21 +866,30 @@ const Dashboard: React.FC = () => {
         setPtrDist(0);
       }
     };
+    const maybeFade = (force = false) => {
+      if (ptrPhaseRef.current !== 'zooming') return;
+      if (force || (ptrFetchDoneRef.current && ptrZoomDoneRef.current)) {
+        setPhase('done');
+        setTimeout(() => {
+          if (ptrPhaseRef.current !== 'done') return;
+          setPhase('idle');
+        }, 420);
+      }
+    };
     const onEnd = () => {
       if (!pulling) return;
       pulling = false;
       if (ptrDistRef.current > 55) {
-        setPhase('refreshing');
-        setPtrDist(56);
-        fetchScrapPosts().finally(() => {
-          // Logo zooms out and fades, then the area collapses
-          setPhase('done');
-          setTimeout(() => {
-            ptrDistRef.current = 0;
-            setPhase('idle');
-            setPtrDist(0);
-          }, 420);
-        });
+        // Release: the logo takes over the whole screen, zooming in while
+        // the feed reloads underneath, then fades away.
+        ptrFetchDoneRef.current = false;
+        ptrZoomDoneRef.current = false;
+        setPhase('zooming');
+        ptrDistRef.current = 0;
+        setPtrDist(0);
+        fetchScrapPosts().finally(() => { ptrFetchDoneRef.current = true; maybeFade(); });
+        setTimeout(() => { ptrZoomDoneRef.current = true; maybeFade(); }, 900);
+        setTimeout(() => maybeFade(true), 2600);
       } else {
         ptrDistRef.current = 0;
         setPhase('idle');
@@ -964,21 +975,22 @@ const Dashboard: React.FC = () => {
           60% { transform: scale(1); opacity: 0.95; }
           100% { transform: scale(1.5); opacity: 0; }
         }
-        .sb-ptr-logo-pulse {
-          animation: sbLogoPulse 0.9s ease-in-out infinite;
+        .sb-ptr-takeover {
+          animation: sbTakeover 0.9s cubic-bezier(0.25, 0.6, 0.4, 1) forwards;
         }
-        @keyframes sbLogoPulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.14); }
+        @keyframes sbTakeover {
+          from { transform: scale(0.45); opacity: 0.95; }
+          to { transform: scale(8); opacity: 1; }
         }
-        .sb-ptr-logo-out {
-          animation: sbLogoOut 0.38s ease-in forwards;
+        .sb-ptr-takeover-out {
+          animation: sbTakeoverOut 0.4s ease-in forwards;
         }
-        @keyframes sbLogoOut {
-          to { transform: scale(1.45); opacity: 0; }
+        @keyframes sbTakeoverOut {
+          from { transform: scale(8); opacity: 1; }
+          to { transform: scale(9.5); opacity: 0; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .sb-heart-burst, .sb-ptr-logo-pulse, .sb-ptr-logo-out { animation: none; }
+          .sb-heart-burst, .sb-ptr-takeover, .sb-ptr-takeover-out { animation-duration: 0.01s; }
         }
         /* Spacious-card composer greeting: hidden on desktop, shown on mobile */
         .sb-greet { display: none; }
@@ -1397,38 +1409,51 @@ const Dashboard: React.FC = () => {
 
         {/* Posts Feed */}
         <div ref={feedRef} className="iv-cards-2 iv-tab-clearance" style={{ paddingBottom: '96px' }}>
-          {/* Pull-to-refresh indicator: the app logo grows with the pull,
-              pulses while refreshing, then zooms out and fades (touch devices) */}
+          {/* Pull-to-refresh: logo grows with the pull (touch devices) */}
           <div style={{
-            height: ptrPhase === 'idle' ? 0 : 56,
+            height: ptrPhase === 'pulling' ? 56 : 0,
             overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            transition: ptrPhase === 'pulling' ? 'none' : 'height 0.25s ease'
+            transition: 'height 0.25s ease'
           }}>
-            {ptrPhase !== 'idle' && (
+            {ptrPhase === 'pulling' && (
               <img
-                src="/newlogo.svg"
+                src="/ptr-logo.png"
                 alt=""
                 draggable={false}
-                className={
-                  ptrPhase === 'refreshing' ? 'sb-ptr-logo-pulse'
-                  : ptrPhase === 'done' ? 'sb-ptr-logo-out' : ''
-                }
                 style={{
-                  width: 42,
-                  height: 42,
-                  objectFit: 'contain',
+                  height: 40,
+                  width: 'auto',
                   pointerEvents: 'none',
-                  opacity: ptrPhase === 'pulling' ? Math.min(0.35 + ptrDist / 90, 1) : 1,
-                  transform: ptrPhase === 'pulling'
-                    ? `scale(${(0.35 + (ptrDist / 90) * 0.65).toFixed(3)})`
-                    : undefined,
+                  opacity: Math.min(0.35 + ptrDist / 90, 1),
+                  transform: `scale(${(0.4 + (ptrDist / 90) * 0.75).toFixed(3)})`,
                 }}
               />
             )}
           </div>
+          {/* Release: the logo takes over the full screen, zooms in while the
+              feed reloads, then fades away */}
+          {(ptrPhase === 'zooming' || ptrPhase === 'done') && (
+            <div style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              pointerEvents: 'none',
+            }}>
+              <img
+                src="/ptr-logo.png"
+                alt=""
+                draggable={false}
+                className={ptrPhase === 'zooming' ? 'sb-ptr-takeover' : 'sb-ptr-takeover-out'}
+                style={{ width: 150, height: 'auto', pointerEvents: 'none' }}
+              />
+            </div>
+          )}
           {scrapPosts.map((post, index) => (
             <div
               key={post.id}
