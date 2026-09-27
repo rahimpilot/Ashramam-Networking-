@@ -24,6 +24,7 @@ import SplashScreen from './SplashScreen';
 import SideNavigation from './SideNavigation';
 import Krabi from './Krabi';
 import Baku from './Baku';
+import Albania from './Albania';
 import September7th2025Meeting from './September7th2025Meeting';
 import October5th2025Meeting from './October5th2025Meeting';
 import November2nd2025Meeting from './November2nd2025Meeting';
@@ -130,6 +131,8 @@ function AnimatedRoutes() {
         <Route path="/ashramam-exclusive/:storyId" element={<RequireAuth><AshramamExclusive /></RequireAuth>} />
         <Route path="/our-trips/krabi" element={<RequireAuth><Krabi /></RequireAuth>} />
         <Route path="/our-trips/baku" element={<RequireAuth><Baku /></RequireAuth>} />
+        <Route path="/our-trips/albania" element={<RequireAuth><Albania /></RequireAuth>} />
+        <Route path="/albania" element={<RequireAuth><Albania /></RequireAuth>} />
         <Route path="/krabi" element={<RequireAuth><Krabi /></RequireAuth>} />
         {/* Unknown URLs go to the login screen instead of a blank page */}
         <Route path="*" element={<Navigate to="/" replace />} />

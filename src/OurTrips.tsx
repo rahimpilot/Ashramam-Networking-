@@ -19,7 +19,21 @@ interface Trip {
 const OurTrips: React.FC = () => {
   const navigate = useNavigate();
 
-  const trips: Trip[] = [];
+  const trips: Trip[] = [
+    {
+      id: 'albania',
+      name: 'Albania',
+      emoji: '🏔️',
+      description: 'Memories from our Albania adventure',
+      color: {
+        gradient: 'linear-gradient(135deg, #CCFBF1 0%, #99F6E0 100%)',
+        border: '#14B8A6',
+        shadow: 'rgba(20, 184, 166, 0.2)',
+        textDark: '#0F766E',
+        textLight: '#0D9488'
+      }
+    }
+  ];
 
   const handleTripClick = (tripId: string) => {
     navigate(`/our-trips/${tripId}`);
