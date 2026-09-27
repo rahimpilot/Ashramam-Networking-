@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ashramam-v1';
+const CACHE_NAME = 'ashramam-v2';
 const urlsToCache = [
   '/',
   '/index.html',
