@@ -9,6 +9,7 @@ import Account from './Account';
 import Profile from './Profile';
 import Dashboard from './Dashboard';
 import Stories from './Stories';
+import TravelDiaries, { TravelDiaryDetail, NewTravelDiary } from './TravelDiaries';
 import Residents from './Residents';
 import Hangout from './Hangout';
 import PowerGroup from './PowerGroup';
@@ -33,6 +34,7 @@ import November2nd2025Meeting from './November2nd2025Meeting';
 function RequireAuth({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [checking, setChecking] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -43,7 +45,9 @@ function RequireAuth({ children }: { children: ReactNode }) {
   }, []);
 
   if (checking) return null;
-  if (!user) return <Navigate to="/" replace />;
+  // Remember where the user wanted to go so the login screen can send
+  // them back after sign-in (used by shared private links).
+  if (!user) return <Navigate to={`/?next=${encodeURIComponent(location.pathname)}`} replace />;
   return <>{children}</>;
 }
 
@@ -112,6 +116,9 @@ function AnimatedRoutes() {
         <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
         <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
         <Route path="/stories" element={<RequireAuth><Stories /></RequireAuth>} />
+        <Route path="/travel-diaries" element={<RequireAuth><TravelDiaries /></RequireAuth>} />
+        <Route path="/travel-diaries/new" element={<RequireAuth><NewTravelDiary /></RequireAuth>} />
+        <Route path="/travel-diaries/:diaryId" element={<RequireAuth><TravelDiaryDetail /></RequireAuth>} />
         <Route path="/residents" element={<RequireAuth><Residents /></RequireAuth>} />
         <Route path="/hangout" element={<RequireAuth><Hangout /></RequireAuth>} />
         <Route path="/hangout/games/uno" element={<RequireAuth><UnoGame /></RequireAuth>} />

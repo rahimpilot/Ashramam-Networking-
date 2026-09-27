@@ -15,6 +15,7 @@ interface Tab {
 const TABS: Tab[] = [
   { id: 'scrapbook', icon: '🏠', label: 'Scrap Book', go: (n) => n('/dashboard') },
   { id: 'stories', icon: '📚', label: 'Stories', go: (n) => n('/stories') },
+  { id: 'travel', icon: '✈️', label: 'Travel', go: (n) => n('/travel-diaries') },
   { id: 'hangout', icon: '🍸', label: 'Hangout', go: (n) => n('/hangout') },
   { id: 'people', icon: '👥', label: 'People', go: (n) => n('/residents') },
   { id: 'settings', icon: '⚙️', label: 'Settings', go: (n) => n('/account') },
@@ -29,6 +30,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ className }) => {
     const path = location.pathname;
     if (path === '/dashboard' || path === '/') return 'scrapbook';
     if (path === '/stories') return 'stories';
+    if (path.startsWith('/travel-diaries')) return 'travel';
     if (path === '/hangout') return 'hangout';
     if (path === '/residents') return 'people';
     if (path === '/account') return 'settings';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
@@ -12,6 +12,13 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // After login, return to the page the user originally wanted
+  // (e.g. a shared travel-diary link). Only allow internal paths.
+  const nextPath = (() => {
+    const n = searchParams.get('next');
+    return n && n.startsWith('/') && !n.startsWith('//') ? n : '/dashboard';
+  })();
 
   const handleForgotPassword = async () => {
     if (!email) {
@@ -64,8 +71,8 @@ const Login: React.FC = () => {
           setError('No pendingUsers document found for your account.');
           return;
         }
-        // Approved: redirect to dashboard
-        navigate('/dashboard');
+        // Approved: redirect to dashboard (or back to the shared link)
+        navigate(nextPath);
       }
     } catch (err: any) {
       setError(err.message);
