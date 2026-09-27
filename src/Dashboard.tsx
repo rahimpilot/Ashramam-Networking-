@@ -174,7 +174,7 @@ const Dashboard: React.FC = () => {
   const [ptrDist, setPtrDist] = useState(0);
   const [ptrPhase, setPtrPhase] = useState<'idle' | 'pulling' | 'zooming' | 'done'>('idle');
   const [heartBurst, setHeartBurst] = useState<string | null>(null);
-  const feedRef = useRef<HTMLDivElement>(null);
+  const ptrZoneRef = useRef<HTMLDivElement>(null);
   const ptrDistRef = useRef(0);
   const ptrPhaseRef = useRef<'idle' | 'pulling' | 'zooming' | 'done'>('idle');
   const ptrFetchDoneRef = useRef(false);
@@ -840,11 +840,17 @@ const Dashboard: React.FC = () => {
   // of the feed to reload posts. Native listeners with passive:false so the
   // page doesn't bounce while pulling. Desktop (mouse) is unaffected.
   useEffect(() => {
-    const el = feedRef.current;
+    // Attach to the zone wrapping composer + feed: pulls usually start on the
+    // composer (the topmost element), so listening on the feed alone misses them
+    // and the browser's native reload fires instead.
+    const el = ptrZoneRef.current;
     if (!el) return;
     let startY = 0;
     let pulling = false;
     const onStart = (e: TouchEvent) => {
+      // Never hijack touches that begin in text inputs
+      const t = e.target as HTMLElement | null;
+      if (t && t.closest && t.closest('textarea, input, [contenteditable="true"]')) return;
       if (window.scrollY <= 0 && ptrPhaseRef.current === 'idle') {
         startY = e.touches[0].clientY;
         pulling = true;
@@ -1193,6 +1199,7 @@ const Dashboard: React.FC = () => {
 
       {/* Main Content */}
       <div
+        ref={ptrZoneRef}
         className="iv-page-wide"
         style={{
           background: 'transparent',
@@ -1408,7 +1415,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Posts Feed */}
-        <div ref={feedRef} className="iv-cards-2 iv-tab-clearance" style={{ paddingBottom: '96px' }}>
+        <div className="iv-cards-2 iv-tab-clearance" style={{ paddingBottom: '96px' }}>
           {/* Pull-to-refresh: logo grows with the pull (touch devices) */}
           <div style={{
             height: ptrPhase === 'pulling' ? 56 : 0,
