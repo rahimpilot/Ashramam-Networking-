@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
 import PageHeader from './PageHeader';
 import { db } from './firebase';
 import {
@@ -95,8 +95,9 @@ const labelStyle: React.CSSProperties = {
 
 /** Cinema & Reviews — public page. Anyone with the link can post a review,
  *  no login needed. Lives in Hangout as the "Cinema and Reviews" tile. */
-export default function CinemaReviews() {
+export default function CinemaReviews({ writeMode = false }: { writeMode?: boolean }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { reviewId } = useParams<{ reviewId: string }>();
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -116,9 +117,18 @@ export default function CinemaReviews() {
   const [previews, setPreviews] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [posted, setPosted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  // One-time "Review posted" banner shown on the list page after posting
+  const [justPosted, setJustPosted] = useState<boolean>(
+    () => !!((location.state as { justPosted?: boolean } | null)?.justPosted)
+  );
+  useEffect(() => {
+    if (!justPosted) return;
+    window.history.replaceState({}, '');
+    const t = setTimeout(() => setJustPosted(false), 3500);
+    return () => clearTimeout(t);
+  }, [justPosted]);
 
   const SHARE_URL = 'https://www.ashramamvibes.com/cinema-reviews?v=2';
 
@@ -237,8 +247,7 @@ export default function CinemaReviews() {
       });
       setName(''); setCinema(''); setLanguage(''); setRating(0);
       setTitle(''); setReview(''); setFiles([]); setPreviews([]);
-      setPosted(true);
-      setTimeout(() => setPosted(false), 3000);
+      navigate('/cinema-reviews', { state: { justPosted: true } });
     } catch (err) {
       console.error(err);
       const code = (err as { code?: string } | null)?.code || '';
@@ -295,8 +304,16 @@ export default function CinemaReviews() {
 
         
 
-        {/* Review detail (opened from a list link) or the review list */}
-        {reviewId ? (
+        {/* Write page back link / review detail / review list */}
+        {writeMode ? (
+          <button onClick={() => navigate('/cinema-reviews')} className="iv-press" style={{
+            marginBottom: 14, padding: '10px 18px', borderRadius: 999,
+            border: '1px solid rgba(91,155,213,.45)', background: '#ffffff',
+            color: '#2f7fc4', fontWeight: 700, fontSize: 14, cursor: 'pointer',
+          }}>
+            ← All reviews
+          </button>
+        ) : reviewId ? (
           selectedLoading ? (
             <div style={{ color: '#8a9aab', fontSize: 14, padding: '12px 2px' }}>Loading review…</div>
           ) : selected ? (
@@ -370,6 +387,22 @@ export default function CinemaReviews() {
           )
         ) : (
           <>
+            {justPosted && (
+              <div style={{
+                marginBottom: 12, padding: '10px 14px', borderRadius: 10,
+                background: '#e6f6ec', color: '#1c7a3d', fontSize: 14, fontWeight: 600,
+              }}>Review posted. Thanks!</div>
+            )}
+            {/* Post a review — opens the write page */}
+            <button onClick={() => navigate('/cinema-reviews/new')} className="iv-press" style={{
+              width: '100%', padding: '13px', borderRadius: 999, border: 'none',
+              background: 'linear-gradient(135deg, #2f7fc4, #1f5d9e)',
+              color: '#fff', fontSize: 16, fontWeight: 800, cursor: 'pointer',
+              boxShadow: '0 4px 14px rgba(47,127,196,.35)',
+              marginBottom: 16,
+            }}>
+              Post a review
+            </button>
             {/* Search */}
             <div style={{ position: 'relative', marginBottom: 10 }}>
               <input
@@ -456,7 +489,8 @@ export default function CinemaReviews() {
           </>
         )}
 
-        {/* Review form */}
+        {/* Review form — lives on the /cinema-reviews/new page now */}
+        {writeMode && (
         <form onSubmit={submit} className="iv-card" style={{ padding: 20, marginTop: 20 }}>
           <h3 style={{ margin: '0 0 14px 0', fontSize: 17, fontWeight: 800, color: '#1c2733' }}>
             Write a review
@@ -541,12 +575,6 @@ export default function CinemaReviews() {
               background: '#fdecec', color: '#b3261e', fontSize: 14, fontWeight: 600,
             }}>{error}</div>
           )}
-          {posted && (
-            <div style={{
-              marginBottom: 12, padding: '10px 14px', borderRadius: 10,
-              background: '#e6f6ec', color: '#1c7a3d', fontSize: 14, fontWeight: 600,
-            }}>Review posted. Thanks!</div>
-          )}
 
           <button type="submit" disabled={submitting} className="iv-press" style={{
             width: '100%', padding: '13px', borderRadius: 999, border: 'none',
@@ -557,7 +585,9 @@ export default function CinemaReviews() {
             {submitting ? 'Posting…' : 'Post review'}
           </button>
         </form>
+        )}
 
+        {!writeMode && (
         <div style={{ textAlign: 'center', marginTop: 20 }}>
           <button onClick={() => navigate('/hangout')} className="iv-press" style={{
             padding: '11px 22px', borderRadius: 999, border: '1px solid rgba(91,155,213,.45)',
@@ -566,6 +596,7 @@ export default function CinemaReviews() {
             ← Back to hangout
           </button>
         </div>
+        )}
       </div>
     </div>
   );

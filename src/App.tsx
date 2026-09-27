@@ -101,6 +101,7 @@ function AnimatedRoutes() {
         <Route path="/articles/:articleId" element={<BelovedArticles />} />
         {/* Public: cinema reviews — anyone with the link can read and post */}
         <Route path="/cinema-reviews" element={<CinemaReviews />} />
+        <Route path="/cinema-reviews/new" element={<CinemaReviews writeMode />} />
         <Route path="/cinema-reviews/:reviewId" element={<CinemaReviews />} />
         {/* Legacy /beloved-articles URLs redirect so old shared links keep working */}
         <Route path="/beloved-articles" element={<Navigate to="/articles" replace />} />
