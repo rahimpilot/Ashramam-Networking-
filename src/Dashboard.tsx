@@ -1011,12 +1011,12 @@ const Dashboard: React.FC = () => {
           .sb-post-img { display: block !important; max-height: 480px !important; }
 
           /* Mobile only: spacious-card composer */
-          .sb-greet { display: block !important; font-size: 17px; color: #1c2733; margin-bottom: 10px; }
+          .sb-greet { display: block !important; font-size: 16px; color: #1c2733; margin-bottom: 6px; }
           .sb-composer-input {
             width: 100% !important;
             background: #f4f1fa !important; border: none !important;
-            border-radius: 14px !important; padding: 14px 16px !important;
-            min-height: 43px !important; box-shadow: none !important;
+            border-radius: 14px !important; padding: 10px 14px !important;
+            min-height: 40px !important; box-shadow: none !important;
           }
           .sb-composer-actions { justify-content: flex-start !important; gap: 10px; }
           .sb-composer-actions .sb-cam-label {
