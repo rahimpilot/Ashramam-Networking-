@@ -172,11 +172,15 @@ const Dashboard: React.FC = () => {
 
   // Pull-to-refresh + double-tap-to-like states
   const [ptrDist, setPtrDist] = useState(0);
-  const [ptrRefreshing, setPtrRefreshing] = useState(false);
+  const [ptrPhase, setPtrPhase] = useState<'idle' | 'pulling' | 'refreshing' | 'done'>('idle');
   const [heartBurst, setHeartBurst] = useState<string | null>(null);
   const feedRef = useRef<HTMLDivElement>(null);
   const ptrDistRef = useRef(0);
-  const ptrRefreshingRef = useRef(false);
+  const ptrPhaseRef = useRef<'idle' | 'pulling' | 'refreshing' | 'done'>('idle');
+  const setPhase = (p: 'idle' | 'pulling' | 'refreshing' | 'done') => {
+    ptrPhaseRef.current = p;
+    setPtrPhase(p);
+  };
   const lastTapRef = useRef<{[postId: string]: number}>({});
   const tapTimerRef = useRef<{[postId: string]: ReturnType<typeof setTimeout>}>({});
   
@@ -839,7 +843,7 @@ const Dashboard: React.FC = () => {
     let startY = 0;
     let pulling = false;
     const onStart = (e: TouchEvent) => {
-      if (window.scrollY <= 0 && !ptrRefreshingRef.current) {
+      if (window.scrollY <= 0 && ptrPhaseRef.current === 'idle') {
         startY = e.touches[0].clientY;
         pulling = true;
       }
@@ -851,10 +855,12 @@ const Dashboard: React.FC = () => {
         e.preventDefault();
         const d = Math.min(dy * 0.45, 90);
         ptrDistRef.current = d;
+        setPhase('pulling');
         setPtrDist(d);
       } else if (dy <= 0) {
         pulling = false;
         ptrDistRef.current = 0;
+        setPhase('idle');
         setPtrDist(0);
       }
     };
@@ -862,17 +868,20 @@ const Dashboard: React.FC = () => {
       if (!pulling) return;
       pulling = false;
       if (ptrDistRef.current > 55) {
-        ptrRefreshingRef.current = true;
-        setPtrRefreshing(true);
+        setPhase('refreshing');
         setPtrDist(56);
         fetchScrapPosts().finally(() => {
-          ptrRefreshingRef.current = false;
-          ptrDistRef.current = 0;
-          setPtrRefreshing(false);
-          setPtrDist(0);
+          // Logo zooms out and fades, then the area collapses
+          setPhase('done');
+          setTimeout(() => {
+            ptrDistRef.current = 0;
+            setPhase('idle');
+            setPtrDist(0);
+          }, 420);
         });
       } else {
         ptrDistRef.current = 0;
+        setPhase('idle');
         setPtrDist(0);
       }
     };
@@ -955,15 +964,21 @@ const Dashboard: React.FC = () => {
           60% { transform: scale(1); opacity: 0.95; }
           100% { transform: scale(1.5); opacity: 0; }
         }
-        .sb-ptr-spin {
-          border: 3px solid #e3def0 !important;
-          border-top-color: #5b6ee1 !important;
-          font-size: 0 !important;
-          animation: sbPtrSpin 0.8s linear infinite;
+        .sb-ptr-logo-pulse {
+          animation: sbLogoPulse 0.9s ease-in-out infinite;
         }
-        @keyframes sbPtrSpin { to { transform: rotate(360deg); } }
+        @keyframes sbLogoPulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.14); }
+        }
+        .sb-ptr-logo-out {
+          animation: sbLogoOut 0.38s ease-in forwards;
+        }
+        @keyframes sbLogoOut {
+          to { transform: scale(1.45); opacity: 0; }
+        }
         @media (prefers-reduced-motion: reduce) {
-          .sb-heart-burst, .sb-ptr-spin { animation: none; }
+          .sb-heart-burst, .sb-ptr-logo-pulse, .sb-ptr-logo-out { animation: none; }
         }
         /* Spacious-card composer greeting: hidden on desktop, shown on mobile */
         .sb-greet { display: none; }
@@ -1382,26 +1397,36 @@ const Dashboard: React.FC = () => {
 
         {/* Posts Feed */}
         <div ref={feedRef} className="iv-cards-2 iv-tab-clearance" style={{ paddingBottom: '96px' }}>
-          {/* Pull-to-refresh indicator (touch devices) */}
+          {/* Pull-to-refresh indicator: the app logo grows with the pull,
+              pulses while refreshing, then zooms out and fades (touch devices) */}
           <div style={{
-            height: ptrRefreshing ? 56 : ptrDist,
+            height: ptrPhase === 'idle' ? 0 : 56,
             overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            transition: ptrRefreshing || ptrDist === 0 ? 'height 0.22s ease' : 'none'
+            transition: ptrPhase === 'pulling' ? 'none' : 'height 0.25s ease'
           }}>
-            {(ptrDist > 0 || ptrRefreshing) && (
-              <div className={ptrRefreshing ? 'sb-ptr-spin' : ''} style={{
-                width: 34, height: 34, borderRadius: '50%',
-                background: '#fff', border: '1px solid #d8d3e8',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 17, color: '#5b6ee1',
-                transform: ptrRefreshing ? 'none' : `rotate(${Math.min(ptrDist * 2, 180)}deg)`,
-                opacity: Math.min(0.4 + ptrDist / 70, 1)
-              }}>
-                {ptrRefreshing ? '' : '↓'}
-              </div>
+            {ptrPhase !== 'idle' && (
+              <img
+                src="/newlogo.svg"
+                alt=""
+                draggable={false}
+                className={
+                  ptrPhase === 'refreshing' ? 'sb-ptr-logo-pulse'
+                  : ptrPhase === 'done' ? 'sb-ptr-logo-out' : ''
+                }
+                style={{
+                  width: 42,
+                  height: 42,
+                  objectFit: 'contain',
+                  pointerEvents: 'none',
+                  opacity: ptrPhase === 'pulling' ? Math.min(0.35 + ptrDist / 90, 1) : 1,
+                  transform: ptrPhase === 'pulling'
+                    ? `scale(${(0.35 + (ptrDist / 90) * 0.65).toFixed(3)})`
+                    : undefined,
+                }}
+              />
             )}
           </div>
           {scrapPosts.map((post, index) => (
