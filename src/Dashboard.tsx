@@ -840,9 +840,9 @@ const Dashboard: React.FC = () => {
   // of the feed to reload posts. Native listeners with passive:false so the
   // page doesn't bounce while pulling. Desktop (mouse) is unaffected.
   useEffect(() => {
-    // Attach to the zone wrapping composer + feed: pulls usually start on the
-    // composer (the topmost element), so listening on the feed alone misses them
-    // and the browser's native reload fires instead.
+    // Attached to the Dashboard root: pulls can start on the sticky header,
+    // the composer, or the feed — all must reach the custom handler, otherwise
+    // the browser's native pull-to-refresh fires and reloads the page.
     const el = ptrZoneRef.current;
     if (!el) return;
     let startY = 0;
@@ -961,7 +961,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div style={{
+    <div ref={ptrZoneRef} style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
       fontFamily: "'Marcellus', Georgia, serif"
@@ -1199,7 +1199,6 @@ const Dashboard: React.FC = () => {
 
       {/* Main Content */}
       <div
-        ref={ptrZoneRef}
         className="iv-page-wide"
         style={{
           background: 'transparent',
