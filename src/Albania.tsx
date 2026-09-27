@@ -112,8 +112,10 @@ const Albania: React.FC = () => {
         }}
       >
         <h2 style={{
-          fontSize: '26px',
+          fontSize: '22px',
           fontWeight: 400,
+          fontFamily: "'Marcellus', Georgia, serif",
+          letterSpacing: '0.5px',
           color: '#1c2733',
           margin: '0 0 4px 0',
           lineHeight: 1.25,
@@ -124,19 +126,19 @@ const Albania: React.FC = () => {
           📅 2022 · Ashramam Team
         </div>
         <div className="iv-card" style={{ padding: '22px' }}>
-          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#33414f', margin: '0 0 16px 0' }}>
+          <p style={{ fontSize: 15, fontFamily: "'Marcellus', Georgia, serif", lineHeight: 1.7, color: '#33414f', margin: '0 0 16px 0' }}>
             This was one of the best trips the Ashramam team ever did — back in 2022,
             just a few months after the core COVID days. The trip gave us the chance
             to experience leisure and fun: hiking, a little adventure — it was a
             complete package.
           </p>
-          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#33414f', margin: '0 0 16px 0' }}>
+          <p style={{ fontSize: 15, fontFamily: "'Marcellus', Georgia, serif", lineHeight: 1.7, color: '#33414f', margin: '0 0 16px 0' }}>
             The location was brand new to us, and the nature was incredibly rich.
             The highlight of the trip was Lake Komani, where we were taken to a
             resort named Eagle's Land after a 45-minute to one-hour boat ride through
             the middle of a deep lake surrounded by huge mountains.
           </p>
-          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#33414f', margin: 0 }}>
+          <p style={{ fontSize: 15, fontFamily: "'Marcellus', Georgia, serif", lineHeight: 1.7, color: '#33414f', margin: 0 }}>
             That ride alone changed our mood — and the destination was even more
             surprising. The boys threw an amazing party every single night of the trip.
           </p>
