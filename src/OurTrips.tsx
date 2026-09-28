@@ -45,6 +45,19 @@ const OurTrips: React.FC = () => {
         textDark: '#4C1D95',
         textLight: '#6D28D9'
       }
+    },
+    {
+      id: 'thailand',
+      name: 'Thailand',
+      emoji: '🏖️',
+      description: 'Memories from our Thailand adventure',
+      color: {
+        gradient: 'linear-gradient(135deg, #FEF3E2 0%, #FED7AA 100%)',
+        border: '#FB923C',
+        shadow: 'rgba(251, 146, 60, 0.2)',
+        textDark: '#92400E',
+        textLight: '#B45309'
+      }
     }
   ];
 
