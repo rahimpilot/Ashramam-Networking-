@@ -2,72 +2,26 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 
-interface TripStory {
-  id: string;
-  author: string;
-  content: string;
-  timestamp: string;
-}
-
-interface TripPhoto {
-  id: string;
-  url: string;
-  caption: string;
-  uploadedBy: string;
-}
-
+/** Baku 2024 — a curated memory page. Photo on top, story below.
+ *  Not a posting page: content is published by Abdu through Muse. */
 const Baku: React.FC = () => {
   const navigate = useNavigate();
-  const [stories, setStories] = useState<TripStory[]>([
-    {
-      id: '1',
-      author: 'Member 1',
-      content: 'Amazing city views from the Flame Towers! The architecture here is absolutely stunning. 🌃',
-      timestamp: '2 days ago'
-    }
-  ]);
+  const [copied, setCopied] = useState(false);
 
-  const [photos, setPhotos] = useState<TripPhoto[]>([
-    {
-      id: '1',
-      url: '/baku-sample.jpg',
-      caption: 'Flame Towers at Night',
-      uploadedBy: 'Member 1'
+  const copyDiaryLink = async () => {
+    const url = 'https://www.ashramamvibes.com/our-trips/baku?v=1';
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* clipboard unavailable */ }
+      document.body.removeChild(ta);
     }
-  ]);
-
-  const [newStory, setNewStory] = useState('');
-  const [showStoryInput, setShowStoryInput] = useState(false);
-
-  const handleAddStory = () => {
-    if (newStory.trim()) {
-      const story: TripStory = {
-        id: Date.now().toString(),
-        author: 'You',
-        content: newStory,
-        timestamp: 'Just now'
-      };
-      setStories([story, ...stories]);
-      setNewStory('');
-      setShowStoryInput(false);
-    }
-  };
-
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const photo: TripPhoto = {
-          id: Date.now().toString(),
-          url: e.target?.result as string,
-          caption: 'New Photo',
-          uploadedBy: 'You'
-        };
-        setPhotos([photo, ...photos]);
-      };
-      reader.readAsDataURL(file);
-    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
   };
 
   return (
@@ -76,7 +30,7 @@ const Baku: React.FC = () => {
       background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
       fontFamily: "'Marcellus', Georgia, serif"
     }}>
-      {/* Modern Mobile Header - 60px height */}
+      {/* Header */}
       <div style={{
         background: 'rgba(255, 255, 255, 0.78)',
         backdropFilter: 'blur(14px)',
@@ -94,9 +48,8 @@ const Baku: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            height: '100%'
-          }}
-        >
+            height: '100%',
+          }}>
           <button
             onClick={() => navigate('/our-trips')}
             style={{
@@ -112,10 +65,8 @@ const Baku: React.FC = () => {
               width: '44px',
               height: '44px',
               borderRadius: '50%',
-              transition: 'background-color 0.2s ease'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e9f1f8'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            aria-label="Back to Travel Diaries"
           >
             ←
           </button>
@@ -126,340 +77,113 @@ const Baku: React.FC = () => {
             lineHeight: '1.3',
             margin: 0
           }}>
-            Baku Trip
+            Baku
           </h1>
-          <img 
-            src="/newlogo.svg" 
-            alt="Logo" 
-            style={{ 
+          <img
+            src="/newlogo.svg"
+            alt="Logo"
+            style={{
               height: 32,
               width: 'auto',
               maxWidth: '100px',
               opacity: 0.8
-            }} 
+            }}
           />
         </div>
       </div>
 
+      {/* Hero photo — full-bleed on mobile, capped and rounded on web */}
+      <div className="baku-hero">
+        <img
+          src="/baku-2024.jpg"
+          alt="The Ashramam team together in Baku, 2024"
+        />
+      </div>
+      <style>{`
+        .baku-hero img {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+        @media (min-width: 1024px) {
+          .baku-hero {
+            max-width: 760px;
+            margin: 24px auto 0 auto;
+            padding: 0 16px;
+          }
+          .baku-hero img {
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+          }
+        }
+      `}</style>
+
+      {/* Story */}
       <div
-        className="iv-page-wide"
+        className="iv-page"
         style={{
-          paddingTop: '16px',
-          paddingBottom: '16px'
+          paddingTop: '20px',
+          paddingBottom: '16px',
+          maxWidth: '720px',
+          margin: '0 auto',
         }}
       >
-        
-        {/* Trip Hero Section */}
-        <div style={{
-          background: 'linear-gradient(135deg, #DDD6FE 0%, #C7D2FE 100%)',
-          borderRadius: '12px',
-          padding: '24px',
-          marginBottom: '24px',
-          textAlign: 'center',
-          border: '2px solid #A78BFA'
+        <h2 style={{
+          fontSize: '22px',
+          fontWeight: 400,
+          fontFamily: "'Marcellus', Georgia, serif",
+          letterSpacing: '0.5px',
+          color: '#1c2733',
+          margin: '0 0 4px 0',
+          lineHeight: 1.25,
         }}>
-          <div style={{
-            fontSize: '64px',
-            lineHeight: 1,
-            marginBottom: '12px'
-          }}>
-            🌃
-          </div>
-          <h2 style={{
-            fontSize: '28px',
-            fontWeight: 400,
-            color: '#4C1D95',
-            margin: '0 0 8px 0'
-          }}>
-            Baku Adventure
-          </h2>
-          <p style={{
-            fontSize: '14px',
-            color: '#6D28D9',
-            margin: 0
-          }}>
-            Share your memories from our trip
+          Baku
+        </h2>
+        <div style={{ fontSize: 13, color: '#6b7f92', marginBottom: '16px' }}>
+          📅 2024 · Ashramam Team
+        </div>
+        <div className="iv-card" style={{ padding: '22px' }}>
+          <p style={{ fontSize: 15, fontFamily: "'Marcellus', Georgia, serif", lineHeight: 1.7, color: '#33414f', margin: '0 0 16px 0' }}>
+            This was the first trip where the boys had to travel from different
+            parts of the world to reunite. Though the weather was not so nice,
+            we had an amazing, blasting time as usual.
+          </p>
+          <p style={{ fontSize: 15, fontFamily: "'Marcellus', Georgia, serif", lineHeight: 1.7, color: '#33414f', margin: '0 0 16px 0' }}>
+            The highlight of the trip was lamb — we had lamb for breakfast, lunch,
+            and dinner, all day, every day. It was a crucial decision made by
+            Chaandy Cock, who wanted to please his friends with lamb. Our blessing
+            was the Power Group's luxury — they had a minimum standard for
+            everything they chose, especially the stay. The Power Group booked
+            every single tiny facility in Baku and let the boys enjoy.
+          </p>
+          <p style={{ fontSize: 15, fontFamily: "'Marcellus', Georgia, serif", lineHeight: 1.7, color: '#33414f', margin: 0 }}>
+            The last night of the trip was crazy — the Power Group took us to a
+            disco in the city with the help of their business partners in Baku
+            and made the boys feel like they were in a dream world. There was no
+            counting the luxury that night. Priven was the star of the night.
           </p>
         </div>
-
-        {/* Add Story Section */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.72)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderRadius: '20px',
-          padding: '16px',
-          marginBottom: '20px',
-          border: '1px solid rgba(255, 255, 255, 0.9)',
-          boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)'
-        }}>
-          {!showStoryInput ? (
-            <button
-              onClick={() => setShowStoryInput(true)}
-              style={{
-                width: '100%',
-                padding: '12px',
-                background: 'linear-gradient(135deg, #6aa5d8 0%, #5b9bd5 100%)',
-                border: 'none',
-                borderRadius: '8px',
-                color: '#ffffff',
-                fontSize: '14px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.02)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            >
-              📝 Add a Story
-            </button>
-          ) : (
-            <div>
-              <textarea
-                value={newStory}
-                onChange={(e) => setNewStory(e.target.value)}
-                placeholder="Share your Baku memories..."
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: '1px solid #bccfdd',
-                  fontSize: '14px',
-                  fontFamily: 'inherit',
-                  minHeight: '100px',
-                  resize: 'none',
-                  boxSizing: 'border-box',
-                  marginBottom: '12px'
-                }}
-              />
-              <div style={{
-                display: 'flex',
-                gap: '12px'
-              }}>
-                <button
-                  onClick={handleAddStory}
-                  style={{
-                    flex: 1,
-                    padding: '10px',
-                    background: 'linear-gradient(135deg, #16A34A 0%, #15803D 100%)',
-                    border: 'none',
-                    borderRadius: '8px',
-                    color: '#ffffff',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                >
-                  Post Story
-                </button>
-                <button
-                  onClick={() => {
-                    setShowStoryInput(false);
-                    setNewStory('');
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '10px',
-                    background: '#d8e6f2',
-                    border: '1px solid #bccfdd',
-                    borderRadius: '8px',
-                    color: '#332e26',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#d3dfee'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = '#d8e6f2'}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Photo Upload Section */}
-        <div style={{
-          background: '#ffffff',
-          borderRadius: '12px',
-          padding: '16px',
-          marginBottom: '20px',
-          border: '1px solid #c9d9e8'
-        }}>
-          <label style={{
-            display: 'block',
-            width: '100%',
-            padding: '12px',
-            background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-            border: 'none',
-            borderRadius: '8px',
-            color: '#ffffff',
-            fontSize: '14px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            textAlign: 'center'
-          }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.02)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            📸 Upload Photo
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoUpload}
-              style={{ display: 'none' }}
-            />
-          </label>
-        </div>
-
-        {/* Stories Section */}
-        <div style={{
-          marginBottom: '20px'
-        }}>
-          <h3 style={{
-            fontSize: '16px',
-            fontWeight: 400,
-            color: '#1c1915',
-            marginBottom: '12px',
-            margin: '0 0 12px 0'
-          }}>
-            Stories ({stories.length})
-          </h3>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px'
-          }}>
-            {stories.map((story) => (
-              <div
-                key={story.id}
-                style={{
-                  background: '#ffffff',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  border: '1px solid #c9d9e8',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-                }}
-              >
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'start',
-                  marginBottom: '12px'
-                }}>
-                  <div>
-                    <p style={{
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      color: '#1c1915',
-                      margin: '0 0 4px 0'
-                    }}>
-                      {story.author}
-                    </p>
-                    <p style={{
-                      fontSize: '12px',
-                      color: '#9dafbe',
-                      margin: 0
-                    }}>
-                      {story.timestamp}
-                    </p>
-                  </div>
-                </div>
-                <p style={{
-                  fontSize: '14px',
-                  color: '#332e26',
-                  lineHeight: '1.5',
-                  margin: 0
-                }}>
-                  {story.content}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Photos Section */}
-        <div style={{
-          marginBottom: '40px'
-        }}>
-          <h3 style={{
-            fontSize: '16px',
-            fontWeight: 400,
-            color: '#1c1915',
-            margin: '0 0 12px 0'
-          }}>
-            Photos ({photos.length})
-          </h3>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '12px'
-          }}>
-            {photos.map((photo) => (
-              <div
-                key={photo.id}
-                style={{
-                  borderRadius: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                  background: '#ffffff',
-                  border: '1px solid #c9d9e8'
-                }}
-              >
-                <img
-                  src={photo.url}
-                  alt={photo.caption}
-                  style={{
-                    width: '100%',
-                    height: '180px',
-                    objectFit: 'cover',
-                    display: 'block'
-                  }}
-                />
-                <div style={{
-                  padding: '12px'
-                }}>
-                  <p style={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: '#1c1915',
-                    margin: '0 0 4px 0',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    {photo.caption}
-                  </p>
-                  <p style={{
-                    fontSize: '11px',
-                    color: '#9dafbe',
-                    margin: 0
-                  }}>
-                    by {photo.uploadedBy}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
+
+      {/* Copy link — at the bottom of the diary */}
+      <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '8px' }}>
+        <button
+          onClick={copyDiaryLink}
+          aria-label="Copy link to this diary"
+          title="Copy link"
+          style={{
+            background: 'transparent',
+            border: 'none',
+            padding: '10px',
+            fontSize: '22px',
+            cursor: 'pointer',
+            lineHeight: 1,
+          }}
+        >
+          {copied ? <span style={{ color: '#1c9c4c' }}>✓</span> : '🔗'}
+        </button>
+      </div>
+
       {/* Spacer so content isn't hidden behind the bottom nav */}
       <div style={{ height: '80px' }} />
       <BottomNavigation />
