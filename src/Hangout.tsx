@@ -17,6 +17,34 @@ interface Tile {
 
 const TILES: Tile[] = [
   {
+    icon: '✈️',
+    title: 'Travel Diaries',
+    subtitle: 'Share travel experiences',
+    path: '/our-trips',
+    iconBg: 'rgba(237, 233, 254, 0.85)',
+  },
+  {
+    icon: '📖',
+    title: 'Articles',
+    subtitle: 'Words worth keeping',
+    path: '/articles',
+    iconBg: 'rgba(255, 247, 237, 0.85)',
+  },
+  {
+    icon: '🎬',
+    title: 'Cinema and Reviews',
+    subtitle: 'Rate the movies you watched',
+    path: '/cinema-reviews',
+    iconBg: 'rgba(224, 234, 244, 0.85)',
+  },
+  {
+    icon: '🔥',
+    title: 'Ashramam Exclusive',
+    subtitle: 'Hot news, members only',
+    path: '/ashramam-exclusive',
+    iconBg: 'rgba(254, 226, 226, 0.85)',
+  },
+  {
     icon: '⚡',
     title: 'Power Group',
     subtitle: 'Rich and naughty',
@@ -36,34 +64,6 @@ const TILES: Tile[] = [
     subtitle: 'Financial assistance',
     path: '/royal-bank',
     iconBg: 'rgba(209, 250, 229, 0.85)',
-  },
-  {
-    icon: '✈️',
-    title: 'Travel Diaries',
-    subtitle: 'Share travel experiences',
-    path: '/our-trips',
-    iconBg: 'rgba(237, 233, 254, 0.85)',
-  },
-  {
-    icon: '🔥',
-    title: 'Ashramam Exclusive',
-    subtitle: 'Hot news, members only',
-    path: '/ashramam-exclusive',
-    iconBg: 'rgba(254, 226, 226, 0.85)',
-  },
-  {
-    icon: '📖',
-    title: 'Articles',
-    subtitle: 'Words worth keeping',
-    path: '/articles',
-    iconBg: 'rgba(255, 247, 237, 0.85)',
-  },
-  {
-    icon: '🎬',
-    title: 'Cinema and Reviews',
-    subtitle: 'Rate the movies you watched',
-    path: '/cinema-reviews',
-    iconBg: 'rgba(224, 234, 244, 0.85)',
   },
 ];
 
