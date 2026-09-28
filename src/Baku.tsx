@@ -9,7 +9,7 @@ const Baku: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const copyDiaryLink = async () => {
-    const url = 'https://www.ashramamvibes.com/our-trips/baku?v=1';
+    const url = 'https://www.ashramamvibes.com/our-trips/baku?v=2';
     try {
       await navigator.clipboard.writeText(url);
     } catch {

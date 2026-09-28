@@ -9,7 +9,7 @@ const Albania: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const copyDiaryLink = async () => {
-    const url = 'https://www.ashramamvibes.com/our-trips/albania?v=1';
+    const url = 'https://www.ashramamvibes.com/our-trips/albania?v=2';
     try {
       await navigator.clipboard.writeText(url);
     } catch {
