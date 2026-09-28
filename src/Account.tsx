@@ -1,12 +1,102 @@
 import React, { useEffect, useState } from 'react';
-import { auth } from './firebase';
+import { auth, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
+
+export interface ProfileData {
+  name: string;
+  location: string;
+  bio: string;
+}
+
+/** Pure presentational profile card — also used by the visual-verification
+ *  preview route with mock data (the route itself is removed before commit). */
+export const ProfileCard: React.FC<{
+  profile: ProfileData | null;
+  email: string | null;
+  displayName: string;
+  onEdit: () => void;
+  onSignOut: () => void;
+}> = ({ profile, email, displayName, onEdit, onSignOut }) => {
+  const initial = (displayName || '?').charAt(0).toUpperCase();
+  const hasProfile = !!(profile && (profile.name || profile.location || profile.bio));
+
+  return (
+    <div style={{ maxWidth: 480, margin: '0 auto', width: '100%' }}>
+      <div className="iv-card" style={{ padding: '28px 24px', textAlign: 'center' }}>
+        <div style={{
+          width: 88, height: 88, borderRadius: '50%',
+          background: 'linear-gradient(135deg, #5b9bd5, #4a86c8)',
+          color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 38, fontWeight: 700, margin: '0 auto 12px auto',
+          fontFamily: "'Marcellus', Georgia, serif"
+        }}>
+          {initial}
+        </div>
+        <h2 style={{
+          fontSize: 24, fontWeight: 400, color: '#1c2733', margin: '0 0 4px 0',
+          fontFamily: "'Marcellus', Georgia, serif", letterSpacing: '0.3px'
+        }}>
+          {displayName || 'Member'}
+        </h2>
+        {profile?.location ? (
+          <p style={{ margin: '0 0 12px 0', color: '#7a8ba0', fontSize: 14 }}>
+            📍 {profile.location}
+          </p>
+        ) : null}
+        {profile?.bio ? (
+          <p style={{ margin: '0 0 4px 0', color: '#3d4b5c', fontSize: 15, lineHeight: 1.65 }}>
+            {profile.bio}
+          </p>
+        ) : null}
+        {!hasProfile ? (
+          <p style={{ margin: '0 0 4px 0', color: '#7a8ba0', fontSize: 14 }}>
+            Your profile is empty — tell the group a little about yourself.
+          </p>
+        ) : null}
+        {email ? (
+          <>
+            <div style={{ borderTop: '1px solid #e6e9f0', margin: '16px 0 12px 0' }} />
+            <p style={{ margin: 0, color: '#7a8ba0', fontSize: 14 }}>
+              ✉️ {email}
+            </p>
+          </>
+        ) : null}
+        <button
+          onClick={onEdit}
+          style={{
+            marginTop: 20, width: '100%', padding: '12px', borderRadius: 10,
+            background: 'linear-gradient(to right, #5b9bd5, #4a86c8)', color: '#ffffff',
+            fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            fontFamily: "'Marcellus', Georgia, serif", letterSpacing: '0.3px'
+          }}
+        >
+          Edit Profile
+        </button>
+      </div>
+      <button
+        onClick={onSignOut}
+        style={{
+          marginTop: 16, width: '100%', padding: '12px', borderRadius: 10,
+          background: '#ffffff', color: '#c0392b', fontWeight: 600,
+          border: '1px solid #eec9c9', cursor: 'pointer', fontSize: '1rem',
+          fontFamily: "'Marcellus', Georgia, serif", letterSpacing: '0.3px'
+        }}
+      >
+        Sign Out
+      </button>
+    </div>
+  );
+};
 
 const Account: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
   const navigate = useNavigate();
 
   // Wait for the auth session to resolve before rendering (avoids a
@@ -19,6 +109,34 @@ const Account: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
+  // Load the member's profile info (name, location, bio) from Firestore
+  useEffect(() => {
+    if (!user) {
+      setProfileLoading(false);
+      return;
+    }
+    const fetchProfile = async () => {
+      setProfileLoading(true);
+      try {
+        const snap = await getDoc(doc(db, 'profiles', user.uid));
+        if (snap.exists()) {
+          const data = snap.data();
+          setProfile({
+            name: data.name || '',
+            location: data.location || '',
+            bio: data.bio || ''
+          });
+        } else {
+          setProfile(null);
+        }
+      } catch {
+        setProfile(null);
+      }
+      setProfileLoading(false);
+    };
+    fetchProfile();
+  }, [user]);
+
   const handleLogout = async () => {
     await auth.signOut();
     window.location.href = '/';
@@ -28,32 +146,29 @@ const Account: React.FC = () => {
     navigate('/profile');
   };
 
+  const displayName = profile?.name || user?.email?.split('@')[0] || '';
+
   return (
-    <div style={{ maxWidth: 400, margin: '2rem auto 100px auto', padding: '2rem', background: 'rgba(255, 255, 255, 0.72)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255, 255, 255, 0.9)', borderRadius: 20, boxShadow: '0 6px 20px rgba(91, 155, 213, 0.18)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <img src="/newlogo.svg" alt="Logo" style={{ height: 48, marginBottom: 24 }} />
-      <h2 className="iv-display" style={{ fontSize: '2rem', fontWeight: 400, marginBottom: '0.5rem', color: '#5b9bd5' }}>Welcome!</h2>
-      {authLoading ? (
-        <p>Loading...</p>
+    <div className="iv-page iv-page-narrow" style={{ paddingTop: '24px', paddingBottom: '16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
+        <img src="/newlogo.svg" alt="Ashramam" style={{ height: 40, opacity: 0.9 }} />
+      </div>
+      {authLoading || profileLoading ? (
+        <p style={{ textAlign: 'center', color: '#7a8ba0' }}>Loading your profile…</p>
       ) : user ? (
-        <>
-          <div style={{ marginBottom: 16, textAlign: 'center' }}>
-            <p style={{ fontSize: '1rem', margin: 0 }}><strong>Email:</strong> {user.email}</p>
-            <p style={{ fontSize: '0.9rem', color: '#555', margin: 0 }}><strong>UID:</strong> {user.uid}</p>
-          </div>
-          <div style={{ marginBottom: 24, width: '100%' }}>
-            <div style={{ background: '#d8e6f2', borderRadius: 8, padding: 12, textAlign: 'center', color: '#333' }}>
-              <strong>Profile Info</strong>
-              <p style={{ margin: '8px 0 0 0', fontSize: '0.95rem', color: '#666' }}>More features coming soon!</p>
-            </div>
-          </div>
-          <button onClick={goToProfile} style={{ marginBottom: 12, padding: '10px 32px', borderRadius: 8, background: '#4a86c8', color: '#ffffff', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Profile</button>
-          <button onClick={handleLogout} style={{ padding: '10px 32px', borderRadius: 8, background: 'linear-gradient(to right, #5b9bd5, #4a86c8)', color: '#ffffff', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>Logout</button>
-        </>
+        <ProfileCard
+          profile={profile}
+          email={user.email}
+          displayName={displayName}
+          onEdit={goToProfile}
+          onSignOut={handleLogout}
+        />
       ) : (
-        <p>Not logged in.</p>
+        <p style={{ textAlign: 'center', color: '#7a8ba0' }}>Not logged in.</p>
       )}
 
-      {/* Bottom Navigation */}
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div style={{ height: '80px' }} />
       <BottomNavigation />
     </div>
   );
