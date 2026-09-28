@@ -4,6 +4,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
+import { getProfilePhoto } from './profilePhotos';
 
 export interface ProfileData {
   name: string;
@@ -17,24 +18,39 @@ export const ProfileCard: React.FC<{
   profile: ProfileData | null;
   email: string | null;
   displayName: string;
+  photoUrl: string | null;
   onEdit: () => void;
   onSignOut: () => void;
-}> = ({ profile, email, displayName, onEdit, onSignOut }) => {
+}> = ({ profile, email, displayName, photoUrl, onEdit, onSignOut }) => {
   const initial = (displayName || '?').charAt(0).toUpperCase();
   const hasProfile = !!(profile && (profile.name || profile.location || profile.bio));
+  const [imgFailed, setImgFailed] = useState(false);
+  const showPhoto = !!photoUrl && !imgFailed;
 
   return (
     <div style={{ maxWidth: 480, margin: '0 auto', width: '100%' }}>
       <div className="iv-card" style={{ padding: '28px 24px', textAlign: 'center' }}>
-        <div style={{
-          width: 88, height: 88, borderRadius: '50%',
-          background: 'linear-gradient(135deg, #5b9bd5, #4a86c8)',
-          color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 38, fontWeight: 700, margin: '0 auto 12px auto',
-          fontFamily: "'Marcellus', Georgia, serif"
-        }}>
-          {initial}
-        </div>
+        {showPhoto ? (
+          <img
+            src={photoUrl as string}
+            alt={displayName}
+            onError={() => setImgFailed(true)}
+            style={{
+              width: 88, height: 88, borderRadius: '50%', objectFit: 'cover',
+              margin: '0 auto 12px auto', display: 'block'
+            }}
+          />
+        ) : (
+          <div style={{
+            width: 88, height: 88, borderRadius: '50%',
+            background: 'linear-gradient(135deg, #5b9bd5, #4a86c8)',
+            color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 38, fontWeight: 700, margin: '0 auto 12px auto',
+            fontFamily: "'Marcellus', Georgia, serif"
+          }}>
+            {initial}
+          </div>
+        )}
         <h2 style={{
           fontSize: 24, fontWeight: 400, color: '#1c2733', margin: '0 0 4px 0',
           fontFamily: "'Marcellus', Georgia, serif", letterSpacing: '0.3px'
@@ -160,6 +176,7 @@ const Account: React.FC = () => {
           profile={profile}
           email={user.email}
           displayName={displayName}
+          photoUrl={getProfilePhoto(user.email || '')}
           onEdit={goToProfile}
           onSignOut={handleLogout}
         />

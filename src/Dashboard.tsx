@@ -8,30 +8,11 @@ import BottomNavigation from './BottomNavigation';
 import { SkeletonPost } from './Skeleton';
 import { tapMedium } from './haptics';
 
-// Admin-controlled profile picture mapping
+import { getProfilePhoto } from './profilePhotos';
+
+// Admin-controlled profile picture mapping (single source of truth in profilePhotos.ts)
 const getProfilePicture = (email: string, name: string) => {
-  const profilePictureMap: { [key: string]: string } = {
-    // Add user email mappings here - controlled by admin
-    'raimu456@gmail.com': '/raimu.jpg',
-    'hyder.mohamed@gmail.com': '/hyder.JPG',
-    'mzmhmd@gmail.com': '/bruno.png',
-    'nias.ahamad@gmail.com': '/nias.jpg',
-    'mshanir@gmail.com': '/shanir.jpeg',
-    'niaznasu@gmail.com': '/niaz.jpeg',
-    'riaz986@gmail.com': '/riaz',
-    'anaskallur@gmail.com': '/anas.jpg',
-    'mailmohasinali@gmail.com': '/appan.JPG',
-    'asifmadheena@gmail.com': '/asif.png',
-    // Add more mappings as needed
-  };
-
-  // Check if user has a custom profile picture
-  if (profilePictureMap[email.toLowerCase()]) {
-    return profilePictureMap[email.toLowerCase()];
-  }
-
-  // Return null for default avatar
-  return null;
+  return getProfilePhoto(email);
 };
 
 interface UserProfile {
