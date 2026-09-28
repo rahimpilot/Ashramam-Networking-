@@ -1108,21 +1108,8 @@ const Dashboard: React.FC = () => {
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap'
               }}>
-                {userProfile.name || user?.displayName || 'User'}
+                {(userProfile.name || user?.displayName || 'User').split(' ')[0]}
               </div>
-              {userProfile.bio && (
-                <div style={{
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  color: '#6b7f92',
-                  lineHeight: '1.4',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
-                }}>
-                  {userProfile.bio}
-                </div>
-              )}
             </div>
           </div>
           
