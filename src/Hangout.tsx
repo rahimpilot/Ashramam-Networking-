@@ -17,6 +17,13 @@ interface Tile {
 
 const TILES: Tile[] = [
   {
+    icon: '⚡',
+    title: 'Power Group',
+    subtitle: 'Rich and naughty',
+    path: '/power-group',
+    iconBg: 'rgba(254, 243, 199, 0.85)',
+  },
+  {
     icon: '✈️',
     title: 'Travel Diaries',
     subtitle: 'Share travel experiences',
@@ -43,13 +50,6 @@ const TILES: Tile[] = [
     subtitle: 'Hot news, members only',
     path: '/ashramam-exclusive',
     iconBg: 'rgba(254, 226, 226, 0.85)',
-  },
-  {
-    icon: '⚡',
-    title: 'Power Group',
-    subtitle: 'Rich and naughty',
-    path: '/power-group',
-    iconBg: 'rgba(254, 243, 199, 0.85)',
   },
   {
     icon: '📝',
@@ -324,53 +324,6 @@ const Hangout: React.FC = () => {
             <span style={{ flex: 1, height: '1px', background: 'rgba(91,155,213,0.30)' }} />
           </div>
           <div className="iv-cards-3">
-            <div
-              className="hangout-tile"
-              onClick={() => navigate('/hangout/games/uno')}
-              style={{
-                ...GLASS_CARD,
-                borderRadius: '20px',
-                padding: '18px 16px',
-                cursor: 'pointer'
-              }}
-            >
-              <div className="ht-icon" style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '15px',
-                background: 'rgba(254, 243, 199, 0.85)',
-                border: '1px solid rgba(255, 255, 255, 0.7)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '24px',
-                marginBottom: '13px',
-                flexShrink: 0
-              }}>
-                🃏
-              </div>
-              <div className="ht-text" style={{ flex: 1, minWidth: 0 }}>
-                <div className="ht-title" style={{
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  color: '#1c2733',
-                  marginBottom: '4px',
-                  lineHeight: 1.3
-                }}>
-                  UNO
-                </div>
-                <div className="ht-sub" style={{
-                  fontSize: '12.5px',
-                  color: '#5b6b7c',
-                  lineHeight: 1.45
-                }}>
-                  {openTables !== null && openTables > 0
-                    ? `${openTables} open table${openTables === 1 ? '' : 's'} — jump in`
-                    : 'Game night with the crew'}
-                </div>
-              </div>
-              <div className="ht-go" aria-hidden="true">›</div>
-            </div>
             {TILES.map((tile) => (
               <div
                 key={tile.path}
@@ -419,6 +372,54 @@ const Hangout: React.FC = () => {
                 <div className="ht-go" aria-hidden="true">›</div>
               </div>
             ))}
+<div
+              className="hangout-tile"
+              onClick={() => navigate('/hangout/games/uno')}
+              style={{
+                ...GLASS_CARD,
+                borderRadius: '20px',
+                padding: '18px 16px',
+                cursor: 'pointer'
+              }}
+            >
+              <div className="ht-icon" style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '15px',
+                background: 'rgba(254, 243, 199, 0.85)',
+                border: '1px solid rgba(255, 255, 255, 0.7)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '24px',
+                marginBottom: '13px',
+                flexShrink: 0
+              }}>
+                🃏
+              </div>
+              <div className="ht-text" style={{ flex: 1, minWidth: 0 }}>
+                <div className="ht-title" style={{
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  color: '#1c2733',
+                  marginBottom: '4px',
+                  lineHeight: 1.3
+                }}>
+                  UNO
+                </div>
+                <div className="ht-sub" style={{
+                  fontSize: '12.5px',
+                  color: '#5b6b7c',
+                  lineHeight: 1.45
+                }}>
+                  {openTables !== null && openTables > 0
+                    ? `${openTables} open table${openTables === 1 ? '' : 's'} — jump in`
+                    : 'Game night with the crew'}
+                </div>
+              </div>
+              <div className="ht-go" aria-hidden="true">›</div>
+            </div>
+
           </div>
         </div>
 
