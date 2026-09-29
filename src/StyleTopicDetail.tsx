@@ -90,32 +90,7 @@ const StyleTopicDetail: React.FC = () => {
           padding: '20px',
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
         }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            gap: '12px'
-          }}>
-            <div>
-              <p style={{
-                fontSize: '12px',
-                fontWeight: 400,
-                color: '#777777',
-                margin: '0 0 4px 0',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-              }}>
-                {topic.kicker}
-              </p>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: 400,
-                color: '#111111',
-                margin: '0 0 8px 0'
-              }}>
-                {topic.title}
-              </h2>
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button
               onClick={copyTopicLink}
               title="Copy link"
@@ -153,37 +128,6 @@ const StyleTopicDetail: React.FC = () => {
             {topic.description}
           </p>
 
-          <div style={{
-            borderTop: '1px solid #e6e6e6',
-            paddingTop: '12px'
-          }}>
-            <p style={{
-              fontSize: '12px',
-              fontWeight: 400,
-              color: '#777777',
-              margin: '0 0 8px 0',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Credits
-            </p>
-            {topic.credits.map((c) => (
-              <div
-                key={c.role}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  gap: '12px',
-                  padding: '5px 0',
-                  fontSize: '13px',
-                  lineHeight: 1.4
-                }}
-              >
-                <span style={{ color: '#777777' }}>{c.role}</span>
-                <span style={{ color: '#111111', textAlign: 'right' }}>{c.name}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 

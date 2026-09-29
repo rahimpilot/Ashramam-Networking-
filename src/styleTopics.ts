@@ -26,8 +26,8 @@ export const STYLE_TOPICS: StyleTopic[] = [
     title: "Harper's Bazaar Kazakhstan — Diamond Issue",
     kicker: 'Cover story · May 2023',
     description:
-      "Mafi worked as styling assistant on the cover story of Harper's " +
-      "Bazaar Kazakhstan's Diamond Issue — a high-fashion editorial shoot.",
+      "Styling assistant on the cover story of Harper's Bazaar Kazakhstan's " +
+      "Diamond Issue — a high-fashion editorial shoot.",
     image: '/style-by-mafi/bazaar-diamond-cover.jpg',
     ogImage: '/og-style-by-mafi.jpg',
     credits: [
