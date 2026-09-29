@@ -40,6 +40,13 @@ export function cinemaDrivePreviewUrl(c: Cinema): string | null {
   return c.driveFileId ? `https://drive.google.com/file/d/${c.driveFileId}/preview` : null;
 }
 
+/** Direct mp4 stream for the Drive file — plays in a native <video> tag with no Google login. */
+export function cinemaDirectVideoUrl(c: Cinema): string | null {
+  return c.driveFileId
+    ? `https://drive.usercontent.google.com/download?id=${c.driveFileId}&export=download&confirm=t`
+    : null;
+}
+
 export function cinemaWatchUrl(c: Cinema): string {
   return `https://www.youtube.com/watch?v=${c.youtubeId}`;
 }
