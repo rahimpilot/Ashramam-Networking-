@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 
 /** Style By Mafi — a member's fashion and styling showcase. Content to be added. */
 const StyleByMafi: React.FC = () => {
   const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+
+  const copyPageLink = async () => {
+    const url = 'https://www.ashramamvibes.com/style-by-mafi?v=1';
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* clipboard unavailable */ }
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
 
   return (
     <div style={{
@@ -78,6 +95,24 @@ const StyleByMafi: React.FC = () => {
           }}>
             New looks and styling will appear here soon.
           </p>
+        </div>
+
+        {/* Copy public link */}
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <button
+            onClick={copyPageLink}
+            title="Copy link"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              padding: '10px',
+              fontSize: '22px',
+              cursor: 'pointer',
+              lineHeight: 1,
+            }}
+          >
+            {copied ? <span style={{ color: '#1c9c4c' }}>✓</span> : '🔗'}
+          </button>
         </div>
       </div>
 
