@@ -5,7 +5,7 @@ import BottomNavigation from './BottomNavigation';
 interface Trip {
   id: string;
   name: string;
-  emoji: string;
+  image: string;
   description: string;
   color: {
     gradient: string;
@@ -23,7 +23,7 @@ const OurTrips: React.FC = () => {
     {
       id: 'albania',
       name: 'Albania',
-      emoji: '🏔️',
+      image: '/albania-2022.jpg',
       description: 'Memories from our Albania adventure',
       color: {
         gradient: 'linear-gradient(135deg, #CCFBF1 0%, #99F6E0 100%)',
@@ -36,7 +36,7 @@ const OurTrips: React.FC = () => {
     {
       id: 'baku',
       name: 'Baku',
-      emoji: '🌃',
+      image: '/baku-2024.jpg',
       description: 'Memories from our Baku adventure',
       color: {
         gradient: 'linear-gradient(135deg, #DDD6FE 0%, #C7D2FE 100%)',
@@ -49,7 +49,7 @@ const OurTrips: React.FC = () => {
     {
       id: 'thailand',
       name: 'Thailand',
-      emoji: '🏖️',
+      image: '/thailand-2025.jpg',
       description: 'Memories from our Thailand adventure',
       color: {
         gradient: 'linear-gradient(135deg, #FEF3E2 0%, #FED7AA 100%)',
@@ -62,7 +62,7 @@ const OurTrips: React.FC = () => {
     {
       id: 'kasol',
       name: 'Kasol',
-      emoji: '🌲',
+      image: '/kasol.jpg',
       description: 'The first planned Ashramam trip',
       color: {
         gradient: 'linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%)',
@@ -182,13 +182,17 @@ const OurTrips: React.FC = () => {
                 e.currentTarget.style.boxShadow = `0 1px 3px ${trip.color.shadow}`;
               }}
             >
-              <div style={{
-                fontSize: '48px',
-                lineHeight: 1,
-                flexShrink: 0
-              }}>
-                {trip.emoji}
-              </div>
+              <img
+                src={trip.image}
+                alt={trip.name}
+                style={{
+                  width: '88px',
+                  height: '88px',
+                  objectFit: 'cover',
+                  borderRadius: '10px',
+                  flexShrink: 0
+                }}
+              />
               <div>
                 <h3 style={{
                   fontSize: '18px',
