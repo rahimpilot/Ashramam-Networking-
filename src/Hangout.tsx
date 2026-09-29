@@ -72,6 +72,13 @@ const TILES: Tile[] = [
     path: '/style-by-mafi',
     iconBg: 'rgba(252, 231, 243, 0.85)',
   },
+  {
+    icon: '🎙️',
+    title: 'Podcasts',
+    subtitle: 'Listen right here',
+    path: '/podcasts',
+    iconBg: 'rgba(207, 250, 254, 0.85)',
+  },
 ];
 
 const GLASS_CARD = {
