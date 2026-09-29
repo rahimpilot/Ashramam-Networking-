@@ -18,6 +18,7 @@ const GALLERY = [
   '/styledbymafi/gallery-10.jpg',
   '/styledbymafi/gallery-11.jpg',
   '/styledbymafi/gallery-12.jpg',
+  '/styledbymafi/gallery-13.jpg',
 ];
 
 /** Styled by Mafi — Mafi's fashion portfolio (public). */
@@ -43,9 +44,25 @@ const StyledByMafi: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: PAGE_BG, fontFamily: FONT }}>
+    <div className="sbm-page" style={{ minHeight: '100vh', background: PAGE_BG, fontFamily: FONT }}>
+      <style>{`
+        @media (min-width: 1024px) {
+          .sbm-page { max-width: 1280px; margin: 0 auto; }
+          .sbm-hero { height: 82vh !important; min-height: 600px !important; }
+          .sbm-hero-text { padding: 2.5rem 3rem 3rem !important; }
+          .sbm-kicker { font-size: 1rem !important; }
+          .sbm-title { font-size: 5rem !important; }
+          .sbm-tag { font-size: 1.3rem !important; max-width: 600px !important; }
+          .sbm-about { max-width: 860px !important; padding-top: 3rem !important; }
+          .sbm-about h2, .sbm-gallery-wrap h2 { font-size: 2rem !important; }
+          .sbm-about-text { font-size: 1.2rem !important; }
+          .sbm-gallery-wrap { max-width: 1280px !important; }
+          .sbm-gallery { columns: 3 300px !important; column-gap: 1.25rem !important; }
+          .sbm-contact { margin: 0 2rem 3rem !important; }
+        }
+      `}</style>
       {/* Hero */}
-      <div style={{ position: 'relative', height: '62vh', minHeight: 380, overflow: 'hidden' }}>
+      <div className="sbm-hero" style={{ position: 'relative', height: '62vh', minHeight: 380, overflow: 'hidden' }}>
         <img
           src="/styledbymafi/hero.jpg"
           alt="Mehroof — fashion stylist"
@@ -75,39 +92,39 @@ const StyledByMafi: React.FC = () => {
             color: copied ? '#2e7d32' : '#3a332a'
           }}
         >{copied ? '✓' : '🔗'}</button>
-        <div style={{
+        <div className="sbm-hero-text" style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 1,
           padding: '1.5rem 1.25rem 1.75rem', color: '#fff'
         }}>
-          <div style={{ fontSize: '0.8rem', letterSpacing: '0.35em', opacity: 0.85, marginBottom: '0.4rem' }}>
+          <div className="sbm-kicker" style={{ fontSize: '0.8rem', letterSpacing: '0.35em', opacity: 0.85, marginBottom: '0.4rem' }}>
             FASHION STYLIST
           </div>
-          <h1 style={{ margin: 0, fontSize: '3rem', fontWeight: 400, lineHeight: 1.05 }}>
+          <h1 className="sbm-title" style={{ margin: 0, fontSize: '3rem', fontWeight: 400, lineHeight: 1.05 }}>
             Mehroof
           </h1>
-          <p style={{ margin: '0.6rem 0 0', fontSize: '1rem', opacity: 0.9, maxWidth: 420 }}>
+          <p className="sbm-tag" style={{ margin: '0.6rem 0 0', fontSize: '1rem', opacity: 0.9, maxWidth: 420 }}>
             Creating visual stories through wardrobe, texture, and mood.
           </p>
         </div>
       </div>
 
       {/* About */}
-      <div style={{ padding: '2rem 1.25rem 0.5rem', maxWidth: 720, margin: '0 auto' }}>
+      <div className="sbm-about" style={{ padding: '2rem 1.25rem 0.5rem', maxWidth: 720, margin: '0 auto' }}>
         <h2 style={{ fontSize: '1.4rem', fontWeight: 400, color: '#2c2a4a', margin: '0 0 0.75rem' }}>
           About Me
         </h2>
-        <p style={{ fontSize: '1.02rem', lineHeight: 1.7, color: '#4a4763', margin: 0 }}>
+        <p className="sbm-about-text" style={{ fontSize: '1.02rem', lineHeight: 1.7, color: '#4a4763', margin: 0 }}>
           Creating visual stories through wardrobe, texture, and mood. I specialize in
           editorial shoots, modern styling, and personalized fashion transformations.
         </p>
       </div>
 
       {/* Gallery */}
-      <div style={{ padding: '1.5rem 1.25rem 0.5rem', maxWidth: 1080, margin: '0 auto' }}>
+      <div className="sbm-gallery-wrap" style={{ padding: '1.5rem 1.25rem 0.5rem', maxWidth: 1080, margin: '0 auto' }}>
         <h2 style={{ fontSize: '1.4rem', fontWeight: 400, color: '#2c2a4a', margin: '0 0 1rem' }}>
           The Gallery
         </h2>
-        <div style={{ columns: '2 200px', columnGap: '0.75rem' }}>
+        <div className="sbm-gallery" style={{ columns: '2 200px', columnGap: '0.75rem' }}>
           {GALLERY.map((src) => (
             <img
               key={src}
@@ -125,20 +142,33 @@ const StyledByMafi: React.FC = () => {
         </div>
       </div>
 
-      {/* Contact */}
-      <div style={{ padding: '2rem 1.25rem 3rem', maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '1.4rem', fontWeight: 400, color: '#2c2a4a', margin: '0 0 0.75rem' }}>
-          Get In Touch
-        </h2>
-        <a
-          href="mailto:mehroofmt@gmail.com"
-          style={{
-            display: 'inline-block', padding: '0.8rem 2rem', borderRadius: 999,
-            background: '#2c2a4a', color: '#fff', textDecoration: 'none', fontSize: '1.05rem'
-          }}
-        >
-          mehroofmt@gmail.com
-        </a>
+      {/* Contact — dark textured band */}
+      <div className="sbm-contact" style={{
+        position: 'relative', overflow: 'hidden', margin: '0 0 2.5rem',
+        borderRadius: 18,
+      }}>
+        <img
+          src="/styledbymafi/touch-bg.jpg" alt="" aria-hidden
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,36,0.72)' }} />
+        <div style={{ position: 'relative', padding: '2.5rem 1.5rem', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 400, color: '#fff', margin: '0 0 0.75rem' }}>
+            Get In Touch
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem', margin: '0 0 1.5rem', lineHeight: 1.6 }}>
+            For bookings, collaborations and styling inquiries.
+          </p>
+          <a
+            href="mailto:mehroofmt@gmail.com"
+            style={{
+              display: 'inline-block', padding: '0.8rem 2rem', borderRadius: 999,
+              background: '#fff', color: '#2c2a4a', textDecoration: 'none', fontSize: '1.05rem', fontWeight: 600
+            }}
+          >
+            ✉️ mehroofmt@gmail.com
+          </a>
+        </div>
       </div>
 
       <BottomNavigation />
