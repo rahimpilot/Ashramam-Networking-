@@ -130,6 +130,7 @@ const OurCinemas: React.FC = () => {
                       controls
                       playsInline
                       preload="metadata"
+                      crossOrigin="anonymous"
                       style={{ width: '100%', height: '100%', display: 'block', background: '#000' }}
                     />
                   ) : (
