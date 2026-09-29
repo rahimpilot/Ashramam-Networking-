@@ -66,7 +66,7 @@ const StyleByMafi: React.FC = () => {
           margin: '0 0 16px 0',
           textAlign: 'center'
         }}>
-          Style By Mafi
+          Styled by Mafi
         </h1>
 
         <div className="iv-cards">
