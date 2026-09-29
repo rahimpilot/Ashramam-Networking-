@@ -2,13 +2,35 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 
-/** Style By Mafi — a member's fashion and styling showcase. Content to be added. */
+interface Credit {
+  role: string;
+  name: string;
+}
+
+const FEATURE_CREDITS: Credit[] = [
+  { role: 'Editor-in-Chief', name: 'Larissa Azanova' },
+  { role: 'Photography', name: 'Mann' },
+  { role: 'Concept & Art Direction', name: 'Galbi' },
+  { role: 'Styling', name: 'Daniela Correia' },
+  { role: 'Styling Assistant', name: 'Mehroof (Mafi)' },
+  { role: 'Hair', name: 'Umang' },
+  { role: 'Makeup', name: 'Arianna Scapola' },
+  { role: 'Digitech', name: 'Alister' },
+  { role: 'Model', name: 'Reimi' },
+  { role: 'Casting Curation', name: 'Ellie Vojvodinska' },
+  { role: 'Light Assistant', name: 'James' },
+  { role: 'Retouch', name: 'Gorgeous Agency' },
+  { role: 'Studio', name: 'Bicki Boss' },
+  { role: 'Production', name: 'Things By People' },
+];
+
+/** Style By Mafi — a member's fashion and styling showcase. */
 const StyleByMafi: React.FC = () => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
 
   const copyPageLink = async () => {
-    const url = 'https://www.ashramamvibes.com/style-by-mafi?v=1';
+    const url = 'https://www.ashramamvibes.com/style-by-mafi?v=2';
     try {
       await navigator.clipboard.writeText(url);
     } catch {
@@ -69,32 +91,84 @@ const StyleByMafi: React.FC = () => {
           Style By Mafi
         </h1>
 
+        {/* Feature tile — Harper's Bazaar Kazakhstan, Diamond Issue */}
         <div className="iv-card" style={{
           background: '#ffffff',
           border: '1px solid #d9d9d9',
           borderRadius: '12px',
-          padding: '48px 24px',
-          textAlign: 'center',
+          padding: '20px',
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
         }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>👔</div>
+          <img
+            src="/style-by-mafi/bazaar-diamond-cover.jpg"
+            alt="Harper's Bazaar Kazakhstan, May 2023 — Diamond Issue cover"
+            style={{
+              width: '100%',
+              height: 'auto',
+              borderRadius: '8px',
+              display: 'block'
+            }}
+          />
           <p style={{
-            fontSize: '18px',
+            fontSize: '12px',
+            fontWeight: 400,
+            color: '#777777',
+            margin: '16px 0 4px 0',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            Cover story · May 2023
+          </p>
+          <h2 style={{
+            fontSize: '22px',
             fontWeight: 400,
             color: '#111111',
             margin: '0 0 8px 0'
           }}>
-            Mafi's style showcase is on its way
-          </p>
+            Harper's Bazaar Kazakhstan — Diamond Issue
+          </h2>
           <p style={{
-            fontSize: '14px',
+            fontSize: '15px',
             fontWeight: 400,
-            color: '#555555',
-            margin: 0,
-            lineHeight: 1.5
+            color: '#333333',
+            margin: '0 0 16px 0',
+            lineHeight: 1.6
           }}>
-            New looks and styling will appear here soon.
+            Mafi worked as styling assistant on the cover story of Harper's
+            Bazaar Kazakhstan's Diamond Issue — a high-fashion editorial shoot.
           </p>
+
+          <div style={{
+            borderTop: '1px solid #e6e6e6',
+            paddingTop: '12px'
+          }}>
+            <p style={{
+              fontSize: '12px',
+              fontWeight: 400,
+              color: '#777777',
+              margin: '0 0 8px 0',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}>
+              Credits
+            </p>
+            {FEATURE_CREDITS.map((c) => (
+              <div
+                key={c.role}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: '12px',
+                  padding: '5px 0',
+                  fontSize: '13px',
+                  lineHeight: 1.4
+                }}
+              >
+                <span style={{ color: '#777777' }}>{c.role}</span>
+                <span style={{ color: '#111111', textAlign: 'right' }}>{c.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Copy public link */}
