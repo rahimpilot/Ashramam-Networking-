@@ -65,6 +65,13 @@ const TILES: Tile[] = [
     path: '/royal-bank',
     iconBg: 'rgba(209, 250, 229, 0.85)',
   },
+  {
+    icon: '👔',
+    title: 'Style By Mafi',
+    subtitle: 'Fashion and styling showcase',
+    path: '/style-by-mafi',
+    iconBg: 'rgba(252, 231, 243, 0.85)',
+  },
 ];
 
 const GLASS_CARD = {

@@ -14,6 +14,7 @@ import Hangout from './Hangout';
 import PowerGroup from './PowerGroup';
 import MeetingMinutes from './MeetingMinutes';
 import RoyalBank from './RoyalBank';
+import StyleByMafi from './StyleByMafi';
 import VoiceRoom from './VoiceRoom';
 import UnoGame from './UnoGame';
 import OurTrips from './OurTrips';
@@ -127,6 +128,7 @@ function AnimatedRoutes() {
         <Route path="/meeting-minutes/october-5th-2025" element={<RequireAuth><October5th2025Meeting /></RequireAuth>} />
         <Route path="/meeting-minutes/november-2nd-2025" element={<RequireAuth><November2nd2025Meeting /></RequireAuth>} />
         <Route path="/royal-bank" element={<RequireAuth><RoyalBank /></RequireAuth>} />
+        <Route path="/style-by-mafi" element={<RequireAuth><StyleByMafi /></RequireAuth>} />
         <Route path="/voice-room" element={<RequireAuth><VoiceRoom /></RequireAuth>} />
         <Route path="/our-trips" element={<RequireAuth><OurTrips /></RequireAuth>} />
         <Route path="/ashramam-exclusive" element={<RequireAuth><AshramamExclusive /></RequireAuth>} />
