@@ -25,6 +25,10 @@ export function cinemaThumbnail(c: Cinema): string {
   return `https://i.ytimg.com/vi/${c.youtubeId}/maxresdefault.jpg`;
 }
 
+export function cinemaThumbnailFallback(c: Cinema): string {
+  return `https://i.ytimg.com/vi/${c.youtubeId}/hqdefault.jpg`;
+}
+
 export function cinemaEmbedUrl(c: Cinema): string {
   return `https://www.youtube-nocookie.com/embed/${c.youtubeId}?rel=0`;
 }

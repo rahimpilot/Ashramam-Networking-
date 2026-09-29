@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
-import { CINEMAS, getCinema, cinemaThumbnail, cinemaEmbedUrl, Cinema } from './ourCinemas';
+import { CINEMAS, getCinema, cinemaThumbnail, cinemaThumbnailFallback, cinemaEmbedUrl, Cinema } from './ourCinemas';
 
 const FONT = "'Marcellus', Georgia, serif";
 const PAGE_BG = 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)';
@@ -70,6 +70,10 @@ function CinemaCard({ cinema }: { cinema: Cinema }) {
           src={cinemaThumbnail(cinema)}
           alt={cinema.title}
           loading="lazy"
+          onError={(e) => {
+            const img = e.currentTarget;
+            if (img.src !== cinemaThumbnailFallback(cinema)) img.src = cinemaThumbnailFallback(cinema);
+          }}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
         <div style={{
