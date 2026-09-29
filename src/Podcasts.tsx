@@ -18,7 +18,13 @@ function toEmbedUrl(spotifyUrl: string): string | null {
   return `https://open.spotify.com/embed/${m[1]}/${m[2]}`;
 }
 
-const EPISODES: Episode[] = [];
+const EPISODES: Episode[] = [
+  {
+    title: 'Snake stories assorted',
+    note: 'Recorded by Abdu — plays right here in the app, no login needed.',
+    audioUrl: '/audio/snake-stories-assorted.m4a',
+  },
+];
 
 /** Podcasts — play recordings right inside the app, no login needed. */
 const Podcasts: React.FC = () => {
