@@ -30,5 +30,9 @@ export function cinemaThumbnailFallback(c: Cinema): string {
 }
 
 export function cinemaEmbedUrl(c: Cinema): string {
-  return `https://www.youtube-nocookie.com/embed/${c.youtubeId}?rel=0`;
+  return `https://www.youtube.com/embed/${c.youtubeId}?rel=0`;
+}
+
+export function cinemaWatchUrl(c: Cinema): string {
+  return `https://www.youtube.com/watch?v=${c.youtubeId}`;
 }

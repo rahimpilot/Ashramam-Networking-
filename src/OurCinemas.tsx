@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
-import { CINEMAS, getCinema, cinemaThumbnail, cinemaThumbnailFallback, cinemaEmbedUrl, Cinema } from './ourCinemas';
+import { CINEMAS, getCinema, cinemaThumbnail, cinemaThumbnailFallback, cinemaEmbedUrl, cinemaWatchUrl, Cinema } from './ourCinemas';
 
 const FONT = "'Marcellus', Georgia, serif";
 const PAGE_BG = 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)';
@@ -137,6 +137,14 @@ const OurCinemas: React.FC = () => {
             <p style={{ fontSize: '1.02rem', lineHeight: 1.7, color: '#4a4763', margin: 0 }}>
               {cinema.description}
             </p>
+            <a
+              href={cinemaWatchUrl(cinema)}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-block', marginTop: '1rem', fontSize: '0.95rem', color: '#5b54a8' }}
+            >
+              Having trouble playing? Watch on YouTube →
+            </a>
           </div>
         </>
       ) : (
