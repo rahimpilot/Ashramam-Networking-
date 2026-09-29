@@ -72,7 +72,7 @@ function isSplashEntryPath(pathname: string) {
 function useSidebarVisible() {
   const location = useLocation();
   const p = location.pathname;
-  return !(p === '/' || p.startsWith('/articles') || p.startsWith('/cinema-reviews') || p.startsWith('/beloved-articles'));
+  return !(p === '/' || p.startsWith('/articles') || p.startsWith('/cinema-reviews') || p.startsWith('/beloved-articles') || p.startsWith('/styledbymafi'));
 }
 /** Replays the soft page-entrance animation on every navigation. */
 function AnimatedRoutes() {
