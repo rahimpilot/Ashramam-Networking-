@@ -12,7 +12,7 @@ const StyleByMafi: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const copyPageLink = async () => {
-    const url = 'https://www.ashramamvibes.com/style-by-mafi?v=2';
+    const url = 'https://www.ashramamvibes.com/style-by-mafi?v=3';
     try {
       await navigator.clipboard.writeText(url);
     } catch {
