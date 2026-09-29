@@ -18,6 +18,7 @@ const FALLBACK_DESC = 'Recordings from the Ashramam circle — press play and li
 const EPISODES = {
   'snake-stories-assorted': 'Snake stories assorted',
   'illi-is-a-wonderman': 'illi is a wonderman with reality',
+  'fear-of-snake-and-tiger': 'Fear of snake and tiger',
 };
 
 const esc = (s) =>

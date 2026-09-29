@@ -29,6 +29,11 @@ const EPISODES: Episode[] = [
     title: 'illi is a wonderman with reality',
     audioUrl: '/audio/illi-is-a-wonderman.m4a',
   },
+  {
+    slug: 'fear-of-snake-and-tiger',
+    title: 'Fear of snake and tiger',
+    audioUrl: '/audio/fear-of-snake-and-tiger.m4a',
+  },
 ];
 
 /** Podcasts — play recordings right inside the app, no login needed. */
