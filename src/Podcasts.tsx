@@ -24,6 +24,11 @@ const EPISODES: Episode[] = [
     title: 'Snake stories assorted',
     audioUrl: '/audio/snake-stories-assorted.m4a',
   },
+  {
+    slug: 'illi-is-a-wonderman',
+    title: 'illi is a wonderman with reality',
+    audioUrl: '/audio/illi-is-a-wonderman.m4a',
+  },
 ];
 
 /** Podcasts — play recordings right inside the app, no login needed. */
