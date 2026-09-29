@@ -69,7 +69,7 @@ const TILES: Tile[] = [
     icon: '👔',
     title: 'Style By Mafi',
     subtitle: 'Fashion and styling showcase',
-    path: '/style-by-mafi',
+    path: '/styledbymafi',
     iconBg: 'rgba(252, 231, 243, 0.85)',
   },
   {
