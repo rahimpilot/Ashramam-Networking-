@@ -6,7 +6,7 @@ interface Trip {
   id: string;
   name: string;
   image: string;
-  description: string;
+  year: string;
 }
 
 const OurTrips: React.FC = () => {
@@ -17,25 +17,25 @@ const OurTrips: React.FC = () => {
       id: 'albania',
       name: 'Albania',
       image: '/albania-2022.jpg',
-      description: 'Memories from our Albania adventure',
+      year: '2022',
     },
     {
       id: 'baku',
       name: 'Baku',
       image: '/baku-2024.jpg',
-      description: 'Memories from our Baku adventure',
+      year: '2024',
     },
     {
       id: 'thailand',
       name: 'Thailand',
       image: '/thailand-2025.jpg',
-      description: 'Memories from our Thailand adventure',
+      year: '2025',
     },
     {
       id: 'kasol',
       name: 'Kasol',
       image: '/kasol.jpg',
-      description: 'The first planned Ashramam trip',
+      year: '2025',
     }
   ];
 
@@ -175,7 +175,7 @@ const OurTrips: React.FC = () => {
                   color: '#555555',
                   margin: 0
                 }}>
-                  {trip.description}
+                  {trip.year}
                 </p>
               </div>
             </div>
