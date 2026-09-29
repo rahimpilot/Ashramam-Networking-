@@ -139,9 +139,6 @@ const Kasol: React.FC = () => {
         }}>
           Kasol
         </h2>
-        <div style={{ fontSize: 13, color: '#6b7f92', marginBottom: '16px' }}>
-          📅 The first planned Ashramam trip · Ashramam Team
-        </div>
         <div className="iv-card" style={{ padding: '22px' }}>
           <p style={{ fontSize: 15, fontFamily: "'Marcellus', Georgia, serif", lineHeight: 1.7, color: '#33414f', margin: '0 0 16px 0' }}>
             Kasol — the first properly planned trip of Ashramam. The boys had
