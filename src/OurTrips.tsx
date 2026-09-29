@@ -58,6 +58,19 @@ const OurTrips: React.FC = () => {
         textDark: '#92400E',
         textLight: '#B45309'
       }
+    },
+    {
+      id: 'kasol',
+      name: 'Kasol',
+      emoji: '🌲',
+      description: 'The first planned Ashramam trip',
+      color: {
+        gradient: 'linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%)',
+        border: '#22C55E',
+        shadow: 'rgba(34, 197, 94, 0.2)',
+        textDark: '#14532D',
+        textLight: '#15803D'
+      }
     }
   ];
 
