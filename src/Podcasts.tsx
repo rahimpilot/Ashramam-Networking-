@@ -5,8 +5,10 @@ import BottomNavigation from './BottomNavigation';
 interface Episode {
   title: string;
   note: string;
-  spotifyUrl: string;
-  isDemo: boolean;
+  /** Direct audio file URL (Firebase Storage or bundled) — plays for everyone, no login. */
+  audioUrl?: string;
+  /** Spotify link — falls back to Spotify's embed player (needs Spotify login for full playback). */
+  spotifyUrl?: string;
 }
 
 /** Turn any open.spotify.com link into its embeddable player URL. */
@@ -16,16 +18,9 @@ function toEmbedUrl(spotifyUrl: string): string | null {
   return `https://open.spotify.com/embed/${m[1]}/${m[2]}`;
 }
 
-const EPISODES: Episode[] = [
-  {
-    title: 'Well Played',
-    note: 'Demo episode — send your Spotify links and your recordings will appear here.',
-    spotifyUrl: 'https://open.spotify.com/episode/1iWSFY7pQVPbnjvNYFsobs',
-    isDemo: true,
-  },
-];
+const EPISODES: Episode[] = [];
 
-/** Podcasts — play Spotify recordings right inside the app. */
+/** Podcasts — play recordings right inside the app, no login needed. */
 const Podcasts: React.FC = () => {
   const navigate = useNavigate();
 
@@ -80,56 +75,70 @@ const Podcasts: React.FC = () => {
           textAlign: 'center',
           margin: '0 0 20px 0'
         }}>
-          Press play and listen right here — no need to open Spotify.
+          Press play and listen right here.
         </p>
 
-        {EPISODES.map((ep) => {
-          const embedUrl = toEmbedUrl(ep.spotifyUrl);
-          if (!embedUrl) return null;
-          return (
-            <div
-              key={ep.spotifyUrl}
-              style={{
-                background: '#ffffff',
-                border: '1px solid #d9d9d9',
-                borderRadius: '12px',
-                padding: '16px',
-                marginBottom: '16px',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
-              }}
-            >
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: '12px',
-                gap: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '18px',
-                  fontWeight: 400,
-                  color: '#111111',
-                  margin: 0
-                }}>
-                  {ep.title}
-                </h3>
-                {ep.isDemo && (
-                  <span style={{
-                    fontSize: '11px',
-                    color: '#555555',
-                    background: '#f0f0f0',
-                    border: '1px solid #d9d9d9',
-                    borderRadius: '999px',
-                    padding: '3px 10px',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    Demo
-                  </span>
-                )}
-              </div>
+        {EPISODES.length === 0 && (
+          <div style={{
+            background: '#ffffff',
+            border: '1px solid #d9d9d9',
+            borderRadius: '12px',
+            padding: '48px 24px',
+            textAlign: 'center',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎙️</div>
+            <p style={{
+              fontSize: '18px',
+              fontWeight: 400,
+              color: '#111111',
+              margin: '0 0 8px 0'
+            }}>
+              The first recording is on its way
+            </p>
+            <p style={{
+              fontSize: '14px',
+              fontWeight: 400,
+              color: '#555555',
+              margin: 0,
+              lineHeight: 1.5
+            }}>
+              It will play right here in the app — no Spotify login needed.
+            </p>
+          </div>
+        )}
+
+        {EPISODES.map((ep) => (
+          <div
+            key={ep.title}
+            style={{
+              background: '#ffffff',
+              border: '1px solid #d9d9d9',
+              borderRadius: '12px',
+              padding: '16px',
+              marginBottom: '16px',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
+            }}
+          >
+            <h3 style={{
+              fontSize: '18px',
+              fontWeight: 400,
+              color: '#111111',
+              margin: '0 0 12px 0'
+            }}>
+              {ep.title}
+            </h3>
+            {ep.audioUrl ? (
+              <audio
+                controls
+                preload="metadata"
+                src={ep.audioUrl}
+                style={{ width: '100%', display: 'block' }}
+              />
+            ) : ep.spotifyUrl && toEmbedUrl(ep.spotifyUrl) ? (
               <iframe
                 title={ep.title}
-                src={embedUrl}
+                src={toEmbedUrl(ep.spotifyUrl)!}
                 width="100%"
                 height="152"
                 frameBorder="0"
@@ -138,17 +147,17 @@ const Podcasts: React.FC = () => {
                 loading="lazy"
                 style={{ borderRadius: '8px', display: 'block' }}
               />
-              <p style={{
-                fontSize: '13px',
-                color: '#555555',
-                margin: '12px 0 0 0',
-                lineHeight: 1.5
-              }}>
-                {ep.note}
-              </p>
-            </div>
-          );
-        })}
+            ) : null}
+            <p style={{
+              fontSize: '13px',
+              color: '#555555',
+              margin: '12px 0 0 0',
+              lineHeight: 1.5
+            }}>
+              {ep.note}
+            </p>
+          </div>
+        ))}
       </div>
 
       {/* Spacer so content isn't hidden behind the bottom nav */}
