@@ -45,6 +45,13 @@ const TILES: Tile[] = [
     iconBg: 'rgba(224, 234, 244, 0.85)',
   },
   {
+    icon: '🎥',
+    title: 'Our Cinemas',
+    subtitle: 'Short films by our own people',
+    path: '/our-cinemas',
+    iconBg: 'rgba(232, 224, 244, 0.85)',
+  },
+  {
     icon: '🔥',
     title: 'Ashramam Exclusive',
     subtitle: 'Hot news, members only',

@@ -15,6 +15,7 @@ import PowerGroup from './PowerGroup';
 import MeetingMinutes from './MeetingMinutes';
 import RoyalBank from './RoyalBank';
 import StyledByMafi from './StyledByMafi';
+import OurCinemas from './OurCinemas';
 import Podcasts from './Podcasts';
 import VoiceRoom from './VoiceRoom';
 import UnoGame from './UnoGame';
@@ -62,7 +63,7 @@ function LegacyArticleRedirect() {
 }
 
 /** Routes where a fresh visitor sees the brand splash before the page loads. */
-const SPLASH_PATHS = ['/', '/articles', '/cinema-reviews', '/beloved-articles'];
+const SPLASH_PATHS = ['/', '/articles', '/cinema-reviews', '/beloved-articles', '/our-cinemas'];
 function isSplashEntryPath(pathname: string) {
   return SPLASH_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
 }
@@ -72,7 +73,7 @@ function isSplashEntryPath(pathname: string) {
 function useSidebarVisible() {
   const location = useLocation();
   const p = location.pathname;
-  return !(p === '/' || p.startsWith('/articles') || p.startsWith('/cinema-reviews') || p.startsWith('/beloved-articles') || p.startsWith('/styledbymafi'));
+  return !(p === '/' || p.startsWith('/articles') || p.startsWith('/cinema-reviews') || p.startsWith('/beloved-articles') || p.startsWith('/styledbymafi') || p.startsWith('/our-cinemas'));
 }
 /** Replays the soft page-entrance animation on every navigation. */
 function AnimatedRoutes() {
@@ -130,6 +131,8 @@ function AnimatedRoutes() {
         <Route path="/meeting-minutes/november-2nd-2025" element={<RequireAuth><November2nd2025Meeting /></RequireAuth>} />
         <Route path="/royal-bank" element={<RequireAuth><RoyalBank /></RequireAuth>} />
         <Route path="/styledbymafi" element={<StyledByMafi />} />
+        <Route path="/our-cinemas" element={<OurCinemas />} />
+        <Route path="/our-cinemas/:cinemaId" element={<OurCinemas />} />
         <Route path="/style-by-mafi" element={<Navigate to="/styledbymafi" replace />} />
         <Route path="/style-by-mafi/:topicSlug" element={<Navigate to="/styledbymafi" replace />} />
         <Route path="/podcasts" element={<RequireAuth><Podcasts /></RequireAuth>} />
