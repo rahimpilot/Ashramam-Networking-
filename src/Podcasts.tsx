@@ -1,10 +1,10 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
 
 interface Episode {
+  slug: string;
   title: string;
-  note: string;
   /** Direct audio file URL (Firebase Storage or bundled) — plays for everyone, no login. */
   audioUrl?: string;
   /** Spotify link — falls back to Spotify's embed player (needs Spotify login for full playback). */
@@ -20,8 +20,8 @@ function toEmbedUrl(spotifyUrl: string): string | null {
 
 const EPISODES: Episode[] = [
   {
+    slug: 'snake-stories-assorted',
     title: 'Snake stories assorted',
-    note: 'Recorded by Abdu — plays right here in the app, no login needed.',
     audioUrl: '/audio/snake-stories-assorted.m4a',
   },
 ];
@@ -29,6 +29,33 @@ const EPISODES: Episode[] = [
 /** Podcasts — play recordings right inside the app, no login needed. */
 const Podcasts: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+
+  // A shared link like /podcasts?ep=<slug> scrolls straight to that episode.
+  useEffect(() => {
+    const slug = searchParams.get('ep');
+    if (slug) {
+      const el = document.getElementById(`ep-${slug}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [searchParams]);
+
+  const copyEpisodeLink = async (ep: Episode) => {
+    const url = `https://www.ashramamvibes.com/podcasts?ep=${ep.slug}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* clipboard unavailable */ }
+      document.body.removeChild(ta);
+    }
+    setCopiedSlug(ep.slug);
+    setTimeout(() => setCopiedSlug(null), 1800);
+  };
 
   return (
     <div style={{
@@ -116,7 +143,8 @@ const Podcasts: React.FC = () => {
 
         {EPISODES.map((ep) => (
           <div
-            key={ep.title}
+            key={ep.slug}
+            id={`ep-${ep.slug}`}
             style={{
               background: '#ffffff',
               border: '1px solid #d9d9d9',
@@ -126,14 +154,37 @@ const Podcasts: React.FC = () => {
               boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
             }}
           >
-            <h3 style={{
-              fontSize: '18px',
-              fontWeight: 400,
-              color: '#111111',
-              margin: '0 0 12px 0'
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '12px',
+              gap: '12px'
             }}>
-              {ep.title}
-            </h3>
+              <h3 style={{
+                fontSize: '18px',
+                fontWeight: 400,
+                color: '#111111',
+                margin: 0
+              }}>
+                {ep.title}
+              </h3>
+              <button
+                onClick={() => copyEpisodeLink(ep)}
+                title="Copy link"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  padding: '6px',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  lineHeight: 1,
+                  flexShrink: 0
+                }}
+              >
+                {copiedSlug === ep.slug ? <span style={{ color: '#1c9c4c' }}>✓</span> : '🔗'}
+              </button>
+            </div>
             {ep.audioUrl ? (
               <audio
                 controls
@@ -154,14 +205,6 @@ const Podcasts: React.FC = () => {
                 style={{ borderRadius: '8px', display: 'block' }}
               />
             ) : null}
-            <p style={{
-              fontSize: '13px',
-              color: '#555555',
-              margin: '12px 0 0 0',
-              lineHeight: 1.5
-            }}>
-              {ep.note}
-            </p>
           </div>
         ))}
       </div>

@@ -51,7 +51,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
   if (checking) return null;
   // Remember where the user wanted to go so the login screen can send
   // them back after sign-in (used by shared private links).
-  if (!user) return <Navigate to={`/?next=${encodeURIComponent(location.pathname)}`} replace />;
+  if (!user) return <Navigate to={`/?next=${encodeURIComponent(location.pathname + location.search)}`} replace />;
   return <>{children}</>;
 }
 
