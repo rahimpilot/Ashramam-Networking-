@@ -7,13 +7,6 @@ interface Trip {
   name: string;
   image: string;
   description: string;
-  color: {
-    gradient: string;
-    border: string;
-    shadow: string;
-    textDark: string;
-    textLight: string;
-  };
 }
 
 const OurTrips: React.FC = () => {
@@ -25,52 +18,24 @@ const OurTrips: React.FC = () => {
       name: 'Albania',
       image: '/albania-2022.jpg',
       description: 'Memories from our Albania adventure',
-      color: {
-        gradient: 'linear-gradient(135deg, #CCFBF1 0%, #99F6E0 100%)',
-        border: '#14B8A6',
-        shadow: 'rgba(20, 184, 166, 0.2)',
-        textDark: '#0F766E',
-        textLight: '#0D9488'
-      }
     },
     {
       id: 'baku',
       name: 'Baku',
       image: '/baku-2024.jpg',
       description: 'Memories from our Baku adventure',
-      color: {
-        gradient: 'linear-gradient(135deg, #DDD6FE 0%, #C7D2FE 100%)',
-        border: '#A78BFA',
-        shadow: 'rgba(167, 139, 250, 0.2)',
-        textDark: '#4C1D95',
-        textLight: '#6D28D9'
-      }
     },
     {
       id: 'thailand',
       name: 'Thailand',
       image: '/thailand-2025.jpg',
       description: 'Memories from our Thailand adventure',
-      color: {
-        gradient: 'linear-gradient(135deg, #FEF3E2 0%, #FED7AA 100%)',
-        border: '#FB923C',
-        shadow: 'rgba(251, 146, 60, 0.2)',
-        textDark: '#92400E',
-        textLight: '#B45309'
-      }
     },
     {
       id: 'kasol',
       name: 'Kasol',
       image: '/kasol.jpg',
       description: 'The first planned Ashramam trip',
-      color: {
-        gradient: 'linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%)',
-        border: '#22C55E',
-        shadow: 'rgba(34, 197, 94, 0.2)',
-        textDark: '#14532D',
-        textLight: '#15803D'
-      }
     }
   ];
 
@@ -161,13 +126,13 @@ const OurTrips: React.FC = () => {
             <div
               key={trip.id}
               style={{
-                background: trip.color.gradient,
+                background: '#ffffff',
                 borderRadius: '12px',
                 padding: '20px',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                border: `2px solid ${trip.color.border}`,
-                boxShadow: `0 1px 3px ${trip.color.shadow}`,
+                border: '1px solid #d9d9d9',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '16px'
@@ -175,11 +140,11 @@ const OurTrips: React.FC = () => {
               onClick={() => handleTripClick(trip.id)}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.02)';
-                e.currentTarget.style.boxShadow = `0 4px 12px ${trip.color.shadow}`;
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.12)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = `0 1px 3px ${trip.color.shadow}`;
+                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.08)';
               }}
             >
               <img
@@ -199,7 +164,7 @@ const OurTrips: React.FC = () => {
                   fontWeight: 400,
                   lineHeight: '1.3',
                   margin: '0 0 4px 0',
-                  color: trip.color.textDark
+                  color: '#111111'
                 }}>
                   {trip.name}
                 </h3>
@@ -207,7 +172,7 @@ const OurTrips: React.FC = () => {
                   fontSize: '14px',
                   fontWeight: 400,
                   lineHeight: '1.4',
-                  color: trip.color.textLight,
+                  color: '#555555',
                   margin: 0
                 }}>
                   {trip.description}
