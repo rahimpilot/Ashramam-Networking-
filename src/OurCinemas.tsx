@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
-import { CINEMAS, getCinema, cinemaThumbnail, cinemaThumbnailFallback, cinemaEmbedUrl, cinemaWatchUrl, Cinema } from './ourCinemas';
+import { CINEMAS, getCinema, cinemaThumbnail, cinemaThumbnailFallback, cinemaEmbedUrl, cinemaDrivePreviewUrl, cinemaWatchUrl, Cinema } from './ourCinemas';
 
 const FONT = "'Marcellus', Georgia, serif";
 const PAGE_BG = 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)';
@@ -121,13 +121,26 @@ const OurCinemas: React.FC = () => {
               boxShadow: '0 8px 30px rgba(40,30,80,0.25)',
             }}>
               <div style={{ aspectRatio: '16 / 9' }}>
-                <iframe
-                  src={cinemaEmbedUrl(cinema)}
-                  title={cinema.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  style={{ width: '100%', height: '100%', border: 0, display: 'block' }}
-                />
+                {(() => {
+                  const driveUrl = cinemaDrivePreviewUrl(cinema);
+                  return driveUrl ? (
+                    <iframe
+                      src={driveUrl}
+                      title={cinema.title}
+                      allow="autoplay; encrypted-media; picture-in-picture"
+                      allowFullScreen
+                      style={{ width: '100%', height: '100%', border: 0, display: 'block' }}
+                    />
+                  ) : (
+                    <iframe
+                      src={cinemaEmbedUrl(cinema)}
+                      title={cinema.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      style={{ width: '100%', height: '100%', border: 0, display: 'block' }}
+                    />
+                  );
+                })()}
               </div>
             </div>
             <h1 className="oc-detail-title" style={{ fontSize: '1.7rem', fontWeight: 400, color: '#2c2a4a', margin: '1.25rem 0 0.35rem' }}>

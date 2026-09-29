@@ -5,6 +5,8 @@ export interface Cinema {
   by: string;
   youtubeId: string;
   description: string;
+  /** Google Drive file id — when set, the film plays via the Drive preview player instead of the YouTube embed. */
+  driveFileId?: string;
 }
 
 export const CINEMAS: Cinema[] = [
@@ -14,6 +16,7 @@ export const CINEMAS: Cinema[] = [
     by: 'Riyaz Ummer',
     youtubeId: 'mtnuJy4z_1E',
     description: 'A short film by Riyaz Ummer. Watch it right here.',
+    driveFileId: '1DJTmxoZn0JeRFr_ReXitHuXuV7ktE1oF',
   },
 ];
 
@@ -31,6 +34,10 @@ export function cinemaThumbnailFallback(c: Cinema): string {
 
 export function cinemaEmbedUrl(c: Cinema): string {
   return `https://www.youtube.com/embed/${c.youtubeId}?rel=0`;
+}
+
+export function cinemaDrivePreviewUrl(c: Cinema): string | null {
+  return c.driveFileId ? `https://drive.google.com/file/d/${c.driveFileId}/preview` : null;
 }
 
 export function cinemaWatchUrl(c: Cinema): string {
