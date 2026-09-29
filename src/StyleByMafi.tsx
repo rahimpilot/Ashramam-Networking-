@@ -1,30 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
+import { STYLE_TOPICS } from './styleTopics';
 
-interface Credit {
-  role: string;
-  name: string;
-}
+const PAGE_BG = 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)';
+const FONT = "'Marcellus', Georgia, serif";
 
-const FEATURE_CREDITS: Credit[] = [
-  { role: 'Editor-in-Chief', name: 'Larissa Azanova' },
-  { role: 'Photography', name: 'Mann' },
-  { role: 'Concept & Art Direction', name: 'Galbi' },
-  { role: 'Styling', name: 'Daniela Correia' },
-  { role: 'Styling Assistant', name: 'Mehroof (Mafi)' },
-  { role: 'Hair', name: 'Umang' },
-  { role: 'Makeup', name: 'Arianna Scapola' },
-  { role: 'Digitech', name: 'Alister' },
-  { role: 'Model', name: 'Reimi' },
-  { role: 'Casting Curation', name: 'Ellie Vojvodinska' },
-  { role: 'Light Assistant', name: 'James' },
-  { role: 'Retouch', name: 'Gorgeous Agency' },
-  { role: 'Studio', name: 'Bicki Boss' },
-  { role: 'Production', name: 'Things By People' },
-];
-
-/** Style By Mafi — a member's fashion and styling showcase. */
+/** Style By Mafi — topic listing. Each card opens its own detail page. */
 const StyleByMafi: React.FC = () => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
@@ -46,11 +28,7 @@ const StyleByMafi: React.FC = () => {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)',
-      fontFamily: "'Marcellus', Georgia, serif"
-    }}>
+    <div style={{ minHeight: '100vh', background: PAGE_BG, fontFamily: FONT }}>
       {/* Back Button */}
       <div style={{
         padding: '1rem 0.5rem',
@@ -91,84 +69,60 @@ const StyleByMafi: React.FC = () => {
           Style By Mafi
         </h1>
 
-        {/* Feature tile — Harper's Bazaar Kazakhstan, Diamond Issue */}
-        <div className="iv-card" style={{
-          background: '#ffffff',
-          border: '1px solid #d9d9d9',
-          borderRadius: '12px',
-          padding: '20px',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
-        }}>
-          <img
-            src="/style-by-mafi/bazaar-diamond-cover.jpg"
-            alt="Harper's Bazaar Kazakhstan, May 2023 — Diamond Issue cover"
-            style={{
-              width: '100%',
-              height: 'auto',
-              borderRadius: '8px',
-              display: 'block'
-            }}
-          />
-          <p style={{
-            fontSize: '12px',
-            fontWeight: 400,
-            color: '#777777',
-            margin: '16px 0 4px 0',
-            textTransform: 'uppercase',
-            letterSpacing: '1px'
-          }}>
-            Cover story · May 2023
-          </p>
-          <h2 style={{
-            fontSize: '22px',
-            fontWeight: 400,
-            color: '#111111',
-            margin: '0 0 8px 0'
-          }}>
-            Harper's Bazaar Kazakhstan — Diamond Issue
-          </h2>
-          <p style={{
-            fontSize: '15px',
-            fontWeight: 400,
-            color: '#333333',
-            margin: '0 0 16px 0',
-            lineHeight: 1.6
-          }}>
-            Mafi worked as styling assistant on the cover story of Harper's
-            Bazaar Kazakhstan's Diamond Issue — a high-fashion editorial shoot.
-          </p>
-
-          <div style={{
-            borderTop: '1px solid #e6e6e6',
-            paddingTop: '12px'
-          }}>
-            <p style={{
-              fontSize: '12px',
-              fontWeight: 400,
-              color: '#777777',
-              margin: '0 0 8px 0',
-              textTransform: 'uppercase',
-              letterSpacing: '1px'
-            }}>
-              Credits
-            </p>
-            {FEATURE_CREDITS.map((c) => (
-              <div
-                key={c.role}
+        <div className="iv-cards">
+          {STYLE_TOPICS.map((topic) => (
+            <button
+              key={topic.slug}
+              onClick={() => navigate(`/style-by-mafi/${topic.slug}`)}
+              style={{
+                background: '#ffffff',
+                border: '1px solid #d9d9d9',
+                borderRadius: '12px',
+                padding: '12px',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
+                cursor: 'pointer',
+                textAlign: 'left',
+                fontFamily: FONT,
+                display: 'flex',
+                gap: '12px',
+                alignItems: 'center',
+                width: '100%'
+              }}
+            >
+              <img
+                src={topic.image}
+                alt={topic.title}
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  gap: '12px',
-                  padding: '5px 0',
-                  fontSize: '13px',
-                  lineHeight: 1.4
+                  width: '84px',
+                  height: '112px',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  flexShrink: 0,
+                  display: 'block'
                 }}
-              >
-                <span style={{ color: '#777777' }}>{c.role}</span>
-                <span style={{ color: '#111111', textAlign: 'right' }}>{c.name}</span>
+              />
+              <div style={{ minWidth: 0 }}>
+                <p style={{
+                  fontSize: '11px',
+                  color: '#777777',
+                  margin: '0 0 4px 0',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  {topic.kicker}
+                </p>
+                <p style={{
+                  fontSize: '17px',
+                  fontWeight: 400,
+                  color: '#111111',
+                  margin: 0,
+                  lineHeight: 1.35
+                }}>
+                  {topic.title}
+                </p>
               </div>
-            ))}
-          </div>
+            </button>
+          ))}
         </div>
 
         {/* Copy public link */}
