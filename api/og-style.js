@@ -18,6 +18,11 @@ const TOPICS = {
     kicker: 'Cover story · May 2023',
     image: `${SITE}/og-style-by-mafi.jpg`,
   },
+  'bazaar-diamond-issue-digital': {
+    title: "Harper's Bazaar Kazakhstan — Diamond Issue (Digital Cover)",
+    kicker: 'Digital cover · May 2023',
+    image: `${SITE}/og-style-by-mafi-digital.jpg`,
+  },
 };
 
 const FALLBACK_IMAGE = `${SITE}/og-style-by-mafi.jpg`;

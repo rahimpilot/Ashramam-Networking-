@@ -47,6 +47,17 @@ export const STYLE_TOPICS: StyleTopic[] = [
       { role: 'Production', name: 'Things By People' },
     ],
   },
+  {
+    slug: 'bazaar-diamond-issue-digital',
+    title: "Harper's Bazaar Kazakhstan — Diamond Issue (Digital Cover)",
+    kicker: 'Digital cover · May 2023',
+    description:
+      "Styling assistant on the digital cover of Harper's Bazaar Kazakhstan's " +
+      "Diamond Issue — a high-fashion editorial shoot.",
+    image: '/style-by-mafi/bazaar-diamond-digital-cover.jpg',
+    ogImage: '/og-style-by-mafi-digital.jpg',
+    credits: [],
+  },
 ];
 
 export const getStyleTopic = (slug: string): StyleTopic | undefined =>
