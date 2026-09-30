@@ -5,7 +5,7 @@ export interface Cinema {
   by: string;
   youtubeId: string;
   description: string;
-  /** Google Drive file id — when set, the film plays via the Drive preview player instead of the YouTube embed. */
+  /** Google Drive file id of the source upload — kept for reference; playback uses the YouTube embed. */
   driveFileId?: string;
 }
 
@@ -34,17 +34,6 @@ export function cinemaThumbnailFallback(c: Cinema): string {
 
 export function cinemaEmbedUrl(c: Cinema): string {
   return `https://www.youtube.com/embed/${c.youtubeId}?rel=0`;
-}
-
-export function cinemaDrivePreviewUrl(c: Cinema): string | null {
-  return c.driveFileId ? `https://drive.google.com/file/d/${c.driveFileId}/preview` : null;
-}
-
-/** Direct mp4 stream for the Drive file — plays in a native <video> tag with no Google login. */
-export function cinemaDirectVideoUrl(c: Cinema): string | null {
-  return c.driveFileId
-    ? `https://drive.usercontent.google.com/download?id=${c.driveFileId}&export=download&confirm=t`
-    : null;
 }
 
 export function cinemaWatchUrl(c: Cinema): string {
