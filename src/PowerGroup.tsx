@@ -92,7 +92,7 @@ const PowerGroup: React.FC = () => {
         </div>
       </div>
 
-      <div className="iv-page-wide" style={{ paddingTop: '22px' }}>
+      <div className="iv-page-wide pg-page" style={{ paddingTop: '22px' }}>
         <p
           style={{
             textAlign: 'center',
@@ -106,6 +106,7 @@ const PowerGroup: React.FC = () => {
         </p>
 
         <div
+          className="pg-bio"
           style={{
             border: '1px solid rgba(212, 175, 55, 0.4)',
             borderRadius: '14px',
