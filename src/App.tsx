@@ -131,8 +131,8 @@ function AnimatedRoutes() {
         <Route path="/meeting-minutes/november-2nd-2025" element={<RequireAuth><November2nd2025Meeting /></RequireAuth>} />
         <Route path="/royal-bank" element={<RequireAuth><RoyalBank /></RequireAuth>} />
         <Route path="/styledbymafi" element={<StyledByMafi />} />
-        <Route path="/our-cinemas" element={<OurCinemas />} />
-        <Route path="/our-cinemas/:cinemaId" element={<OurCinemas />} />
+        <Route path="/our-cinemas" element={<RequireAuth><OurCinemas /></RequireAuth>} />
+        <Route path="/our-cinemas/:cinemaId" element={<RequireAuth><OurCinemas /></RequireAuth>} />
         <Route path="/style-by-mafi" element={<Navigate to="/styledbymafi" replace />} />
         <Route path="/style-by-mafi/:topicSlug" element={<Navigate to="/styledbymafi" replace />} />
         <Route path="/podcasts" element={<RequireAuth><Podcasts /></RequireAuth>} />

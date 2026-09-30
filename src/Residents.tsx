@@ -852,6 +852,38 @@ const Residents: React.FC = () => {
           </div>
           </div>
         )}
+        {/* Power Group — moved here from Hangout; sits right below all residents */}
+        <div className="res-friendsbox" style={{ marginTop: 16 }}>
+          <h2 className="ok-boxtitle" style={{ margin: '4px 2px 12px' }}>
+            Power Group
+          </h2>
+          <div
+            role="link"
+            tabIndex={0}
+            onClick={() => navigate('/power-group')}
+            onKeyDown={(e) => { if (e.key === 'Enter') navigate('/power-group'); }}
+            style={{
+              background: '#0b0b0c',
+              borderRadius: 10,
+              padding: '16px 18px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 14,
+              cursor: 'pointer',
+              border: '1px solid #2a2416',
+            }}
+          >
+            <span style={{ fontSize: 30, lineHeight: 1 }}>⚡</span>
+            <span>
+              <span style={{ display: 'block', fontFamily: "'Marcellus', serif", fontSize: 19, color: '#d4af37' }}>
+                Power Group
+              </span>
+              <span style={{ display: 'block', fontSize: 13, color: '#a8a29e', marginTop: 2 }}>
+                Rich and naughty
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
 
       <UserProfileModal

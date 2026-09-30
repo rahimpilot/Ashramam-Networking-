@@ -17,13 +17,6 @@ interface Tile {
 
 const TILES: Tile[] = [
   {
-    icon: '⚡',
-    title: 'Power Group',
-    subtitle: 'Rich and naughty',
-    path: '/power-group',
-    iconBg: 'rgba(254, 243, 199, 0.85)',
-  },
-  {
     icon: '✈️',
     title: 'Travel Diaries',
     subtitle: 'Share travel experiences',

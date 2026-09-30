@@ -90,7 +90,7 @@ function CinemaCard({ cinema }: { cinema: Cinema }) {
   );
 }
 
-/** Our Cinemas — public short-film category. List at /our-cinemas, player at /our-cinemas/:cinemaId. */
+/** Our Cinemas — members-only short-film category. List at /our-cinemas, player at /our-cinemas/:cinemaId. */
 const OurCinemas: React.FC = () => {
   const navigate = useNavigate();
   const { cinemaId } = useParams<{ cinemaId: string }>();
