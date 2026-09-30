@@ -738,7 +738,7 @@ const Residents: React.FC = () => {
           </h2>
           {/* Orkut-style friends grid: always 3 in a row */}
           <div
-            className="res-grid iv-tab-clearance"
+            className="res-grid iv-tab-clearance res-grid-pg"
             style={{ paddingBottom: 80 }}
           >
             {residents.map((resident) => (
@@ -853,7 +853,7 @@ const Residents: React.FC = () => {
           </div>
         )}
         {/* Power Group — moved here from Hangout; sits right below all residents */}
-        <div className="res-friendsbox" style={{ marginTop: 16 }}>
+        <div className="res-friendsbox res-pg-box" style={{ marginTop: 16 }}>
           <h2 className="ok-boxtitle" style={{ margin: '4px 2px 12px' }}>
             Power Group
           </h2>
@@ -884,6 +884,7 @@ const Residents: React.FC = () => {
             </span>
           </div>
         </div>
+        <div className="iv-dock-spacer res-pg-spacer" />
       </div>
 
       <UserProfileModal

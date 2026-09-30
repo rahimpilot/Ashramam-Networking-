@@ -538,3 +538,15 @@ a {
   .res-name { font-size: 12px !important; font-weight: 400 !important; }
   .res-city, .res-pct { display: none !important; }
 }
+
+/* Power Group tile below the residents grid (2026-09-30, mobile fix).
+   The old 80px in-grid clearance moved below the tile, so on mobile the
+   tile sits close under the friends list and clears the floating dock. */
+@media (max-width: 767px) {
+  .res-grid-pg { padding-bottom: 6px !important; }
+  .res-pg-box { margin-top: 12px !important; }
+}
+@media (min-width: 1024px) {
+  /* No dock on desktop: no extra spacer needed below the tile. */
+  .res-pg-spacer { display: none; }
+}
