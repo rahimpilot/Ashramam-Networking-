@@ -5,6 +5,8 @@ export interface Cinema {
   by: string;
   youtubeId: string;
   description: string;
+  /** Poster/title-card image shown in the category (local public/ path). */
+  poster: string;
   /** Google Drive file id of the source upload — kept for reference; playback uses the YouTube embed. */
   driveFileId?: string;
 }
@@ -16,12 +18,17 @@ export const CINEMAS: Cinema[] = [
     by: 'Riyaz Ummer',
     youtubeId: 'mtnuJy4z_1E',
     description: 'A short film by Riyaz Ummer. Watch it right here.',
+    poster: '/cinemas/ore-swasam-title.jpg',
     driveFileId: '1DJTmxoZn0JeRFr_ReXitHuXuV7ktE1oF',
   },
 ];
 
 export function getCinema(id: string | undefined): Cinema | undefined {
   return CINEMAS.find((c) => c.id === id);
+}
+
+export function cinemaPoster(c: Cinema): string {
+  return c.poster;
 }
 
 export function cinemaThumbnail(c: Cinema): string {

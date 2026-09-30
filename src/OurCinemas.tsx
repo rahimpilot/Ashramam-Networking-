@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BottomNavigation from './BottomNavigation';
-import { CINEMAS, getCinema, cinemaThumbnail, cinemaThumbnailFallback, cinemaEmbedUrl, Cinema } from './ourCinemas';
+import { CINEMAS, getCinema, cinemaPoster, cinemaWatchUrl, Cinema } from './ourCinemas';
 
 const FONT = "'Marcellus', Georgia, serif";
 const PAGE_BG = 'linear-gradient(135deg, #d9d4e9 0%, #f0ebf9 55%, #e3def0 100%)';
@@ -67,13 +67,9 @@ function CinemaCard({ cinema }: { cinema: Cinema }) {
     >
       <div style={{ position: 'relative', aspectRatio: '16 / 9', background: '#1c1830' }}>
         <img
-          src={cinemaThumbnail(cinema)}
+          src={cinemaPoster(cinema)}
           alt={cinema.title}
           loading="lazy"
-          onError={(e) => {
-            const img = e.currentTarget;
-            if (img.src !== cinemaThumbnailFallback(cinema)) img.src = cinemaThumbnailFallback(cinema);
-          }}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
         <div style={{
@@ -116,19 +112,37 @@ const OurCinemas: React.FC = () => {
         <>
           <TopBar onBack={() => navigate('/our-cinemas')} shareUrl={`${SITE}/our-cinemas/${cinema.id}?v=1`} />
           <div className="oc-wrap oc-player-wrap" style={{ maxWidth: 860, margin: '0 auto', padding: '0 1.25rem 3rem' }}>
-            <div style={{
-              borderRadius: 16, overflow: 'hidden', background: '#000',
-              boxShadow: '0 8px 30px rgba(40,30,80,0.25)',
-            }}>
+            <a
+              href={cinemaWatchUrl(cinema)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Watch ${cinema.title} on YouTube`}
+              style={{
+                display: 'block', borderRadius: 16, overflow: 'hidden', background: '#000',
+                boxShadow: '0 8px 30px rgba(40,30,80,0.25)', cursor: 'pointer', position: 'relative',
+              }}
+            >
               <div style={{ aspectRatio: '16 / 9' }}>
-                <iframe
-                  src={cinemaEmbedUrl(cinema)}
-                  title={cinema.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  style={{ width: '100%', height: '100%', border: 0, display: 'block' }}
+                <img
+                  src={cinemaPoster(cinema)}
+                  alt={cinema.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
               </div>
+              <div style={{
+                position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'rgba(10,8,25,0.18)',
+              }}>
+                <div style={{
+                  width: 76, height: 76, borderRadius: '50%', background: 'rgba(255,255,255,0.94)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.8rem', color: '#2c2a4a', paddingLeft: 6,
+                  boxShadow: '0 4px 18px rgba(0,0,0,0.35)',
+                }}>▶</div>
+              </div>
+            </a>
+            <div style={{ textAlign: 'center', fontSize: '0.85rem', color: '#8a86a3', marginTop: '0.6rem' }}>
+              Tap to watch on YouTube
             </div>
             <h1 className="oc-detail-title" style={{ fontSize: '1.7rem', fontWeight: 400, color: '#2c2a4a', margin: '1.25rem 0 0.35rem' }}>
               {cinema.title}
