@@ -150,8 +150,8 @@ const Kodaikanal: React.FC = () => {
         </div>
         <div className="iv-card" style={{ padding: '22px' }}>
           <p style={{ fontSize: 15, fontFamily: "'Marcellus', Georgia, serif", lineHeight: 1.7, color: '#33414f', margin: '0 0 16px 0' }}>
-            Kodaikanal 2015 — this trip came before the bachelor life, and it
-            might be one of the best trips ever. We were all in Kerala when Pat
+            This trip came before the bachelor life, and it might be one of
+            the best trips ever. We were all in Kerala when Pat
             hired a traveller and took all the boys to Kodai. Someone booked a
             stay in the middle of a small town. The boys started chilling —
             the boys found happiness, deserved happiness, and the night was long.
