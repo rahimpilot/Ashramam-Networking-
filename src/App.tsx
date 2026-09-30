@@ -69,7 +69,7 @@ function isSplashEntryPath(pathname: string) {
 }
 
 /** Routes where the desktop sidebar is shown (the logged-in app shell).
- *  Public pages (login, articles, cinema reviews) get the full width. */
+ *  Full-width pages (login, articles, cinema reviews, our cinemas) skip it. */
 function useSidebarVisible() {
   const location = useLocation();
   const p = location.pathname;
