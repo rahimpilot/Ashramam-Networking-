@@ -26,7 +26,7 @@ export const CINEMAS: Cinema[] = [
     by: 'Riyaz Ummer',
     youtubeId: 'mtnuJy4z_1E',
     description: 'A short film by Riyaz Ummer. Watch it right here.',
-    poster: '/cinemas/ore-swasam-poster-v2.jpg',
+    poster: '/cinemas/ore-swasam-poster-v3.jpg',
     cast: ['Nimisha Ashok', 'Amritha Sathyanath K', 'Misty'],
     crew: [
       { role: 'Direction & Screenplay', name: 'Riyaz Ummer' },
