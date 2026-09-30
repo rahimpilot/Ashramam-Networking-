@@ -151,6 +151,48 @@ const OurCinemas: React.FC = () => {
             <p style={{ fontSize: '1.02rem', lineHeight: 1.7, color: '#4a4763', margin: 0 }}>
               {cinema.description}
             </p>
+            {cinema.directorStory && (
+              <div style={{ marginTop: '1.75rem' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 400, color: '#2c2a4a', margin: '0 0 0.6rem' }}>
+                  About the director
+                </h2>
+                {cinema.directorStory.split('\n\n').map((para, i) => (
+                  <p key={i} style={{ fontSize: '1rem', lineHeight: 1.7, color: '#4a4763', margin: i === 0 ? 0 : '0.75rem 0 0' }}>
+                    {para}
+                  </p>
+                ))}
+              </div>
+            )}
+            {cinema.cast.length > 0 && (
+              <div style={{ marginTop: '1.75rem' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 400, color: '#2c2a4a', margin: '0 0 0.6rem' }}>
+                  Cast
+                </h2>
+                <p style={{ fontSize: '1rem', lineHeight: 1.7, color: '#4a4763', margin: 0 }}>
+                  {cinema.cast.join(', ')}
+                </p>
+              </div>
+            )}
+            {cinema.crew.length > 0 && (
+              <div style={{ marginTop: '1.75rem' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 400, color: '#2c2a4a', margin: '0 0 0.6rem' }}>
+                  Crew
+                </h2>
+                <div>
+                  {cinema.crew.map((credit) => (
+                    <div key={credit.role} style={{ display: 'flex', gap: '0.75rem', padding: '0.3rem 0', fontSize: '0.95rem', lineHeight: 1.5 }}>
+                      <div style={{ flex: '0 0 190px', color: '#8a86a3' }}>{credit.role}</div>
+                      <div style={{ color: '#2c2a4a' }}>{credit.name}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {cinema.copyright && (
+              <div style={{ marginTop: '1.5rem', fontSize: '0.85rem', color: '#8a86a3' }}>
+                {cinema.copyright}
+              </div>
+            )}
           </div>
         </>
       ) : (
