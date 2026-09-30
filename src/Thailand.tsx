@@ -194,7 +194,7 @@ const Thailand: React.FC = () => {
       </div>
 
       {/* Spacer so content isn't hidden behind the bottom nav */}
-      <div style={{ height: '80px' }} />
+      <div className="iv-dock-spacer" />
       <BottomNavigation />
     </div>
   );

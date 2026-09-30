@@ -171,6 +171,9 @@ const StyledByMafi: React.FC = () => {
         </div>
       </div>
 
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div className="iv-dock-spacer" />
+
       <BottomNavigation />
 
       {/* Lightbox */}

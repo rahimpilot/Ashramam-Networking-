@@ -1066,7 +1066,7 @@ const VoiceRoom: React.FC = () => {
             ← Back to Hangout
           </button>
         </div>
-        <div style={{ height: '80px' }} />
+        <div className="iv-dock-spacer" />
         <BottomNavigation />
       </div>
     );
@@ -1275,6 +1275,9 @@ const VoiceRoom: React.FC = () => {
           </p>
         </div>
       </div>
+
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div className="iv-dock-spacer" />
 
       <BottomNavigation />
     </div>

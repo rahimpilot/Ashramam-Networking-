@@ -372,6 +372,19 @@ select:focus {
   .iv-tab-clearance { padding-bottom: 32px !important; }
 }
 
+/* Spacer that keeps page content clear of the floating bottom dock.
+   The dock is ~102px tall plus the phone's bottom safe-area inset. */
+.iv-dock-spacer { height: calc(112px + env(safe-area-inset-bottom)); }
+@media (min-width: 1024px) {
+  /* The dock is hidden on desktop, so the spacer shrinks to a normal gap. */
+  .iv-dock-spacer { height: 28px; }
+}
+
+/* Unify the older iv-tab-clearance pages with the same dock clearance. */
+@media (max-width: 1023px) {
+  .iv-tab-clearance { padding-bottom: calc(112px + env(safe-area-inset-bottom)) !important; }
+}
+
 /* ---------- Orkut theme (Abdu's pick, 2026-09-25) ----------
    Faithful to the real orkut.com reference screenshots: pale lavender
    canvas, white boxes with thin lavender-gray borders, white header bar,

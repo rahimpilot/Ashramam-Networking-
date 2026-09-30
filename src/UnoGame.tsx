@@ -469,6 +469,9 @@ const UnoGame: React.FC = () => {
       <div style={pageStyle}>
         <PageHeader backTo="/hangout" title="UNO" onBack={() => navigate('/hangout')} />
         <div style={wrapStyle}><div style={card}><p style={{ textAlign: 'center', color: '#6b7f92' }}>Connecting…</p></div></div>
+        {/* Spacer so content isn't hidden behind the bottom nav */}
+        <div className="iv-dock-spacer" />
+
         <BottomNavigation />
       </div>
     );
@@ -484,6 +487,9 @@ const UnoGame: React.FC = () => {
             <button style={btnPrimary} onClick={() => navigate('/')}>Go to sign in</button>
           </div>
         </div>
+        {/* Spacer so content isn't hidden behind the bottom nav */}
+        <div className="iv-dock-spacer" />
+
         <BottomNavigation />
       </div>
     );
@@ -571,6 +577,9 @@ const UnoGame: React.FC = () => {
             {notice}
           </div>
         )}
+        {/* Spacer so content isn't hidden behind the bottom nav */}
+        <div className="iv-dock-spacer" />
+
         <BottomNavigation />
       </div>
     );
@@ -581,6 +590,9 @@ const UnoGame: React.FC = () => {
       <div style={pageStyle}>
         <PageHeader backTo="/hangout" title="UNO" onBack={leaveRoom} />
         <div style={wrapStyle}><div style={card}><p style={{ textAlign: 'center', color: '#6b7f92' }}>Joining table…</p></div></div>
+        {/* Spacer so content isn't hidden behind the bottom nav */}
+        <div className="iv-dock-spacer" />
+
         <BottomNavigation />
       </div>
     );
@@ -651,6 +663,9 @@ const UnoGame: React.FC = () => {
             </p>
           )}
         </div>
+        {/* Spacer so content isn't hidden behind the bottom nav */}
+        <div className="iv-dock-spacer" />
+
         <BottomNavigation />
       </div>
     );
@@ -808,6 +823,9 @@ const UnoGame: React.FC = () => {
           {notice}
         </div>
       )}
+        {/* Spacer so content isn't hidden behind the bottom nav */}
+        <div className="iv-dock-spacer" />
+
       <BottomNavigation />
     </div>
   );

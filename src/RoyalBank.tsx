@@ -464,7 +464,7 @@ const RoyalBank: React.FC = () => {
       {/* Loan Application Form Modal */}
       <LoanApplicationForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
       {/* Spacer so content isn't hidden behind the bottom nav */}
-      <div style={{ height: '80px' }} />
+      <div className="iv-dock-spacer" />
       <BottomNavigation />
     </div>
   );

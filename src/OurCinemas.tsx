@@ -144,10 +144,9 @@ const OurCinemas: React.FC = () => {
             <div style={{ textAlign: 'center', fontSize: '0.85rem', color: '#8a86a3', marginTop: '0.6rem' }}>
               Tap to watch on YouTube
             </div>
-            <h1 className="oc-detail-title" style={{ fontSize: '1.7rem', fontWeight: 400, color: '#2c2a4a', margin: '1.25rem 0 0.35rem' }}>
+            <h1 className="oc-detail-title" style={{ fontSize: '1.7rem', fontWeight: 400, color: '#2c2a4a', margin: '1.25rem 0 0.75rem' }}>
               {cinema.title}
             </h1>
-            <div style={{ fontSize: '1rem', color: '#6b6785', marginBottom: '0.75rem' }}>by {cinema.by}</div>
             <p style={{ fontSize: '1.02rem', lineHeight: 1.7, color: '#4a4763', margin: 0 }}>
               {cinema.description}
             </p>
@@ -211,6 +210,9 @@ const OurCinemas: React.FC = () => {
           </div>
         </>
       )}
+
+      {/* Spacer so content isn't hidden behind the bottom nav */}
+      <div className="iv-dock-spacer" />
 
       <BottomNavigation />
     </div>
