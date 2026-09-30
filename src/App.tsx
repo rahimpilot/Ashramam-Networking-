@@ -30,6 +30,7 @@ import Baku from './Baku';
 import Albania from './Albania';
 import Thailand from './Thailand';
 import Kasol from './Kasol';
+import Kodaikanal from './Kodaikanal';
 import September7th2025Meeting from './September7th2025Meeting';
 import October5th2025Meeting from './October5th2025Meeting';
 import November2nd2025Meeting from './November2nd2025Meeting';
@@ -148,6 +149,8 @@ function AnimatedRoutes() {
         <Route path="/thailand" element={<RequireAuth><Thailand /></RequireAuth>} />
         <Route path="/our-trips/kasol" element={<RequireAuth><Kasol /></RequireAuth>} />
         <Route path="/kasol" element={<RequireAuth><Kasol /></RequireAuth>} />
+        <Route path="/our-trips/kodaikanal" element={<RequireAuth><Kodaikanal /></RequireAuth>} />
+        <Route path="/kodaikanal" element={<RequireAuth><Kodaikanal /></RequireAuth>} />
         <Route path="/krabi" element={<RequireAuth><Krabi /></RequireAuth>} />
         {/* Unknown URLs go to the login screen instead of a blank page */}
         <Route path="*" element={<Navigate to="/" replace />} />

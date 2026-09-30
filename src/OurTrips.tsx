@@ -14,6 +14,12 @@ const OurTrips: React.FC = () => {
 
   const trips: Trip[] = [
     {
+      id: 'kodaikanal',
+      name: 'Kodaikanal',
+      image: '/kodaikanal-2015.jpg',
+      year: '2015',
+    },
+    {
       id: 'albania',
       name: 'Albania',
       image: '/albania-2022.jpg',
