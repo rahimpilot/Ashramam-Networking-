@@ -65,12 +65,12 @@ function CinemaCard({ cinema }: { cinema: Cinema }) {
         boxShadow: '0 2px 10px rgba(60,50,100,0.10)',
       }}
     >
-      <div style={{ position: 'relative', aspectRatio: '16 / 9', background: '#1c1830' }}>
+      <div style={{ position: 'relative', aspectRatio: '16 / 9', overflow: 'hidden', background: '#1c1830' }}>
         <img
           src={cinemaPoster(cinema)}
           alt={cinema.title}
           loading="lazy"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
         <div style={{
           position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -122,11 +122,11 @@ const OurCinemas: React.FC = () => {
                 boxShadow: '0 8px 30px rgba(40,30,80,0.25)', cursor: 'pointer', position: 'relative',
               }}
             >
-              <div style={{ aspectRatio: '16 / 9' }}>
+              <div style={{ position: 'relative', aspectRatio: '16 / 9', overflow: 'hidden', background: '#000' }}>
                 <img
                   src={cinemaPoster(cinema)}
                   alt={cinema.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
               </div>
               <div style={{
