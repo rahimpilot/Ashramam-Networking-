@@ -738,7 +738,7 @@ const Residents: React.FC = () => {
           </h2>
           {/* Orkut-style friends grid: always 3 in a row */}
           <div
-            className="res-grid iv-tab-clearance res-grid-pg"
+            className="res-grid iv-tab-clearance"
             style={{ paddingBottom: 80 }}
           >
             {residents.map((resident) => (
@@ -849,42 +849,72 @@ const Residents: React.FC = () => {
                 </div>
               </div>
             ))}
+            {/* Power Group lives in the grid's last slot — impossible to miss */}
+            <div
+              onClick={() => navigate('/power-group')}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/power-group'); }}
+              role="link"
+              tabIndex={0}
+              className="iv-card iv-card-hover res-tile"
+              style={{
+                padding: 10,
+                cursor: 'pointer',
+                textAlign: 'center'
+              }}
+            >
+              <div className="res-photo" style={{
+                width: '100%',
+                aspectRatio: '1',
+                borderRadius: 4,
+                margin: '0 auto 8px auto',
+                overflow: 'hidden',
+                position: 'relative',
+                border: '1px solid #2a2416',
+                background: '#0b0b0c',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6
+              }}>
+                <span style={{ fontSize: 34, lineHeight: 1 }}>⚡</span>
+                <span style={{
+                  fontFamily: "'Marcellus', serif",
+                  fontSize: 13,
+                  letterSpacing: 1,
+                  color: '#d4af37',
+                  textAlign: 'center'
+                }}>
+                  POWER GROUP
+                </span>
+              </div>
+
+              <h3 className="res-name" style={{
+                fontSize: 13,
+                fontWeight: 400,
+                color: '#1b3fc1',
+                margin: '0 0 2px 0',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
+                Power Group
+              </h3>
+
+              <p className="res-city" style={{
+                fontSize: 11,
+                color: '#6b7f92',
+                margin: '0 0 6px 0',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
+                Rich and naughty
+              </p>
+            </div>
           </div>
           </div>
         )}
-        {/* Power Group — moved here from Hangout; sits right below all residents */}
-        <div className="res-friendsbox res-pg-box" style={{ marginTop: 16 }}>
-          <h2 className="ok-boxtitle" style={{ margin: '4px 2px 12px' }}>
-            Power Group
-          </h2>
-          <div
-            role="link"
-            tabIndex={0}
-            onClick={() => navigate('/power-group')}
-            onKeyDown={(e) => { if (e.key === 'Enter') navigate('/power-group'); }}
-            style={{
-              background: '#0b0b0c',
-              borderRadius: 10,
-              padding: '16px 18px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-              cursor: 'pointer',
-              border: '1px solid #2a2416',
-            }}
-          >
-            <span style={{ fontSize: 30, lineHeight: 1 }}>⚡</span>
-            <span>
-              <span style={{ display: 'block', fontFamily: "'Marcellus', serif", fontSize: 19, color: '#d4af37' }}>
-                Power Group
-              </span>
-              <span style={{ display: 'block', fontSize: 13, color: '#a8a29e', marginTop: 2 }}>
-                Rich and naughty
-              </span>
-            </span>
-          </div>
-        </div>
-        <div className="iv-dock-spacer res-pg-spacer" />
       </div>
 
       <UserProfileModal
