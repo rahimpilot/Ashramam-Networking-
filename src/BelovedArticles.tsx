@@ -313,7 +313,6 @@ const BelovedArticles: React.FC = () => {
         /* "More articles" strip exists only on mobile */
         .art-more { display: none; }
         @media (max-width: 767px) {
-          @keyframes artInRight { from { opacity: 0; transform: translateX(64px); } to { opacity: 1; transform: translateX(0); } }
           @keyframes artFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
           @keyframes artFadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
           @keyframes artInLeft { from { opacity: 0; transform: translateX(-44px); } to { opacity: 1; transform: translateX(0); } }
@@ -322,28 +321,20 @@ const BelovedArticles: React.FC = () => {
           /* List: search bar drops in */
           .art-search { animation: artFadeDown .5s ease-out backwards; }
 
-          /* List: article cards become a horizontal snap-scroll carousel */
+          /* List: article cards stack vertically — scroll down to browse */
           .art-carousel {
-            display: flex !important;
-            overflow-x: auto !important;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            align-items: stretch;
-            gap: 12px;
-            padding: 6px 20px 18px !important;
-            margin: 0 -16px !important;
-            scrollbar-width: none;
-          }
-          .art-carousel::-webkit-scrollbar { display: none; }
-          .art-carousel > .art-card {
-            flex: 0 0 84% !important;
-            max-width: 340px;
-            scroll-snap-align: center;
+            display: block !important;
             margin: 0 !important;
-            animation: artInRight .55s cubic-bezier(.22,.9,.3,1) backwards;
+            padding: 6px 0 18px !important;
+          }
+          .art-carousel > .art-card {
+            width: 100% !important;
+            max-width: none;
+            margin: 0 0 14px !important;
+            animation: artFadeUp .55s cubic-bezier(.22,.9,.3,1) backwards;
             animation-delay: calc(var(--art-i, 0) * 80ms);
           }
-          /* Carousel card: image on top, text below */
+          /* Vertical card: image on top, text below */
           .art-carousel .art-card-row { flex-direction: column !important; align-items: stretch !important; padding: 0 !important; gap: 0 !important; }
           .art-carousel .art-card-img { width: 100% !important; height: 168px !important; border-radius: 18px 18px 0 0 !important; }
           .art-carousel .art-card-body { padding: 14px 16px 16px !important; }
