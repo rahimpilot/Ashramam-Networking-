@@ -221,14 +221,6 @@ const SomeMoments: React.FC = () => {
         }}>
           Some Moment
         </h1>
-        <p style={{
-          fontSize: '14px',
-          color: '#555555',
-          textAlign: 'center',
-          margin: '0 0 20px 0'
-        }}>
-          Short videos from the crew — press play and watch right here.
-        </p>
 
         {MOMENTS.length === 0 && (
           <div style={{
