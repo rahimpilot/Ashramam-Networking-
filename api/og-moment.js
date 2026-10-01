@@ -33,11 +33,14 @@ const esc = (s) =>
 
 module.exports = async (req, res) => {
   const slug = String(req.query.m || '');
+  const v = String(req.query.v || '');
   const moment = MOMENTS[slug];
   const titleText = moment ? `${moment.title}${moment.year ? ` (${moment.year})` : ''}` : null;
   const pageTitle = titleText ? `${titleText} | Ashramam Some Moment` : FALLBACK_TITLE;
+  // Carry the ?v= cache-buster through so the shared URL and the card agree.
+  const vParam = v ? `&v=${encodeURIComponent(v)}` : '';
   const pageUrl = moment
-    ? `${SITE}/some-moment?m=${encodeURIComponent(slug)}`
+    ? `${SITE}/some-moment?m=${encodeURIComponent(slug)}${vParam}`
     : `${SITE}/some-moment`;
   const image = moment ? moment.image : FALLBACK_IMAGE;
 

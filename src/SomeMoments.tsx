@@ -159,7 +159,9 @@ const SomeMoments: React.FC = () => {
   }, [searchParams]);
 
   const copyMomentLink = async (m: Moment) => {
-    const url = `https://www.ashramamvibes.com/some-moment?m=${m.slug}`;
+    // &v=1 busts WhatsApp's aggressive preview cache — bump it if a shared
+    // preview ever goes stale (re-share the fresh link afterwards).
+    const url = `https://www.ashramamvibes.com/some-moment?m=${m.slug}&v=1`;
     try {
       await navigator.clipboard.writeText(url);
     } catch {
