@@ -24,6 +24,125 @@ const MOMENTS: Moment[] = [
   },
 ];
 
+/** One video card: title + copy-link + player with a Facebook-style full-screen button. */
+const MomentCard: React.FC<{
+  m: Moment;
+  copied: boolean;
+  onCopy: () => void;
+}> = ({ m, copied, onCopy }) => {
+  const videoRef = React.useRef<HTMLVideoElement | null>(null);
+
+  const toggleFullscreen = () => {
+    const v = videoRef.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
+    if (!v) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else if (v.requestFullscreen) {
+      v.requestFullscreen().catch(() => {});
+    } else if (v.webkitEnterFullscreen) {
+      // iOS Safari: fullscreen only works through the video element itself.
+      v.webkitEnterFullscreen();
+    }
+  };
+
+  return (
+    <div
+      id={`moment-${m.slug}`}
+      style={{
+        background: '#ffffff',
+        border: '1px solid #d9d9d9',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '16px',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
+      }}
+    >
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '12px',
+        gap: '12px'
+      }}>
+        <h3 style={{
+          fontSize: '18px',
+          fontWeight: 400,
+          color: '#111111',
+          margin: 0
+        }}>
+          {m.title}
+          {m.year && (
+            <span style={{ fontSize: '14px', color: '#777777' }}> · {m.year}</span>
+          )}
+        </h3>
+        <button
+          onClick={onCopy}
+          title="Copy link"
+          style={{
+            background: 'transparent',
+            border: 'none',
+            padding: '6px',
+            fontSize: '20px',
+            cursor: 'pointer',
+            lineHeight: 1,
+            flexShrink: 0
+          }}
+        >
+          {copied ? <span style={{ color: '#1c9c4c' }}>✓</span> : '🔗'}
+        </button>
+      </div>
+      <div style={{
+        position: 'relative',
+        background: '#000000',
+        borderRadius: '8px',
+        overflow: 'hidden'
+      }}>
+        <video
+          ref={videoRef}
+          controls
+          preload="metadata"
+          playsInline
+          src={m.videoUrl}
+          style={{
+            width: '100%',
+            height: 'auto',
+            maxHeight: '560px',
+            objectFit: 'contain',
+            display: 'block',
+            margin: '0 auto',
+            background: '#000000'
+          }}
+        />
+        <button
+          onClick={toggleFullscreen}
+          title="Full screen"
+          aria-label="Watch in full screen"
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            width: '44px',
+            height: '44px',
+            borderRadius: '50%',
+            background: 'rgba(0, 0, 0, 0.55)',
+            border: '1px solid rgba(255, 255, 255, 0.35)',
+            color: '#ffffff',
+            fontSize: '20px',
+            lineHeight: 1,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 0
+          }}
+        >
+          ⛶
+        </button>
+      </div>
+    </div>
+  );
+};
+
 /** Some Moment — short videos from the crew, members only. */
 const SomeMoments: React.FC = () => {
   const navigate = useNavigate();
@@ -140,60 +259,12 @@ const SomeMoments: React.FC = () => {
         )}
 
         {MOMENTS.map((m) => (
-          <div
+          <MomentCard
             key={m.slug}
-            id={`moment-${m.slug}`}
-            style={{
-              background: '#ffffff',
-              border: '1px solid #d9d9d9',
-              borderRadius: '12px',
-              padding: '16px',
-              marginBottom: '16px',
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)'
-            }}
-          >
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '12px',
-              gap: '12px'
-            }}>
-              <h3 style={{
-                fontSize: '18px',
-                fontWeight: 400,
-                color: '#111111',
-                margin: 0
-              }}>
-                {m.title}
-                {m.year && (
-                  <span style={{ fontSize: '14px', color: '#777777' }}> · {m.year}</span>
-                )}
-              </h3>
-              <button
-                onClick={() => copyMomentLink(m)}
-                title="Copy link"
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  padding: '6px',
-                  fontSize: '20px',
-                  cursor: 'pointer',
-                  lineHeight: 1,
-                  flexShrink: 0
-                }}
-              >
-                {copiedSlug === m.slug ? <span style={{ color: '#1c9c4c' }}>✓</span> : '🔗'}
-              </button>
-            </div>
-            <video
-              controls
-              preload="metadata"
-              playsInline
-              src={m.videoUrl}
-              style={{ width: '100%', display: 'block', borderRadius: '8px', background: '#000' }}
-            />
-          </div>
+            m={m}
+            copied={copiedSlug === m.slug}
+            onCopy={() => copyMomentLink(m)}
+          />
         ))}
       </div>
 
