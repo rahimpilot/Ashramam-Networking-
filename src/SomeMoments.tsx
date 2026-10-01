@@ -143,7 +143,7 @@ const MomentCard: React.FC<{
   );
 };
 
-/** Some Moment — short videos from the crew, members only. */
+/** Some Moments — short videos from the crew, members only. */
 const SomeMoments: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

@@ -7,7 +7,7 @@
 //                              through a User-Agent rewrite in vercel.json.
 //                              Humans keep getting the SPA.
 //
-// Unknown or missing slugs fall back to the generic Some Moment card.
+// Unknown or missing slugs fall back to the generic Some Moments card.
 
 const SITE = 'https://www.ashramamvibes.com';
 const FALLBACK_TITLE = 'Some Moments | Ashramam';
