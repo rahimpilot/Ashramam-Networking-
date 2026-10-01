@@ -5,6 +5,8 @@ import BottomNavigation from './BottomNavigation';
 interface Moment {
   slug: string;
   title: string;
+  /** Shown next to the title, e.g. "2017". */
+  year?: string;
   /** Bundled video file — plays right inside the app for logged-in members. */
   videoUrl: string;
 }
@@ -14,6 +16,12 @@ interface Moment {
  * drop the file in public/videos/ and add one entry below. Newest first.
  */
 const MOMENTS: Moment[] = [
+  {
+    slug: 'selfie-fight-2017',
+    title: 'Selfie Fight',
+    year: '2017',
+    videoUrl: '/videos/selfie-fight-2017.mp4',
+  },
 ];
 
 /** Some Moment — short videos from the crew, members only. */
@@ -158,6 +166,9 @@ const SomeMoments: React.FC = () => {
                 margin: 0
               }}>
                 {m.title}
+                {m.year && (
+                  <span style={{ fontSize: '14px', color: '#777777' }}> · {m.year}</span>
+                )}
               </h3>
               <button
                 onClick={() => copyMomentLink(m)}
