@@ -17,6 +17,7 @@ import RoyalBank from './RoyalBank';
 import StyledByMafi from './StyledByMafi';
 import OurCinemas from './OurCinemas';
 import Podcasts from './Podcasts';
+import SomeMoments from './SomeMoments';
 import VoiceRoom from './VoiceRoom';
 import UnoGame from './UnoGame';
 import OurTrips from './OurTrips';
@@ -137,6 +138,7 @@ function AnimatedRoutes() {
         <Route path="/style-by-mafi" element={<Navigate to="/styledbymafi" replace />} />
         <Route path="/style-by-mafi/:topicSlug" element={<Navigate to="/styledbymafi" replace />} />
         <Route path="/podcasts" element={<RequireAuth><Podcasts /></RequireAuth>} />
+        <Route path="/some-moment" element={<RequireAuth><SomeMoments /></RequireAuth>} />
         <Route path="/voice-room" element={<RequireAuth><VoiceRoom /></RequireAuth>} />
         <Route path="/our-trips" element={<RequireAuth><OurTrips /></RequireAuth>} />
         <Route path="/ashramam-exclusive" element={<RequireAuth><AshramamExclusive /></RequireAuth>} />
