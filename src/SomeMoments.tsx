@@ -219,7 +219,7 @@ const SomeMoments: React.FC = () => {
           margin: '0 0 6px 0',
           textAlign: 'center'
         }}>
-          Some Moment
+          Some Moments
         </h1>
 
         {MOMENTS.length === 0 && (

@@ -24,6 +24,13 @@ const TILES: Tile[] = [
     iconBg: 'rgba(237, 233, 254, 0.85)',
   },
   {
+    icon: '📹',
+    title: 'Some Moments',
+    subtitle: 'Short videos from the crew',
+    path: '/some-moment',
+    iconBg: 'rgba(254, 243, 199, 0.85)',
+  },
+  {
     icon: '📖',
     title: 'Articles',
     subtitle: 'Words worth keeping',
@@ -78,13 +85,6 @@ const TILES: Tile[] = [
     subtitle: 'Listen right here',
     path: '/podcasts',
     iconBg: 'rgba(207, 250, 254, 0.85)',
-  },
-  {
-    icon: '📹',
-    title: 'Some Moment',
-    subtitle: 'Short videos from the crew',
-    path: '/some-moment',
-    iconBg: 'rgba(254, 243, 199, 0.85)',
   },
 ];
 

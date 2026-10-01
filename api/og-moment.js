@@ -1,6 +1,6 @@
 // api/og-moment.js
 //
-// Dynamic Open Graph preview for individual Some Moment videos.
+// Dynamic Open Graph preview for individual Some Moments videos.
 //
 //   /api/og-moment?m=<slug>  -> HTML card with OG meta tags. Served to
 //                              WhatsApp / Facebook / Twitter crawlers
@@ -10,7 +10,7 @@
 // Unknown or missing slugs fall back to the generic Some Moment card.
 
 const SITE = 'https://www.ashramamvibes.com';
-const FALLBACK_TITLE = 'Some Moment | Ashramam';
+const FALLBACK_TITLE = 'Some Moments | Ashramam';
 const FALLBACK_DESC = 'Short videos from the Ashramam crew — press play and watch right in the app. Tap to open.';
 
 // Mirror of the video catalog in src/SomeMoments.tsx (slug -> { title, year, image }).
@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
   const v = String(req.query.v || '');
   const moment = MOMENTS[slug];
   const titleText = moment ? `${moment.title}${moment.year ? ` (${moment.year})` : ''}` : null;
-  const pageTitle = titleText ? `${titleText} | Ashramam Some Moment` : FALLBACK_TITLE;
+  const pageTitle = titleText ? `${titleText} | Ashramam Some Moments` : FALLBACK_TITLE;
   // Carry the ?v= cache-buster through so the shared URL and the card agree.
   const vParam = v ? `&v=${encodeURIComponent(v)}` : '';
   const pageUrl = moment
