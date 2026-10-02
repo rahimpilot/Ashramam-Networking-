@@ -329,6 +329,95 @@ const Hangout: React.FC = () => {
             </div>
           </div>
 
+          {/* Ashramam Radio — frosted banner, same tile style as the voice room */}
+          <div
+            className="hangout-voice"
+            onClick={() => navigate('/radio')}
+            style={{
+              background: 'linear-gradient(135deg, rgba(109,88,246,0.88) 0%, rgba(139,124,246,0.88) 100%)',
+              backdropFilter: 'blur(24px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+              borderRadius: '22px',
+              padding: '14px 18px',
+              cursor: 'pointer',
+              marginBottom: '24px',
+              boxShadow: '0 14px 38px rgba(109, 88, 246, 0.35)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            {/* glass shine */}
+            <div style={{
+              position: 'absolute',
+              top: '-70px',
+              right: '-50px',
+              width: '220px',
+              height: '220px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%)',
+              pointerEvents: 'none'
+            }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <span style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: '#f87171',
+                boxShadow: '0 0 10px #f87171'
+              }} />
+              <span style={{
+                fontSize: '10px',
+                fontWeight: 800,
+                letterSpacing: '2.5px',
+                color: 'rgba(255,255,255,0.92)'
+              }}>
+                ON AIR
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{
+                  fontFamily: "'Marcellus', Georgia, serif",
+                  fontSize: '22px',
+                  fontWeight: 400,
+                  color: '#ffffff',
+                  margin: '0 0 2px 0',
+                  letterSpacing: '-0.3px'
+                }}>
+                  Ashramam Radio
+                </h3>
+                <p style={{
+                  fontSize: '12.5px',
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  margin: 0,
+                  lineHeight: 1.5
+                }}>
+                  Live stations from around the world — pick one and press play.
+                </p>
+              </div>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(255, 255, 255, 0.92)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                color: '#5b3df0',
+                fontSize: '13px',
+                fontWeight: 800,
+                borderRadius: '999px',
+                padding: '10px 16px',
+                boxShadow: '0 8px 20px rgba(109, 88, 246, 0.28)',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
+              }}>
+                📻 Tune in
+                <span style={{ fontSize: '15px' }}>→</span>
+              </div>
+            </div>
+          </div>
+
           {/* Explore grid */}
           <div style={{
             fontSize: '11px',

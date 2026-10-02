@@ -19,6 +19,7 @@ import OurCinemas from './OurCinemas';
 import Podcasts from './Podcasts';
 import SomeMoments from './SomeMoments';
 import VoiceRoom from './VoiceRoom';
+import Radio from './Radio';
 import UnoGame from './UnoGame';
 import OurTrips from './OurTrips';
 import AshramamExclusive from './AshramamExclusive';
@@ -140,6 +141,7 @@ function AnimatedRoutes() {
         <Route path="/podcasts" element={<RequireAuth><Podcasts /></RequireAuth>} />
         <Route path="/some-moment" element={<RequireAuth><SomeMoments /></RequireAuth>} />
         <Route path="/voice-room" element={<RequireAuth><VoiceRoom /></RequireAuth>} />
+        <Route path="/radio" element={<RequireAuth><Radio /></RequireAuth>} />
         <Route path="/our-trips" element={<RequireAuth><OurTrips /></RequireAuth>} />
         <Route path="/ashramam-exclusive" element={<RequireAuth><AshramamExclusive /></RequireAuth>} />
         <Route path="/ashramam-exclusive/:storyId" element={<RequireAuth><AshramamExclusive /></RequireAuth>} />
