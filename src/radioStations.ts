@@ -2,9 +2,10 @@
  *
  * Sourced from the community-run Radio Browser directory (open/free sources).
  * Every stream URL below is https (no mixed-content blocks), non-HLS
- * (plays in a plain <audio> element on all browsers), and was verified
- * working by Radio Browser's own health checks (lastcheckok=1) on
- * 2026-09-30 / 2026-10-01.
+ * (plays in a plain <audio> element on all browsers), and was verified with
+ * a direct HTTP check (200 + audio/* content-type) before going in —
+ * Radio Browser's own lastcheckok flag alone is NOT enough (it passed a
+ * wrongly-listed URL for Dubai Eye once).
  *
  * Pipeline: Ray picks the stations/countries, Muse adds and verifies each
  * stream before it goes in. Add new entries here — newest first is not
@@ -28,12 +29,12 @@ export const RADIO_REGIONS: RadioRegion[] = ['UAE', 'America', 'India', 'Canada'
 export const RADIO_STATIONS: RadioStation[] = [
   // ---- United Arab Emirates ----
   {
-    slug: 'dubai-eye-1038',
-    name: 'Dubai Eye 103.8',
+    slug: 'radio-mirchi-dubai',
+    name: 'Radio Mirchi Dubai',
     region: 'UAE',
     place: 'Dubai, UAE',
-    tags: 'talk, news, variety',
-    streamUrl: 'https://gbradio.cdn.tibus.net/U105?aw_0_1st.playerId=wireless-website&_=477645',
+    tags: 'bollywood, hindi, desi hits',
+    streamUrl: 'https://eu8.fastcast4u.com/proxy/clyedupq/?mp=/1',
   },
   {
     slug: 'exclusively-pink-floyd',
